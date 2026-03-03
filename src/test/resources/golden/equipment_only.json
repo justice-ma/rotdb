@@ -1,0 +1,41 @@
+{
+  "skills": {
+    "strength": 120,
+    "magic": 120,
+    "ranged": 120,
+    "necromancy": 120,
+    "attack": 120
+  },
+  "abilityId": "GREATERCONCENTRATEDBLAST",
+
+  "equipment": {
+    "mainhandId": 3682,
+    "offhandId": null,
+    "headId": 5266,
+    "bodyId": 6884,
+    "glovesId": 3938,
+    "legsId": 6858,
+    "bootsId": 1758,
+    "pocketId": 3394,
+    "ammoId": null,
+    "ringId": 2040,
+    "neckId": 3399,
+    "capeId": 4552
+  },
+
+  "buffs": {
+    "enabledBuffs": ["SHARDOFGENESIS", "REAPERSCREW"],
+    "buffStacks": {}
+  },
+
+  "selectedPrayers": [],
+  "potions": [],
+  "perks": {
+    "selectedPerks": {}
+  },
+
+  "targetTitle": "Arch-Glacor",
+
+  "spell": "INCITEFEAR",
+  "relic": null
+}
