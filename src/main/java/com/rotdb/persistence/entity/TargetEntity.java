@@ -1,6 +1,6 @@
 package com.rotdb.persistence.entity;
 
-import com.rotdb.model.enums.CombatStyles;
+import com.rotdb.domain.model.enums.CombatStyles;
 import jakarta.persistence.*;
 
 @Entity

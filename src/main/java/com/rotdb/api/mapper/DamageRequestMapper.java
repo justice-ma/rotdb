@@ -1,11 +1,13 @@
 package com.rotdb.api.mapper;
 
-import com.rotdb.api.dto.DamageCalcRequest;
-import com.rotdb.domain.DamageRequest;
-import com.rotdb.model.context.TargetContext;
-import com.rotdb.model.equipment.*;
-import com.rotdb.model.player.*;
-import com.rotdb.service.mapper.*;
+import com.rotdb.api.dto.DamageCalcRequestDto;
+import com.rotdb.application.mapper.*;
+import com.rotdb.domain.model.DamageRequest;
+import com.rotdb.domain.model.context.TargetContext;
+import com.rotdb.domain.model.equipment.EquipmentModel;
+import com.rotdb.domain.model.equipment.FamiliarContext;
+import com.rotdb.domain.model.equipment.PerkContext;
+import com.rotdb.domain.model.player.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -37,7 +39,7 @@ public final class DamageRequestMapper {
         this.perkContextMapper = perkContextMapper;
     }
 
-    public DamageRequest from(DamageCalcRequest request) {
+    public DamageRequest from(DamageCalcRequestDto request) {
         EquipmentModel equipment = equipmentContextMapper.from(request.equipment());
         SkillsContext skills = skillsContextMapper.from(request.skills());
         BuffContext buffs = buffContextMapper.from(request.buffs());

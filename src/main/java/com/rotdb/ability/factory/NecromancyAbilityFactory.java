@@ -1,13 +1,13 @@
 package com.rotdb.ability.factory;
 
-import com.rotdb.model.context.AbilityContext;
-import com.rotdb.model.context.AbilityHitsContext;
-import com.rotdb.model.enums.CombatStyles;
+import com.rotdb.domain.model.context.AbilityContext;
+import com.rotdb.domain.model.context.AbilityHitsContext;
+import com.rotdb.domain.model.enums.CombatStyles;
 import java.util.List;
 import static com.rotdb.ability.AbilityId.*;
 import static com.rotdb.ability.Handedness.*;
-import static com.rotdb.model.enums.AbilityTier.*;
-import static com.rotdb.model.enums.Targetting.*;
+import static com.rotdb.domain.model.enums.AbilityTier.*;
+import static com.rotdb.domain.model.enums.Targetting.*;
 
 public class NecromancyAbilityFactory {
     public static AbilityContext necromancy() {

@@ -1,0 +1,53 @@
+:root {
+  --bg-dark: hsl(0 0% 10%);
+  --bg: hsl(0 0% 15%);
+  --bg-light: hsl(0 0% 20%);
+  --text: hsl(0 0% 95%);
+  --text-muted: hsl(0 0% 70%);
+  --text-accent: hsl(197 79% 58%);
+  --border: hsl(0 0% 28%);
+  --border-light: hsl(0 0% 35%);
+  --border-accent: hsl(197 79% 58%);
+  --bg-accent: hsla(197, 55%, 46%, 0.267);
+
+  --space-1: 0.5rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 1.25rem;
+  --space-5: 1.5rem;
+
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-dark);
+  color: var(--text);
+}
+
+.ability-page {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  gap: 3em;
+  padding: var(--space-4);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.combat-settings-panel {
+  width: 420px;
+  min-width: 420px;
+  box-sizing: border-box;
+}
+
+.ability-browser {
+  flex: 1;
+  min-width: 0;
+}
+
+.detailed-ability-panel {
+  width: 420px;
+  min-width: 420px;
+  box-sizing: border-box;
+}

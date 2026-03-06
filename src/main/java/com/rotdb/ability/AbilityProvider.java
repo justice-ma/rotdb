@@ -1,7 +1,7 @@
 package com.rotdb.ability;
 
 import com.rotdb.ability.factory.*;
-import com.rotdb.model.context.AbilityContext;
+import com.rotdb.domain.model.context.AbilityContext;
 
 public final class AbilityProvider {
 

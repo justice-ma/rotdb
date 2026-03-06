@@ -1,0 +1,12 @@
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10000;
+  background-color: var(--bg-dark);
+  height: 3em;
+  cursor: default;
+  border-bottom: 1px var(--border) solid;
+}

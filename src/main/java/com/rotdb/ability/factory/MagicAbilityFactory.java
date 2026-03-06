@@ -1,19 +1,16 @@
 package com.rotdb.ability.factory;
 
-import com.rotdb.model.context.AbilityContext;
-import com.rotdb.model.context.AbilityHitsContext;
+import com.rotdb.domain.model.context.AbilityContext;
+import com.rotdb.domain.model.context.AbilityHitsContext;
 import java.util.List;
 
 import static com.rotdb.ability.AbilityId.*;
 import static com.rotdb.ability.Handedness.*;
-import static com.rotdb.model.enums.AbilityTier.*;
-import static com.rotdb.model.enums.CombatStyles.MAGIC;
-import static com.rotdb.model.enums.Targetting.*;
+import static com.rotdb.domain.model.enums.AbilityTier.*;
+import static com.rotdb.domain.model.enums.CombatStyles.MAGIC;
+import static com.rotdb.domain.model.enums.Targetting.*;
 
 public class MagicAbilityFactory {
-
-    // TODO: needs to be looked at, 1.08x live game after all calcs?
-    //  Also hit timing varies depending on selected spell
     public static AbilityContext magic() {
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(0.9, 1.1, false, BASIC, 2)),

@@ -1,9 +1,9 @@
 package com.rotdb.persistence.entity;
 
-import com.rotdb.model.enums.CombatStyles;
-import com.rotdb.model.enums.Effect;
-import com.rotdb.model.enums.Slots;
-import com.rotdb.model.enums.WeaponStyle;
+import com.rotdb.domain.model.enums.CombatStyles;
+import com.rotdb.domain.model.enums.Effect;
+import com.rotdb.domain.model.enums.Slots;
+import com.rotdb.domain.model.enums.WeaponStyle;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;

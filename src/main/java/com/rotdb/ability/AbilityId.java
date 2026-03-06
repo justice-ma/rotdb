@@ -1,25 +1,25 @@
 package com.rotdb.ability;
 
-import com.rotdb.model.enums.AbilityTier;
-import com.rotdb.model.enums.CombatStyles;
+import com.rotdb.domain.model.enums.AbilityTier;
+import com.rotdb.domain.model.enums.CombatStyles;
 
-import static com.rotdb.model.enums.AbilityTier.*;
-import static com.rotdb.model.enums.CombatStyles.*;
+import static com.rotdb.domain.model.enums.AbilityTier.*;
+import static com.rotdb.domain.model.enums.CombatStyles.*;
 
 public enum AbilityId {
     MELEEAUTO(MELEE, BASIC,"Attack"),
     ASSAULT(MELEE, THRESHOLD,"Assault"),
-    BLOODLUSTASSAULT(MELEE, THRESHOLD,"Assault"),
+    BLOODLUSTASSAULT(MELEE, THRESHOLD,"Bloodlust Assault"),
     SEVER2H(MELEE, BASIC,"Sever"),
     SEVERDW(MELEE, BASIC,"Sever"),
     OVERPOWER(MELEE, ULTIMATE,"Overpower"),
-    OVERPOWERIGNEOUS(MELEE, ULTIMATE,"Overpower"),
+    OVERPOWERIGNEOUS(MELEE, ULTIMATE,"Igneous Overpower"),
     REND(MELEE, BASIC,"Rend"),
     FURY(MELEE, BASIC,"Fury"),
     GREATERFURY(MELEE, BASIC,"Greater Fury"),
     BACKHAND(MELEE, BASIC,"Backhand"),
     HURRICANE(MELEE, THRESHOLD,"Hurricane"),
-    BLOODLUSTHURRICANE(MELEE, THRESHOLD,"Hurricane"),
+    BLOODLUSTHURRICANE(MELEE, THRESHOLD,"Bloodlust Hurricane"),
     FLURRY(MELEE, THRESHOLD,"Flurry"),
     GREATERFLURRY(MELEE, THRESHOLD,"Flurry"),
     DISMEMBER(MELEE, BASIC,"Dismember"),
@@ -57,7 +57,7 @@ public enum AbilityId {
     SNIPE(RANGED, BASIC,"Snipe"),
     PIERCINGSHOT(RANGED, BASIC,"Piercing Shot"),
     DEADSHOT(RANGED, ULTIMATE,"Deadshot"),
-    DEADSHOTIGNEOUS(RANGED, ULTIMATE,"Deadshot"),
+    DEADSHOTIGNEOUS(RANGED, ULTIMATE,"Igneous Deadshot"),
     BINDINGSHOT(RANGED, BASIC,"Binding Shot"),
     BOMBARDMENT(RANGED, THRESHOLD,"Bombardment"),
     GALESHOT(RANGED, BASIC,"Galeshot"),
@@ -73,7 +73,7 @@ public enum AbilityId {
     FINGEROFDEATH(NECROMANCY, THRESHOLD,"Finger of Death"),
     TOUCHOFDEATH(NECROMANCY, BASIC,"Touch of Death"),
     DEATHSKULLS(NECROMANCY, ULTIMATE,"Death Skulls"),
-    DEATHSKULLSIGNEOUS(NECROMANCY, ULTIMATE,"Death Skulls"),
+    DEATHSKULLSIGNEOUS(NECROMANCY, ULTIMATE,"Igneous Death Skulls"),
     BLOODSIPHON(NECROMANCY, BASIC,"Blood Siphon"),
     BLOODSIPHONHEAL(NECROMANCY, BASIC,"Blood Siphon AOE"),
     CONJUREPUTRIDZOMBIE(NECROMANCY, BASIC,"Conjure Putrid Zombie"),

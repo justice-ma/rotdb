@@ -1,15 +1,15 @@
 package com.rotdb.ability.factory;
 
-import com.rotdb.model.context.AbilityContext;
-import com.rotdb.model.context.AbilityHitsContext;
-import com.rotdb.model.enums.CombatStyles;
+import com.rotdb.domain.model.context.AbilityContext;
+import com.rotdb.domain.model.context.AbilityHitsContext;
+import com.rotdb.domain.model.enums.*;
 
 import java.util.List;
 
 import static com.rotdb.ability.AbilityId.*;
 import static com.rotdb.ability.Handedness.*;
-import static com.rotdb.model.enums.AbilityTier.*;
-import static com.rotdb.model.enums.Targetting.*;
+import static com.rotdb.domain.model.enums.AbilityTier.*;
+import static com.rotdb.domain.model.enums.Targetting.*;
 
 public class MeleeAbilityFactory {
     private MeleeAbilityFactory() {
@@ -50,7 +50,7 @@ public class MeleeAbilityFactory {
                         new AbilityHitsContext(1.85, 2.15, false, THRESHOLD, 3),
                         new AbilityHitsContext(1.85, 2.15, false, THRESHOLD, 5),
                         new AbilityHitsContext(1.85, 2.15, false, THRESHOLD, 7)),
-                "Assault",
+                "Bloodlust Assault",
                 -25,
                 10,
                 true,
@@ -185,7 +185,7 @@ public class MeleeAbilityFactory {
                 List.of(new AbilityHitsContext(1.35, 1.65, false, THRESHOLD, 1),
                         new AbilityHitsContext(1.55, 1.85, false, THRESHOLD, 1),
                         new AbilityHitsContext(0.75, 0.95, false, THRESHOLD, 1)),
-                "Hurricane",
+                "Bloodlust Hurricane",
                 -25,
                 34,
                 false,

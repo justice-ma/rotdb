@@ -1,14 +1,12 @@
 package com.rotdb.persistence.mapper;
 
-import com.rotdb.model.enums.CombatStyles;
-import com.rotdb.model.enums.Effect;
-import com.rotdb.model.enums.WeaponStyle;
-import com.rotdb.model.equipment.EquipmentModel;
-import com.rotdb.model.equipment.EquipmentSlot;
+import com.rotdb.domain.model.enums.CombatStyles;
+import com.rotdb.domain.model.enums.WeaponStyle;
+import com.rotdb.domain.model.equipment.EquipmentModel;
+import com.rotdb.domain.model.equipment.EquipmentSlot;
 import com.rotdb.persistence.entity.EquipmentEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.EnumSet;
 import java.util.List;
 
 @Component
