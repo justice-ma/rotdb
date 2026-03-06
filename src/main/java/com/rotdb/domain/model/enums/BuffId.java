@@ -1,72 +1,74 @@
 package com.rotdb.domain.model.enums;
 
 public enum BuffId {
-    ENCHANTMENTOFSAVAGERY(0, 0, false),
-    ENCHANTMENTOFAGONY(0, 0, false),
-    ENCHANTMENTOFHEROISM(0, 0, false),
-    ENCHANTMENTOFDISPELLING(0, 0, false),
-    ENCHANTMENTOFDREAD(0, 0, false),
-    ENCHANTMENTOFSHADOWS(0, 0, false),
-    ENCHANTMENTOFAFFLICTION(0, 0, false),
-    ENCHANTMENTOFFLAMES(0, 0, false),
-    ENCHANTMENTOFMETAPHYSICS(0, 0, false),
-    SHARDOFGENESIS(0, 0, false),
-    DRACONICFRUIT(0, 0, false),
-    SMASH(0, 0, false),
-    CHAOSROAR(0, 0, false),
-    SUNSHINE(0, 0, false),
-    DEATHSWIFTNESS(0, 0, false),
-    BERSERK(0, 0, false),
-    ZGS(0, 0, false),
-    UNDEADSLAYERSIGIL(0, 0, false),
-    DRAGONSLAYERSIGIL(0, 0, false),
-    DEMONSLAYERSIGIL(0, 0, false),
-    REAPERSCREW(0, 0, false),
-    RUNICCHARGE(0, 0, false),
-    KALG(0, 0, false),
-    ECLIPSEDSOUL(0, 0, false),
-    SPLITSOUL(0, 0, false),
-    INSTABILITY(0, 0, false),
-    BALANCEBYFORCE(0, 0, false),
-    DBA(0, 0, false),
-    DRAGONSCIMITAR(0, 0, false),
-    GALES(0, 0, false),
-    FURYBUFF(0, 0, false),
-    GREATERFURYBUFF(0, 0, false),
-    CONCENTRATEDBLASTBUFF(0, 0, false),
-    GREATERCONCENTRATEDBLASTBUFF(0, 0, false),
-    RAPIDFIREBUFF(0, 0, false),
-    ASPHYXIATEBUFF(0, 0, false),
-    CHILL(0, 0, false),
-    BLOODLUST(0, 8, true),
-    CONFLAGRATE(0, 0, false),
-    STONEOFJAS(0, 6, true),
-    RUBYAURORA(0, 3, true),
-    GRAVITATE(0, 20, true),
-    WENSTACKS(0, 15, true),
-    REVENGESTACKS(0, 10, true),
-    RUTHELESSSTACKS(0, 5, true),
-    GUARDHOUSE(0, 3, true),
-    TITHESTACKS(0, 12, true),
-    PUZZLEBOX(0, 6, true),
-    NOPENOPENOPE(0, 2, true),
-    BALANCEOFPOWER(0, 6, true),
-    GUARDIANSTRIUMPH(0, 6, true),
-    SLAYERLODGE(0, 3, true),
-    ESSENCECORRUPTIONSTACKS(0, 100, true),
-    NOFEAR(0, 2, true),
-    PERFECTEQUILIBRIUMSTACKS(0, 7, true),
-    PRIMORDIALICESTACKS(0, 10, true),
-    TIMESINCELASTATTACK(0, 10, true),
-    REAPERSTACKS(0, 30, true);
+    ENCHANTMENTOFSAVAGERY(0, 0, false, "Savagery"),
+    ENCHANTMENTOFAGONY(0, 0, false, "Agony"),
+    ENCHANTMENTOFHEROISM(0, 0, false, "Heroism"),
+    ENCHANTMENTOFDISPELLING(0, 0, false, "Dispelling"),
+    ENCHANTMENTOFDREAD(0, 0, false, "Dread"),
+    ENCHANTMENTOFSHADOWS(0, 0, false, "Shadows"),
+    ENCHANTMENTOFAFFLICTION(0, 0, false, "Affliction"),
+    ENCHANTMENTOFFLAMES(0, 0, false, "Flames"),
+    ENCHANTMENTOFMETAPHYSICS(0, 0, false, "Metaphysics"),
+    SHARDOFGENESIS(0, 0, false, "Shard of Genesis"),
+    DRACONICFRUIT(0, 0, false, "Draconic Fruit"),
+    SMASH(0, 0, false, "Rend"),
+    CHAOSROAR(0, 0, false, "Chaos Roar"),
+    SUNSHINE(0, 0, false, "Sunshine"),
+    DEATHSWIFTNESS(0, 0, false, "Death Swiftness"),
+    BERSERK(0, 0, false, "Berserk"),
+    ZGS(0, 0, false, "Zaros Godsword"),
+    UNDEADSLAYERSIGIL(0, 0, false, "Undead Slayer Sigil"),
+    DRAGONSLAYERSIGIL(0, 0, false, "Dragon Slayer Sigil"),
+    DEMONSLAYERSIGIL(0, 0, false, "Demon Slayer Sigil"),
+    REAPERSCREW(0, 0, false, "Reapers Crew"),
+    RUNICCHARGE(0, 0, false, "Runic Charge"),
+    KALG(0, 0, false, "Kal'gerion Scroll"),
+    ECLIPSEDSOUL(0, 0, false, "Eclipsed Soul"),
+    SPLITSOUL(0, 0, false, "Split Soul"),
+    INSTABILITY(0, 0, false, "Instability"),
+    BALANCEBYFORCE(0, 0, false, "Balance by Force"),
+    DBA(0, 0, false, "Dragon Battleaxe"),
+    DRAGONSCIMITAR(0, 0, false, "Dragon Scimitar"),
+    GALES(0, 0, false, "Galeshot"),
+    FURYBUFF(0, 0, false, "Fury"),
+    GREATERFURYBUFF(0, 0, false, "Greater Fury"),
+    CONCENTRATEDBLASTBUFF(0, 0, false, "Concentrated Blast"),
+    GREATERCONCENTRATEDBLASTBUFF(0, 0, false, "Greater Concentrated Blast"),
+    RAPIDFIREBUFF(0, 0, false, "Rapidfire"),
+    ASPHYXIATEBUFF(0, 0, false, "Tumeken's"),
+    CHILL(0, 0, false, "Chill"),
+    BLOODLUST(0, 0, false, "Bloodlust"),
+    CONFLAGRATE(0, 0, false, "Conflagrate"),
+    STONEOFJAS(0, 6, true, "Stone of Jas"),
+    RUBYAURORA(0, 3, true, "Ruby Aurora"),
+    GRAVITATE(0, 20, true, "Gravitate"),
+    WENSTACKS(0, 15, true, "Wen Stacks"),
+    REVENGESTACKS(0, 10, true, "Revenge Stacks"),
+    RUTHELESSSTACKS(0, 5, true, "Ruthless Stacks"),
+    GUARDHOUSE(0, 3, true, "Guardhouse Tier"),
+    TITHESTACKS(0, 12, true, "Tithe Stacks"),
+    PUZZLEBOX(0, 6, true, "Puzzlebox"),
+    NOPENOPENOPE(0, 2, true, "Nope Nope Nope"),
+    BALANCEOFPOWER(0, 6, true, "Balance of Power"),
+    GUARDIANSTRIUMPH(0, 6, true, "Guardians Triumph"),
+    SLAYERLODGE(0, 3, true, "Slayer Lodge"),
+    ESSENCECORRUPTIONSTACKS(0, 100, true, "Essence Corruption"),
+    NOFEAR(0, 2, true, "No Fear"),
+    PERFECTEQUILIBRIUMSTACKS(0, 7, true, "Perfect Equilibrium"),
+    PRIMORDIALICESTACKS(0, 10, true, "Primordial Ice"),
+    TIMESINCELASTATTACK(0, 10, true, "Time Since Last Attack"),
+    REAPERSTACKS(0, 30, true, "Reaper Stacks");
 
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;
+    private final String label;
 
-    BuffId(int minimumStacks, int maximumStacks, boolean stackable) {
+    BuffId(int minimumStacks, int maximumStacks, boolean stackable, String label) {
         this.minimumStacks = minimumStacks;
         this.maximumStacks = maximumStacks;
         this.stackable = stackable;
+        this.label = label;
     }
 
     public int getMinimumStacks() {
@@ -79,5 +81,9 @@ public enum BuffId {
 
     public boolean isStackable() {
         return stackable;
+    }
+
+    public String getLabel() {
+        return label;
     }
 }

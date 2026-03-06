@@ -76,19 +76,19 @@
 }
 
 .damage-result {
-  margin: 0;
+  margin: var(--space-1) 0 0 0;
   font-size: 36px;
   font-weight: 700;
 }
 
 .subtext {
-  margin: var(--space-2) 0 0 0;
+  margin: 0;
   font-size: 14px;
   color: var(--text-muted);
 }
 
 .damage-result-small {
-  margin: 0;
+  margin: var(--space-1) 0 0 0;
   font-size: 24px;
   font-weight: 700;
 }
@@ -109,8 +109,8 @@
 }
 
 .crit-damages .subtext {
-  margin-top: 0;
-  margin-bottom: var(--space-1);
+  margin-top: var(--space-1);
+  margin-bottom: 0;
 }
 
 .bar-chart {

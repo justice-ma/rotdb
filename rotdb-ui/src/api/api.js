@@ -41,3 +41,8 @@ export async function fetchEquipmentBySlot(slot, query) {
   );
   return res.json();
 }
+
+export async function fetchBuffs() {
+  const res = await fetch(`${BASE}/buffs`);
+  return handleResponse(res);
+}

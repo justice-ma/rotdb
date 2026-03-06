@@ -34,7 +34,6 @@
   align-items: stretch;
 }
 
-/* Card */
 .ability-card {
   background: linear-gradient(180deg, var(--bg-light), var(--bg));
   border: 1px solid var(--border);

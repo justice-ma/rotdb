@@ -1,0 +1,122 @@
+.buff-search {
+  width: 100%;
+  box-sizing: border-box;
+
+  border-radius: 10px;
+  border: 1px solid var(--border);
+
+  background: var(--bg-dark);
+  color: var(--text);
+
+  padding: 11px 12px;
+
+  outline: none;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.buff-search::placeholder {
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.buff-search:focus {
+  border-color: var(--text-accent);
+  box-shadow: 0 0 0 3px rgba(63, 185, 233, 0.18);
+}
+
+.buff-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.buff-tab {
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-muted);
+  border-radius: 8px;
+  padding: var(--space-1) var(--space-2);
+  cursor: pointer;
+  min-width: 84px;
+}
+
+.buff-tab.active {
+  color: var(--text);
+  border-color: var(--text-accent);
+  background: var(--bg-light);
+}
+
+.buff-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+  margin-bottom: var(--space-2);
+}
+
+.buff {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  border: 1px solid var(--border);
+  background: var(--bg-light);
+  color: var(--text-muted);
+  border-radius: 8px;
+
+  padding: var(--space-1) var(--space-2);
+  cursor: pointer;
+  min-width: 100px;
+  min-height: 38px;
+}
+
+.buff.selected {
+  color: var(--text);
+  border-color: var(--text-accent);
+  background: var(--bg-light);
+}
+
+.buff-item {
+  display: flex;
+  align-items: center;
+}
+
+.buff-stack-input {
+  width: 24px;
+  min-width: 24px;
+  height: 20px;
+
+  padding: 0;
+  margin: 0;
+
+  border: none;
+  border-radius: 4px;
+  background: var(--bg-dark);
+  color: var(--text);
+
+  font: inherit;
+  font-size: 0.85em;
+  line-height: 1;
+
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.buff-stack-input::-webkit-inner-spin-button,
+.buff-stack-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.buff-section h3 {
+  color: var(--text-accent);
+}

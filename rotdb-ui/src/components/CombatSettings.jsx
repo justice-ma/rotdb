@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { fetchEquipmentBySlot } from "../api/api";
 import "../style/combatSettings.css";
+import BuffPanel from "./BuffPanel";
 
 const SLOTS = [
   "MAINHAND",
@@ -74,8 +75,10 @@ export default function CombatSettings({
   mainhand,
   setMainhand,
   setEquipmentIds,
+  style,
   buffs,
   setBuffs,
+  allBuffs,
 }) {
   const [queries, setQueries] = useState(
     Object.fromEntries(SLOTS.map((s) => [s, ""])),
@@ -219,6 +222,30 @@ export default function CombatSettings({
             ))}
           </div>
         </div>
+      </details>
+      <details className="cs-section">
+        <summary className="cs-summary">Stats</summary>
+      </details>
+      <details className="cs-section">
+        <summary className="cs-summary">Prayer</summary>
+      </details>
+      <details className="cs-section">
+        <summary className="cs-summary">Buffs</summary>
+        <BuffPanel
+          style={style}
+          buffs={buffs}
+          setBuffs={setBuffs}
+          allBuffs={allBuffs}
+        />
+      </details>
+      <details className="cs-section">
+        <summary className="cs-summary">Perks</summary>
+      </details>
+      <details className="cs-section">
+        <summary className="cs-summary">Target</summary>
+      </details>
+      <details className="cs-section">
+        <summary className="cs-summary">Familiar</summary>
       </details>
     </div>
   );

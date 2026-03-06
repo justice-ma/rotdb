@@ -48,7 +48,7 @@ public class BuffCritResolver {
             criticalStrikeChance += 0.04;
         }
 
-        if (buff.has(BuffId.NOFEAR) && buff.stacks(BuffId.NOFEAR) > 0) {
+        if (buff.has(BuffId.NOFEAR) && buff.stacks(BuffId.NOFEAR) > 0 && ability.getId() == METEORSTRIKE) {
             criticalStrikeChance += 0.2 * buff.stacks(BuffId.NOFEAR);
         }
         return criticalStrikeChance;

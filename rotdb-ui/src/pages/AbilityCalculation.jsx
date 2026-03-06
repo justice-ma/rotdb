@@ -8,6 +8,7 @@ import {
   fetchAbilities,
   fetchBatchCalculation,
   fetchDetailedAbilityCalculation,
+  fetchBuffs,
 } from "../api/api";
 
 import "../style/abilityPage.css";
@@ -17,41 +18,36 @@ export default function AbilityCalculation() {
   const [results, setResults] = useState({});
   const [detailedResults, setDetailedResults] = useState({});
   const [error, setError] = useState("");
-
-  // weapon selected in CombatSettings
   const [mainhand, setMainhand] = useState(null);
-
-  // combat style used to fetch abilities (MELEE/RANGED/MAGIC/etc.)
   const [style, setStyle] = useState("RANGED");
-
-  // current selected ability
   const [selectedAbility, setSelectedAbility] = useState(null);
-
-  // equipmentIds in slot shape: { MAINHAND: 3119, OFFHAND: 123, ... }
   const [equipmentIds, setEquipmentIds] = useState({});
+  const [buffs, setBuffs] = useState({});
+  const [allBuffs, setAllBuffs] = useState([]);
 
-  // buffs state for payload
-  const [buffs, setBuffs] = useState({
-    enabledBuffs: ["SHARDOFGENESIS", "REAPERSCREW"],
-    buffStacks: {},
-  });
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await fetchBuffs();
+        setAllBuffs(data);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, []);
 
-  // keep style in sync with picked mainhand.clazz
   useEffect(() => {
     if (!mainhand?.clazz) return;
 
     setStyle((prev) => (prev === mainhand.clazz ? prev : mainhand.clazz));
 
-    // reset selection + detailed panel when swapping weapon styles
     setSelectedAbility(null);
     setDetailedResults({});
   }, [mainhand]);
 
-  // Build request base payload from state (single source of truth)
   const base = useMemo(() => {
     const mainhandId = equipmentIds.MAINHAND ?? null;
 
-    // If no mainhand, return null so we can gate requests
     if (!mainhandId) return null;
 
     return {
@@ -82,7 +78,7 @@ export default function AbilityCalculation() {
       perks: {
         selectedPerks: { PRECISE: 6, ERUPTIVE: 2, ULTIMATUMS: 4 },
       },
-      targetTitle: "Arch-Glacor",
+      targetTitle: "Training dummy",
       spell: "INCITEFEAR",
       relic: null,
     };
@@ -90,7 +86,6 @@ export default function AbilityCalculation() {
 
   const needsMainhand = !equipmentIds.MAINHAND;
 
-  // Load abilities ONLY when we have a mainhand
   useEffect(() => {
     if (!base) {
       setAbilities([]);
@@ -111,7 +106,6 @@ export default function AbilityCalculation() {
     })();
   }, [style, base]);
 
-  // Batch calculate ability card values
   useEffect(() => {
     if (!base) return;
     if (!abilities.length) return;
@@ -131,7 +125,6 @@ export default function AbilityCalculation() {
     })();
   }, [base, abilities]);
 
-  // Detailed calculations for selected ability
   useEffect(() => {
     if (!base) return;
     if (!selectedAbility) return;
@@ -158,8 +151,10 @@ export default function AbilityCalculation() {
           mainhand={mainhand}
           setMainhand={setMainhand}
           setEquipmentIds={setEquipmentIds}
+          style={style}
           buffs={buffs}
           setBuffs={setBuffs}
+          allBuffs={allBuffs}
         />
       </div>
 
