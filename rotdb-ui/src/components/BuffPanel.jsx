@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../style/buffPanel.css";
 
 const BUFF_CATEGORY = {
-  ULTIMATES: "Ultimates",
+  TARGET: "Target",
   SPECIAL_ATTACKS: "Specials",
   ENCHANTMENTS: "Enchants",
   ABILITY_BUFFS: "Ability",
@@ -65,15 +65,15 @@ const BUFF_UI_META = {
     styles: [STYLE.MELEE],
   },
   SUNSHINE: {
-    category: BUFF_CATEGORY.ULTIMATES,
+    category: BUFF_CATEGORY.ABILITY_BUFFS,
     styles: [STYLE.MAGIC],
   },
   DEATHSWIFTNESS: {
-    category: BUFF_CATEGORY.ULTIMATES,
+    category: BUFF_CATEGORY.ABILITY_BUFFS,
     styles: [STYLE.RANGED],
   },
   BERSERK: {
-    category: BUFF_CATEGORY.ULTIMATES,
+    category: BUFF_CATEGORY.ABILITY_BUFFS,
     styles: [STYLE.MELEE],
   },
   ZGS: {
@@ -249,21 +249,87 @@ const BUFF_UI_META = {
     category: BUFF_CATEGORY.ENCHANTMENTS,
     styles: [STYLE.MELEE, STYLE.MAGIC, STYLE.RANGED, STYLE.NECROMANCY],
   },
+  BLEEDS: {
+    category: BUFF_CATEGORY.TARGET,
+    styles: [STYLE.MELEE],
+  },
+  BLACKSTONEARROWSTACKS: {
+    category: BUFF_CATEGORY.TARGET,
+    styles: [STYLE.MELEE, STYLE.MAGIC, STYLE.RANGED, STYLE.NECROMANCY],
+  },
+  LORDOFBONESSTACKS: {
+    category: BUFF_CATEGORY.TARGET,
+    styles: [STYLE.MELEE, STYLE.MAGIC, STYLE.RANGED, STYLE.NECROMANCY],
+  },
+  COMBUSTED: {
+    category: BUFF_CATEGORY.TARGET,
+    styles: [STYLE.MAGIC],
+  },
+  FLAMEBOUNDRIVAL: {
+    category: BUFF_CATEGORY.TARGET,
+    styles: [STYLE.MELEE],
+  },
+  HAUNTED: {
+    category: BUFF_CATEGORY.TARGET,
+    styles: [STYLE.MELEE, STYLE.MAGIC, STYLE.RANGED, STYLE.NECROMANCY],
+  },
+  VULNED: {
+    category: BUFF_CATEGORY.TARGET,
+    styles: [STYLE.MELEE, STYLE.MAGIC, STYLE.RANGED, STYLE.NECROMANCY],
+  },
+  CURSED: {
+    category: BUFF_CATEGORY.TARGET,
+    styles: [STYLE.MELEE, STYLE.MAGIC, STYLE.RANGED, STYLE.NECROMANCY],
+  },
+  SMOKECLOUDED: {
+    category: BUFF_CATEGORY.TARGET,
+    styles: [STYLE.MELEE, STYLE.MAGIC, STYLE.RANGED, STYLE.NECROMANCY],
+  },
+  OBLITERATED: {
+    category: BUFF_CATEGORY.TARGET,
+    styles: [STYLE.MELEE, STYLE.MAGIC, STYLE.RANGED, STYLE.NECROMANCY],
+  },
+  BANDOSBOOK: {
+    category: BUFF_CATEGORY.TARGET,
+    styles: [STYLE.MELEE, STYLE.MAGIC, STYLE.RANGED, STYLE.NECROMANCY],
+  },
+  CLAWSOFGUTHIX: {
+    category: BUFF_CATEGORY.TARGET,
+    styles: [STYLE.MELEE, STYLE.MAGIC, STYLE.RANGED, STYLE.NECROMANCY],
+  },
+  CLOBBER: {
+    category: BUFF_CATEGORY.TARGET,
+    styles: [STYLE.MELEE, STYLE.MAGIC, STYLE.RANGED, STYLE.NECROMANCY],
+  },
+  SUNDER: {
+    category: BUFF_CATEGORY.TARGET,
+    styles: [STYLE.MELEE, STYLE.MAGIC, STYLE.RANGED, STYLE.NECROMANCY],
+  },
+  BACKSTAB: {
+    category: BUFF_CATEGORY.TARGET,
+    styles: [STYLE.MELEE, STYLE.MAGIC, STYLE.RANGED, STYLE.NECROMANCY],
+  },
+  CROESUSSPORED: {
+    category: BUFF_CATEGORY.TARGET,
+    styles: [STYLE.MELEE, STYLE.MAGIC, STYLE.RANGED, STYLE.NECROMANCY],
+  },
 };
 
 const CATEGORY_ORDER = [
-  BUFF_CATEGORY.ULTIMATES,
-  BUFF_CATEGORY.SPECIAL_ATTACKS,
   BUFF_CATEGORY.ABILITY_BUFFS,
+  BUFF_CATEGORY.SPECIAL_ATTACKS,
   BUFF_CATEGORY.PASSIVE_BUFFS,
   BUFF_CATEGORY.STACKS,
   BUFF_CATEGORY.SLAYER_BUFFS,
   BUFF_CATEGORY.ENCHANTMENTS,
+  BUFF_CATEGORY.TARGET,
   BUFF_CATEGORY.OTHER,
 ];
 
 export default function BuffPanel({ style, buffs, setBuffs, allBuffs }) {
-  const [activeCategory, setActiveCategory] = useState(BUFF_CATEGORY.ULTIMATES);
+  const [activeCategory, setActiveCategory] = useState(
+    BUFF_CATEGORY.ABILITY_BUFFS,
+  );
   const [search, setSearch] = useState("");
 
   const enabledBuffs = buffs?.enabledBuffs ?? [];
@@ -389,8 +455,6 @@ export default function BuffPanel({ style, buffs, setBuffs, allBuffs }) {
       </div>
 
       <div className="buff-section">
-        <h3>{activeCategory}</h3>
-
         <div className="buff-grid">
           {activeBuffs.map((buff) => {
             const isSelected = enabledBuffs.includes(buff.id);

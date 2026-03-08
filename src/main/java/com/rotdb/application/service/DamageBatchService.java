@@ -59,7 +59,7 @@ public class DamageBatchService {
                 base.spell(),
                 base.selectedPrayers(),
                 base.berserkersFury(),
-                base.familiar(),
+                base.selectedFamiliar(),
                 base.perks()
         );
     }

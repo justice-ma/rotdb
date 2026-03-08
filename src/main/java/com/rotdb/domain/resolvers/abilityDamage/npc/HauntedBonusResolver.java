@@ -3,16 +3,18 @@ package com.rotdb.domain.resolvers.abilityDamage.npc;
 import com.rotdb.domain.model.context.AbilityHitsContext;
 import com.rotdb.domain.model.context.CalculationContext;
 import com.rotdb.domain.model.context.TargetContext;
+import com.rotdb.domain.model.enums.BuffId;
 import com.rotdb.domain.model.enums.Effect;
 import com.rotdb.domain.model.equipment.EquipmentSlot;
+import com.rotdb.domain.model.player.BuffContext;
 
 public class HauntedBonusResolver {
     // TODO: NEXUS GOES IN QUIVER SLOT - CREATE QUIVER SLOT
     public static HauntedBonus resolve(CalculationContext context, AbilityHitsContext hit) {
-        TargetContext target = context.getTarget();
+        BuffContext buff = context.getBuffs();
         EquipmentSlot pocket = context.getEquipment().getPocket();
         int minCrit = 0, maxCrit = 0, minNonCrit = 0, maxNonCrit = 0, minAvg = 0, maxAvg = 0;
-        if (target.isHaunted()) {
+        if (buff.has(BuffId.HAUNTED)) {
             double mod = pocket.getEffect().contains(Effect.DEVOURERSNEXUS) ? 0.15 : 0.1;
             minCrit = Math.min((int) (hit.getCritMin() * mod), (int) (context.getDamage().getBaseDamage() * (mod * 2)));
             maxCrit = Math.min((int) (hit.getCritMax() * mod), (int) (context.getDamage().getBaseDamage() * (mod * 2)));

@@ -58,6 +58,10 @@
     background-color 0.15s ease;
 }
 
+.slot-input::selection {
+  background-color: var(--bg-accent);
+}
+
 .slot-input::placeholder {
   color: var(--text-muted);
   letter-spacing: 0.02em;
@@ -89,7 +93,7 @@
   top: calc(100% + 6px);
 
   margin: 0;
-  padding: 6px;
+  padding: var(--space-1);
 
   list-style: none;
 
@@ -101,9 +105,13 @@
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
 
   max-height: 240px;
-  overflow-y: auto;
+  overflow-y: scroll;
 
-  z-index: 50;
+  z-index: 500;
+}
+
+.slot-results::-webkit-scrollbar {
+  width: 0;
 }
 
 .slot-result {

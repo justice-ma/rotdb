@@ -1,5 +1,6 @@
 package com.rotdb.domain.resolvers.abilityDamage.core;
 
+import com.rotdb.domain.model.context.AbilityContext;
 import com.rotdb.domain.model.context.CalculationContext;
 import com.rotdb.domain.model.enums.BuffId;
 import com.rotdb.domain.model.enums.Effect;

@@ -1,0 +1,35 @@
+.familiar-panel {
+  display: flex;
+  flex-direction: column;
+  margin: var(--space-2) 0;
+}
+
+.familiar-select {
+  width: 100%;
+  box-sizing: border-box;
+
+  border-radius: 10px;
+  border: 1px solid var(--border);
+
+  background: var(--bg-dark);
+  color: var(--text);
+
+  padding: 11px 12px;
+
+  outline: none;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.15s ease;
+  cursor: pointer;
+}
+
+.familiar-select:focus {
+  border-color: var(--text-accent);
+  box-shadow: 0 0 0 3px rgba(63, 185, 233, 0.18);
+}
+
+.familiar-error {
+  color: #ff7b7b;
+}

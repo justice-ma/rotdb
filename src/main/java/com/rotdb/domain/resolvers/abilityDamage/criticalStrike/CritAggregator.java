@@ -11,17 +11,16 @@ public class CritAggregator {
         CritBonus setBonus = SetEffectsCritResolver.resolve(context);
         CritBonus gearBonus = GearCritResolver.resolve(context);
 
-        double globalChance = baseChance
+        double globalChance = Math.min(baseChance
                 + setBonus.getChanceDelta()
                 + gearBonus.getChanceDelta()
                 + BuffCritResolver.resolve(context)
-                + PerkCritResolver.resolve(context);
+                + PerkCritResolver.resolve(context), 1);
 
         double globalDamage = baseDamage
                 + setBonus.getDamageDelta()
                 + gearBonus.getDamageDelta()
                 + TargetCritResolver.resolve(context);
-
         int hits = context.getAbility().getHits().size();
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);

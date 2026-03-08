@@ -12,5 +12,6 @@ public enum Slots {
     AMMO,
     RING,
     NECK,
-    CAPE
+    CAPE,
+    QUIVER
 }

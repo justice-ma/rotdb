@@ -4,22 +4,12 @@ import com.rotdb.domain.model.enums.CombatStyles;
 import com.rotdb.domain.model.enums.WeaponStyle;
 
 public class TargetContext {
-    private int maxHp, currentHp, bleeds, startingTask, currentTask, size, defence, armour, affinity,
-            blackStoneArrowStacks, lordOfBonesStacks;
-    private boolean combusted, flameboundRival, undead, scarab, scarabPlus, slayerTask, boss, abyssalDemon, dragon,
-            revenant, haunted, vulned, cursed, demon, spider, ghostHunter, smokeClouded, dagannoth, obliterate, bandosBook,
-            clawsOfGuthix, clobber, sunder, backstab, croesusSpored, dinosaur;
+    private int maxHp, currentHp, startingTask, currentTask, size, defence, armour, affinity;
+    private boolean undead, scarab, scarabPlus, slayerTask, boss, abyssalDemon, dragon,
+            revenant, demon, spider, ghostHunter, dagannoth, dinosaur;
     private String name;
     private CombatStyles weakness;
     private WeaponStyle weaponWeakness;
-
-    public boolean isCombusted() {
-        return combusted;
-    }
-
-    public void setCombusted(boolean combusted) {
-        this.combusted = combusted;
-    }
 
     public int getMaxHp() {
         return maxHp;
@@ -43,14 +33,6 @@ public class TargetContext {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public boolean isFlameboundRival() {
-        return flameboundRival;
-    }
-
-    public void setFlameboundRival(boolean flameboundRival) {
-        this.flameboundRival = flameboundRival;
     }
 
     public boolean isUndead() {
@@ -133,30 +115,6 @@ public class TargetContext {
         this.revenant = revenant;
     }
 
-    public boolean isHaunted() {
-        return haunted;
-    }
-
-    public void setHaunted(boolean haunted) {
-        this.haunted = haunted;
-    }
-
-    public boolean isVulned() {
-        return vulned;
-    }
-
-    public void setVulned(boolean vulned) {
-        this.vulned = vulned;
-    }
-
-    public boolean isCursed() {
-        return cursed;
-    }
-
-    public void setCursed(boolean cursed) {
-        this.cursed = cursed;
-    }
-
     public boolean isDemon() {
         return demon;
     }
@@ -179,22 +137,6 @@ public class TargetContext {
 
     public void setGhostHunter(boolean ghostHunter) {
         this.ghostHunter = ghostHunter;
-    }
-
-    public int getBleeds() {
-        return bleeds;
-    }
-
-    public void setBleeds(int bleeds) {
-        this.bleeds = bleeds;
-    }
-
-    public boolean isSmokeClouded() {
-        return smokeClouded;
-    }
-
-    public void setSmokeClouded(boolean smokeClouded) {
-        this.smokeClouded = smokeClouded;
     }
 
     public int getSize() {
@@ -237,54 +179,6 @@ public class TargetContext {
         this.dagannoth = dagannoth;
     }
 
-    public boolean isObliterate() {
-        return obliterate;
-    }
-
-    public void setObliterate(boolean obliterate) {
-        this.obliterate = obliterate;
-    }
-
-    public boolean isBandosBook() {
-        return bandosBook;
-    }
-
-    public void setBandosBook(boolean bandosBook) {
-        this.bandosBook = bandosBook;
-    }
-
-    public boolean isClawsOfGuthix() {
-        return clawsOfGuthix;
-    }
-
-    public void setClawsOfGuthix(boolean clawsOfGuthix) {
-        this.clawsOfGuthix = clawsOfGuthix;
-    }
-
-    public boolean isClobber() {
-        return clobber;
-    }
-
-    public void setClobber(boolean clobber) {
-        this.clobber = clobber;
-    }
-
-    public boolean isSunder() {
-        return sunder;
-    }
-
-    public void setSunder(boolean sunder) {
-        this.sunder = sunder;
-    }
-
-    public boolean isBackstab() {
-        return backstab;
-    }
-
-    public void setBackstab(boolean backstab) {
-        this.backstab = backstab;
-    }
-
     public CombatStyles getWeakness() {
         return weakness;
     }
@@ -299,30 +193,6 @@ public class TargetContext {
 
     public void setWeaponWeakness(WeaponStyle weaponWeakness) {
         this.weaponWeakness = weaponWeakness;
-    }
-
-    public int getBlackStoneArrowStacks() {
-        return blackStoneArrowStacks;
-    }
-
-    public void setBlackStoneArrowStacks(int blackStoneArrowStacks) {
-        this.blackStoneArrowStacks = blackStoneArrowStacks;
-    }
-
-    public int getLordOfBonesStacks() {
-        return lordOfBonesStacks;
-    }
-
-    public void setLordOfBonesStacks(int lordOfBonesStacks) {
-        this.lordOfBonesStacks = lordOfBonesStacks;
-    }
-
-    public boolean isCroesusSpored() {
-        return croesusSpored;
-    }
-
-    public void setCroesusSpored(boolean croesusSpored) {
-        this.croesusSpored = croesusSpored;
     }
 
     public boolean isDinosaur() {

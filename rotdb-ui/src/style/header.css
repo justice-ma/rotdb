@@ -10,3 +10,7 @@
   cursor: default;
   border-bottom: 1px var(--border) solid;
 }
+
+.accent {
+  color: var(--text-accent);
+}

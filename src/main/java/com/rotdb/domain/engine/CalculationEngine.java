@@ -2,6 +2,7 @@ package com.rotdb.domain.engine;
 
 import com.rotdb.application.normalization.DamageRequestNormalizer;
 import com.rotdb.application.validation.DamageRequestValidator;
+import com.rotdb.application.validation.PrayerRequestValidator;
 import com.rotdb.domain.model.HitResult;
 import com.rotdb.domain.model.DamageRequest;
 import com.rotdb.domain.model.DamageResult;
@@ -19,11 +20,15 @@ public final class CalculationEngine {
     private final AbilityDamagePipeline abilityPipeline = new AbilityDamagePipeline();
     private final DamageRequestNormalizer normalizer = new DamageRequestNormalizer();
     private final DamageRequestValidator validator = new DamageRequestValidator();
+    private final PrayerRequestValidator prayerValidator = new PrayerRequestValidator();
     public DamageResult calculateAbilityDamage(DamageRequest request) {
         validator.validate(request);
         request = normalizer.normalize(request);
 
         CalculationContext context = ContextBuilder.build(request);
+
+        prayerValidator.validatePrayers(context.getSelectedPrayers());
+
         abilityPipeline.run(context);
         System.out.println("BASE=" + context.getDamage().getBaseDamage() + " STYLE=" +
                 context.getEquipment().getMainhand().getClazz() + " MAGIC=" + context.getSkills().getBoostedMagic() +

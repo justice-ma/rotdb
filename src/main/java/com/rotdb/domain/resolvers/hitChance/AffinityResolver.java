@@ -2,18 +2,20 @@ package com.rotdb.domain.resolvers.hitChance;
 
 import com.rotdb.domain.model.context.CalculationContext;
 import com.rotdb.domain.model.context.TargetContext;
+import com.rotdb.domain.model.enums.BuffId;
+import com.rotdb.domain.model.player.BuffContext;
 
 public class AffinityResolver {
     public static int resolve(CalculationContext context) {
         int affinity = context.getTarget().getAffinity();
-        TargetContext target = context.getTarget();
+        BuffContext buff = context.getBuffs();
 
-        int statius = target.isObliterate() ? 5 : 0;
-        int bandos = target.isBandosBook() ? 3 : 0;
-        int guthixStaff = target.isClawsOfGuthix() ? 2 : 0;
-        int dragonHatchet = target.isClobber() ? 3 : 0;
-        int barrelchest = target.isSunder() ? 4 : 0;
-        int boneDagger = target.isBackstab() ? 2 : 0;
+        int statius = buff.has(BuffId.OBLITERATED) ? 5 : 0;
+        int bandos = buff.has(BuffId.BANDOSBOOK) ? 3 : 0;
+        int guthixStaff = buff.has(BuffId.CLAWSOFGUTHIX) ? 2 : 0;
+        int dragonHatchet = buff.has(BuffId.CLOBBER) ? 3 : 0;
+        int barrelchest = buff.has(BuffId.SUNDER) ? 4 : 0;
+        int boneDagger = buff.has(BuffId.BACKSTAB) ? 2 : 0;
 
         return affinity + statius + bandos + guthixStaff + dragonHatchet + barrelchest + boneDagger;
     }

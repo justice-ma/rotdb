@@ -46,3 +46,40 @@ export async function fetchBuffs() {
   const res = await fetch(`${BASE}/buffs`);
   return handleResponse(res);
 }
+
+export async function fetchSpells(query) {
+  const res = await fetch(`${BASE}/spells?q=${encodeURIComponent(query)}`);
+  return handleResponse(res);
+}
+
+export async function fetchPrayers() {
+  const res = await fetch(`${BASE}/prayers`);
+  return handleResponse(res);
+}
+
+export async function fetchPrayersByName(query) {
+  const res = await fetch(`${BASE}/prayers?q=${encodeURIComponent(query)}`);
+  return handleResponse(res);
+}
+
+export async function fetchPerks() {
+  const res = await fetch(`${BASE}/perks`);
+  return handleResponse(res);
+}
+
+export async function fetchTargets(query) {
+  const res = await fetch(
+    `${BASE}/target/search?q=${encodeURIComponent(query)}`,
+  );
+  return handleResponse(res);
+}
+
+export async function fetchFamiliars() {
+  const res = await fetch(`${BASE}/familiars`);
+  return handleResponse(res);
+}
+
+export async function fetchPotions() {
+  const res = await fetch(`${BASE}/potions`);
+  return handleResponse(res);
+}

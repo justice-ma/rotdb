@@ -1,0 +1,65 @@
+.stats-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: var(--space-1) 0 var(--space-2) 0;
+  justify-content: space-around;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg);
+  padding: var(--space-1);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.stat-label {
+  color: var(--text);
+  cursor: pointer;
+}
+
+.stat-input {
+  width: 44px;
+  box-sizing: border-box;
+  text-align: center;
+
+  border: var(--border) 1px solid;
+  border-radius: 8px;
+  background: var(--bg-dark);
+  color: var(--text);
+
+  padding: 8px 10px;
+  outline: none;
+}
+
+.stat-row:focus-within {
+  border-color: var(--text-accent);
+  box-shadow: 0 0 0 2px rgba(63, 185, 233, 0.18);
+}
+
+.stat-input::-webkit-inner-spin-button,
+.stat-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.stat-input::selection {
+  background-color: var(--bg-accent);
+}
+
+.stat-row:hover:not(:focus-within) {
+  border-color: var(--border-light);
+}
+
+.stat-row:hover {
+  background: var(--bg-light);
+}
+
+.stat-row:hover > .stat-input {
+  border-color: var(--border-light);
+}

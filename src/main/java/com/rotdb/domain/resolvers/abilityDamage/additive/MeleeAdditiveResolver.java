@@ -11,7 +11,6 @@ import com.rotdb.domain.model.player.BuffContext;
 public class MeleeAdditiveResolver {
     public static double resolve(CalculationContext context, int hitIndex) {
         BuffContext buff = context.getBuffs();
-        TargetContext target = context.getTarget();
         EquipmentSlot neck = context.getEquipment().getNeck();
         EquipmentSlot gloves = context.getEquipment().getGloves();
         EquipmentSlot mainhand = context.getEquipment().getMainhand();
@@ -24,7 +23,7 @@ public class MeleeAdditiveResolver {
                 mod += 0.05;
             }
 
-            if (mainhand.getEffect().contains(Effect.EKZEKKIL) && target.isFlameboundRival()) {
+            if (mainhand.getEffect().contains(Effect.EKZEKKIL) && buff.has(BuffId.FLAMEBOUNDRIVAL)) {
                 mod += 0.12;
             }
 

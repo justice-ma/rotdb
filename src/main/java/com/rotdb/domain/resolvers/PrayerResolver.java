@@ -67,8 +67,10 @@ public class PrayerResolver {
             }
 
             if (zealotsEquipped && ZEALOTS.contains(prayer)) {
-                out.setPrayerStrengthBonus(out.getPrayerStrengthBonus() + 10);
-                out.setPrayerAccuracyBonus((int) (out.getPrayerAccuracyBonus() * 1.1));
+                out.setPrayerStrengthBonus(prayer.getPrayerStrengthBonus() == 0 ? out.getPrayerStrengthBonus() :
+                        out.getPrayerStrengthBonus() + 10);
+                out.setPrayerAccuracyBonus((int) (out.getPrayerAccuracyBonus() == 0 ? out.getPrayerAccuracyBonus() :
+                        out.getPrayerAccuracyBonus() * 1.1));
             }
         }
 

@@ -18,7 +18,7 @@ public record DamageCalcRequestDto(
         Spells spell,
         Set<Prayer> selectedPrayers,
         Boolean berserkersFury,
-        Familiars familiar,
+        Familiars selectedFamiliar,
         PerkSelection perks
 ) {
     public record Skills(Integer strength, Integer magic,Integer ranged, Integer necromancy, Integer attack) {}

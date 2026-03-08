@@ -47,7 +47,7 @@ public final class DamageRequestMapper {
         SpellContext spell = spellContextMapper.from(request.spell());
         PrayerContext prayer = prayerContextMapper.from(request.selectedPrayers());
         RelicsContext relics = relicsContextMapper.from(request.berserkersFury());
-        FamiliarContext familiar = familiarContextMapper.from(request.familiar());
+        FamiliarContext familiar = familiarContextMapper.from(request.selectedFamiliar());
         PerkContext perks = perkContextMapper.from(request.perks());
 
         DamageRequest dr = new DamageRequest();

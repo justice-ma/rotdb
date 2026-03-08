@@ -17,16 +17,16 @@ public class TargetStatusMultiplierResolver {
         EquipmentSlot cape = context.getEquipment().getCape();
 
         double mod = 1;
-        if (target.isVulned()) {
+        if (buff.has(BuffId.VULNED)) {
             mod *= 1.1;
         }
 
-        if (target.isCursed() && !target.isVulned()) {
+        if (buff.has(BuffId.CURSED) && !buff.has(BuffId.VULNED)) {
             mod *= 1.05;
         }
 
 
-        if (target.isCroesusSpored()) {
+        if (buff.has(BuffId.CROESUSSPORED)) {
             mod *= 1.1;
         }
 

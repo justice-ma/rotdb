@@ -33,11 +33,16 @@
   flex-wrap: wrap;
   justify-content: space-between;
   gap: var(--space-1);
-  margin-top: var(--space-2);
+  margin-top: var(--space-3);
   margin-bottom: var(--space-3);
 }
 
 .buff-tab {
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+
   border: 1px solid var(--border);
   background: var(--bg);
   color: var(--text-muted);
@@ -50,39 +55,73 @@
 .buff-tab.active {
   color: var(--text);
   border-color: var(--text-accent);
-  background: var(--bg-light);
+  background: var(--bg-accent);
 }
 
 .buff-grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--space-1);
   margin-top: var(--space-1);
   margin-bottom: var(--space-2);
 }
 
 .buff {
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
+  justify-content: space-between;
+  gap: 8px;
 
   border: 1px solid var(--border);
-  background: var(--bg-light);
+  background: var(--bg);
   color: var(--text-muted);
   border-radius: 8px;
 
   padding: var(--space-1) var(--space-2);
   cursor: pointer;
-  min-width: 100px;
+  width: 177px;
   min-height: 38px;
+  box-sizing: border-box;
+
+  animation: buff-enter 180ms ease;
 }
 
 .buff.selected {
   color: var(--text);
   border-color: var(--text-accent);
-  background: var(--bg-light);
+  background: var(--bg-accent);
+}
+
+.buff:hover,
+.buff-tab:hover {
+  cursor: pointer;
+  transform: translateY(-2px);
+  border-color: var(--border-accent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 8px 20px rgba(0, 0, 0, 0.45);
+}
+
+.buff:hover:not(.buff.selected),
+.buff-tab:hover:not(.buff-tab:active) {
+  background-color: var(--bg-light);
+}
+
+@keyframes buff-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .buff-item {
@@ -90,25 +129,44 @@
   align-items: center;
 }
 
+.buff-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+  color: inherit;
+  line-height: 1.2;
+}
+
 .buff-stack-input {
-  width: 24px;
-  min-width: 24px;
-  height: 20px;
+  flex: 0 0 30px;
+  width: 30px;
+  min-width: 30px;
+  height: 22px;
 
   padding: 0;
   margin: 0;
 
   border: none;
   border-radius: 4px;
-  background: var(--bg-dark);
+  background: var(--bg-light);
   color: var(--text);
 
   font: inherit;
   font-size: 0.85em;
   line-height: 1;
-
   text-align: center;
   box-sizing: border-box;
+
+  outline: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.buff.selected .buff-stack-input {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.buff-stack-input:focus {
+  box-shadow: 0 0 0 2px rgba(63, 185, 233, 0.18);
 }
 
 .buff-stack-input::-webkit-inner-spin-button,

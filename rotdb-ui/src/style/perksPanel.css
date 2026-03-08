@@ -1,0 +1,138 @@
+.perks-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+  margin-bottom: var(--space-2);
+}
+
+.perk-row,
+.perk-toggle-button {
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.15s ease;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-muted);
+  border-radius: 8px;
+
+  padding: var(--space-1) var(--space-2);
+  cursor: pointer;
+
+  width: 177px;
+  min-height: 38px;
+  box-sizing: border-box;
+
+  font-size: 0.9rem;
+}
+
+.perk-row.selected {
+  color: var(--text);
+  border-color: var(--text-accent);
+  background: var(--bg-accent);
+}
+
+.perk-row:hover,
+.perk-toggle-button:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-accent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 8px 20px rgba(0, 0, 0, 0.45);
+}
+
+.perk-row:hover:not(.selected) {
+  background-color: var(--bg-light);
+}
+
+.perk-row:focus-within {
+  border-color: var(--text-accent);
+  box-shadow:
+    0 0 0 3px rgba(63, 185, 233, 0.18),
+    0 8px 20px rgba(0, 0, 0, 0.45);
+}
+
+.perk-label {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  color: inherit;
+
+  font-size: 0.9em;
+  line-height: 1.2;
+  font-weight: 500;
+
+  text-align: left;
+}
+
+.perk-rank-input {
+  flex: 0 0 30px;
+  width: 30px;
+  height: 22px;
+
+  border: none;
+  border-radius: 4px;
+  background: var(--bg-light);
+  color: var(--text);
+  text-align: center;
+  outline: none;
+}
+
+.perk-row.selected .perk-rank-input {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.perk-rank-input:focus {
+  box-shadow: 0 0 0 2px rgba(63, 185, 233, 0.18);
+}
+
+.perk-row:not(.selected) .perk-rank-input {
+  opacity: 0.72;
+}
+
+.perk-rank-input::-webkit-inner-spin-button,
+.perk-rank-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.perk-rank-input::selection {
+  background-color: var(--bg-accent);
+}
+
+@keyframes perk-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.perks-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.perk-toolbar {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.perk-toggle-button.active {
+  border-color: var(--border-accent);
+  background-color: var(--bg-accent);
+  color: var(--text);
+}

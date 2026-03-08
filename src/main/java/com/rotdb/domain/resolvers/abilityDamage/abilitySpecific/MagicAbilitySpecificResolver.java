@@ -21,7 +21,6 @@ public class MagicAbilitySpecificResolver {
         EquipmentSlot offhand = context.getEquipment().getOffhand();
         EquipmentSlot gloves = context.getEquipment().getGloves();
         BuffContext buff = context.getBuffs();
-        TargetContext target = context.getTarget();
         double mod = 1;
         if (style == MAGIC) {
             if (buff.has(BuffId.CONFLAGRATE) && ability.getId() == AbilityId.COMBUST) {
@@ -34,7 +33,7 @@ public class MagicAbilitySpecificResolver {
                 mod *= 1.3;
             }
 
-            if (gloves.getEffect().contains(Effect.KERAPACSWRISTWRAPS) && target.isCombusted()) {
+            if (gloves.getEffect().contains(Effect.KERAPACSWRISTWRAPS) && buff.has(BuffId.COMBUSTED)) {
                 if (buff.has(BuffId.ENCHANTMENTOFFLAMES) && gloves.getEffect().contains(Effect.ENHANCED)) {
                     mod *= 1.4;
                 } else {
@@ -43,7 +42,7 @@ public class MagicAbilitySpecificResolver {
 
             }
 
-            if (ability.getId() == AbilityId.DRAGONBREATH && target.isCombusted()) {
+            if (ability.getId() == AbilityId.DRAGONBREATH && buff.has(BuffId.COMBUSTED)) {
                mod *= 1.25;
             }
         }

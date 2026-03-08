@@ -58,7 +58,23 @@ public enum BuffId {
     PERFECTEQUILIBRIUMSTACKS(0, 7, true, "Perfect Equilibrium"),
     PRIMORDIALICESTACKS(0, 10, true, "Primordial Ice"),
     TIMESINCELASTATTACK(0, 10, true, "Time Since Last Attack"),
-    REAPERSTACKS(0, 30, true, "Reaper Stacks");
+    REAPERSTACKS(0, 30, true, "Reaper Stacks"),
+    BLEEDS(0, 4, true, "Bleeds on Target"),
+    BLACKSTONEARROWSTACKS(0, 21, true, "BSA Stacks"),
+    LORDOFBONESSTACKS(0, 200, true, "LoB Stacks"),
+    COMBUSTED(0, 0, false, "Combusted"),
+    FLAMEBOUNDRIVAL(0, 0, false, "Flamebound Rival"),
+    HAUNTED(0, 0, false, "Haunted"),
+    VULNED(0, 0, false, "Vulned"),
+    CURSED(0, 0, false, "Cursed"),
+    SMOKECLOUDED(0, 0, false, "Smoke Clouded"),
+    OBLITERATED(0, 0, false, "Statius' Warhammer"),
+    BANDOSBOOK(0, 0, false, "Bandos Book"),
+    CLAWSOFGUTHIX(0, 0, false, "Claws of Guthix"),
+    CLOBBER(0, 0, false, "Clobber"),
+    SUNDER(0, 0, false, "Sunder"),
+    BACKSTAB(0, 0, false, "Backstab"),
+    CROESUSSPORED(0, 0, false, "Croesus Spored");
 
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;

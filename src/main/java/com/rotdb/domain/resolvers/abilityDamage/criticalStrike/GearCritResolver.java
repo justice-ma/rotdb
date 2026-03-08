@@ -17,7 +17,6 @@ public class GearCritResolver {
         EquipmentSlot ammo = context.getEquipment().getAmmo();
         BuffContext buff = context.getBuffs();
         AbilityContext ability = context.getAbility();
-        TargetContext target = context.getTarget();
 
         double criticalStrikeChance = 0;
         double criticalStrikeDamage = 0;
@@ -29,10 +28,10 @@ public class GearCritResolver {
             criticalStrikeChance += 0.05;
         }
 
-        if (ring.getEffect().contains(Effect.CHAMPIONSRING) && target.getBleeds() > 0 && ability.getCombatStyle() == MELEE) {
+        if (ring.getEffect().contains(Effect.CHAMPIONSRING) && buff.has(BuffId.BLEEDS) && buff.stacks(BuffId.BLEEDS) > 0 && ability.getCombatStyle() == MELEE) {
             if (buff.has(BuffId.ENCHANTMENTOFHEROISM)) {
                 criticalStrikeChance += 0.04;
-                criticalStrikeDamage += 0.015 * target.getBleeds();
+                criticalStrikeDamage += 0.015 * buff.stacks(BuffId.BLEEDS);
             } else {
                 criticalStrikeChance += 0.03;
             }

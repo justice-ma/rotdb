@@ -22,7 +22,7 @@ public class CoreModifier implements Modifier {
 
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
-
+            if (hit.isDot()) continue;
             hit.setCurrentMin(hit.getCurrentMin() + add);
             hit.setCurrentMax(hit.getCurrentMax() + add);
             hit.setCurrentDamage((hit.getCurrentMin() + hit.getCurrentMax()) / 2);

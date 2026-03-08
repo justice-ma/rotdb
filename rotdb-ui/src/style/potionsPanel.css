@@ -1,0 +1,23 @@
+.potions-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.potion-select {
+  width: 100%;
+  background: var(--bg-light);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  padding: 0.65rem 0.8rem;
+  font: inherit;
+}
+
+.potion-select:focus {
+  outline: none;
+  border-color: var(--text-accent);
+}
+
+.potion-error {
+  color: hsl(0 65% 65%);
+}
