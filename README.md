@@ -240,13 +240,7 @@ than final visual polish.
 
 # Frontend Screenshots
 
-*(Add screenshots here once UI stabilizes)*
-
-Example placeholders:
-
-    docs/screenshots/ability-browser.png
-    docs/screenshots/combat-settings.png
-    docs/screenshots/damage-results.png
+(in progress)
 
 ------------------------------------------------------------------------
 
