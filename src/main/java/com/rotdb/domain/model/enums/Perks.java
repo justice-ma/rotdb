@@ -5,6 +5,7 @@ public enum Perks {
     RUTHLESS(1, 3, false, "Ruthless"),
     PRECISE(1, 6, false, "Precise"),
     ERUPTIVE(1, 4, false, "Eruptive"),
+    EQUILIBRIUM(1, 4, false, "Equilibrium"),
     ULTIMATUMS(1, 4, false, "Ultimatums"),
     BITING(1, 4, true, "Biting"),
     FLANKING(1, 4, false, "Flanking"),

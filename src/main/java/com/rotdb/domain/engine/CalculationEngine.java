@@ -30,14 +30,6 @@ public final class CalculationEngine {
         prayerValidator.validatePrayers(context.getSelectedPrayers());
 
         abilityPipeline.run(context);
-        System.out.println("BASE=" + context.getDamage().getBaseDamage() + " STYLE=" +
-                context.getEquipment().getMainhand().getClazz() + " MAGIC=" + context.getSkills().getBoostedMagic() +
-                " MHTIER=" + context.getEquipment().getMainhand().getDamageTier() +
-                " ACCTIER=" + context.getEquipment().getMainhand().getAccuracyTier() +
-                " DW=" + (context.getEquipment().getOffhand().getId() != null) +
-                " BONUS=" + context.getEquipment().getTotalStrength() +
-                " EFFECTS=" + context.getEquipment().getMainhand().getEffect() +
-                " HITCHANCE=" + context.getHitChance());
         return mapToResult(context);
     }
 

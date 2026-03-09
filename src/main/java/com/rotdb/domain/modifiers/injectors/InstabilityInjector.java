@@ -26,7 +26,7 @@ public class InstabilityInjector implements Modifier {
             }
 
             AbilityHitsContext proc = new AbilityHitsContext(
-                    0.9, 1.1,
+                    0.8, 1,
                     false,
                     AbilityTier.BASIC,
                     parent.getHitTiming() + 1,

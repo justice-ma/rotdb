@@ -38,10 +38,13 @@ public class AmmoBuffInvisibleResolver {
             }
         }
 
-        if (style == RANGED &&
-                ammo.getEffect().contains(Effect.WENARROWS)) {
-            int wen = buff.has(BuffId.WENSTACKS) ? buff.stacks(BuffId.WENSTACKS) : 0;
-            return 1 + (0.02 * wen);
+        System.out.println(ammo.getEffect());
+        System.out.println(buff.stacks(BuffId.WENSTACKS));
+
+        if (style == RANGED && ammo.getEffect().contains(Effect.WENARROWS)) {
+            int wen = buff.has(BuffId.WENSTACKS) && buff.stacks(BuffId.WENSTACKS) >= 10
+                    ? buff.stacks(BuffId.WENSTACKS) : 0;
+            return 1.3;
         }
 
         return 1;

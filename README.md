@@ -1,204 +1,328 @@
 # RuneScape Ability Damage Simulator
 
-A deterministic damage calculator and simulation engine for RuneScape abilities.  
-Built to model real in-game combat math, modifier stacking, and multi-hit abilities with high accuracy.
+A deterministic damage calculator and simulation engine for RuneScape
+abilities.\
+Built to model real in‑game combat math, modifier stacking, and
+multi‑hit abilities with high accuracy.
 
-## Overview
+This project now includes:
 
-This project calculates the damage output of RuneScape abilities by running a structured **damage pipeline** over a clean input model (`DamageRequest`).
+-   A **Spring Boot backend**
+-   A **React frontend prototype**
+-   A **PostgreSQL database populated with RuneScape data scraped from
+    the RuneScape Wiki**
+
+The goal is to provide an **accurate, explainable, and extensible combat
+simulation engine** for RuneScape 3.
+
+------------------------------------------------------------------------
+
+# Overview
+
+The simulator calculates the damage output of RuneScape abilities by
+executing a structured **damage pipeline** on a clean input model
+(`DamageRequest`).
 
 It supports:
 
-- Multi-hit abilities
-- Style-specific formulas (Melee / Ranged / Magic / Necromancy)
-- Additive + multiplicative modifier layers
-- Critical strike modeling
-- Buffs, perks, prayers, relics, and gear effects
-- Proc effects and injected hits (e.g., Perfect Equilibrium)
+-   Multi‑hit abilities
+-   Style specific formulas (Melee / Ranged / Magic / Necromancy)
+-   Additive and multiplicative modifier stacking
+-   Critical strike modeling
+-   Buffs, prayers, relics, perks, and gear effects
+-   Proc effects and injected hits
+-   Familiar and target modifiers
+-   Equipment‑driven rule logic
 
-The goal is **accurate, explainable, and modular damage calculation** — not just rough estimates.
+Unlike simple calculators, this project attempts to replicate
+**RuneScape's internal combat math deterministically**.
 
-## Tech Stack
+------------------------------------------------------------------------
 
-- **Backend:** Java (Spring Boot integration planned/in progress)
-- **Build Tool:** Maven
-- **Frontend (planned):** React
-- **Database (planned):** PostgreSQL
+# Tech Stack
 
-## Architecture
+## Backend
 
-The system is split into **three major layers**:
+-   Java
+-   Spring Boot
+-   Maven
 
-### 1) Input Layer
+## Frontend
 
-User inputs are captured in a clean input model, e.g. `DamageRequest`.
+-   React
+-   Vite
 
-This includes:
+## Database
 
-- Equipment
-- Ability
-- Skills
-- Buffs
-- Prayers
-- Perks
-- Relics
-- Target
-- Ammo/Familiar/etc
+-   PostgreSQL
+-   RuneScape Wiki scraped data
 
-This ensures the calculation engine **never touches raw user input directly**.
+## Deployment
 
-### 2) Engine Layer
+-   Railway (backend hosting)
+-   PostgreSQL production database
 
-The engine converts the request into a working context and runs the **damage pipeline**:
+------------------------------------------------------------------------
 
-```java
+# System Architecture
+
+The system is separated into **three major layers**.
+
+## 1. Input Layer
+
+User configuration is converted into a structured model:
+
+    DamageRequest
+
+Inputs include:
+
+-   Equipment
+-   Ability
+-   Combat style
+-   Player skill levels
+-   Buffs
+-   Prayers
+-   Perks
+-   Relics
+-   Familiar
+-   Target
+-   Potions
+
+This ensures the calculation engine **never interacts directly with UI
+state**.
+
+------------------------------------------------------------------------
+
+## 2. Engine Layer
+
+The engine converts the request into a working context and executes the
+**damage pipeline**.
+
+``` java
 DamageResult result = engine.calculateAbilityDamage(request);
 ```
 
-Pipeline stages typically include:
+Pipeline stages include:
 
-1. Base damage calculation
-2. Additive modifiers
-3. Multiplicative modifiers
-4. Hit-specific adjustments
-5. Crit calculation
-6. Proc injections
-7. Final damage resolution
+1.  Base damage calculation
+2.  Additive modifiers
+3.  Multiplicative modifiers
+4.  Hit‑specific adjustments
+5.  Critical strike modeling
+6.  Proc injections
+7.  Final hit resolution
 
-Each stage is modular and composable.
+Each stage is modular and independently testable.
 
-### 3) Output Layer
+------------------------------------------------------------------------
 
-The final output is returned as `DamageResult`.
+## 3. Output Layer
 
-This contains:
+Results are returned as:
 
-- Final hit values (per hit)
-- Min / Max / Avg damage
-- Crit / Non-crit breakdown
-- Total damage
-- Optional debug trace (if enabled)
+    DamageResult
 
-## Project Structure (Conceptual)
+Output contains:
 
-```
-domain/
-  DamageRequest
-  DamageResult
+-   Individual hit values
+-   Min / Max / Avg damage
+-   Crit vs non‑crit breakdown
+-   Total damage
+-   Optional debug trace
 
-engine/
-  CalculationEngine
-  AbilityDamagePipeline
+------------------------------------------------------------------------
 
-model/
-  context/
-    CalculationContext
-    AbilityContext
-    HitContext
-    PrayerContext
-    BuffContext
-    ...
+# Architecture Diagram
 
-rules/
-  modifiers/
-  injectors/
-  calculators/
+                     ┌──────────────┐
+                     │   React UI   │
+                     │ (Frontend)   │
+                     └──────┬───────┘
+                            │ REST API
+                            ▼
+                   ┌─────────────────┐
+                   │ Spring Boot API │
+                   │  /calculate     │
+                   │  /batch         │
+                   └──────┬──────────┘
+                          │
+                          ▼
+                 ┌────────────────────┐
+                 │ Damage Calculation │
+                 │      Engine        │
+                 │  Ability Pipeline  │
+                 └──────┬─────────────┘
+                        │
+                        ▼
+               ┌───────────────────────┐
+               │ PostgreSQL Database   │
+               │ Equipment / Targets   │
+               └───────────────────────┘
 
-abilities/
-  factories/
-```
+------------------------------------------------------------------------
 
-## Example Usage
+# Backend API
 
-```java
-DamageRequest request = new DamageRequestBuilder()
-    .equipment(equipment)
-    .ability(AbilityId.ASSAULT)
-    .skills(skills)
-    .buffs(buffs)
-    .prayers(prayers)
-    .build();
+## Calculate Single Ability
 
-DamageResult result = engine.calculateAbilityDamage(request);
+    POST /damage/calculate
 
-System.out.println(result.getTotalDamage());
-```
+Returns detailed damage information for a single ability.
 
-## Key Design Principles
+------------------------------------------------------------------------
 
-### Deterministic pipeline
-Every modifier runs in a strict order to match in-game behavior.
+## Batch Ability Calculation
 
-### Separation of concerns
-- Input models never leak into calculation logic
-- Rules are isolated into their own classes
-- Each modifier is independently testable
+    POST /damage/calculate/batch
 
-### Hit-level simulation
-Each ability hit is modeled independently, allowing:
-- Per-hit crit chance
-- Proc injection
-- Hit-specific scaling
+Used by the frontend ability browser to calculate damage for multiple
+abilities simultaneously.
 
-## Current Features
+------------------------------------------------------------------------
 
-- Base damage formulas for all styles
-- Multi-hit ability support
-- Prayer + buff handling
-- Crit calculation per hit
-- Modifier layering system
-- Debug output support
-- Proc injection framework
+# Example API Payload
 
-## Planned Features
+Example request body sent from the frontend:
 
-- Spring Boot REST API
-- React frontend UI
-- Preset saving via PostgreSQL
-- Rotation simulation (multi-ability timelines)
-- DPS graphing + comparisons
-- Export/share builds
-
-## Running the Project
-
-### Prerequisites
-
-- Java 17+
-- Maven
-
-### Run
-
-```bash
-mvn clean install
-mvn spring-boot:run   # once backend is integrated
+``` json
+{
+  "style": "MELEE",
+  "abilityId": "ASSAULT",
+  "skills": {
+    "attack": 99,
+    "strength": 99
+  },
+  "equipment": {
+    "mainhandId": 12345,
+    "headId": 9876
+  },
+  "selectedPrayers": ["PIETY"],
+  "selectedFamiliar": "KALGERION_DEMON"
+}
 ```
 
-## Debugging Output
+Example response:
 
-The engine supports:
+``` json
+{
+  "totalDamage": 13450,
+  "averageHit": 1921,
+  "minHit": 1450,
+  "maxHit": 2380,
+  "hits": [1800, 1900, 2000, 2100]
+}
+```
 
-- Always printing final damage
-- Optional detailed modifier trace
-- File output for long logs
+------------------------------------------------------------------------
 
-## Contributing
+# Frontend Prototype
 
-To add a new modifier:
+The React frontend currently provides a **combat configuration
+interface**.
 
-1. Create a class implementing `Modifier`
-2. Insert it into the appropriate pipeline stage
-3. Add any required context fields
+Users can configure:
 
-## Why This Exists
+-   Equipment
+-   Skill levels
+-   Buffs
+-   Prayers
+-   Familiar
+-   Target
+-   Ability selection
 
-RuneScape damage math is:
+The frontend constructs a `DamageRequest` payload and sends it to the
+backend API.
 
-- Non-trivial
-- Poorly documented in one place
-- Full of layered edge cases
+The UI is currently **prototype stage**, focused on functionality rather
+than final visual polish.
 
-This project exists to provide a **clear, correct, and extensible implementation** of that system.
+------------------------------------------------------------------------
 
-## Author
+# Frontend Screenshots
+
+*(Add screenshots here once UI stabilizes)*
+
+Example placeholders:
+
+    docs/screenshots/ability-browser.png
+    docs/screenshots/combat-settings.png
+    docs/screenshots/damage-results.png
+
+------------------------------------------------------------------------
+
+# Database
+
+PostgreSQL stores RuneScape data including:
+
+-   Equipment
+-   Abilities
+-   Stats
+-   Requirements
+-   Metadata
+
+Data is scraped from the **RuneScape Wiki** and normalized for use by
+the simulator.
+
+------------------------------------------------------------------------
+
+# Project Structure (Conceptual)
+
+    backend/
+      domain/
+      engine/
+      model/
+      rules/
+      abilities/
+
+    frontend/
+      pages/
+      components/
+      panels/
+      api/
+
+    database/
+      schema/
+      seed_data/
+
+------------------------------------------------------------------------
+
+# Running the Project
+
+## Backend
+
+Requirements:
+
+-   Java 21+
+-   Maven
+-   PostgreSQL
+
+Run:
+
+    mvn clean install
+    mvn spring-boot:run
+
+------------------------------------------------------------------------
+
+## Frontend
+
+    npm install
+    npm run dev
+
+------------------------------------------------------------------------
+
+# Why This Exists
+
+RuneScape combat math is:
+
+-   Complex
+-   Poorly documented
+-   Full of layered edge cases
+
+This project provides a **deterministic and extensible implementation of
+RuneScape ability damage calculations**.
+
+------------------------------------------------------------------------
+
+# Author
 
 Justice Mazerolle

@@ -39,8 +39,8 @@ function StatTitle({ icon: Icon, children }) {
 }
 
 function getMetricValue(hit, metric) {
-  if (metric === "min") return hit.hitMinDamage ?? 0;
-  if (metric === "max") return hit.hitMaxDamage ?? 0;
+  if (metric === "min") return hit.hitMinNonCrit ?? 0;
+  if (metric === "max") return hit.hitMaxCrit ?? 0;
   return hit.hitAvgDamage ?? 0;
 }
 

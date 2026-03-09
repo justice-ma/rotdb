@@ -2,6 +2,7 @@ package com.rotdb.domain.resolvers.abilityDamage.criticalStrike;
 
 import com.rotdb.domain.model.context.AbilityHitsContext;
 import com.rotdb.domain.model.context.CalculationContext;
+import com.rotdb.domain.model.enums.Perks;
 
 public class CritAggregator {
     public static void apply (CalculationContext context) {
@@ -24,6 +25,11 @@ public class CritAggregator {
         int hits = context.getAbility().getHits().size();
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
+
+            if (context.getPerks().has(Perks.EQUILIBRIUM) && context.getPerks().rank(Perks.EQUILIBRIUM) > 0) {
+                hit.setCritChanceModifier(0);
+                continue;
+            }
 
             hit.setCritChanceModifier(globalChance);
             hit.setCritDamageModifier(globalDamage);

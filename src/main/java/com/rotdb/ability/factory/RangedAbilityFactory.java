@@ -212,7 +212,6 @@ public class RangedAbilityFactory {
                 CORRUPTIONSHOT);
     }
 
-    // TODO: Force-crit
     public static AbilityContext shadowTendrils() {
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(2, 2.4, false, THRESHOLD, 2)),

@@ -1,16 +1,37 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      "/api": {
+      "/abilities": {
         target: "http://localhost:8080",
         changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+      "/buffs": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
+      "/prayers": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
+      "/perks": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
+      "/familiars": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
+      "/potions": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+      },
+      "/damage": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
       },
     },
   },

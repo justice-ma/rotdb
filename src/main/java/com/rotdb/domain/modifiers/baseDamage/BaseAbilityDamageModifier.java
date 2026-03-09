@@ -45,6 +45,7 @@ public final class BaseAbilityDamageModifier implements Modifier{
         if (buffs.has(BuffId.REAPERSCREW)) bonus += 12;
 
         int er = perks.has(Perks.ERUPTIVE) ? perks.rank(Perks.ERUPTIVE) : 0;
+        int eq = perks.has(Perks.EQUILIBRIUM) ? perks.rank(Perks.EQUILIBRIUM) : 0;
         int mhTier = equipment.getMainhand().getDamageTier();
         int ohTier = dw ? equipment.getOffhand().getDamageTier() : 0;
         int ammoTier = style == CombatStyles.MAGIC ? context.getSpellContext().getSpell().getDamageTier() :
@@ -58,7 +59,7 @@ public final class BaseAbilityDamageModifier implements Modifier{
             ohTier += 5;
         }
 
-        int base = resolveBase(style, dw, s, bonus, mhTier, ohTier, er, ammoTier);
+        int base = resolveBase(style, dw, s, bonus, mhTier, ohTier, er, ammoTier, eq);
 
         context.getDamage().setBaseDamage(base);
         context.getEquipment().setCombatStyle(style);
@@ -66,20 +67,20 @@ public final class BaseAbilityDamageModifier implements Modifier{
 
     private int resolveBase(CombatStyles style, boolean dw,
                             int s, double bonus, int mhTier, int ohTier,
-                            int er, int ammoTier) {
+                            int er, int ammoTier, int eq) {
         return switch (style) {
             case MELEE -> dw
-                    ? MeleeBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er)
-                    : MeleeBaseDamageResolver.twoHand(s, bonus, mhTier, er);
+                    ? MeleeBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, eq)
+                    : MeleeBaseDamageResolver.twoHand(s, bonus, mhTier, er, eq);
             case MAGIC -> dw
-                    ? MagicBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, ammoTier)
-                    : MagicBaseDamageResolver.twoHand(s, bonus, mhTier, er, ammoTier);
+                    ? MagicBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, ammoTier, eq)
+                    : MagicBaseDamageResolver.twoHand(s, bonus, mhTier, er, ammoTier, eq);
             case RANGED -> dw
-                    ? RangedBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, ammoTier)
-                    : RangedBaseDamageResolver.twoHand(s, bonus, mhTier, er, ammoTier);
+                    ? RangedBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, ammoTier, eq)
+                    : RangedBaseDamageResolver.twoHand(s, bonus, mhTier, er, ammoTier, eq);
             case NECROMANCY -> {
                 if (!dw) throw new IllegalStateException("Necromancy requires offhand in current rules");
-                yield NecromancyBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er);
+                yield NecromancyBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, eq);
             }
             case ALL -> throw new IllegalStateException("Combat style ALL is not valid for base damage");
         };

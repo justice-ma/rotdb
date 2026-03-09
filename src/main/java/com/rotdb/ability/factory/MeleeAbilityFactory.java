@@ -30,10 +30,10 @@ public class MeleeAbilityFactory {
 
     public static AbilityContext assault() {
         return new AbilityContext(4,
-                List.of(new AbilityHitsContext(1.45, 1.75, false, THRESHOLD, 1),
-                        new AbilityHitsContext(1.45, 1.75, false, THRESHOLD, 3),
-                        new AbilityHitsContext(1.45, 1.75, false, THRESHOLD, 5),
-                        new AbilityHitsContext(1.45, 1.75, false, THRESHOLD, 7)),
+                List.of(new AbilityHitsContext(1.3, 1.5, false, THRESHOLD, 1),
+                        new AbilityHitsContext(1.3, 1.5, false, THRESHOLD, 3),
+                        new AbilityHitsContext(1.3, 1.5, false, THRESHOLD, 5),
+                        new AbilityHitsContext(1.3, 1.5, false, THRESHOLD, 7)),
                 "Assault",
                 -25,
                 10,
@@ -46,10 +46,10 @@ public class MeleeAbilityFactory {
 
     public static AbilityContext bloodlustAssault() {
         return new AbilityContext(4,
-                List.of(new AbilityHitsContext(1.85, 2.15, false, THRESHOLD, 1),
-                        new AbilityHitsContext(1.85, 2.15, false, THRESHOLD, 3),
-                        new AbilityHitsContext(1.85, 2.15, false, THRESHOLD, 5),
-                        new AbilityHitsContext(1.85, 2.15, false, THRESHOLD, 7)),
+                List.of(new AbilityHitsContext(1.7, 1.9, false, THRESHOLD, 1),
+                        new AbilityHitsContext(1.7, 1.9, false, THRESHOLD, 3),
+                        new AbilityHitsContext(1.7, 1.9, false, THRESHOLD, 5),
+                        new AbilityHitsContext(1.7, 1.9, false, THRESHOLD, 7)),
                 "Bloodlust Assault",
                 -25,
                 10,
@@ -60,10 +60,10 @@ public class MeleeAbilityFactory {
                 BLOODLUSTASSAULT);
     }
 
-    public static AbilityContext sever2h() {
+    public static AbilityContext adaptiveStrike2h() {
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(1.2, 1.4, false, BASIC, 1)),
-                "Sever",
+                "Adaptive Strike",
                 12,
                 9,
                 false,
@@ -73,11 +73,11 @@ public class MeleeAbilityFactory {
                 SEVER2H);
     }
 
-    public static AbilityContext severDw() {
+    public static AbilityContext adaptiveStrikeDw() {
         return new AbilityContext(2,
                 List.of(new AbilityHitsContext(0.6, 0.75, false, BASIC, 1),
                         new AbilityHitsContext(0.6, 0.75, false, BASIC, 1)),
-                "Sever",
+                "Adaptive Strike",
                 12,
                 9,
                 false,
@@ -89,7 +89,7 @@ public class MeleeAbilityFactory {
 
     public static AbilityContext overpower() {
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(5.5, 6, false, ULTIMATE, 3)),
+                List.of(new AbilityHitsContext(5.2, 5.7, false, ULTIMATE, 3)),
                 "Overpower",
                 -60,
                 50,
@@ -102,9 +102,9 @@ public class MeleeAbilityFactory {
 
     public static AbilityContext overpowerIgneous() {
         return new AbilityContext(2,
-                List.of(new AbilityHitsContext(3.1, 3.7, false, ULTIMATE, 3),
-                        new AbilityHitsContext(3.1, 3.7, false, ULTIMATE, 3)),
-                "Overpower",
+                List.of(new AbilityHitsContext(2.8, 3.4, false, ULTIMATE, 3),
+                        new AbilityHitsContext(2.8, 3.4, false, ULTIMATE, 3)),
+                "Igneous Overpower",
                 -60,
                 50,
                 false,
@@ -197,14 +197,14 @@ public class MeleeAbilityFactory {
 
     public static AbilityContext flurry() {
         return new AbilityContext(8,
-                List.of(new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 1),
-                        new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 2),
-                        new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 3),
-                        new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 4),
-                        new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 5),
-                        new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 6),
-                        new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 7),
-                        new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 8)),
+                List.of(new AbilityHitsContext(0.6, 0.7, false, THRESHOLD, 1),
+                        new AbilityHitsContext(0.6, 0.7, false, THRESHOLD, 2),
+                        new AbilityHitsContext(0.6, 0.7, false, THRESHOLD, 3),
+                        new AbilityHitsContext(0.6, 0.7, false, THRESHOLD, 4),
+                        new AbilityHitsContext(0.6, 0.7, false, THRESHOLD, 5),
+                        new AbilityHitsContext(0.6, 0.7, false, THRESHOLD, 6),
+                        new AbilityHitsContext(0.6, 0.7, false, THRESHOLD, 7),
+                        new AbilityHitsContext(0.6, 0.7, false, THRESHOLD, 8)),
                 "Flurry",
                 -25,
                 34,
@@ -217,14 +217,14 @@ public class MeleeAbilityFactory {
 
     public static AbilityContext greaterFlurry() {
         return new AbilityContext(8,
-                List.of(new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 1),
-                        new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 2),
-                        new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 3),
-                        new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 4),
-                        new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 5),
-                        new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 6),
-                        new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 7),
-                        new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 8)),
+                List.of(new AbilityHitsContext(0.6, 0.7, false, THRESHOLD, 1),
+                        new AbilityHitsContext(0.6, 0.7, false, THRESHOLD, 2),
+                        new AbilityHitsContext(0.6, 0.7, false, THRESHOLD, 3),
+                        new AbilityHitsContext(0.6, 0.7, false, THRESHOLD, 4),
+                        new AbilityHitsContext(0.6, 0.7, false, THRESHOLD, 5),
+                        new AbilityHitsContext(0.6, 0.7, false, THRESHOLD, 6),
+                        new AbilityHitsContext(0.6, 0.7, false, THRESHOLD, 7),
+                        new AbilityHitsContext(0.6, 0.7, false, THRESHOLD, 8)),
                 "Greater Flurry",
                 -25,
                 34,
@@ -257,12 +257,12 @@ public class MeleeAbilityFactory {
 
     public static AbilityContext slaughter() {
         return new AbilityContext(6,
-                List.of(new AbilityHitsContext(0.9, 1.1, true, THRESHOLD, 3),
-                        new AbilityHitsContext(0.9, 1.1, true, THRESHOLD, 6),
-                        new AbilityHitsContext(0.9, 1.1, true, THRESHOLD, 9),
-                        new AbilityHitsContext(0.9, 1.1, true, THRESHOLD, 12),
-                        new AbilityHitsContext(0.9, 1.1, true, THRESHOLD, 15),
-                        new AbilityHitsContext(0.9, 1.1, true, THRESHOLD, 18)),
+                List.of(new AbilityHitsContext(0.8, 1, true, THRESHOLD, 3),
+                        new AbilityHitsContext(0.8, 1, true, THRESHOLD, 6),
+                        new AbilityHitsContext(0.8, 1, true, THRESHOLD, 9),
+                        new AbilityHitsContext(0.8, 1, true, THRESHOLD, 12),
+                        new AbilityHitsContext(0.8, 1, true, THRESHOLD, 15),
+                        new AbilityHitsContext(0.8, 1, true, THRESHOLD, 18)),
                 "Slaughter",
                 -25,
                 0,
@@ -276,12 +276,12 @@ public class MeleeAbilityFactory {
     public static AbilityContext massacre() {
         return new AbilityContext(7,
                 List.of(new AbilityHitsContext(1.1, 1.3, false, THRESHOLD, 1),
-                        new AbilityHitsContext(1.2, 1.2, true, THRESHOLD, 5),
-                        new AbilityHitsContext(1.2, 1.2, true, THRESHOLD, 9),
-                        new AbilityHitsContext(1.2, 1.2, true, THRESHOLD, 13),
-                        new AbilityHitsContext(1.2, 1.2, true, THRESHOLD, 17),
-                        new AbilityHitsContext(1.2, 1.2, true, THRESHOLD, 21),
-                        new AbilityHitsContext(1.2, 1.2, true, THRESHOLD, 25)),
+                        new AbilityHitsContext(1, 1, true, THRESHOLD, 5),
+                        new AbilityHitsContext(1, 1, true, THRESHOLD, 9),
+                        new AbilityHitsContext(1, 1, true, THRESHOLD, 13),
+                        new AbilityHitsContext(1, 1, true, THRESHOLD, 17),
+                        new AbilityHitsContext(1, 1, true, THRESHOLD, 21),
+                        new AbilityHitsContext(1, 1, true, THRESHOLD, 25)),
                 "Massacre",
                 -25,
                 0,

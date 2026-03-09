@@ -43,7 +43,7 @@ public enum BuffId {
     STONEOFJAS(0, 6, true, "Stone of Jas"),
     RUBYAURORA(0, 3, true, "Ruby Aurora"),
     GRAVITATE(0, 20, true, "Gravitate"),
-    WENSTACKS(0, 15, true, "Wen Stacks"),
+    WENSTACKS(0, 10, true, "Wen Stacks"),
     REVENGESTACKS(0, 10, true, "Revenge Stacks"),
     RUTHELESSSTACKS(0, 5, true, "Ruthless Stacks"),
     GUARDHOUSE(0, 3, true, "Guardhouse Tier"),

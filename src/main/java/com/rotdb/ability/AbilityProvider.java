@@ -13,8 +13,8 @@ public final class AbilityProvider {
             case MELEEAUTO -> MeleeAbilityFactory.attack();
             case ASSAULT -> MeleeAbilityFactory.assault();
             case BLOODLUSTASSAULT -> MeleeAbilityFactory.bloodlustAssault();
-            case SEVER2H -> MeleeAbilityFactory.sever2h();
-            case SEVERDW -> MeleeAbilityFactory.severDw();
+            case SEVER2H -> MeleeAbilityFactory.adaptiveStrike2h();
+            case SEVERDW -> MeleeAbilityFactory.adaptiveStrikeDw();
             case OVERPOWER -> MeleeAbilityFactory.overpower();
             case OVERPOWERIGNEOUS -> MeleeAbilityFactory.overpowerIgneous();
             case REND -> MeleeAbilityFactory.rend();
