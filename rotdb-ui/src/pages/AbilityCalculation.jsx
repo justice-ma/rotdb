@@ -27,6 +27,8 @@ const DEFAULT_SKILLS = {
 };
 
 export default function AbilityCalculation() {
+  const [settingsOpen, setSettingsOpen] = useState(false);
+
   const [abilities, setAbilities] = useState([]);
   const [results, setResults] = useState({});
   const [detailedResults, setDetailedResults] = useState({});
@@ -216,6 +218,7 @@ export default function AbilityCalculation() {
     if (!preset) return;
 
     applyPresetPayload(preset.payload, preset.uiState);
+    setSettingsOpen(false);
   }
 
   function handleDeletePreset() {
@@ -286,7 +289,33 @@ export default function AbilityCalculation() {
 
   return (
     <div className="ability-page">
-      <div className="combat-settings-panel">
+      <button
+        type="button"
+        className="mobile-settings-button"
+        onClick={() => setSettingsOpen(true)}
+      >
+        ☰ Settings
+      </button>
+
+      {settingsOpen ? (
+        <div
+          className="mobile-settings-overlay"
+          onClick={() => setSettingsOpen(false)}
+        />
+      ) : null}
+
+      <div className={`combat-settings-panel ${settingsOpen ? "open" : ""}`}>
+        <div className="mobile-settings-topbar">
+          <h3>Settings</h3>
+          <button
+            type="button"
+            className="mobile-close-button"
+            onClick={() => setSettingsOpen(false)}
+          >
+            ✕
+          </button>
+        </div>
+
         <CombatSettings
           mainhand={mainhand}
           setMainhand={setMainhand}
@@ -326,16 +355,90 @@ export default function AbilityCalculation() {
         {needsMainhand ? (
           <div className="start-container">
             <div className="start-card">
-              <h3 className="start-title">Start here</h3>
+              <h3 className="start-title">
+                Welcome to the Ability Damage Calculator
+              </h3>
+
+              <p className="start-text">
+                This tool lets you build a combat setup, compare ability damage,
+                and inspect detailed calculation results for individual
+                abilities.
+              </p>
+
+              <h4 className="start-subtitle">Getting started</h4>
               <ol className="start-steps">
                 <li>
-                  Select a <b>Mainhand</b> weapon on the left.
+                  Select a <b>Mainhand</b> weapon in the <b>Equipment</b>{" "}
+                  section on the left.
                 </li>
-                <li>Pick buffs you want enabled.</li>
-                <li>Select an ability to see detailed results.</li>
+                <li>
+                  The selected weapon determines your combat style and unlocks
+                  the matching ability list.
+                </li>
+                <li>
+                  Add the rest of your setup, such as armour, offhand, prayers,
+                  potions, perks, buffs, target, and familiar.
+                </li>
+                <li>
+                  Browse the ability list in the middle panel to compare damage
+                  values.
+                </li>
+                <li>
+                  Click any ability to view a more detailed breakdown in the
+                  right panel.
+                </li>
               </ol>
+
+              <h4 className="start-subtitle">What each section does</h4>
+              <ul className="start-list">
+                <li>
+                  <b>Presets</b> — Save and load full builds for quick testing.
+                </li>
+                <li>
+                  <b>Equipment</b> — Select your weapon, armour, jewellery,
+                  ammo, and spell where applicable.
+                </li>
+                <li>
+                  <b>Stats</b> — Set skill levels used in the calculation.
+                </li>
+                <li>
+                  <b>Prayer</b> — Apply active prayers for the selected combat
+                  style.
+                </li>
+                <li>
+                  <b>Potions</b> — Choose an active potion boost.
+                </li>
+                <li>
+                  <b>Buffs</b> — Toggle supported buffs and conditional bonuses.
+                </li>
+                <li>
+                  <b>Perks</b> — Apply invention perk ranks and related options.
+                </li>
+                <li>
+                  <b>Target</b> — Choose the target being attacked.
+                </li>
+                <li>
+                  <b>Familiar</b> — Select an active familiar if relevant.
+                </li>
+              </ul>
+
+              <h4 className="start-subtitle">Important notes</h4>
+              <ul className="start-list">
+                <li>
+                  A <b>Mainhand</b> weapon is required before ability
+                  calculations can begin.
+                </li>
+                <li>
+                  Some systems and values may still be in progress, so treat
+                  this as a build and testing tool rather than a final
+                  authoritative source.
+                </li>
+                <li>Saved presets are stored locally in your browser.</li>
+              </ul>
+
               <div className="start-hint">
-                Tip: type 2+ characters to search.
+                Tip: most searchable fields begin returning results after typing
+                at least 2 characters.
               </div>
             </div>
           </div>
@@ -352,14 +455,7 @@ export default function AbilityCalculation() {
       </div>
 
       <div className="detailed-ability-panel">
-        {needsMainhand ? (
-          <div className="start-card subtle">
-            <h3 className="start-title">No weapon selected</h3>
-            <p className="start-text">
-              Pick a mainhand to enable calculations.
-            </p>
-          </div>
-        ) : (
+        {!needsMainhand && (
           <AbilityStatistics
             calculationResults={detailedResults}
             selectedAbility={selectedAbility}

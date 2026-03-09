@@ -19,6 +19,8 @@ const STYLE = {
   NECROMANCY: "NECROMANCY",
 };
 
+const PRAYER_MOVED_BUFF_IDS = ["ECLIPSEDSOUL"];
+
 const BUFF_UI_META = {
   ENCHANTMENTOFSAVAGERY: {
     category: BUFF_CATEGORY.ENCHANTMENTS,
@@ -400,6 +402,7 @@ export default function BuffPanel({ style, buffs, setBuffs, allBuffs }) {
   }
 
   const mergedBuffs = (allBuffs ?? [])
+    .filter((buff) => !PRAYER_MOVED_BUFF_IDS.includes(buff.id))
     .map((buff) => ({
       ...buff,
       ...(BUFF_UI_META[buff.id] ?? {
@@ -462,7 +465,6 @@ export default function BuffPanel({ style, buffs, setBuffs, allBuffs }) {
             return (
               <div key={buff.id} className="buff-item">
                 <button
-                  key={buff.id}
                   type="button"
                   onClick={() => toggleBuff(buff.id)}
                   className={isSelected ? "buff selected" : "buff"}

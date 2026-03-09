@@ -310,7 +310,10 @@ export default function CombatSettings({
       const q = (queries[slot] ?? "").trim();
       const selected = selectedEquipmentBySlot?.[slot];
 
-      if (selected && q === selected.name) continue;
+      if (selected && q === selected.name) {
+        setLoadingBySlot((prev) => ({ ...prev, [slot]: false }));
+        continue;
+      }
 
       if (q.length < 2) {
         setResultsBySlot((prev) => ({ ...prev, [slot]: [] }));
@@ -463,6 +466,9 @@ export default function CombatSettings({
             style={style}
             selectedPrayers={selectedPrayers}
             setSelectedPrayers={setSelectedPrayers}
+            buffs={buffs}
+            setBuffs={setBuffs}
+            allBuffs={allBuffs}
           />
         </div>
       </details>

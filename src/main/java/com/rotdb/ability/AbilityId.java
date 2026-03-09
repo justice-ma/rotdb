@@ -21,7 +21,7 @@ public enum AbilityId {
     HURRICANE(MELEE, THRESHOLD,"Hurricane"),
     BLOODLUSTHURRICANE(MELEE, THRESHOLD,"Bloodlust Hurricane"),
     FLURRY(MELEE, THRESHOLD,"Flurry"),
-    GREATERFLURRY(MELEE, THRESHOLD,"Flurry"),
+    GREATERFLURRY(MELEE, THRESHOLD,"Greater Flurry"),
     DISMEMBER(MELEE, BASIC,"Dismember"),
     SLAUGHTER(MELEE, THRESHOLD,"Slaughter"),
     MASSACRE(MELEE, THRESHOLD,"Massacre"),

@@ -2,10 +2,19 @@ import { useEffect, useMemo, useState } from "react";
 import { fetchPrayers } from "../api/api";
 import "../style/prayerPanel.css";
 
+const PRAYER_MOVED_BUFF_META = {
+  ECLIPSEDSOUL: {
+    book: "NORMAL",
+  },
+};
+
 export default function PrayerPanel({
   style,
   selectedPrayers,
   setSelectedPrayers,
+  buffs,
+  setBuffs,
+  allBuffs,
 }) {
   const [query, setQuery] = useState("");
   const [allPrayers, setAllPrayers] = useState([]);
@@ -43,6 +52,8 @@ export default function PrayerPanel({
     };
   }, [style]);
 
+  const splitSoulEnabled = (buffs?.enabledBuffs ?? []).includes("SPLITSOUL");
+
   const results = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
@@ -55,6 +66,22 @@ export default function PrayerPanel({
       return matchesBook && matchesQuery;
     });
   }, [allPrayers, activeBook, query]);
+
+  const prayerMovedBuffs = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    return (allBuffs ?? [])
+      .filter((buff) => PRAYER_MOVED_BUFF_META[buff.id])
+      .map((buff) => ({
+        ...buff,
+        ...PRAYER_MOVED_BUFF_META[buff.id],
+      }))
+      .filter((buff) => buff.book === activeBook)
+      .filter((buff) => {
+        if (!normalizedQuery) return true;
+        return buff.label?.toLowerCase().includes(normalizedQuery);
+      });
+  }, [allBuffs, activeBook, query]);
 
   function groupsOverlap(a = [], b = []) {
     return a.some((group) => b.includes(group));
@@ -70,6 +97,10 @@ export default function PrayerPanel({
   }
 
   function togglePrayer(clickedPrayer) {
+    if (splitSoulEnabled && clickedPrayer.book === "NORMAL") {
+      return;
+    }
+
     setSelectedPrayers((prev) => {
       const isSelected = prev.includes(clickedPrayer.id);
 
@@ -97,6 +128,48 @@ export default function PrayerPanel({
       });
 
       return [...nextSelected.map((prayer) => prayer.id), clickedPrayer.id];
+    });
+  }
+
+  useEffect(() => {
+    if (!splitSoulEnabled) return;
+
+    setSelectedPrayers([]);
+
+    setBuffs((prev) => {
+      const enabled = prev?.enabledBuffs ?? [];
+      if (!enabled.includes("ECLIPSEDSOUL")) return prev;
+
+      return {
+        ...prev,
+        enabledBuffs: enabled.filter((id) => id !== "ECLIPSEDSOUL"),
+      };
+    });
+  }, [splitSoulEnabled, setSelectedPrayers, setBuffs]);
+
+  function togglePrayerMovedBuff(buffId) {
+    setBuffs((prev) => {
+      const enabled = prev?.enabledBuffs ?? [];
+      const stacks = prev?.buffStacks ?? {};
+      const isEnabled = enabled.includes(buffId);
+
+      if (isEnabled) {
+        const nextEnabled = enabled.filter((id) => id !== buffId);
+        const nextStacks = { ...stacks };
+        delete nextStacks[buffId];
+
+        return {
+          ...prev,
+          enabledBuffs: nextEnabled,
+          buffStacks: nextStacks,
+        };
+      }
+
+      return {
+        ...prev,
+        enabledBuffs: [...enabled, buffId],
+        buffStacks: stacks,
+      };
     });
   }
 
@@ -133,9 +206,35 @@ export default function PrayerPanel({
 
       {error ? <div className="slot-error">{error}</div> : null}
 
+      {splitSoulEnabled && activeBook === "NORMAL" ? (
+        <div className="slot-error">
+          Normal prayers cannot be selected while Split Soul is active.
+        </div>
+      ) : null}
+
       <div className="prayer-results">
+        {prayerMovedBuffs.map((buff) => {
+          const enabled = (buffs?.enabledBuffs ?? []).includes(buff.id);
+          const disabled = splitSoulEnabled && buff.book === "NORMAL";
+
+          return (
+            <div key={buff.id} className="prayer-row">
+              <button
+                type="button"
+                className={`prayer ${enabled ? "selected" : ""}`}
+                aria-pressed={enabled}
+                disabled={disabled}
+                onClick={() => togglePrayerMovedBuff(buff.id)}
+              >
+                <span>{buff.label}</span>
+              </button>
+            </div>
+          );
+        })}
+
         {results.map((prayer) => {
           const selected = selectedPrayers.includes(prayer.id);
+          const disabled = splitSoulEnabled && prayer.book === "NORMAL";
 
           return (
             <div key={prayer.id} className="prayer-row">
@@ -143,6 +242,7 @@ export default function PrayerPanel({
                 type="button"
                 className={`prayer ${selected ? "selected" : ""}`}
                 aria-pressed={selected}
+                disabled={disabled}
                 onClick={() => togglePrayer(prayer)}
               >
                 <span>{prayer.name}</span>

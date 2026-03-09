@@ -225,7 +225,7 @@ public class MeleeAbilityFactory {
                         new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 6),
                         new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 7),
                         new AbilityHitsContext(0.65, 0.75, false, THRESHOLD, 8)),
-                "Flurry",
+                "Greater Flurry",
                 -25,
                 34,
                 true,
