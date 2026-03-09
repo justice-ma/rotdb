@@ -39,8 +39,6 @@ public class DamageBatchService {
             double max = result.getMaxCoeff();
             double avg = result.getTotalAvgDamage();
 
-            System.out.println(id.getName());
-
             out.put(id, new AbilityCardResultDto(min, max, avg));
         }
 

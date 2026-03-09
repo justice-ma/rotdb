@@ -29,7 +29,7 @@ public class CalculationContext {
     private double hitChance;
 
     public boolean debug = false;
-    public boolean finalPrint = true;
+    public boolean finalPrint = false;
 
     public EquipmentSlot getEquipmentSlot() {
         return equipmentSlot;

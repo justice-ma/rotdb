@@ -29,7 +29,6 @@ public class DamageController {
     @PostMapping("/calculate")
     public DamageResult calculate(@RequestBody DamageCalcRequestDto request) {
         DamageRequest internal = mapper.from(request);
-        System.out.println("REQUEST PERKS=" + internal.getPerks().getPerk());
         return engine.calculateAbilityDamage(internal);
     }
 
