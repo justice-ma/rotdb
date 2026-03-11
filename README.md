@@ -19,7 +19,7 @@ simulation engine** for RuneScape 3.
 
 A live preview of the application is available here:
 
-[https://your-vercel-deployment-url.vercel.app](https://rotdb.vercel.app/)
+(https://rotdb.vercel.app/)
 
 > Note: This project is currently in active development. Some features may be incomplete or change as the system evolves.
 
