@@ -4,12 +4,10 @@ import com.rotdb.domain.model.context.AbilityContext;
 import com.rotdb.domain.model.context.AbilityHitsContext;
 import com.rotdb.domain.model.context.CalculationContext;
 import com.rotdb.domain.model.context.TargetContext;
-import com.rotdb.domain.model.enums.BuffId;
-import com.rotdb.domain.model.enums.CombatStyles;
-import com.rotdb.domain.model.enums.Effect;
-import com.rotdb.domain.model.enums.TargetTags;
+import com.rotdb.domain.model.enums.*;
 import com.rotdb.domain.model.equipment.EquipmentSlot;
 import com.rotdb.domain.model.player.BuffContext;
+import com.rotdb.domain.model.player.SpellContext;
 
 import static com.rotdb.domain.model.enums.CombatStyles.*;
 
@@ -20,9 +18,10 @@ public class AmmoBuffInvisibleResolver {
         AbilityContext ability = context.getAbility();
         TargetContext target = context.getTarget();
         BuffContext buff = context.getBuffs();
+        SpellContext spell = context.getSpellContext();
 
         if (style == MAGIC) {
-            if (/*TODO: NEEDS SPELL CONTEXT*/ target.has(TargetTags.UNDEAD)) {
+            if (spell.getSpell() == Spells.CRUMBLEUNDEAD && target.has(TargetTags.UNDEAD)) {
                 return 1.3;
             }
         }

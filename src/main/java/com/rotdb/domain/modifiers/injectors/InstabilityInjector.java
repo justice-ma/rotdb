@@ -6,8 +6,10 @@ import com.rotdb.domain.model.enums.AbilityTier;
 import com.rotdb.domain.model.enums.BuffId;
 import com.rotdb.domain.model.enums.HitType;
 import com.rotdb.domain.modifiers.Modifier;
+import com.rotdb.domain.resolvers.abilityDamage.criticalStrike.CritDamageRangeResolver;
 
 import java.util.List;
+
 import static com.rotdb.domain.model.enums.CombatStyles.MAGIC;
 
 public class InstabilityInjector implements Modifier {
@@ -25,8 +27,18 @@ public class InstabilityInjector implements Modifier {
                 continue;
             }
 
+            double procCritChance = parent.getCritChanceModifier();
+            // Instability should not inherit conc / gconc crit bonus
+            if (context.getBuffs().has(BuffId.CONCENTRATEDBLASTBUFF)) {
+                procCritChance -= context.getBuffs().has(BuffId.RUNICCHARGE) ? 0.51 : 0.21;
+            } else if (context.getBuffs().has(BuffId.GREATERCONCENTRATEDBLASTBUFF)) {
+                procCritChance -= context.getBuffs().has(BuffId.RUNICCHARGE) ? 0.45 : 0.15;
+            }
+
+            procCritChance = Math.max(0, Math.min(procCritChance, 1));
+
             AbilityHitsContext proc = new AbilityHitsContext(
-                    0.8, 1,
+                    0.7, 0.9,
                     false,
                     AbilityTier.BASIC,
                     parent.getHitTiming() + 1,
@@ -34,11 +46,17 @@ public class InstabilityInjector implements Modifier {
                     i
             );
 
+            proc.setCritChanceModifier(procCritChance);
+            proc.setCritDamageModifier(parent.getCritDamageModifier());
+            proc.setMinCritDamage(CritDamageRangeResolver.resolve(context, proc).getMinMod());
+            proc.setMaxCritDamage(CritDamageRangeResolver.resolve(context, proc).getMaxMod());
+            proc.setAverageCritDamage((proc.getMinCritDamage() + proc.getMaxCritDamage()) / 2);
             hits.add(i + 1, proc);
             baseCount++;
             i++;
         }
     }
+
     private boolean parentCanCrit(CalculationContext context, AbilityHitsContext parent) {
         if (parent.isDot()) return false;
         if (parent.getCritChanceModifier() == 0) return false;

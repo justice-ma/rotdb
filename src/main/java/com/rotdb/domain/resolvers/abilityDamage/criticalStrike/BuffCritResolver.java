@@ -22,14 +22,14 @@ public class BuffCritResolver {
         if (ability.getId() == SMOKETENDRILS || ability.getId() == SHADOWTENDRILS) criticalStrikeChance = 1;
         if (buff.has(BuffId.CONCENTRATEDBLASTBUFF)  && ability.getCombatStyle() == MAGIC) {
             if (buff.has(BuffId.RUNICCHARGE)) {
-                criticalStrikeChance += 0.75;
+                criticalStrikeChance += 0.45;
             } else {
                 criticalStrikeChance += 0.15;
             }
         }
         if (buff.has(BuffId.GREATERCONCENTRATEDBLASTBUFF)  && ability.getCombatStyle() == MAGIC) {
             if (buff.has(BuffId.RUNICCHARGE)) {
-                criticalStrikeChance += 0.81;
+                criticalStrikeChance += 0.51;
             } else {
                 criticalStrikeChance += 0.21;
             }

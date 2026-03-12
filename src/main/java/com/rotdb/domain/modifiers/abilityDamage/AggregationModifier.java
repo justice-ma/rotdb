@@ -55,10 +55,17 @@ public class AggregationModifier implements Modifier {
                 critMin += hit.getNonCritMin();
                 critMax += hit.getCritMax();
                 critAvg += (hit.getNonCritMin() + hit.getCritMax()) / 2;
+
+                hit.setCurrentMin((int) (hit.getCurrentMin() * w));
+                hit.setCurrentMax((int) (hit.getCurrentMax() * w));
+                hit.setCurrentDamage((int) (hit.getCurrentDamage() * w));
+
+                hit.setNonCritMin((int) (hit.getNonCritMin() * w));
+                hit.setNonCritMax((int) (hit.getNonCritMax() * w));
+                hit.setNonCritDamage((int) (hit.getNonCritDamage() * w));
             }
         }
 
-        // ===== SET FINAL TOTALS ONCE =====
         context.getDamage().setCurrentMin(min);
         context.getDamage().setCurrentMax(max);
         context.getDamage().setCurrentDamage(avg);

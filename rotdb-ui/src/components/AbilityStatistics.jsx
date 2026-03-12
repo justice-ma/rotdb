@@ -90,7 +90,9 @@ function buildStackedGroups(hits, metric) {
     } else if (type === "SPLITSOUL") {
       currentGroup.splitSoul += value;
     } else if (type === "INSTABILITY") {
-      currentGroup.instability += value;
+      if (metric !== "min") {
+        currentGroup.instability += value;
+      }
     }
 
     currentGroup.sourceHits.push(hit);
