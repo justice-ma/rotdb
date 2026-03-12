@@ -270,10 +270,7 @@ export default function CombatSettings({
 
       for (const slot of SLOTS) {
         const selected = selectedEquipmentBySlot?.[slot];
-
-        if (selected) {
-          next[slot] = selected.name ?? "";
-        }
+        next[slot] = selected?.name ?? "";
       }
 
       return next;

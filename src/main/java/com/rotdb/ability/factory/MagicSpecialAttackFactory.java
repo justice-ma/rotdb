@@ -18,7 +18,7 @@ public class MagicSpecialAttackFactory {
                         new AbilityHitsContext(0.55, 0.65, false, THRESHOLD, 12),
                         new AbilityHitsContext(0.55, 0.65, false, THRESHOLD, 16),
                         new AbilityHitsContext(0.55, 0.65, false, THRESHOLD, 20)),
-                "Fromt the Shadows",
+                "From the Shadows",
                 -50,
                 0,
                 false,

@@ -15,7 +15,7 @@ public class AbilityService {
 
         for (AbilityId a : AbilityId.values()) {
             if (a.getStyle() == style) {
-                out.add(new AbilityDto(a, a.getName(), a.getTier()));
+                out.add(new AbilityDto(a, a.getName(), a.getTier(), a.getIconPath(), a.isCommon()));
             }
         }
 

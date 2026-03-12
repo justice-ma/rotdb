@@ -6,5 +6,7 @@ import com.rotdb.domain.model.enums.AbilityTier;
 public record AbilityDto(
         AbilityId ability,
         String name,
-        AbilityTier tier
+        AbilityTier tier,
+        String iconPath,
+        boolean common
 ) {}
