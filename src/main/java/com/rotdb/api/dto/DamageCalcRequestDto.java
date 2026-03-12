@@ -24,7 +24,7 @@ public record DamageCalcRequestDto(
     public record Skills(Integer strength, Integer magic,Integer ranged, Integer necromancy, Integer attack) {}
     public record EquipmentIds(Long mainhandId, Long offhandId, Long headId, Long bodyId,
                                Long glovesId, Long legsId, Long bootsId, Long pocketId, Long ammoId,
-                               Long ringId, Long neckId, Long capeId) {}
+                               Long ringId, Long neckId, Long capeId, Long quiverId) {}
     public record BuffIds (Set<BuffId> enabledBuffs, Map<BuffId, Integer> buffStacks) {}
     public record PotionSelection (Potions pot, Stats stat) {}
     public record PerkSelection (Map<Perks, Integer> selectedPerks, Boolean itemLevel20) {}

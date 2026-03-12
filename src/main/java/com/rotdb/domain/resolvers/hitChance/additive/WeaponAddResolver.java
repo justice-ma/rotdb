@@ -2,6 +2,7 @@ package com.rotdb.domain.resolvers.hitChance.additive;
 
 import com.rotdb.domain.model.context.CalculationContext;
 import com.rotdb.domain.model.enums.Effect;
+import com.rotdb.domain.model.enums.TargetTags;
 import com.rotdb.domain.model.equipment.EquipmentSlot;
 
 public class WeaponAddResolver {
@@ -17,12 +18,12 @@ public class WeaponAddResolver {
             }
         }
 
-        if (mainhand.getEffect().contains(Effect.DARKLIGHT) && context.getTarget().isDemon()) {
+        if (mainhand.getEffect().contains(Effect.DARKLIGHT) && context.getTarget().has(TargetTags.DEMON)) {
             add += 2;
         }
 
         if (mainhand.getEffect().contains(Effect.BALMUNG) &&
-                context.getTarget().isDagannoth()) {
+                context.getTarget().has(TargetTags.DAGANNOTH)) {
             if (!mainhand.getEffect().contains(Effect.ENHANCED)) {
                 add += 45;
             } else {

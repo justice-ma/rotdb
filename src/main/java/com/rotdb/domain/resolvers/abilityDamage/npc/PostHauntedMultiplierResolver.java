@@ -4,6 +4,7 @@ import com.rotdb.domain.model.context.CalculationContext;
 import com.rotdb.domain.model.context.TargetContext;
 import com.rotdb.domain.model.enums.BuffId;
 import com.rotdb.domain.model.enums.Effect;
+import com.rotdb.domain.model.enums.TargetTags;
 import com.rotdb.domain.model.equipment.EquipmentSlot;
 import com.rotdb.domain.model.player.BuffContext;
 import com.rotdb.domain.model.player.SkillsContext;
@@ -20,7 +21,7 @@ public class PostHauntedMultiplierResolver {
             mod *= 1 + (0.6 * buff.stacks(BuffId.BALANCEOFPOWER));
         }
 
-        if (target.isDinosaur() && neck.getEffect().contains(Effect.SALAMANCY)) {
+        if (target.has(TargetTags.DINOSAUR) && neck.getEffect().contains(Effect.SALAMANCY)) {
             mod *= 1.15;
         }
 

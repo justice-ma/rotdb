@@ -14,6 +14,7 @@ export async function fetchAbilities(style) {
 }
 
 export async function fetchBatchCalculation(payload) {
+  console.log("BATCH REQUEST BODY", JSON.stringify(payload, null, 2));
   const res = await fetch(`${BASE}/damage/calculate/batch`, {
     method: "POST",
     headers: {
@@ -25,6 +26,7 @@ export async function fetchBatchCalculation(payload) {
 }
 
 export async function fetchDetailedAbilityCalculation(payload) {
+  console.log("DETAILED REQUEST BODY", JSON.stringify(payload, null, 2));
   const res = await fetch(`${BASE}/damage/calculate`, {
     method: "POST",
     headers: {

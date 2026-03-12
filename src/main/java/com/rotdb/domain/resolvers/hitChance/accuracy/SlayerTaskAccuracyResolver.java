@@ -4,6 +4,7 @@ import com.rotdb.domain.model.context.CalculationContext;
 import com.rotdb.domain.model.context.TargetContext;
 import com.rotdb.domain.model.enums.CombatStyles;
 import com.rotdb.domain.model.enums.Effect;
+import com.rotdb.domain.model.enums.TargetTags;
 import com.rotdb.domain.model.equipment.EquipmentSlot;
 
 import static com.rotdb.domain.model.enums.CombatStyles.*;
@@ -17,8 +18,8 @@ public class SlayerTaskAccuracyResolver {
 
         double accuracyModifier = 0;
 
-        if (gloves.getEffect().contains(Effect.DRAGONSLAYERGLOVES) && context.getTarget().isDragon() && context.getTarget().isSlayerTask()) accuracyModifier += 0.1;
-        if (head.getEffect().contains(Effect.SLAYERHELM) && context.getTarget().isSlayerTask()) {
+        if (gloves.getEffect().contains(Effect.DRAGONSLAYERGLOVES) && context.getTarget().has(TargetTags.DRAGON)) accuracyModifier += 0.1;
+        if (head.getEffect().contains(Effect.SLAYERHELM)) {
             if (head.getEffect().contains(Effect.FULL)) {
                 accuracyModifier += 0.125;
             } else if (head.getEffect().contains(Effect.REINFORCED)) {
@@ -36,19 +37,19 @@ public class SlayerTaskAccuracyResolver {
             }
         }
 
-        if (head.getEffect().contains(Effect.FOCUSSIGHT) && style == RANGED && context.getTarget().isSlayerTask()) {
+        if (head.getEffect().contains(Effect.FOCUSSIGHT) && style == RANGED) {
             accuracyModifier += 0.125;
         }
 
-        if (head.getEffect().contains(Effect.BLACKMASK) && style == MELEE && context.getTarget().isSlayerTask()) {
+        if (head.getEffect().contains(Effect.BLACKMASK) && style == MELEE) {
             accuracyModifier += 0.125;
         }
 
-        if (head.getEffect().contains(Effect.HEXCREST) && style == MAGIC && context.getTarget().isSlayerTask()) {
+        if (head.getEffect().contains(Effect.HEXCREST) && style == MAGIC) {
             accuracyModifier += 0.125;
         }
 
-        if (head.getEffect().contains(Effect.SPECTRALLENS) && style == NECROMANCY && context.getTarget().isSlayerTask()) {
+        if (head.getEffect().contains(Effect.SPECTRALLENS) && style == NECROMANCY) {
             accuracyModifier += 0.125;
         }
         return accuracyModifier;

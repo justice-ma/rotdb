@@ -7,6 +7,7 @@ import com.rotdb.domain.model.context.TargetContext;
 import com.rotdb.domain.model.enums.BuffId;
 import com.rotdb.domain.model.enums.CombatStyles;
 import com.rotdb.domain.model.enums.Effect;
+import com.rotdb.domain.model.enums.TargetTags;
 import com.rotdb.domain.model.equipment.EquipmentSlot;
 import com.rotdb.domain.model.player.BuffContext;
 
@@ -21,7 +22,7 @@ public class AmmoBuffInvisibleResolver {
         BuffContext buff = context.getBuffs();
 
         if (style == MAGIC) {
-            if (/*TODO: NEEDS SPELL CONTEXT*/ target.isUndead()) {
+            if (/*TODO: NEEDS SPELL CONTEXT*/ target.has(TargetTags.UNDEAD)) {
                 return 1.3;
             }
         }
@@ -37,9 +38,6 @@ public class AmmoBuffInvisibleResolver {
                 }
             }
         }
-
-        System.out.println(ammo.getEffect());
-        System.out.println(buff.stacks(BuffId.WENSTACKS));
 
         if (style == RANGED && ammo.getEffect().contains(Effect.WENARROWS)) {
             int wen = buff.has(BuffId.WENSTACKS) && buff.stacks(BuffId.WENSTACKS) >= 10

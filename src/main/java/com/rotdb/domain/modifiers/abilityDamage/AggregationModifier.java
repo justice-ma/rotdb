@@ -73,7 +73,6 @@ public class AggregationModifier implements Modifier {
 
         context.getDamage().setMinPercent(minCoeff);
         context.getDamage().setMaxPercent(maxCoeff);
-        System.out.println(maxCoeff);
 
         Debug.finalDamageReport(context);
     }

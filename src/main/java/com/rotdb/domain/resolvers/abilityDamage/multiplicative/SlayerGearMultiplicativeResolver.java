@@ -2,10 +2,7 @@ package com.rotdb.domain.resolvers.abilityDamage.multiplicative;
 
 import com.rotdb.domain.model.context.CalculationContext;
 import com.rotdb.domain.model.context.TargetContext;
-import com.rotdb.domain.model.enums.BuffId;
-import com.rotdb.domain.model.enums.CombatStyles;
-import com.rotdb.domain.model.enums.Effect;
-import com.rotdb.domain.model.enums.Perks;
+import com.rotdb.domain.model.enums.*;
 import com.rotdb.domain.model.equipment.EquipmentSlot;
 import com.rotdb.domain.model.equipment.PerkContext;
 import com.rotdb.domain.model.player.BuffContext;
@@ -21,7 +18,7 @@ public class SlayerGearMultiplicativeResolver {
         EquipmentSlot head = context.getEquipment().getHead();
 
         double mod = 1;
-        if (head.getEffect().contains(Effect.SLAYERHELM) && target.isSlayerTask()) {
+        if (head.getEffect().contains(Effect.SLAYERHELM)) {
             if (head.getEffect().contains(Effect.FULL)) {
                 mod *= 1.075;
             } else if (head.getEffect().contains(Effect.REINFORCED)) {
@@ -39,29 +36,29 @@ public class SlayerGearMultiplicativeResolver {
             }
         }
 
-        if (head.getEffect().contains(Effect.FOCUSSIGHT) && style == RANGED && target.isSlayerTask()) {
+        if (head.getEffect().contains(Effect.FOCUSSIGHT) && style == RANGED) {
             mod *= 1.075;
         }
 
-        if (head.getEffect().contains(Effect.BLACKMASK) && style == MELEE && target.isSlayerTask()) {
+        if (head.getEffect().contains(Effect.BLACKMASK) && style == MELEE) {
             mod *= 1.075;
         }
 
-        if (head.getEffect().contains(Effect.HEXCREST) && style == MAGIC && target.isSlayerTask()) {
+        if (head.getEffect().contains(Effect.HEXCREST) && style == MAGIC) {
             mod *= 1.075;
         }
 
-        if (head.getEffect().contains(Effect.SPECTRALLENS) && style == NECROMANCY && target.isSlayerTask()) {
+        if (head.getEffect().contains(Effect.SPECTRALLENS) && style == NECROMANCY) {
             mod *= 1.075;
         }
 
         if (buff.has(BuffId.GUARDHOUSE) && buff.stacks(BuffId.GUARDHOUSE) > 0) {
-            if (target.isUndead()) {
+            if (target.has(TargetTags.UNDEAD)) {
                 mod *= 1.02;
             } else {
                 mod *= 1.01;
             }
-            if (buff.stacks(BuffId.GUARDHOUSE) > 2 && (double) target.getCurrentHp() / target.getMaxHp() < 0.25 && !target.isBoss()) {
+            if (buff.stacks(BuffId.GUARDHOUSE) > 2 && (double) target.getCurrentHp() / target.getMaxHp() < 0.25 && !target.has(TargetTags.BOSS)) {
                 mod *= 1.1;
             }
         }

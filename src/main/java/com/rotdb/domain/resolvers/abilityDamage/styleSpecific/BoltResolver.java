@@ -3,6 +3,7 @@ package com.rotdb.domain.resolvers.abilityDamage.styleSpecific;
 import com.rotdb.domain.model.context.CalculationContext;
 import com.rotdb.domain.model.context.TargetContext;
 import com.rotdb.domain.model.enums.Effect;
+import com.rotdb.domain.model.enums.TargetTags;
 import com.rotdb.domain.model.equipment.EquipmentSlot;
 
 public class BoltResolver {
@@ -22,7 +23,7 @@ public class BoltResolver {
             }  else if (ammo.getEffect().contains(Effect.DIAMONDE)) {
                 mod *= 1.15;
             } else if (ammo.getEffect().contains(Effect.DRAGONSTONEE)) {
-                if (!target.isDragon()) {
+                if (!target.has(TargetTags.DRAGON)) {
                     mod *= 1.25;
                 }
             } else if (ammo.getEffect().contains(Effect.ONYXE)) {

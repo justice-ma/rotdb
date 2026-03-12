@@ -41,6 +41,7 @@ public class InstabilityInjector implements Modifier {
     }
     private boolean parentCanCrit(CalculationContext context, AbilityHitsContext parent) {
         if (parent.isDot()) return false;
+        if (parent.getCritChanceModifier() == 0) return false;
         return !context.getAbility().getName().equalsIgnoreCase("Magma Tempest");
     }
 }

@@ -5,6 +5,7 @@ import com.rotdb.domain.model.context.TargetContext;
 import com.rotdb.domain.model.enums.BuffId;
 import com.rotdb.domain.model.enums.CombatStyles;
 import com.rotdb.domain.model.enums.Effect;
+import com.rotdb.domain.model.enums.TargetTags;
 import com.rotdb.domain.model.equipment.EquipmentSlot;
 import com.rotdb.domain.model.player.BuffContext;
 
@@ -26,9 +27,9 @@ public class WeaponInvisibleResolver {
                 return 1.125;
             }
         } else if (mainhand.getEffect().contains(Effect.KERIS)) {
-            if (target.isScarab()) {
+            if (target.has(TargetTags.KERIS)) {
                 return 1.333;
-            } else if (target.isScarabPlus() && mainhand.getEffect().contains(Effect.KERISPLUS)) {
+            } else if (target.has(TargetTags.CONSECRATEDKERIS) && mainhand.getEffect().contains(Effect.KERISPLUS)) {
                 return 1.333;
             }
         }

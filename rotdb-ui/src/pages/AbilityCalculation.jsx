@@ -111,6 +111,7 @@ export default function AbilityCalculation() {
         capeId: equipmentIds.CAPE ?? null,
         pocketId: equipmentIds.POCKET ?? null,
         ammoId: equipmentIds.AMMO ?? null,
+        quiverId: equipmentIds.QUIVER ?? null,
       },
       buffs,
       selectedPrayers,
@@ -195,6 +196,7 @@ export default function AbilityCalculation() {
       CAPE: payload.equipment?.capeId ?? null,
       POCKET: payload.equipment?.pocketId ?? null,
       AMMO: payload.equipment?.ammoId ?? null,
+      QUIVER: payload.equipment?.quiverId ?? null,
     });
 
     setBuffs(payload.buffs ?? {});

@@ -5,6 +5,7 @@ import com.rotdb.domain.model.context.TargetContext;
 import com.rotdb.domain.model.enums.BuffId;
 import com.rotdb.domain.model.enums.CombatStyles;
 import com.rotdb.domain.model.enums.Effect;
+import com.rotdb.domain.model.enums.TargetTags;
 import com.rotdb.domain.model.equipment.EquipmentSlot;
 import com.rotdb.domain.model.player.BuffContext;
 
@@ -30,9 +31,9 @@ public class MeleeMultiplicativeResolver {
                 mod *= 1.2;
             }
 
-            if (mainhand.getEffect().contains(Effect.ABYSSALBANE) && target.isAbyssalDemon() ||
-                    mainhand.getEffect().contains(Effect.DRAGONBANE) && target.isDragon() ||
-                    mainhand.getEffect().contains(Effect.REVENANTBANE) && target.isRevenant()) {
+            if (mainhand.getEffect().contains(Effect.ABYSSALBANE) && target.has(TargetTags.ABYSSALDEMON) ||
+                    mainhand.getEffect().contains(Effect.DRAGONBANE) && target.has(TargetTags.DRAGON) ||
+                    mainhand.getEffect().contains(Effect.REVENANTBANE) && target.has(TargetTags.REVENANT)) {
                 mod *= 1.25;
             }
 

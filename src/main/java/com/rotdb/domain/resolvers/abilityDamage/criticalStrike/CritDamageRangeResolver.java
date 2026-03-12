@@ -10,7 +10,7 @@ public class CritDamageRangeResolver {
         EquipmentSlot mainhand = context.getEquipment().getMainhand();
         double base = hit.getCritDamageModifier();
         if (mainhand.getEffect().contains(Effect.FSOA)) {
-            return new CritRange(base + 0.15, base + 0.30);
+            return new CritRange(base + 0.1, base + 0.25);
         } else {
             return new CritRange(base, base);
         }

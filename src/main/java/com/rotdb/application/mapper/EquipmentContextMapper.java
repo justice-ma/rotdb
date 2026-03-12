@@ -33,6 +33,7 @@ public class EquipmentContextMapper {
         if (equipmentIds.ringId() != null) ids.add(equipmentIds.ringId());
         if (equipmentIds.neckId() != null) ids.add(equipmentIds.neckId());
         if (equipmentIds.capeId() != null) ids.add(equipmentIds.capeId());
+        if (equipmentIds.quiverId() != null) ids.add(equipmentIds.quiverId());
 
         var entities = equipmentRepository.findAllById(ids);
         EquipmentModel equipment = equipmentMapper.fromEntities(entities);

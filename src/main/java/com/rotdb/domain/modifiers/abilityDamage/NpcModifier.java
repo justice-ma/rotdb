@@ -20,6 +20,7 @@ public class NpcModifier implements Modifier {
             mod *= PerkMultiplierResolver.resolve(context);
             mod *= ScrimshawMultiplierResolver.resolve(context);
             mod *= TargetStatusMultiplierResolver.resolve(context);
+            mod *= SigilMultiplierResolver.resolve(context);
             if (!b.isZero()) applyHauntedBonus(hit, b);
             mod *= PostHauntedMultiplierResolver.resolve(context);
             hit.calculateDamages(mod);

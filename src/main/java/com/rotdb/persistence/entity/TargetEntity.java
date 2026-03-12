@@ -1,7 +1,11 @@
 package com.rotdb.persistence.entity;
 
 import com.rotdb.domain.model.enums.CombatStyles;
+import com.rotdb.domain.model.enums.TargetTags;
+import com.rotdb.persistence.converter.TargetTagsConverter;
 import jakarta.persistence.*;
+
+import java.util.EnumSet;
 
 @Entity
 @Table(name="targets")
@@ -52,6 +56,10 @@ public class TargetEntity {
 
     @Column(name="raw_infobox", columnDefinition = "jsonb")
     private String rawInfobox;
+
+    @Convert(converter = TargetTagsConverter.class)
+    @Column(name="tags")
+    private EnumSet<TargetTags> tags;
 
     public Long getId() {
         return id;
@@ -227,5 +235,13 @@ public class TargetEntity {
 
     public void setRawInfobox(String rawInfobox) {
         this.rawInfobox = rawInfobox;
+    }
+
+    public EnumSet<TargetTags> getTags() {
+        return tags;
+    }
+
+    public void setTags(EnumSet<TargetTags> tags) {
+        this.tags = tags;
     }
 }

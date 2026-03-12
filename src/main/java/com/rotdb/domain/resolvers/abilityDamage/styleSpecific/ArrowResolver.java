@@ -4,6 +4,7 @@ import com.rotdb.domain.model.context.CalculationContext;
 import com.rotdb.domain.model.context.TargetContext;
 import com.rotdb.domain.model.enums.CombatStyles;
 import com.rotdb.domain.model.enums.Effect;
+import com.rotdb.domain.model.enums.TargetTags;
 import com.rotdb.domain.model.equipment.EquipmentSlot;
 
 public class ArrowResolver {
@@ -13,8 +14,8 @@ public class ArrowResolver {
 
         double mod = 1;
         if (context.getEquipment().getCombatStyle() == CombatStyles.RANGED) {
-            if (ammo.getEffect().contains(Effect.JASDRAGONBANE) & target.isDragon() ||
-                    ammo.getEffect().contains(Effect.JASDEMONBANE) && target.isDemon()) {
+            if (ammo.getEffect().contains(Effect.JASDRAGONBANE) & target.has(TargetTags.DRAGON) ||
+                    ammo.getEffect().contains(Effect.JASDEMONBANE) && target.has(TargetTags.DEMON)) {
                 mod *= 1.3;
             }
 

@@ -101,6 +101,8 @@ export default function PrayerPanel({
       return;
     }
 
+    const isCurrentlySelected = selectedPrayers.includes(clickedPrayer.id);
+
     setSelectedPrayers((prev) => {
       const isSelected = prev.includes(clickedPrayer.id);
 
@@ -129,6 +131,18 @@ export default function PrayerPanel({
 
       return [...nextSelected.map((prayer) => prayer.id), clickedPrayer.id];
     });
+
+    if (!isCurrentlySelected && clickedPrayer.book === "CURSES") {
+      setBuffs((prev) => {
+        const enabled = prev?.enabledBuffs ?? [];
+        if (!enabled.includes("ECLIPSEDSOUL")) return prev;
+
+        return {
+          ...prev,
+          enabledBuffs: enabled.filter((id) => id !== "ECLIPSEDSOUL"),
+        };
+      });
+    }
   }
 
   useEffect(() => {
@@ -171,6 +185,19 @@ export default function PrayerPanel({
         buffStacks: stacks,
       };
     });
+
+    if (
+      buffId === "ECLIPSEDSOUL" &&
+      !(buffs?.enabledBuffs ?? []).includes(buffId)
+    ) {
+      setSelectedPrayers((prev) => {
+        const curseIds = allPrayers
+          .filter((prayer) => prayer.book === "CURSES")
+          .map((prayer) => prayer.id);
+
+        return prev.filter((id) => !curseIds.includes(id));
+      });
+    }
   }
 
   return (

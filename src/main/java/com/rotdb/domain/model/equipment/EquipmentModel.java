@@ -3,7 +3,7 @@ package com.rotdb.domain.model.equipment;
 import com.rotdb.domain.model.enums.CombatStyles;
 
 public class EquipmentModel {
-    private EquipmentSlot head, body, legs, boots, gloves, cape, pocket, neck, ring, ammo, mainhand, offhand;
+    private EquipmentSlot head, body, legs, boots, gloves, cape, pocket, neck, ring, ammo, mainhand, offhand, quiver;
     private CombatStyles combatStyle;
     private int abilityDamage;
 
@@ -22,6 +22,7 @@ public class EquipmentModel {
         if (ring == null) setRing(EquipmentSlot.emptySlot());
         if (pocket == null) setPocket(EquipmentSlot.emptySlot());
         if (ammo == null) setAmmo(EquipmentSlot.emptySlot());
+        if (quiver == null) setQuiver(EquipmentSlot.emptySlot());
     }
 
     // Getters and Setters
@@ -36,7 +37,8 @@ public class EquipmentModel {
                 + getNeck().getStrength()
                 + getRing().getStrength()
                 + getAmmo().getStrength()
-                + getMainhand().getStrength();
+                + getMainhand().getStrength()
+                + getQuiver().getStrength();
     }
 
     public double getTotalMagic() {
@@ -50,7 +52,8 @@ public class EquipmentModel {
                 + getNeck().getMagic()
                 + getRing().getMagic()
                 + getAmmo().getMagic()
-                + getMainhand().getMagic();
+                + getMainhand().getMagic()
+                + getQuiver().getMagic();
     }
 
     public double getTotalRanged() {
@@ -64,7 +67,8 @@ public class EquipmentModel {
                 + getNeck().getRanged()
                 + getRing().getRanged()
                 + getAmmo().getRanged()
-                + getMainhand().getRanged();
+                + getMainhand().getRanged()
+                + getQuiver().getRanged();
     }
 
     public double getTotalNecromancy() {
@@ -78,7 +82,8 @@ public class EquipmentModel {
                 + getNeck().getNecromancy()
                 + getRing().getNecromancy()
                 + getAmmo().getNecromancy()
-                + getMainhand().getNecromancy();
+                + getMainhand().getNecromancy()
+                + getQuiver().getNecromancy();
     }
 
     public EquipmentSlot getOffhand() {
@@ -191,5 +196,13 @@ public class EquipmentModel {
 
     public void setAbilityDamage(int abilityDamage) {
         this.abilityDamage = abilityDamage;
+    }
+
+    public EquipmentSlot getQuiver() {
+        return quiver;
+    }
+
+    public void setQuiver(EquipmentSlot quiver) {
+        this.quiver = quiver;
     }
 }

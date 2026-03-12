@@ -42,6 +42,8 @@ public final class BaseAbilityDamageModifier implements Modifier{
             case ALL -> throw new IllegalStateException("Combat style ALL is not valid for base damage");
         };
 
+    System.out.println("QUIVER: " + context.getEquipment().getQuiver().getTitle() + " " + context.getEquipment().getQuiver().getStrength());
+
         if (buffs.has(BuffId.REAPERSCREW)) bonus += 12;
 
         int er = perks.has(Perks.ERUPTIVE) ? perks.rank(Perks.ERUPTIVE) : 0;

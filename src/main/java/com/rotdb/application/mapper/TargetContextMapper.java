@@ -2,9 +2,13 @@ package com.rotdb.application.mapper;
 
 import com.rotdb.domain.model.context.TargetContext;
 import com.rotdb.domain.model.enums.CombatStyles;
+import com.rotdb.domain.model.enums.TargetTags;
 import com.rotdb.domain.model.equipment.EquipmentModel;
 import com.rotdb.persistence.repository.TargetRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.EnumSet;
 
 import static com.rotdb.domain.model.enums.CombatStyles.*;
 
@@ -42,6 +46,11 @@ public class TargetContextMapper {
             target.setAffinity(entity.getAffRanged() == null ? 90 : entity.getAffRanged());
         } else {
             target.setAffinity(60);
+        }
+        if (entity.getTags() != null) {
+            target.setTags(entity.getTags());
+        } else {
+            target.setTags(EnumSet.noneOf(TargetTags.class));
         }
 
         return target;

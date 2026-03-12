@@ -154,6 +154,21 @@ public class EquipmentMapper {
                     slot.setEffect(item.getEffectSet());
                     eq.setAmmo(slot);
                     break;
+                case QUIVER:
+                    slot.setId(item.getId());
+                    slot.setDamageTier(0);
+                    slot.setAccuracyTier(0);
+                    slot.setRequiredLevel(item.getRequirementsRaw() == null ? "0" : item.getRequirementsRaw());
+                    slot.setStrength(item.getStrength() == null ? 0 : item.getStrength());
+                    slot.setRanged(item.getRanged() == null ? 0 : item.getRanged());
+                    slot.setMagic(item.getMagic() == null ? 0 : item.getMagic());
+                    slot.setNecromancy(item.getNecromancy() == null ? 0 : item.getNecromancy());
+                    slot.setTitle(item.getName());
+                    slot.setClazz(item.getClazz() == null ? CombatStyles.ALL : item.getClazz());
+                    slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
+                    slot.setEffect(item.getEffectSet());
+                    eq.setQuiver(slot);
+                    break;
                 case RING:
                     slot.setId(item.getId());
                     slot.setDamageTier(0);
