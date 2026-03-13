@@ -2,6 +2,7 @@ package com.rotdb.application.validation;
 
 
 import com.rotdb.domain.model.DamageRequest;
+import com.rotdb.domain.model.enums.Slots;
 
 import java.util.Objects;
 
@@ -12,5 +13,13 @@ public final class DamageRequestValidator {
         if (request.getEquipment() == null) throw new IllegalArgumentException("equipment is required");
         if (request.getAbilityId() == null) throw new IllegalArgumentException("abilityId is required");
         if (request.getSkills() == null) throw new IllegalArgumentException("skills is required");
+
+        var equipment = request.getEquipment();
+
+        if (equipment.getMainhand() != null &&
+                equipment.getMainhand().getSlot() == Slots.TWOHANDED) {
+
+            equipment.setOffhand(null);
+        }
     }
 }

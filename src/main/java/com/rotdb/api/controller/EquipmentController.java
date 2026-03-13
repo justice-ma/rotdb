@@ -3,10 +3,7 @@ package com.rotdb.api.controller;
 import com.rotdb.domain.model.enums.Slots;
 import com.rotdb.persistence.entity.EquipmentEntity;
 import com.rotdb.persistence.repository.EquipmentRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +20,10 @@ public class EquipmentController {
             @RequestParam("q") String query,
             @RequestParam("slot")Slots slot) {
         return repo.findByTitleContainingIgnoreCaseAndSlot(query, slot);
+    }
+
+    @PostMapping("/by-ids")
+    public List<EquipmentEntity> getByIds(@RequestBody List<Long> ids) {
+        return repo.findAllById(ids);
     }
 }

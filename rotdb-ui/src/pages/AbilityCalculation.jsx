@@ -9,11 +9,16 @@ import {
   fetchBatchCalculation,
   fetchDetailedAbilityCalculation,
   fetchBuffs,
+  fetchEquipmentByIds,
+  fetchSpells,
+  fetchFamiliars,
+  fetchTargetByTitle,
 } from "../api/api";
 
 import "../style/abilityPage.css";
 
 const STORAGE_KEY = "rs3-presets";
+const DELETED_DEFAULT_PRESET_IDS_KEY = "rs3-deleted-default-preset-ids";
 
 const DEFAULT_SKILLS = {
   necromancy: 120,
@@ -27,6 +32,300 @@ const DEFAULT_SKILLS = {
   maxHp: 10100,
   currentHp: 10100,
 };
+
+const DEFAULT_PRESETS = [
+  {
+    id: "default-ranged-bis",
+    version: 1,
+    name: "Default Ranged",
+    created: "2026-03-13",
+    edited: "2026-03-13",
+    payload: {
+      style: "RANGED",
+      skills: {
+        necromancy: 120,
+        constitution: 99,
+        strength: 120,
+        ranged: 120,
+        magic: 120,
+        attack: 120,
+        defence: 99,
+        summoning: 99,
+        maxHp: 10100,
+        currentHp: 10100,
+      },
+      equipment: {
+        mainhandId: 1785,
+        offhandId: null,
+        headId: 3263,
+        bodyId: 3264,
+        legsId: 3262,
+        bootsId: 3261,
+        glovesId: 3265,
+        neckId: 3399,
+        ringId: 7949,
+        capeId: 4552,
+        pocketId: 7429,
+        ammoId: 3737,
+        quiverId: 6266,
+      },
+      buffs: {
+        enabledBuffs: [
+          "DEATHSWIFTNESS",
+          "SPLITSOUL",
+          "BALANCEBYFORCE",
+          "REAPERSCREW",
+          "ENCHANTMENTOFDISPELLING",
+          "ENCHANTMENTOFSHADOWS",
+          "SHARDOFGENESIS",
+          "ENCHANTMENTOFDREAD",
+          "VULNED",
+          "SMOKECLOUDED",
+          "KALG",
+        ],
+        buffStacks: {},
+      },
+      selectedPrayers: ["DESOLATION"],
+      potions: [
+        {
+          pot: "ELDER",
+          stat: "ALL",
+        },
+      ],
+      perks: {
+        selectedPerks: {
+          PRECISE: 6,
+          ERUPTIVE: 2,
+          ULTIMATUMS: 4,
+          BITING: 4,
+        },
+        itemLevel20: true,
+      },
+      targetTitle: "Training dummy",
+      targetCurrentHp: null,
+      targetMaxHp: null,
+      spell: null,
+      relic: null,
+      selectedFamiliar: "KALGERIONDEMON",
+    },
+  },
+  {
+    id: "default-melee-bis",
+    version: 1,
+    name: "Default Melee",
+    created: "2026-03-13",
+    edited: "2026-03-13",
+    payload: {
+      style: "MELEE",
+      skills: {
+        necromancy: 120,
+        constitution: 99,
+        strength: 120,
+        ranged: 120,
+        magic: 120,
+        attack: 120,
+        defence: 99,
+        summoning: 99,
+        maxHp: 10100,
+        currentHp: 10100,
+      },
+      equipment: {
+        mainhandId: 3119,
+        offhandId: null,
+        headId: 8769,
+        bodyId: 8771,
+        legsId: 8770,
+        bootsId: 8768,
+        glovesId: 3376,
+        neckId: 291,
+        ringId: 6682,
+        capeId: 4552,
+        pocketId: 7429,
+        ammoId: null,
+        quiverId: 5737,
+      },
+      buffs: {
+        enabledBuffs: [
+          "ECLIPSEDSOUL",
+          "BERSERK",
+          "DBA",
+          "REAPERSCREW",
+          "ENCHANTMENTOFSAVAGERY",
+          "ENCHANTMENTOFHEROISM",
+          "SHARDOFGENESIS",
+          "ENCHANTMENTOFAGONY",
+          "FLAMEBOUNDRIVAL",
+          "VULNED",
+          "SMOKECLOUDED",
+          "KALG",
+        ],
+        buffStacks: {},
+      },
+      selectedPrayers: ["DIVINERAGE", "PIETY"],
+      potions: [
+        {
+          pot: "ELDER",
+          stat: "ALL",
+        },
+      ],
+      perks: {
+        selectedPerks: {},
+        itemLevel20: false,
+      },
+      targetTitle: "Training dummy",
+      targetCurrentHp: null,
+      targetMaxHp: null,
+      spell: null,
+      relic: null,
+      selectedFamiliar: "KALGERIONDEMON",
+    },
+  },
+  {
+    id: "default-magic-bis",
+    version: 1,
+    name: "Default Magic",
+    created: "2026-03-13",
+    edited: "2026-03-13",
+    payload: {
+      style: "MAGIC",
+      skills: {
+        necromancy: 120,
+        constitution: 99,
+        strength: 120,
+        ranged: 120,
+        magic: 120,
+        attack: 120,
+        defence: 99,
+        summoning: 99,
+        maxHp: 10100,
+        currentHp: 10100,
+      },
+      equipment: {
+        mainhandId: 3682,
+        offhandId: null,
+        headId: 5266,
+        bodyId: 6884,
+        legsId: 6858,
+        bootsId: 1758,
+        glovesId: 3938,
+        neckId: 319,
+        ringId: 2040,
+        capeId: 4552,
+        pocketId: 3394,
+        ammoId: null,
+        quiverId: null,
+      },
+      buffs: {
+        enabledBuffs: [
+          "ECLIPSEDSOUL",
+          "SUNSHINE",
+          "INSTABILITY",
+          "REAPERSCREW",
+          "TITHESTACKS",
+          "ENCHANTMENTOFAFFLICTION",
+          "ENCHANTMENTOFMETAPHYSICS",
+          "SHARDOFGENESIS",
+          "ENCHANTMENTOFFLAMES",
+          "HAUNTED",
+          "VULNED",
+          "SMOKECLOUDED",
+          "KALG",
+        ],
+        buffStacks: {
+          TITHESTACKS: 12,
+        },
+      },
+      selectedPrayers: ["MYSTICMIGHT", "OVERCHARGE"],
+      potions: [
+        {
+          pot: "ELDER",
+          stat: "ALL",
+        },
+      ],
+      perks: {
+        selectedPerks: {},
+        itemLevel20: false,
+      },
+      targetTitle: "Training dummy",
+      targetCurrentHp: null,
+      targetMaxHp: null,
+      spell: "INCITEFEAR",
+      relic: null,
+      selectedFamiliar: "KALGERIONDEMON",
+    },
+  },
+  {
+    id: "default-necromancy-bis",
+    version: 1,
+    name: "Default Necromancy",
+    created: "2026-03-13",
+    edited: "2026-03-13",
+    payload: {
+      style: "NECROMANCY",
+      skills: {
+        necromancy: 120,
+        constitution: 99,
+        strength: 120,
+        ranged: 120,
+        magic: 120,
+        attack: 120,
+        defence: 99,
+        summoning: 99,
+        maxHp: 10100,
+        currentHp: 10100,
+      },
+      equipment: {
+        mainhandId: 6098,
+        offhandId: 7818,
+        headId: 8809,
+        bodyId: 6885,
+        legsId: 6859,
+        bootsId: 3648,
+        glovesId: 2654,
+        neckId: 7302,
+        ringId: 9251,
+        capeId: 4552,
+        pocketId: 7429,
+        ammoId: null,
+        quiverId: 8470,
+      },
+      buffs: {
+        enabledBuffs: [
+          "SPLITSOUL",
+          "REAPERSCREW",
+          "UNDEADSLAYERSIGIL",
+          "SHARDOFGENESIS",
+          "HAUNTED",
+          "VULNED",
+        ],
+        buffStacks: {},
+      },
+      selectedPrayers: ["RUINATION"],
+      potions: [
+        {
+          pot: "ELDER",
+          stat: "ALL",
+        },
+      ],
+      perks: {
+        selectedPerks: {
+          PRECISE: 6,
+          ERUPTIVE: 4,
+          EQUILIBRIUM: 4,
+          ULTIMATUMS: 4,
+          UNDEADSLAYER: 1,
+        },
+        itemLevel20: true,
+      },
+      targetTitle: "Rasial, the First Necromancer",
+      targetCurrentHp: 800000,
+      targetMaxHp: 800000,
+      spell: null,
+      relic: null,
+      selectedFamiliar: "RIPPERDEMON",
+    },
+  },
+];
 
 export default function AbilityCalculation() {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -80,11 +379,44 @@ export default function AbilityCalculation() {
 
   useEffect(() => {
     try {
-      const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-      setPresets(Array.isArray(stored) ? stored : []);
+      const rawPresets = localStorage.getItem(STORAGE_KEY);
+      const rawDeletedDefaultIds = localStorage.getItem(
+        DELETED_DEFAULT_PRESET_IDS_KEY,
+      );
+
+      const storedPresets = rawPresets ? JSON.parse(rawPresets) : [];
+      const safeStoredPresets = Array.isArray(storedPresets)
+        ? storedPresets
+        : [];
+
+      const deletedDefaultIds = rawDeletedDefaultIds
+        ? JSON.parse(rawDeletedDefaultIds)
+        : [];
+      const safeDeletedDefaultIds = Array.isArray(deletedDefaultIds)
+        ? deletedDefaultIds
+        : [];
+
+      const deletedSet = new Set(safeDeletedDefaultIds);
+      const existingIds = new Set(safeStoredPresets.map((p) => p.id));
+
+      const defaultsToSeed = DEFAULT_PRESETS.filter(
+        (preset) => !deletedSet.has(preset.id) && !existingIds.has(preset.id),
+      );
+
+      const merged = [...safeStoredPresets, ...defaultsToSeed];
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+      localStorage.setItem(
+        DELETED_DEFAULT_PRESET_IDS_KEY,
+        JSON.stringify(safeDeletedDefaultIds),
+      );
+
+      setPresets(merged);
     } catch (e) {
       console.error("Failed to load presets", e);
-      setPresets([]);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PRESETS));
+      localStorage.setItem(DELETED_DEFAULT_PRESET_IDS_KEY, JSON.stringify([]));
+      setPresets(DEFAULT_PRESETS);
     }
   }, []);
 
@@ -159,6 +491,9 @@ export default function AbilityCalculation() {
   function handleSavePreset(name) {
     if (!base) return;
 
+    console.log("Preset payload:");
+    console.log(JSON.stringify(base, null, 2));
+
     const trimmedName = name.trim();
     if (!trimmedName) return;
 
@@ -186,7 +521,7 @@ export default function AbilityCalculation() {
     setSelectedPresetId(newPreset.id);
   }
 
-  function applyPresetPayload(payload, uiState = {}) {
+  function applyPresetPayload(payload) {
     if (!payload) return;
 
     setStyle(payload.style ?? "RANGED");
@@ -208,16 +543,17 @@ export default function AbilityCalculation() {
       QUIVER: payload.equipment?.quiverId ?? null,
     });
 
+    setSelectedEquipmentBySlot({});
+    setMainhand(null);
+    setSpell(null);
+    setFamiliar(null);
+    setTarget(null);
+
     setBuffs(payload.buffs ?? {});
     setSelectedPrayers(payload.selectedPrayers ?? []);
     setSelectedPerks(payload.perks?.selectedPerks ?? {});
+    setItemLevel20(payload.perks?.itemLevel20 ?? false);
     setSelectedPotions(payload.potions ?? [{ pot: "NONE", stat: "ALL" }]);
-
-    setMainhand(uiState.mainhand ?? null);
-    setSpell(uiState.spell ?? null);
-    setFamiliar(uiState.familiar ?? null);
-    setTarget(uiState.target ?? null);
-    setSelectedEquipmentBySlot(uiState.selectedEquipmentBySlot ?? {});
 
     setTargetCurrentHp(
       payload.targetCurrentHp == null ? "" : String(payload.targetCurrentHp),
@@ -231,19 +567,111 @@ export default function AbilityCalculation() {
     setResults({});
   }
 
-  function handleLoadPreset() {
+  async function hydratePresetUiFromPayload(payload) {
+    const equipment = payload?.equipment ?? {};
+
+    const slotToId = {
+      MAINHAND: equipment.mainhandId,
+      OFFHAND: equipment.offhandId,
+      HEAD: equipment.headId,
+      BODY: equipment.bodyId,
+      LEGS: equipment.legsId,
+      BOOTS: equipment.bootsId,
+      GLOVES: equipment.glovesId,
+      NECK: equipment.neckId,
+      RING: equipment.ringId,
+      CAPE: equipment.capeId,
+      POCKET: equipment.pocketId,
+      AMMO: equipment.ammoId,
+      QUIVER: equipment.quiverId,
+    };
+
+    const equipmentIds = Object.values(slotToId).filter(Boolean);
+
+    const [equipmentItems, allSpells, allFamiliars] = await Promise.all([
+      equipmentIds.length
+        ? fetchEquipmentByIds(equipmentIds)
+        : Promise.resolve([]),
+      payload.spell ? fetchSpells("") : Promise.resolve([]),
+      payload.selectedFamiliar ? fetchFamiliars() : Promise.resolve([]),
+    ]);
+
+    const byId = new Map(
+      equipmentItems.map((item) => [
+        item.id,
+        {
+          ...item,
+          name: item.name ?? item.title ?? "",
+        },
+      ]),
+    );
+
+    const hydratedBySlot = {};
+
+    for (const [slot, id] of Object.entries(slotToId)) {
+      if (!id) continue;
+      const item = byId.get(id);
+      if (item) hydratedBySlot[slot] = item;
+    }
+
+    const hydratedSpell =
+      allSpells.find((spell) => spell.id === payload.spell) ?? null;
+
+    const hydratedFamiliar =
+      allFamiliars.find(
+        (familiar) => familiar.id === payload.selectedFamiliar,
+      ) ?? null;
+
+    const targetItem = payload.targetTitle
+      ? await fetchTargetByTitle(payload.targetTitle)
+      : null;
+
+    setTarget(targetItem);
+
+    setSelectedEquipmentBySlot(hydratedBySlot);
+    setMainhand(hydratedBySlot.MAINHAND ?? null);
+    setSpell(hydratedSpell);
+    setFamiliar(hydratedFamiliar);
+  }
+
+  async function handleLoadPreset() {
     const preset = presets.find((p) => p.id === selectedPresetId);
     if (!preset) return;
 
-    applyPresetPayload(preset.payload, preset.uiState);
+    applyPresetPayload(preset.payload);
+    await hydratePresetUiFromPayload(preset.payload);
+
     setSettingsOpen(false);
   }
 
   function handleDeletePreset() {
     if (!selectedPresetId) return;
 
+    const presetToDelete = presets.find((p) => p.id === selectedPresetId);
+    const isDefaultPreset = DEFAULT_PRESETS.some(
+      (p) => p.id === selectedPresetId,
+    );
+
     const updated = presets.filter((p) => p.id !== selectedPresetId);
     persistPresets(updated);
+
+    if (isDefaultPreset && presetToDelete) {
+      try {
+        const rawDeleted = localStorage.getItem(DELETED_DEFAULT_PRESET_IDS_KEY);
+        const deletedIds = rawDeleted ? JSON.parse(rawDeleted) : [];
+        const safeDeletedIds = Array.isArray(deletedIds) ? deletedIds : [];
+
+        if (!safeDeletedIds.includes(selectedPresetId)) {
+          localStorage.setItem(
+            DELETED_DEFAULT_PRESET_IDS_KEY,
+            JSON.stringify([...safeDeletedIds, selectedPresetId]),
+          );
+        }
+      } catch (e) {
+        console.error("Failed to store deleted default preset id", e);
+      }
+    }
+
     setSelectedPresetId("");
   }
 

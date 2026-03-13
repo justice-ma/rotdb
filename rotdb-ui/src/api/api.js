@@ -83,3 +83,22 @@ export async function fetchPotions() {
   const res = await fetch(`${BASE}/potions`);
   return handleResponse(res);
 }
+
+export async function fetchEquipmentByIds(ids) {
+  const res = await fetch(`${BASE}/equipment/by-ids`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(ids),
+  });
+  return handleResponse(res);
+}
+
+export async function fetchTargetByTitle(title) {
+  const res = await fetch(
+    `${BASE}/target/by-title?title=${encodeURIComponent(title)}`,
+  );
+
+  return handleResponse(res);
+}

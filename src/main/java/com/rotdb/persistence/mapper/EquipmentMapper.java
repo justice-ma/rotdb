@@ -31,6 +31,24 @@ public class EquipmentMapper {
                     slot.setClazz(item.getClazz() == null ? CombatStyles.ALL : item.getClazz());
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
+                    slot.setSlot(item.getSlot());
+                    eq.setMainhand(slot);
+                    break;
+                case TWOHANDED:
+                    slot.setId(item.getId());
+                    slot.setDamageTier(item.getDamageTier() == null ? item.getTier() == null ? 0 :
+                            item.getTier(): item.getDamageTier());
+                    slot.setAccuracyTier(item.getAccuracyTier() == null ? item.getTier() == null ? 0 : item.getTier() : item.getAccuracyTier());
+                    slot.setRequiredLevel(item.getRequirementsRaw() == null ? "0" : item.getRequirementsRaw());
+                    slot.setStrength(0);
+                    slot.setRanged(0);
+                    slot.setMagic(0);
+                    slot.setNecromancy(0);
+                    slot.setTitle(item.getName());
+                    slot.setClazz(item.getClazz() == null ? CombatStyles.ALL : item.getClazz());
+                    slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
+                    slot.setEffect(item.getEffectSet());
+                    slot.setSlot(item.getSlot());
                     eq.setMainhand(slot);
                     break;
                 case OFFHAND:
@@ -47,6 +65,7 @@ public class EquipmentMapper {
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
+                    slot.setSlot(item.getSlot());
                     eq.setOffhand(slot);
                     break;
                 case HEAD:
@@ -62,6 +81,7 @@ public class EquipmentMapper {
                     slot.setClazz(item.getClazz() == null ? CombatStyles.ALL : item.getClazz());
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
+                    slot.setSlot(item.getSlot());
                     eq.setHead(slot);
                     break;
                 case BODY:
@@ -77,6 +97,7 @@ public class EquipmentMapper {
                     slot.setClazz(item.getClazz() == null ? CombatStyles.ALL : item.getClazz());
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
+                    slot.setSlot(item.getSlot());
                     eq.setBody(slot);
                     break;
                 case GLOVES:
@@ -92,6 +113,7 @@ public class EquipmentMapper {
                     slot.setClazz(item.getClazz() == null ? CombatStyles.ALL : item.getClazz());
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
+                    slot.setSlot(item.getSlot());
                     eq.setGloves(slot);
                     break;
                 case LEGS:
@@ -107,6 +129,7 @@ public class EquipmentMapper {
                     slot.setClazz(item.getClazz() == null ? CombatStyles.ALL : item.getClazz());
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
+                    slot.setSlot(item.getSlot());
                     eq.setLegs(slot);
                     break;
                 case BOOTS:
@@ -122,6 +145,7 @@ public class EquipmentMapper {
                     slot.setClazz(item.getClazz() == null ? CombatStyles.ALL : item.getClazz());
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
+                    slot.setSlot(item.getSlot());
                     eq.setBoots(slot);
                     break;
                 case POCKET:
@@ -137,6 +161,7 @@ public class EquipmentMapper {
                     slot.setClazz(item.getClazz() == null ? CombatStyles.ALL : item.getClazz());
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
+                    slot.setSlot(item.getSlot());
                     eq.setPocket(slot);
                     break;
                 case AMMO:
@@ -152,6 +177,7 @@ public class EquipmentMapper {
                     slot.setClazz(item.getClazz() == null ? CombatStyles.ALL : item.getClazz());
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
+                    slot.setSlot(item.getSlot());
                     eq.setAmmo(slot);
                     break;
                 case QUIVER:
@@ -167,6 +193,7 @@ public class EquipmentMapper {
                     slot.setClazz(item.getClazz() == null ? CombatStyles.ALL : item.getClazz());
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
+                    slot.setSlot(item.getSlot());
                     eq.setQuiver(slot);
                     break;
                 case RING:
@@ -182,6 +209,7 @@ public class EquipmentMapper {
                     slot.setClazz(item.getClazz() == null ? CombatStyles.ALL : item.getClazz());
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
+                    slot.setSlot(item.getSlot());
                     eq.setRing(slot);
                     break;
                 case NECK:
@@ -197,6 +225,7 @@ public class EquipmentMapper {
                     slot.setClazz(item.getClazz() == null ? CombatStyles.ALL : item.getClazz());
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
+                    slot.setSlot(item.getSlot());
                     eq.setNeck(slot);
                     break;
                 case CAPE:
@@ -212,6 +241,7 @@ public class EquipmentMapper {
                     slot.setClazz(item.getClazz() == null ? CombatStyles.ALL : item.getClazz());
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
+                    slot.setSlot(item.getSlot());
                     eq.setCape(slot);
                     break;
                 default:

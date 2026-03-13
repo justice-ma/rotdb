@@ -2,6 +2,7 @@ package com.rotdb.application.mapper;
 
 import com.rotdb.api.dto.DamageCalcRequestDto;
 import com.rotdb.domain.model.equipment.EquipmentModel;
+import com.rotdb.domain.model.equipment.EquipmentSlot;
 import com.rotdb.persistence.mapper.EquipmentMapper;
 import com.rotdb.persistence.repository.EquipmentRepository;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ public class EquipmentContextMapper {
         this.equipmentMapper = equipmentMapper;
         this.equipmentRepository = equipmentRepository;
     }
-    
+
     public EquipmentModel from(DamageCalcRequestDto.EquipmentIds equipmentIds) {
         var ids = new ArrayList<Long>();
 
@@ -37,8 +38,13 @@ public class EquipmentContextMapper {
 
         var entities = equipmentRepository.findAllById(ids);
         EquipmentModel equipment = equipmentMapper.fromEntities(entities);
-        equipment.fillMissingWithEmpty();
 
+        if (equipment.getMainhand() != null &&
+                equipment.getMainhand().getSlot() == com.rotdb.domain.model.enums.Slots.TWOHANDED) {
+            equipment.setOffhand(null);
+        }
+
+        equipment.fillMissingWithEmpty();
         return equipment;
     }
 }

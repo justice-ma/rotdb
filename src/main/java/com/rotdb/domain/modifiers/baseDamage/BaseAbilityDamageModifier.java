@@ -72,17 +72,20 @@ public final class BaseAbilityDamageModifier implements Modifier{
             case MELEE -> dw
                     ? MeleeBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, eq)
                     : MeleeBaseDamageResolver.twoHand(s, bonus, mhTier, er, eq);
+
             case MAGIC -> dw
                     ? MagicBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, ammoTier, eq)
                     : MagicBaseDamageResolver.twoHand(s, bonus, mhTier, er, ammoTier, eq);
+
             case RANGED -> dw
                     ? RangedBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, ammoTier, eq)
                     : RangedBaseDamageResolver.twoHand(s, bonus, mhTier, er, ammoTier, eq);
-            case NECROMANCY -> {
-                if (!dw) throw new IllegalStateException("Necromancy requires offhand in current rules");
-                yield NecromancyBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, eq);
-            }
-            case ALL -> throw new IllegalStateException("Combat style ALL is not valid for base damage");
+
+            case NECROMANCY ->
+                    NecromancyBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, eq);
+
+            case ALL ->
+                    throw new IllegalStateException("Combat style ALL is not valid for base damage");
         };
     }
 }

@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { fetchEquipmentBySlot, fetchSpells } from "../api/api";
+import {
+  fetchEquipmentBySlot,
+  fetchSpells,
+  fetchEquipmentByIds,
+} from "../api/api";
 import "../style/combatSettings.css";
 import BuffPanel from "./BuffPanel";
 import StatPanel from "./StatPanel";
@@ -37,6 +41,7 @@ function SlotSearch({
   selected,
   onClear,
   onBeginEdit,
+  disabled = false,
 }) {
   const placeholder = `${slot.charAt(0) + slot.slice(1).toLowerCase()}…`;
 
@@ -44,21 +49,29 @@ function SlotSearch({
     <div className="slot-block">
       <div className="slot-input-wrap">
         <input
-          className="slot-input"
-          value={query}
+          className={`slot-input ${disabled ? "slot-input-disabled" : ""}`}
+          value={disabled ? "" : query}
           onChange={(e) => {
+            if (disabled) return;
             if (selected) onBeginEdit(slot);
             setQueryForSlot(slot, e.target.value);
           }}
-          placeholder={placeholder}
+          placeholder={
+            disabled
+              ? "Offhand unavailable with a two-handed mainhand"
+              : placeholder
+          }
           autoComplete="off"
+          readOnly={disabled}
         />
-        {loading ? <span className="slot-spinner" aria-hidden="true" /> : null}
+        {!disabled && loading ? (
+          <span className="slot-spinner" aria-hidden="true" />
+        ) : null}
       </div>
 
-      {error ? <div className="slot-error">{error}</div> : null}
+      {!disabled && error ? <div className="slot-error">{error}</div> : null}
 
-      {!loading && results.length > 0 ? (
+      {!disabled && !loading && results.length > 0 ? (
         <ul className="slot-results">
           {results.slice(0, 15).map((item) => (
             <li
@@ -185,18 +198,94 @@ export default function CombatSettings({
   const [spellLoading, setSpellLoading] = useState(false);
   const [spellError, setSpellError] = useState("");
 
+  const isTwoHandedMainhand =
+    selectedEquipmentBySlot?.MAINHAND?.slot === "TWOHANDED";
+
   function setQueryForSlot(slot, value) {
     setQueries((prev) => ({ ...prev, [slot]: value }));
   }
 
+  async function searchEquipmentForSlot(slot, query, signal) {
+    if (slot === "MAINHAND") {
+      const [mainhandData, twoHandedData] = await Promise.all([
+        fetchEquipmentBySlot("MAINHAND", query, signal),
+        fetchEquipmentBySlot("TWOHANDED", query, signal),
+      ]);
+
+      const combined = [
+        ...(Array.isArray(mainhandData) ? mainhandData : []),
+        ...(Array.isArray(twoHandedData) ? twoHandedData : []),
+      ];
+
+      const seen = new Set();
+
+      return combined.filter((item) => {
+        if (!item?.id || seen.has(item.id)) return false;
+        seen.add(item.id);
+        return true;
+      });
+    }
+
+    const data = await fetchEquipmentBySlot(slot, query, signal);
+    return Array.isArray(data) ? data : [];
+  }
+
   function onPick(slot, item) {
-    setSelectedEquipmentBySlot((prev) => ({ ...prev, [slot]: item }));
-    setQueries((prev) => ({ ...prev, [slot]: item.name }));
-    setResultsBySlot((prev) => ({ ...prev, [slot]: [] }));
-    setErrorBySlot((prev) => ({ ...prev, [slot]: "" }));
+    setSelectedEquipmentBySlot((prev) => {
+      const next = { ...prev, [slot]: item };
+
+      if (slot === "MAINHAND" && item?.slot === "TWOHANDED") {
+        delete next.OFFHAND;
+      }
+
+      return next;
+    });
+
+    setQueries((prev) => {
+      const next = { ...prev, [slot]: item.name };
+
+      if (slot === "MAINHAND" && item?.slot === "TWOHANDED") {
+        next.OFFHAND = "";
+      }
+
+      return next;
+    });
+
+    setResultsBySlot((prev) => {
+      const next = { ...prev, [slot]: "" };
+
+      if (slot === "MAINHAND" && item?.slot === "TWOHANDED") {
+        next.OFFHAND = [];
+      }
+
+      return next;
+    });
+
+    setErrorBySlot((prev) => {
+      const next = { ...prev, [slot]: "" };
+
+      if (slot === "MAINHAND" && item?.slot === "TWOHANDED") {
+        next.OFFHAND = "";
+      }
+
+      return next;
+    });
+
+    setLoadingBySlot((prev) => {
+      if (!(slot === "MAINHAND" && item?.slot === "TWOHANDED")) return prev;
+      return { ...prev, OFFHAND: false };
+    });
 
     if (typeof setEquipmentIds === "function") {
-      setEquipmentIds((prev) => ({ ...(prev ?? {}), [slot]: item.id }));
+      setEquipmentIds((prev) => {
+        const next = { ...(prev ?? {}), [slot]: item.id };
+
+        if (slot === "MAINHAND" && item?.slot === "TWOHANDED") {
+          delete next.OFFHAND;
+        }
+
+        return next;
+      });
     }
 
     if (slot === "MAINHAND" && typeof setMainhand === "function") {
@@ -269,17 +358,31 @@ export default function CombatSettings({
   }
 
   useEffect(() => {
+    if (!isTwoHandedMainhand) return;
+    if (!selectedEquipmentBySlot?.OFFHAND) return;
+
+    onClear("OFFHAND");
+  }, [isTwoHandedMainhand, selectedEquipmentBySlot]);
+
+  useEffect(() => {
     setQueries((prev) => {
       const next = { ...prev };
 
       for (const slot of SLOTS) {
         const selected = selectedEquipmentBySlot?.[slot];
-        next[slot] = selected?.name ?? "";
+
+        if (selected?.name) {
+          next[slot] = selected.name;
+        }
+      }
+
+      if (isTwoHandedMainhand) {
+        next.OFFHAND = "";
       }
 
       return next;
     });
-  }, [selectedEquipmentBySlot]);
+  }, [selectedEquipmentBySlot, isTwoHandedMainhand]);
 
   useEffect(() => {
     if (!mainhand) return;
@@ -308,6 +411,13 @@ export default function CombatSettings({
     const timers = [];
 
     for (const slot of SLOTS) {
+      if (slot === "OFFHAND" && isTwoHandedMainhand) {
+        setResultsBySlot((prev) => ({ ...prev, [slot]: [] }));
+        setLoadingBySlot((prev) => ({ ...prev, [slot]: false }));
+        setErrorBySlot((prev) => ({ ...prev, [slot]: "" }));
+        continue;
+      }
+
       const q = (queries[slot] ?? "").trim();
       const selected = selectedEquipmentBySlot?.[slot];
 
@@ -331,11 +441,11 @@ export default function CombatSettings({
 
       const t = setTimeout(async () => {
         try {
-          const data = await fetchEquipmentBySlot(slot, q, controller.signal);
+          const data = await searchEquipmentForSlot(slot, q, controller.signal);
 
           setResultsBySlot((prev) => ({
             ...prev,
-            [slot]: Array.isArray(data) ? data : [],
+            [slot]: data,
           }));
           setLoadingBySlot((prev) => ({ ...prev, [slot]: false }));
         } catch (e) {
@@ -353,7 +463,7 @@ export default function CombatSettings({
       timers.forEach(clearTimeout);
       Object.values(controllers).forEach((c) => c.abort());
     };
-  }, [queries, selectedEquipmentBySlot]);
+  }, [queries, selectedEquipmentBySlot, isTwoHandedMainhand]);
 
   useEffect(() => {
     if (style !== "MAGIC") {
@@ -434,6 +544,7 @@ export default function CombatSettings({
                 selected={selectedEquipmentBySlot?.[slot]}
                 onClear={onClear}
                 onBeginEdit={onBeginEdit}
+                disabled={slot === "OFFHAND" && isTwoHandedMainhand}
               />
             ))}
 

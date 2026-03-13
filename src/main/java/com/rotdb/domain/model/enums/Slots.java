@@ -9,6 +9,7 @@ public enum Slots {
     POCKET,
     OFFHAND,
     MAINHAND,
+    TWOHANDED,
     AMMO,
     RING,
     NECK,

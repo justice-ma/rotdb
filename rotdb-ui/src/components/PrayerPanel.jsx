@@ -148,7 +148,13 @@ export default function PrayerPanel({
   useEffect(() => {
     if (!splitSoulEnabled) return;
 
-    setSelectedPrayers([]);
+    setSelectedPrayers((prev) => {
+      const normalPrayerIds = allPrayers
+        .filter((prayer) => prayer.book === "NORMAL")
+        .map((prayer) => prayer.id);
+
+      return prev.filter((id) => !normalPrayerIds.includes(id));
+    });
 
     setBuffs((prev) => {
       const enabled = prev?.enabledBuffs ?? [];
@@ -159,7 +165,28 @@ export default function PrayerPanel({
         enabledBuffs: enabled.filter((id) => id !== "ECLIPSEDSOUL"),
       };
     });
-  }, [splitSoulEnabled, setSelectedPrayers, setBuffs]);
+  }, [splitSoulEnabled, allPrayers, setSelectedPrayers, setBuffs]);
+
+  useEffect(() => {
+    if (!selectedPrayers.length || !allPrayers.length) return;
+
+    const selectedPrayerObjects = allPrayers.filter((prayer) =>
+      selectedPrayers.includes(prayer.id),
+    );
+
+    const hasCurseSelected = selectedPrayerObjects.some(
+      (prayer) => prayer.book === "CURSES",
+    );
+    const hasNormalSelected = selectedPrayerObjects.some(
+      (prayer) => prayer.book === "NORMAL",
+    );
+
+    if (hasCurseSelected && !hasNormalSelected) {
+      setActiveBook("CURSES");
+    } else if (hasNormalSelected && !hasCurseSelected) {
+      setActiveBook("NORMAL");
+    }
+  }, [selectedPrayers, allPrayers]);
 
   function togglePrayerMovedBuff(buffId) {
     setBuffs((prev) => {

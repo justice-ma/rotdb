@@ -67,7 +67,7 @@ public enum AbilityId {
     CORRUPTIONSHOT(RANGED, THRESHOLD,"Corruption Shot", "/ability_icons/corruption-shot.png"),
     SHADOWTENDRILS(RANGED, THRESHOLD,"Shadow Tendrils", "/ability_icons/shadow-tendrils.png"),
 
-    NECROMANCYAUTO(NECROMANCY, BASIC,"Necromancy", "/ability_icons/necromnacy.png"),
+    NECROMANCYAUTO(NECROMANCY, BASIC,"Necromancy", "/ability_icons/necromancy.png"),
     CONJURESKELETONWARRIOR(NECROMANCY, BASIC,"Conjure Skeleton Warrior", "/ability_icons/conjure-skeleton-warrior.png"),
     COMMANDSKELETONWARRIOR(NECROMANCY, BASIC,"Command Skeleton Warrior", "/ability_icons/command-skeleton-warrior.png"),
     FINGEROFDEATH(NECROMANCY, THRESHOLD,"Finger of Death", "/ability_icons/finger-of-death.png"),
