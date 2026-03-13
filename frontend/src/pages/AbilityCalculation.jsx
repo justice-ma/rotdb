@@ -169,8 +169,13 @@ const DEFAULT_PRESETS = [
         },
       ],
       perks: {
-        selectedPerks: {},
-        itemLevel20: false,
+        selectedPerks: {
+          PRECISE: 6,
+          ERUPTIVE: 2,
+          ULTIMATUMS: 4,
+          BITING: 4,
+        },
+        itemLevel20: true,
       },
       targetTitle: null,
       targetCurrentHp: null,
@@ -243,8 +248,13 @@ const DEFAULT_PRESETS = [
         },
       ],
       perks: {
-        selectedPerks: {},
-        itemLevel20: false,
+        selectedPerks: {
+          PRECISE: 6,
+          ERUPTIVE: 2,
+          ULTIMATUMS: 4,
+          BITING: 4,
+        },
+        itemLevel20: true,
       },
       targetTitle: null,
       targetCurrentHp: null,
