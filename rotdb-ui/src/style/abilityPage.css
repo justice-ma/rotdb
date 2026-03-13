@@ -157,7 +157,7 @@ body {
 @media (max-width: 1200px) and (min-width: 901px) {
   .ability-page {
     display: grid;
-    grid-template-columns: 380px minmax(0, 1fr);
+    grid-template-columns: 420px minmax(0, 1fr);
     grid-template-areas:
       "settings browser"
       "details browser";

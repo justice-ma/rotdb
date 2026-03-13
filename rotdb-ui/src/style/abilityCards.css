@@ -218,10 +218,18 @@
   background: var(--bg);
   color: var(--text-muted);
   cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s;
 }
 
 .special-filter button.active {
   border-color: var(--text-accent);
   color: var(--text);
-  background: rgba(63, 185, 233, 0.08);
+  background: var(--bg-accent);
+}
+
+.special-filter button:hover:not(button.active) {
+  background-color: var(--bg-light);
+  border-color: var(--border-light);
 }

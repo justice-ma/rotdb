@@ -808,13 +808,13 @@ export default function AbilityCalculation() {
               <h3 className="start-title">
                 Welcome to the Ability Damage Calculator
               </h3>
-
               <p className="start-text">
-                This tool lets you build a combat setup, compare ability damage,
-                and inspect detailed calculation results for individual
-                abilities.
+                This tool lets you build a full combat setup, compare ability
+                damage, and inspect detailed hit-by-hit calculation results. It
+                models most major RuneScape 3 combat mechanics including
+                equipment bonuses, perks, prayers, buffs, targets, and
+                conditional effects.
               </p>
-
               <h4 className="start-subtitle">Getting started</h4>
               <ol className="start-steps">
                 <li>
@@ -822,73 +822,89 @@ export default function AbilityCalculation() {
                   section on the left.
                 </li>
                 <li>
-                  The selected weapon determines your combat style and unlocks
+                  The selected weapon determines your combat style and reveals
                   the matching ability list.
                 </li>
                 <li>
-                  Add the rest of your setup, such as armour, offhand, prayers,
-                  potions, perks, buffs, target, and familiar.
+                  Add the rest of your setup including armour, offhand, perks,
+                  prayers, potions, buffs, familiar, and target.
                 </li>
                 <li>
-                  Browse the ability list in the middle panel to compare damage
-                  values.
+                  Browse the ability list in the middle panel to compare
+                  calculated damage values.
                 </li>
                 <li>
-                  Click any ability to view a more detailed breakdown in the
-                  right panel.
+                  Click any ability to open a detailed breakdown in the right
+                  panel, including hit contributions and conditional effects.
                 </li>
               </ol>
-
               <h4 className="start-subtitle">What each section does</h4>
               <ul className="start-list">
                 <li>
-                  <b>Presets</b> — Save and load full builds for quick testing.
+                  <b>Presets</b> — Save and load full presets for quick testing
+                  and comparisons.
                 </li>
                 <li>
-                  <b>Equipment</b> — Select your weapon, armour, jewellery,
-                  ammo, and spell where applicable.
+                  <b>Equipment</b> — Select weapons, armour, jewellery, ammo,
+                  and other relevant gear.
                 </li>
                 <li>
-                  <b>Stats</b> — Set skill levels used in the calculation.
+                  <b>Stats</b> — Configure combat levels used in calculations.
                 </li>
                 <li>
-                  <b>Prayer</b> — Apply active prayers for the selected combat
+                  <b>Prayer</b> — Activate combat prayers for the selected
                   style.
                 </li>
                 <li>
-                  <b>Potions</b> — Choose an active potion boost.
+                  <b>Potions</b> — Apply potion stat boosts.
                 </li>
                 <li>
-                  <b>Buffs</b> — Toggle supported buffs and conditional bonuses.
+                  <b>Buffs</b> — Toggle conditional buffs, set effects, and
+                  temporary combat bonuses.
                 </li>
                 <li>
-                  <b>Perks</b> — Apply invention perk ranks and related options.
+                  <b>Perks</b> — Configure Invention perks and adjust rank.
                 </li>
                 <li>
-                  <b>Target</b> — Choose the target being attacked.
+                  <b>Target</b> — Select the enemy being attacked, including
+                  current lifepoint.
                 </li>
                 <li>
-                  <b>Familiar</b> — Select an active familiar if relevant.
+                  <b>Familiar</b> — Choose an active familiar if relevant to the
+                  setup.
                 </li>
               </ul>
-
-              <h4 className="start-subtitle">Important notes</h4>
+              <h4 className="start-subtitle">Calculation coverage</h4>
               <ul className="start-list">
                 <li>
-                  A <b>Mainhand</b> weapon is required before ability
+                  Damage values are expected to be accurate within roughly{" "}
+                  <b>0.1%</b> of in-game results for most setups.
+                </li>
+                <li>
+                  The calculator currently models the vast majority of buffs,
+                  equipment effects, perks, and ability interactions used in
+                  modern combat.
+                </li>
+                <li>
+                  Complex hit structures and proc effects are displayed in the
+                  detailed ability breakdown.
+                </li>
+              </ul>
+              <h4 className="start-subtitle">Notes</h4>
+              <ul className="start-list">
+                <li>
+                  A <b>Mainhand</b> weapon must be selected before ability
                   calculations can begin.
                 </li>
                 <li>
-                  Some systems and values may still be in progress, so treat
-                  this as a build and testing tool rather than a final
-                  authoritative source.
+                  Some niche mechanics or very recent game updates may not yet
+                  be fully modeled.
                 </li>
                 <li>Saved presets are stored locally in your browser.</li>
               </ul>
-
               <div className="start-hint">
-                Tip: most searchable fields begin returning results after typing
-                at least 2 characters.
+                Tip: default best-in-slot presets are available, select one and
+                adjust to your needs.
               </div>
             </div>
           </div>
