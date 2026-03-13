@@ -126,7 +126,7 @@ export default function TargetPanel({
 
       <div className="target-hint">
         <p>
-          Current target: <b>{target?.name ?? "Training Dummy"}</b>
+          Current target: <b>{target?.name ?? "Default"}</b>
         </p>
 
         <div className="target-hp-row">

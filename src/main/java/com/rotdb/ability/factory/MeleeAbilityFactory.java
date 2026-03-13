@@ -70,7 +70,7 @@ public class MeleeAbilityFactory {
                 TWO_HANDED,
                 SINGLE_TARGET,
                 CombatStyles.MELEE,
-                SEVER2H);
+                ADAPTIVESTRIKE);
     }
 
     public static AbilityContext adaptiveStrikeDw() {
@@ -84,7 +84,7 @@ public class MeleeAbilityFactory {
                 DUAL_WIELD,
                 SINGLE_TARGET,
                 CombatStyles.MELEE,
-                SEVERDW);
+                ADAPTIVESTRIKE);
     }
 
     public static AbilityContext overpower() {

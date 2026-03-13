@@ -2,19 +2,26 @@ package com.rotdb.ability;
 
 import com.rotdb.ability.factory.*;
 import com.rotdb.domain.model.context.AbilityContext;
+import com.rotdb.domain.model.context.CalculationContext;
+import com.rotdb.domain.model.enums.Effect;
+import com.rotdb.domain.model.enums.Slots;
+import com.rotdb.domain.model.equipment.EquipmentModel;
+import com.rotdb.domain.model.equipment.EquipmentSlot;
 
 public final class AbilityProvider {
 
     private AbilityProvider() {}
 
-    public static AbilityContext get(AbilityId id) {
+    public static AbilityContext get(AbilityId id, CalculationContext context) {
         return switch (id) {
             // Melee Abilities
             case MELEEAUTO -> MeleeAbilityFactory.attack();
             case ASSAULT -> MeleeAbilityFactory.assault();
             case BLOODLUSTASSAULT -> MeleeAbilityFactory.bloodlustAssault();
-            case SEVER2H -> MeleeAbilityFactory.adaptiveStrike2h();
-            case SEVERDW -> MeleeAbilityFactory.adaptiveStrikeDw();
+            case ADAPTIVESTRIKE ->
+                    context.getEquipment().getMainhand().getSlot() == Slots.TWOHANDED
+                            ? MeleeAbilityFactory.adaptiveStrike2h()
+                            : MeleeAbilityFactory.adaptiveStrikeDw();
             case OVERPOWER -> MeleeAbilityFactory.overpower();
             case OVERPOWERIGNEOUS -> MeleeAbilityFactory.overpowerIgneous();
             case REND -> MeleeAbilityFactory.rend();
@@ -47,8 +54,9 @@ public final class AbilityProvider {
             case COMBUST -> MagicAbilityFactory.combust();
             case CHAIN -> MagicAbilityFactory.chain();
             case GREATERCHAIN -> MagicAbilityFactory.greaterChain();
-            case ASPHYXIATE -> MagicAbilityFactory.asphyxiate();
-            case ASPHYXIATETUMEKENS -> MagicAbilityFactory.asphyxiateTumekens();
+            case ASPHYXIATE -> hasAtLeastTumekensPieces(context.getEquipment(), 4)
+                    ? MagicAbilityFactory.asphyxiateTumekens()
+                    : MagicAbilityFactory.asphyxiate();
             case CONCENTRATEDBLAST -> MagicAbilityFactory.concentratedBlast();
             case GREATERCONCENTRATEDBLAST -> MagicAbilityFactory.greaterConcentratedBlast();
             case MAGMATEMPEST -> MagicAbilityFactory.magmaTempest();
@@ -167,5 +175,20 @@ public final class AbilityProvider {
             case SOULCRUSH -> NecromancySpecialAttackFactory.soulCrush();
             case DEATHESSENCE -> NecromancySpecialAttackFactory.deathEssence();
         };
+    }
+    private static boolean hasAtLeastTumekensPieces(EquipmentModel equipment, int required) {
+        int count = 0;
+
+        if (isTumekens(equipment.getHead())) count++;
+        if (isTumekens(equipment.getBody())) count++;
+        if (isTumekens(equipment.getLegs())) count++;
+        if (isTumekens(equipment.getGloves())) count++;
+        if (isTumekens(equipment.getBoots())) count++;
+
+        return count >= required;
+    }
+
+    private static boolean isTumekens(EquipmentSlot item) {
+        return item.getEffect().contains(Effect.TUMEKENS);
     }
 }

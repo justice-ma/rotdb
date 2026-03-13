@@ -23,7 +23,7 @@ public class MeleeAbilitySpecificResolver {
                 mod *= 2.5;
             }
 
-            if (buff.has(BuffId.BLOODLUST) && buff.stacks(BuffId.BLOODLUST) >= 4 && ability.getId() == AbilityId.GREATERFLURRY) {
+            if (buff.has(BuffId.BLOODLUST) && ability.getId() == AbilityId.GREATERFLURRY) {
                 double hpPercent = (double) target.getCurrentHp() / target.getMaxHp();
                 double add = 1 + Math.min(1.0 - hpPercent, 0.65);
                 mod *= add;

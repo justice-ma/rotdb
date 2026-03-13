@@ -1,9 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  fetchEquipmentBySlot,
-  fetchSpells,
-  fetchEquipmentByIds,
-} from "../api/api";
+import { fetchEquipmentBySlot, fetchSpells } from "../api/api";
 import "../style/combatSettings.css";
 import BuffPanel from "./BuffPanel";
 import StatPanel from "./StatPanel";
@@ -39,7 +35,6 @@ function SlotSearch({
   error,
   onPick,
   selected,
-  onClear,
   onBeginEdit,
   disabled = false,
 }) {
@@ -180,6 +175,8 @@ export default function CombatSettings({
   selectedPotions,
   setSelectedPotions,
 }) {
+  const [editingSlot, setEditingSlot] = useState(null);
+
   const visibleSlots = useMemo(() => {
     if (style === "RANGED") return SLOTS;
     return SLOTS.filter((s) => s !== "AMMO");
@@ -231,6 +228,8 @@ export default function CombatSettings({
   }
 
   function onPick(slot, item) {
+    setEditingSlot((prev) => (prev === slot ? null : prev));
+
     setSelectedEquipmentBySlot((prev) => {
       const next = { ...prev, [slot]: item };
 
@@ -252,7 +251,7 @@ export default function CombatSettings({
     });
 
     setResultsBySlot((prev) => {
-      const next = { ...prev, [slot]: "" };
+      const next = { ...prev, [slot]: [] };
 
       if (slot === "MAINHAND" && item?.slot === "TWOHANDED") {
         next.OFFHAND = [];
@@ -294,6 +293,8 @@ export default function CombatSettings({
   }
 
   function onBeginEdit(slot) {
+    setEditingSlot(slot);
+
     setSelectedEquipmentBySlot((prev) => {
       const next = { ...prev };
       delete next[slot];
@@ -318,6 +319,8 @@ export default function CombatSettings({
   }
 
   function onClear(slot) {
+    setEditingSlot((prev) => (prev === slot ? null : prev));
+
     setSelectedEquipmentBySlot((prev) => {
       const next = { ...prev };
       delete next[slot];
@@ -373,6 +376,8 @@ export default function CombatSettings({
 
         if (selected?.name) {
           next[slot] = selected.name;
+        } else if (editingSlot !== slot) {
+          next[slot] = "";
         }
       }
 
@@ -382,7 +387,7 @@ export default function CombatSettings({
 
       return next;
     });
-  }, [selectedEquipmentBySlot, isTwoHandedMainhand]);
+  }, [selectedEquipmentBySlot, isTwoHandedMainhand, editingSlot]);
 
   useEffect(() => {
     if (!mainhand) return;

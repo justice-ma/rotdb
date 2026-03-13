@@ -6,6 +6,8 @@ public class EquipmentModel {
     private EquipmentSlot head, body, legs, boots, gloves, cape, pocket, neck, ring, ammo, mainhand, offhand, quiver;
     private CombatStyles combatStyle;
     private int abilityDamage;
+    private int tuskaPieces, sliskePieces, tectonicPieces, eliteTectonicPieces, dracolichPieces,
+    eliteDracolichPieces, tumekensPieces;
 
     public EquipmentModel() {}
 
@@ -204,5 +206,61 @@ public class EquipmentModel {
 
     public void setQuiver(EquipmentSlot quiver) {
         this.quiver = quiver;
+    }
+
+    public int getTuskaPieces() {
+        return tuskaPieces;
+    }
+
+    public void setTuskaPieces(int tuskaPieces) {
+        this.tuskaPieces = tuskaPieces;
+    }
+
+    public int getSliskePieces() {
+        return sliskePieces;
+    }
+
+    public void setSliskePieces(int sliskePieces) {
+        this.sliskePieces = sliskePieces;
+    }
+
+    public int getTectonicPieces() {
+        return tectonicPieces;
+    }
+
+    public void setTectonicPieces(int tectonicPieces) {
+        this.tectonicPieces = tectonicPieces;
+    }
+
+    public int getEliteTectonicPieces() {
+        return eliteTectonicPieces;
+    }
+
+    public void setEliteTectonicPieces(int eliteTectonicPieces) {
+        this.eliteTectonicPieces = eliteTectonicPieces;
+    }
+
+    public int getDracolichPieces() {
+        return dracolichPieces;
+    }
+
+    public void setDracolichPieces(int dracolichPieces) {
+        this.dracolichPieces = dracolichPieces;
+    }
+
+    public int getEliteDracolichPieces() {
+        return eliteDracolichPieces;
+    }
+
+    public void setEliteDracolichPieces(int eliteDracolichPieces) {
+        this.eliteDracolichPieces = eliteDracolichPieces;
+    }
+
+    public int getTumekensPieces() {
+        return tumekensPieces;
+    }
+
+    public void setTumekensPieces(int tumekensPieces) {
+        this.tumekensPieces = tumekensPieces;
     }
 }

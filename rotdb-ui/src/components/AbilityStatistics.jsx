@@ -30,7 +30,7 @@ ChartJs.register(
 );
 
 const CRIT_MODE = {
-  AUTO: "auto",
+  DEFAULT: "default",
   CRIT: "crit",
   NON_CRIT: "nonCrit",
 };
@@ -74,8 +74,12 @@ function buildStackedGroups(hits, metric, critMode) {
   const groups = [];
 
   for (const hit of hits) {
-    const value = getMetricValue(hit, metric, critMode);
     const type = hit.hitType ?? "BASE";
+
+    const value =
+      critMode === CRIT_MODE.NON_CRIT && type === "INSTABILITY"
+        ? 0
+        : getMetricValue(hit, metric, critMode);
 
     if (!isProcHit(type)) {
       groups.push({
@@ -123,7 +127,7 @@ export default function AbilityStatistics({
 }) {
   const [isTouchLayout, setIsTouchLayout] = useState(window.innerWidth <= 1200);
   const [metric, setMetric] = useState("avg");
-  const [critMode, setCritMode] = useState(CRIT_MODE.AUTO);
+  const [critMode, setCritMode] = useState(CRIT_MODE.DEFAULT);
 
   useEffect(() => {
     function handleResize() {
@@ -234,7 +238,7 @@ export default function AbilityStatistics({
           afterTitle: () => {
             if (critMode === CRIT_MODE.CRIT) return "Forced Crit";
             if (critMode === CRIT_MODE.NON_CRIT) return "Forced Non-Crit";
-            return "Auto";
+            return "Default";
           },
         },
       },
@@ -423,11 +427,11 @@ export default function AbilityStatistics({
             <button
               type="button"
               className={`crit-mode-button ${
-                critMode === CRIT_MODE.AUTO ? "active" : ""
+                critMode === CRIT_MODE.DEFAULT ? "active" : ""
               }`}
-              onClick={() => setCritMode(CRIT_MODE.AUTO)}
+              onClick={() => setCritMode(CRIT_MODE.DEFAULT)}
             >
-              Auto
+              Default
             </button>
 
             <button

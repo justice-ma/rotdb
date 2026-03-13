@@ -27,54 +27,47 @@ public class SetEffectsCritResolver {
         EquipmentSlot gloves = equipment.getGloves();
         EquipmentSlot cape = equipment.getCape();
         List<EquipmentSlot> equipmentSlots = List.of(head, body, legs, boots, gloves, cape);
-        int tuskaCount = 0;
-        int sliskeCount = 0;
-        int tectonicCount = 0;
-        int eliteTectonicCount = 0;
-        int dracolichCount = 0;
-        int eliteDracolichCount = 0;
-        int tumekensCount = 0;
 
         for (EquipmentSlot piece : equipmentSlots) {
             if (piece == null) continue;
-            if (piece.getEffect().contains(WARPRIESTOFTUSKA)) tuskaCount++;
-            if (piece.getEffect().contains(ANIMACOREOFSLISKE)) sliskeCount++;
-            if (piece.getEffect().contains(TECTONIC)) tectonicCount++;
-            if (piece.getEffect().contains(ELITETECTONIC)) eliteTectonicCount++;
-            if (piece.getEffect().contains(DRACOLICH)) dracolichCount++;
-            if (piece.getEffect().contains(ELITEDRACOLICH)) eliteDracolichCount++;
-            if (piece.getEffect().contains(TUMEKENS)) tumekensCount++;
+            if (piece.getEffect().contains(WARPRIESTOFTUSKA)) equipment.setTuskaPieces(equipment.getTuskaPieces() + 1);
+            if (piece.getEffect().contains(ANIMACOREOFSLISKE)) equipment.setSliskePieces(equipment.getSliskePieces() + 1);
+            if (piece.getEffect().contains(TECTONIC)) equipment.setTectonicPieces(equipment.getEliteTectonicPieces() + 1);
+            if (piece.getEffect().contains(ELITETECTONIC)) equipment.setEliteTectonicPieces(equipment.getEliteTectonicPieces() + 1);
+            if (piece.getEffect().contains(DRACOLICH)) equipment.setDracolichPieces(equipment.getDracolichPieces() + 1);
+            if (piece.getEffect().contains(ELITEDRACOLICH)) equipment.setEliteDracolichPieces(equipment.getEliteDracolichPieces() + 1);
+            if (piece.getEffect().contains(TUMEKENS)) equipment.setTumekensPieces(equipment.getTumekensPieces() + 1);
         }
 
-        if (tuskaCount >= 3) {
-            criticalStrikeChance += Math.min(0.06, tuskaCount / 100.0);
+        if (equipment.getTuskaPieces() >= 3) {
+            criticalStrikeChance += Math.min(0.06, equipment.getTuskaPieces() / 100.0);
         }
 
-        if (sliskeCount == 3) {
+        if (equipment.getSliskePieces() == 3) {
             criticalStrikeChance += 0.06;
         }
 
-        if (tectonicCount > 0) {
-            criticalStrikeChance += 0.01 * tectonicCount;
+        if (equipment.getTectonicPieces() > 0) {
+            criticalStrikeChance += 0.01 * equipment.getTectonicPieces();
         }
 
-        if (eliteTectonicCount > 0) {
-            criticalStrikeChance += 0.02 * eliteTectonicCount;
+        if (equipment.getEliteTectonicPieces() > 0) {
+            criticalStrikeChance += 0.02 * equipment.getEliteTectonicPieces();
         }
 
-        if (dracolichCount >= 3 && buff.has(BuffId.RAPIDFIREBUFF)  && ability.getCombatStyle() == RANGED) {
+        if (equipment.getDracolichPieces() >= 3 && buff.has(BuffId.RAPIDFIREBUFF)  && ability.getCombatStyle() == RANGED) {
             criticalStrikeChance += 0.2;
         }
 
-        if (eliteDracolichCount >= 3 && buff.has(BuffId.RAPIDFIREBUFF) && ability.getCombatStyle() == RANGED) {
+        if (equipment.getEliteDracolichPieces() >= 3 && buff.has(BuffId.RAPIDFIREBUFF) && ability.getCombatStyle() == RANGED) {
             criticalStrikeChance += 0.4;
         }
 
-        if (tumekensCount >= 3 && buff.has(BuffId.SUNSHINE)) {
-            criticalStrikeChance += 0.015 * tumekensCount;
+        if (equipment.getTumekensPieces() >= 3 && buff.has(BuffId.SUNSHINE)) {
+            criticalStrikeChance += 0.015 * equipment.getTumekensPieces();
 
-            if (tumekensCount == 5 && buff.has(BuffId.ASPHYXIATEBUFF) ) {
-                criticalStrikeDamage += 0.5;
+            if (equipment.getTumekensPieces() == 5 && buff.has(BuffId.ASPHYXIATEBUFF) ) {
+                criticalStrikeDamage += 0.35;
             }
         }
         return new CritBonus(criticalStrikeChance, criticalStrikeDamage);

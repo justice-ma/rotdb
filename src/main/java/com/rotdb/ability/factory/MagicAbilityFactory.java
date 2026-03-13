@@ -200,7 +200,7 @@ public class MagicAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MAGIC,
-                ASPHYXIATETUMEKENS);
+                ASPHYXIATE);
     }
 
     public static AbilityContext concentratedBlast() {
