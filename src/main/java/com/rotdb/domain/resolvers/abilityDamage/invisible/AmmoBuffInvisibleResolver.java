@@ -38,10 +38,10 @@ public class AmmoBuffInvisibleResolver {
             }
         }
 
-        if (style == RANGED && ammo.getEffect().contains(Effect.WENARROWS)) {
-            int wen = buff.has(BuffId.WENSTACKS) && buff.stacks(BuffId.WENSTACKS) >= 10
-                    ? buff.stacks(BuffId.WENSTACKS) : 0;
-            return 1.3;
+        if (style == RANGED && ammo.getEffect().contains(Effect.WENARROWS) && buff.has(BuffId.WENSTACKS) && buff.stacks(BuffId.WENSTACKS) == 10) {
+            if (hit.getTier() == AbilityTier.THRESHOLD || hit.getTier() == AbilityTier.ULTIMATE) {
+                return 1.3;
+            }
         }
 
         return 1;

@@ -21,12 +21,14 @@ public final class DamageRequestMapper {
     private final PotionContextMapper potionContextMapper;
     private final SpellContextMapper spellContextMapper;
     private final PrayerContextMapper prayerContextMapper;
-    private final RelicsContextMapper relicsContextMapper;
     private final FamiliarContextMapper familiarContextMapper;
     private final PerkContextMapper perkContextMapper;
 
     public DamageRequestMapper(EquipmentContextMapper equipmentContextMapper, SkillsContextMapper skillsContextMapper,
-                               BuffContextMapper buffContextMapper, TargetContextMapper targetContextMapper, PotionContextMapper potionContextMapper, SpellContextMapper spellContextMapper, PrayerContextMapper prayerContextMapper, RelicsContextMapper relicsContextMapper, FamiliarContextMapper familiarContextMapper, PerkContextMapper perkContextMapper) {
+                               BuffContextMapper buffContextMapper, TargetContextMapper targetContextMapper,
+                               PotionContextMapper potionContextMapper, SpellContextMapper spellContextMapper,
+                               PrayerContextMapper prayerContextMapper, FamiliarContextMapper familiarContextMapper,
+                               PerkContextMapper perkContextMapper) {
         this.equipmentContextMapper = equipmentContextMapper;
         this.skillsContextMapper = skillsContextMapper;
         this.buffContextMapper = buffContextMapper;
@@ -34,7 +36,6 @@ public final class DamageRequestMapper {
         this.potionContextMapper = potionContextMapper;
         this.spellContextMapper = spellContextMapper;
         this.prayerContextMapper = prayerContextMapper;
-        this.relicsContextMapper = relicsContextMapper;
         this.familiarContextMapper = familiarContextMapper;
         this.perkContextMapper = perkContextMapper;
     }
@@ -46,7 +47,6 @@ public final class DamageRequestMapper {
         List<PotionContext> potion = potionContextMapper.from(request.potions());
         SpellContext spell = spellContextMapper.from(request.spell());
         PrayerContext prayer = prayerContextMapper.from(request.selectedPrayers());
-        RelicsContext relics = relicsContextMapper.from(request.berserkersFury());
         FamiliarContext familiar = familiarContextMapper.from(request.selectedFamiliar());
         PerkContext perks = perkContextMapper.from(request.perks());
 
@@ -57,11 +57,14 @@ public final class DamageRequestMapper {
         dr.setBuffs(buffs);
         dr.setPotion(potion);
 
-        TargetContext target = targetContextMapper.from(request.targetTitle(), dr.getEquipment());
+        TargetContext target = targetContextMapper.from(
+                request.targetTitle(),
+                request.targetCurrentHp(),
+                request.targetMaxHp(),
+                equipment);
         dr.setTarget(target);
         dr.setSpell(spell);
         dr.setSelectedPrayers(prayer);
-        dr.setRelics(relics);
         dr.setFamiliar(familiar);
         dr.setPerks(perks);
         return dr;

@@ -78,4 +78,5 @@ public enum Effect {
     DRAGONSTONEE,
     ONYXE,
     RUBYE,
+    PERNIXQUIVER,
 }

@@ -29,6 +29,12 @@ ChartJs.register(
   Legend,
 );
 
+const CRIT_MODE = {
+  AUTO: "auto",
+  CRIT: "crit",
+  NON_CRIT: "nonCrit",
+};
+
 function StatTitle({ icon: Icon, children }) {
   return (
     <div className="stat-title">
@@ -38,9 +44,21 @@ function StatTitle({ icon: Icon, children }) {
   );
 }
 
-function getMetricValue(hit, metric) {
-  if (metric === "min") return hit.hitMinNonCrit ?? 0;
-  if (metric === "max") return hit.hitMaxCrit ?? 0;
+function getMetricValue(hit, metric, critMode) {
+  if (critMode === CRIT_MODE.CRIT) {
+    if (metric === "min") return hit.hitMinCrit ?? 0;
+    if (metric === "max") return hit.hitMaxCrit ?? 0;
+    return hit.hitAvgCrit ?? 0;
+  }
+
+  if (critMode === CRIT_MODE.NON_CRIT) {
+    if (metric === "min") return hit.hitMinNonCrit ?? 0;
+    if (metric === "max") return hit.hitMaxNonCrit ?? 0;
+    return hit.hitAvgNonCrit ?? 0;
+  }
+
+  if (metric === "min") return hit.hitMinDamage ?? 0;
+  if (metric === "max") return hit.hitMaxDamage ?? 0;
   return hit.hitAvgDamage ?? 0;
 }
 
@@ -52,11 +70,11 @@ function isProcHit(hitType) {
   );
 }
 
-function buildStackedGroups(hits, metric) {
+function buildStackedGroups(hits, metric, critMode) {
   const groups = [];
 
   for (const hit of hits) {
-    const value = getMetricValue(hit, metric);
+    const value = getMetricValue(hit, metric, critMode);
     const type = hit.hitType ?? "BASE";
 
     if (!isProcHit(type)) {
@@ -90,9 +108,7 @@ function buildStackedGroups(hits, metric) {
     } else if (type === "SPLITSOUL") {
       currentGroup.splitSoul += value;
     } else if (type === "INSTABILITY") {
-      if (metric !== "min") {
-        currentGroup.instability += value;
-      }
+      currentGroup.instability += value;
     }
 
     currentGroup.sourceHits.push(hit);
@@ -106,6 +122,8 @@ export default function AbilityStatistics({
   selectedAbility,
 }) {
   const [isTouchLayout, setIsTouchLayout] = useState(window.innerWidth <= 1200);
+  const [metric, setMetric] = useState("avg");
+  const [critMode, setCritMode] = useState(CRIT_MODE.AUTO);
 
   useEffect(() => {
     function handleResize() {
@@ -117,16 +135,18 @@ export default function AbilityStatistics({
   }, []);
 
   const hits = calculationResults?.hit ?? [];
-  const [metric, setMetric] = useState("avg");
 
   const groupedHits = useMemo(
-    () => buildStackedGroups(hits, metric),
-    [hits, metric],
+    () => buildStackedGroups(hits, metric, critMode),
+    [hits, metric, critMode],
   );
 
   const labels = useMemo(
-    () => groupedHits.map((group) => group.label),
-    [groupedHits],
+    () =>
+      groupedHits.map((group) => {
+        return group.label;
+      }),
+    [groupedHits, critMode],
   );
 
   const barChartData = useMemo(() => {
@@ -145,8 +165,8 @@ export default function AbilityStatistics({
         label: "BOLG Proc",
         data: groupedHits.map((group) => group.bolg),
         borderWidth: 1,
-        backgroundColor: "rgba(255, 196, 61, 0.35)",
-        borderColor: "rgba(255, 196, 61, 0.95)",
+        backgroundColor: "rgba(144, 244, 114, 0.35)",
+        borderColor: "rgba(144, 244, 114, 0.95)",
         borderRadius: 4,
         maxBarThickness: 28,
         stack: "damage",
@@ -165,8 +185,8 @@ export default function AbilityStatistics({
         label: "Instability",
         data: groupedHits.map((group) => group.instability),
         borderWidth: 1,
-        backgroundColor: "rgba(144, 244, 114, 0.35)",
-        borderColor: "rgba(144, 244, 114, 0.95)",
+        backgroundColor: "rgba(244, 114, 182, 0.35)",
+        borderColor: "rgba(244, 114, 182, 0.95)",
         borderRadius: 4,
         maxBarThickness: 28,
         stack: "damage",
@@ -211,6 +231,11 @@ export default function AbilityStatistics({
             const value = context.parsed.y ?? 0;
             return `${label}: ${value}`;
           },
+          afterTitle: () => {
+            if (critMode === CRIT_MODE.CRIT) return "Forced Crit";
+            if (critMode === CRIT_MODE.NON_CRIT) return "Forced Non-Crit";
+            return "Auto";
+          },
         },
       },
     },
@@ -245,11 +270,9 @@ export default function AbilityStatistics({
 
   const inlineOptions = {
     ...baseChartOptions,
-
     interaction: {
       mode: undefined,
     },
-
     plugins: {
       ...baseChartOptions.plugins,
       tooltip: {
@@ -265,7 +288,6 @@ export default function AbilityStatistics({
       legend: {
         ...baseChartOptions.plugins.legend,
         labels: {
-          ...baseChartOptions.plugins.legend.labels,
           boxWidth: 16,
           padding: 18,
           font: {
@@ -393,8 +415,40 @@ export default function AbilityStatistics({
 
       <div className="damage-card chart-card">
         <div className="chart-header">
-          <div className="damage-head" style={{ margin: 0 }}>
-            <StatTitle icon={BarChart3}>Per Hit breakdown</StatTitle>
+          <StatTitle icon={BarChart3}>Hits</StatTitle>
+        </div>
+
+        <div className="chart-toolbar">
+          <div className="crit-mode-toggle">
+            <button
+              type="button"
+              className={`crit-mode-button ${
+                critMode === CRIT_MODE.AUTO ? "active" : ""
+              }`}
+              onClick={() => setCritMode(CRIT_MODE.AUTO)}
+            >
+              Auto
+            </button>
+
+            <button
+              type="button"
+              className={`crit-mode-button ${
+                critMode === CRIT_MODE.CRIT ? "active" : ""
+              }`}
+              onClick={() => setCritMode(CRIT_MODE.CRIT)}
+            >
+              Crit
+            </button>
+
+            <button
+              type="button"
+              className={`crit-mode-button ${
+                critMode === CRIT_MODE.NON_CRIT ? "active" : ""
+              }`}
+              onClick={() => setCritMode(CRIT_MODE.NON_CRIT)}
+            >
+              Non-Crit
+            </button>
           </div>
 
           <select
@@ -408,20 +462,23 @@ export default function AbilityStatistics({
           </select>
         </div>
 
-        <div className="chart-inline">
-          <Bar
-            options={isTouchLayout ? overlayOptions : inlineOptions}
-            data={isTouchLayout ? barChartData : inlineChartData}
-          />
-        </div>
-
-        {!isTouchLayout ? (
-          <div className="chart-overlay">
-            <div className="chart-overlay-inner">
-              <Bar options={overlayOptions} data={barChartData} />
-            </div>
+        <div className="chart-hover-zone">
+          <div className="chart-inline">
+            <Bar
+              options={isTouchLayout ? overlayOptions : inlineOptions}
+              data={isTouchLayout ? barChartData : inlineChartData}
+              className="chart"
+            />
           </div>
-        ) : null}
+
+          {!isTouchLayout ? (
+            <div className="chart-overlay">
+              <div className="chart-overlay-inner">
+                <Bar options={overlayOptions} data={barChartData} />
+              </div>
+            </div>
+          ) : null}
+        </div>
       </div>
     </div>
   );

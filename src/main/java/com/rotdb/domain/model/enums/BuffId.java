@@ -74,7 +74,8 @@ public enum BuffId {
     CLOBBER(0, 0, false, "Clobber"),
     SUNDER(0, 0, false, "Sunder"),
     BACKSTAB(0, 0, false, "Backstab"),
-    CROESUSSPORED(0, 0, false, "Croesus Spored");
+    CROESUSSPORED(0, 0, false, "Croesus Spored"),
+    BERSERKERSFURY(0, 0, false, "Berserker's Fury");
 
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;

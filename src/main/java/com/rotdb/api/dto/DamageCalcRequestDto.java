@@ -14,6 +14,8 @@ public record DamageCalcRequestDto(
         Long ammoId,
         BuffIds buffs,
         String targetTitle,
+        Integer targetCurrentHp,
+        Integer targetMaxHp,
         List<PotionSelection> potions,
         Spells spell,
         Set<Prayer> selectedPrayers,
@@ -21,7 +23,7 @@ public record DamageCalcRequestDto(
         Familiars selectedFamiliar,
         PerkSelection perks
 ) {
-    public record Skills(Integer strength, Integer magic,Integer ranged, Integer necromancy, Integer attack) {}
+    public record Skills(Integer strength, Integer magic,Integer ranged, Integer necromancy, Integer attack, Integer maxHp, Integer currentHp) {}
     public record EquipmentIds(Long mainhandId, Long offhandId, Long headId, Long bodyId,
                                Long glovesId, Long legsId, Long bootsId, Long pocketId, Long ammoId,
                                Long ringId, Long neckId, Long capeId, Long quiverId) {}

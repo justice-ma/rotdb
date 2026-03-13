@@ -24,6 +24,8 @@ const DEFAULT_SKILLS = {
   attack: 120,
   defence: 99,
   summoning: 99,
+  maxHp: 10100,
+  currentHp: 10100,
 };
 
 export default function AbilityCalculation() {
@@ -50,7 +52,11 @@ export default function AbilityCalculation() {
 
   const [selectedPrayers, setSelectedPrayers] = useState([]);
   const [selectedPerks, setSelectedPerks] = useState({});
+
   const [target, setTarget] = useState(null);
+  const [targetCurrentHp, setTargetCurrentHp] = useState("");
+  const [targetMaxHp, setTargetMaxHp] = useState("");
+
   const [familiar, setFamiliar] = useState(null);
 
   const [presets, setPresets] = useState([]);
@@ -121,6 +127,8 @@ export default function AbilityCalculation() {
         itemLevel20,
       },
       targetTitle: target?.name ?? "Training dummy",
+      targetCurrentHp: targetCurrentHp === "" ? null : Number(targetCurrentHp),
+      targetMaxHp: targetMaxHp === "" ? null : Number(targetMaxHp),
       spell: spell?.id ?? null,
       relic: null,
       selectedFamiliar: familiar?.id ?? null,
@@ -134,6 +142,8 @@ export default function AbilityCalculation() {
     selectedPrayers,
     selectedPerks,
     target,
+    targetCurrentHp,
+    targetMaxHp,
     familiar,
     selectedPotions,
     itemLevel20,
@@ -180,7 +190,6 @@ export default function AbilityCalculation() {
     if (!payload) return;
 
     setStyle(payload.style ?? "RANGED");
-
     setSkills(payload.skills ?? DEFAULT_SKILLS);
 
     setEquipmentIds({
@@ -202,13 +211,20 @@ export default function AbilityCalculation() {
     setBuffs(payload.buffs ?? {});
     setSelectedPrayers(payload.selectedPrayers ?? []);
     setSelectedPerks(payload.perks?.selectedPerks ?? {});
-    setSelectedPotions(payload?.potions ?? [{ pot: "NONE", stat: "ALL" }]);
+    setSelectedPotions(payload.potions ?? [{ pot: "NONE", stat: "ALL" }]);
 
     setMainhand(uiState.mainhand ?? null);
     setSpell(uiState.spell ?? null);
     setFamiliar(uiState.familiar ?? null);
     setTarget(uiState.target ?? null);
     setSelectedEquipmentBySlot(uiState.selectedEquipmentBySlot ?? {});
+
+    setTargetCurrentHp(
+      payload.targetCurrentHp == null ? "" : String(payload.targetCurrentHp),
+    );
+    setTargetMaxHp(
+      payload.targetMaxHp == null ? "" : String(payload.targetMaxHp),
+    );
 
     setSelectedAbility(null);
     setDetailedResults({});
@@ -338,6 +354,10 @@ export default function AbilityCalculation() {
           setSelectedPerks={setSelectedPerks}
           target={target}
           setTarget={setTarget}
+          targetCurrentHp={targetCurrentHp}
+          setTargetCurrentHp={setTargetCurrentHp}
+          targetMaxHp={targetMaxHp}
+          setTargetMaxHp={setTargetMaxHp}
           familiar={familiar}
           setFamiliar={setFamiliar}
           presets={presets}

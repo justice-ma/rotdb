@@ -4,7 +4,6 @@ import com.rotdb.domain.model.DamageRequest;
 import com.rotdb.domain.model.context.TargetContext;
 import com.rotdb.domain.model.equipment.PerkContext;
 import com.rotdb.domain.model.player.BuffContext;
-import com.rotdb.domain.model.player.RelicsContext;
 
 import java.util.Objects;
 
@@ -13,7 +12,6 @@ public final class DamageRequestNormalizer {
         Objects.requireNonNull(r, "request");
 
         if (r.getBuffs() == null) r.setBuffs(new BuffContext());
-        if (r.getRelics() == null) r.setRelics(new RelicsContext());
         if (r.getPerks() == null) r.setPerks(new PerkContext());
         if (r.getTarget() == null) {
             TargetContext target = new TargetContext();

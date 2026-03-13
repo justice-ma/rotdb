@@ -150,6 +150,10 @@ export default function CombatSettings({
   setSelectedPerks,
   target,
   setTarget,
+  targetCurrentHp,
+  setTargetCurrentHp,
+  targetMaxHp,
+  setTargetMaxHp,
   familiar,
   setFamiliar,
   presets,
@@ -507,7 +511,14 @@ export default function CombatSettings({
       <details className="cs-section">
         <summary className="cs-summary">Target</summary>
         <div className="cs-body">
-          <TargetPanel target={target} setTarget={setTarget} />
+          <TargetPanel
+            target={target}
+            setTarget={setTarget}
+            targetCurrentHp={targetCurrentHp}
+            setTargetCurrentHp={setTargetCurrentHp}
+            targetMaxHp={targetMaxHp}
+            setTargetMaxHp={setTargetMaxHp}
+          />
         </div>
       </details>
 

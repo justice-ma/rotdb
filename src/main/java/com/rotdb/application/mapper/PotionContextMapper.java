@@ -10,7 +10,6 @@ import java.util.List;
 @Component
 public class PotionContextMapper {
     public List<PotionContext> from(List<DamageCalcRequestDto.PotionSelection> request) {
-        System.out.println(request);
         List<PotionContext> potions = new ArrayList<>();
         if (request.isEmpty()) {
             return List.of();

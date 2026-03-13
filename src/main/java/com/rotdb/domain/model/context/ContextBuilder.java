@@ -8,7 +8,6 @@ import com.rotdb.domain.model.equipment.EquipmentModel;
 import com.rotdb.domain.model.equipment.FamiliarContext;
 import com.rotdb.domain.model.equipment.PerkContext;
 import com.rotdb.domain.model.player.BuffContext;
-import com.rotdb.domain.model.player.RelicsContext;
 import com.rotdb.domain.model.player.SkillsContext;
 import com.rotdb.domain.model.player.SpellContext;
 import com.rotdb.domain.resolvers.PrayerResolver;
@@ -21,7 +20,6 @@ public class ContextBuilder {
     private BuffContext buffs;
     private TargetContext target;
     private SkillsContext skills;
-    private RelicsContext relics;
     private PerkContext perks;
     private FamiliarContext familiar;
     private SpellContext spell;
@@ -50,11 +48,6 @@ public class ContextBuilder {
 
     public ContextBuilder skills(SkillsContext s) {
         this.skills = s;
-        return this;
-    }
-
-    public ContextBuilder relics(RelicsContext r) {
-        this.relics = r;
         return this;
     }
 
@@ -90,7 +83,6 @@ public class ContextBuilder {
         context.setBuffs(request.getBuffs());
         context.setTarget(request.getTarget());
         context.setSkills(request.getSkills());
-        context.setRelics(request.getRelics());
         context.setPerks(request.getPerks());
         context.setFamiliar(request.getFamiliar());
         context.setSpellContext(request.getSpell());

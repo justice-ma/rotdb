@@ -15,7 +15,6 @@ public class DamageRequest {
     private BuffContext buffs;
     private TargetContext target;
     private SkillsContext skills;
-    private RelicsContext relics;
     private PerkContext perks;
     private FamiliarContext familiar;
     private PrayerContext selectedPrayers;
@@ -24,14 +23,13 @@ public class DamageRequest {
     public DamageRequest() {};
 
     public DamageRequest(EquipmentModel equipment, AbilityId abilityId, BuffContext buffs, TargetContext target,
-                         SkillsContext skills, RelicsContext relics, PerkContext perks,
+                         SkillsContext skills, PerkContext perks,
                          FamiliarContext familiar, PrayerContext selectedPrayers, SpellContext spell) {
         this.equipment = equipment;
         this.abilityId = abilityId;
         this.buffs = buffs;
         this.target = target;
         this.skills = skills;
-        this.relics = relics;
         this.perks = perks;
         this.familiar = familiar;
         this.selectedPrayers = selectedPrayers;
@@ -56,10 +54,6 @@ public class DamageRequest {
 
     public SkillsContext getSkills() {
         return skills;
-    }
-
-    public RelicsContext getRelics() {
-        return relics;
     }
 
     public PerkContext getPerks() {
@@ -92,10 +86,6 @@ public class DamageRequest {
 
     public void setSkills(SkillsContext skills) {
         this.skills = skills;
-    }
-
-    public void setRelics(RelicsContext relics) {
-        this.relics = relics;
     }
 
     public void setPerks(PerkContext perks) {

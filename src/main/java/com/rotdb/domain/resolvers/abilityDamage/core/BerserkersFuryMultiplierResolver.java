@@ -1,12 +1,13 @@
 package com.rotdb.domain.resolvers.abilityDamage.core;
 
 import com.rotdb.domain.model.context.CalculationContext;
-import com.rotdb.domain.model.player.RelicsContext;
+import com.rotdb.domain.model.enums.BuffId;
+import com.rotdb.domain.model.player.BuffContext;
 
 public class BerserkersFuryMultiplierResolver {
     public static double resolve(CalculationContext context) {
-        RelicsContext relics = context.getRelics();
-        if (relics.isBerserkersFury()) {
+        BuffContext buffs = context.getBuffs();
+        if (buffs.has(BuffId.BERSERKERSFURY)) {
             class Threshold {
                 final double percentIncrease, lower, upper;
 

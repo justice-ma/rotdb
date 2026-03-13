@@ -18,7 +18,6 @@ public class CalculationContext {
     private SkillsContext skills;
     private BuffContext buffs;
     private TargetContext target;
-    private RelicsContext relics;
     private PerkContext perks;
     private FamiliarContext familiar;
     private PrayerContext prayer;
@@ -93,14 +92,6 @@ public class CalculationContext {
 
     public void setTarget(TargetContext target) {
         this.target = target;
-    }
-
-    public RelicsContext getRelics() {
-        return relics;
-    }
-
-    public void setRelics(RelicsContext relics) {
-        this.relics = relics;
     }
 
     public PerkContext getPerks() {

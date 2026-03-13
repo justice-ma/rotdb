@@ -53,6 +53,8 @@ public class DamageBatchService {
                 base.ammoId(),
                 base.buffs(),
                 base.targetTitle(),
+                base.targetCurrentHp(),
+                base.targetMaxHp(),
                 base.potions(),
                 base.spell(),
                 base.selectedPrayers(),

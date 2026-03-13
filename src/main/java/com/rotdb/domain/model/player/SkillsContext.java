@@ -23,6 +23,8 @@ public class SkillsContext {
         if (getBaseMagic() == null) setBaseMagic(1);
         if (getBaseNecromancy() == null) setBaseNecromancy(1);
         if (getBaseRanged() == null) setBaseRanged(1);
+        if (getCurrentHp() == null) setCurrentHp(1000);
+        if (getMaxHp() == null) setMaxHp(1000);
     }
 
     public void correctBoundaries() {
@@ -38,7 +40,10 @@ public class SkillsContext {
         if (getBaseNecromancy() < 1) setBaseNecromancy(1);
         if (getBaseRanged() > 120) setBaseRanged(120);
         if (getBaseRanged() < 1) setBaseRanged(1);
-
+        if (getMaxHp() > 32000) setMaxHp(32000);
+        if (getMaxHp() < 1) setMaxHp(1);
+        if (getCurrentHp() > 32000) setCurrentHp(32000);
+        if (getCurrentHp() < 1) setCurrentHp(1);
     }
 
     public Integer getSummoning() {

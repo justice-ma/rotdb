@@ -17,6 +17,10 @@ public class TargetContext {
         return tags.contains(tag);
     }
 
+    public void normalizeHp() {
+        currentHp = Math.min(maxHp, currentHp);
+    }
+
     public int getMaxHp() {
         return maxHp;
     }

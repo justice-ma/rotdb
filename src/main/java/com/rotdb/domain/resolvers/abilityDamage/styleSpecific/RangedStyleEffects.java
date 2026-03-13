@@ -9,6 +9,7 @@ import com.rotdb.domain.model.equipment.EquipmentSlot;
 public class RangedStyleEffects {
     public static void apply(CalculationContext context, AbilityHitsContext hit) {
         EquipmentSlot ammo = context.getEquipment().getAmmo();
+        EquipmentSlot quiver = context.getEquipment().getQuiver();
         TargetContext target = context.getTarget();
 
         if (ammo.getEffect().contains(Effect.RUBYE)) {
@@ -16,14 +17,13 @@ public class RangedStyleEffects {
             int c = target.getCurrentHp();
             double ad = 0.25 + (c * 1.0 / m);
             int add = (int) (ad * context.getDamage().getBaseDamage());
-            hit.setCurrentMin(context.getDamage().getCurrentMin() + add);
-            hit.setCurrentMax(context.getDamage().getCurrentMax() + add);
-            hit.setCurrentDamage((context.getDamage().getCurrentMin() + context.getDamage().getCurrentMax()) / 2);
+            hit.setCurrentMin(hit.getCurrentMin() + add);
+            hit.setCurrentMax(hit.getCurrentMax() + add);
+            hit.setCurrentDamage((hit.getCurrentMin() + hit.getCurrentMax()) / 2);
         }
-
-        if (/* TODO: Add quiver slot for pernix's quiver */ (double) target.getCurrentHp() / target.getMaxHp() < 0.25) {
-            hit.setCurrentMax((int) (context.getDamage().getCurrentMax() * 1.04));
-            hit.setCurrentDamage((context.getDamage().getCurrentMin() + context.getDamage().getCurrentMax()) / 2);
+        if (quiver.getEffect().contains(Effect.PERNIXQUIVER) && (double) target.getCurrentHp() / target.getMaxHp() < 0.25) {
+            hit.setCurrentMax((int) (hit.getCurrentMax() * 1.04));
+            hit.setCurrentDamage((hit.getCurrentMin() + hit.getCurrentMax()) / 2);
         }
     }
 }

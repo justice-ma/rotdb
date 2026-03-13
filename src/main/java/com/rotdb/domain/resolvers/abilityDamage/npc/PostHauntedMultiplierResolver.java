@@ -18,7 +18,7 @@ public class PostHauntedMultiplierResolver {
 
         double mod = 1;
         if (buff.has(BuffId.BALANCEOFPOWER) && buff.stacks(BuffId.BALANCEOFPOWER) > 0 && (double) skills.getCurrentHp() / skills.getMaxHp() < 0.6) {
-            mod *= 1 + (0.6 * buff.stacks(BuffId.BALANCEOFPOWER));
+            mod *= 1 + (0.06 * buff.stacks(BuffId.BALANCEOFPOWER));
         }
 
         if (target.has(TargetTags.DINOSAUR) && neck.getEffect().contains(Effect.SALAMANCY)) {

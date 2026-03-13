@@ -2,17 +2,30 @@ import { useEffect, useState } from "react";
 import { fetchTargets } from "../api/api";
 import "../style/targetPanel.css";
 
-export default function TargetPanel({ target, setTarget }) {
+export default function TargetPanel({
+  target,
+  setTarget,
+  targetCurrentHp,
+  setTargetCurrentHp,
+  targetMaxHp,
+  setTargetMaxHp,
+}) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const defaultMaxHp = target?.lifepoints1 ?? 100000;
 
   function onPick(item) {
     setTarget(item);
     setQuery(item.name);
     setResults([]);
     setError("");
+
+    const hp = item?.lifepoints1 ?? "";
+    setTargetCurrentHp(hp === "" ? "" : String(hp));
+    setTargetMaxHp(hp === "" ? "" : String(hp));
   }
 
   function onClear() {
@@ -21,6 +34,8 @@ export default function TargetPanel({ target, setTarget }) {
     setResults([]);
     setError("");
     setLoading(false);
+    setTargetCurrentHp("");
+    setTargetMaxHp("");
   }
 
   useEffect(() => {
@@ -59,20 +74,14 @@ export default function TargetPanel({ target, setTarget }) {
     };
   }, [query, target]);
 
-  function onPick(item) {
-    setTarget(item);
-    setQuery(item.name);
-    setResults([]);
-    setError("");
-  }
+  useEffect(() => {
+    if (!target) {
+      setQuery("");
+      return;
+    }
 
-  function onClear() {
-    setTarget(null);
-    setQuery("");
-    setResults([]);
-    setError("");
-    setLoading(false);
-  }
+    setQuery(target.name ?? "");
+  }, [target]);
 
   return (
     <div className="target-panel">
@@ -119,6 +128,32 @@ export default function TargetPanel({ target, setTarget }) {
         <p>
           Current target: <b>{target?.name ?? "Training Dummy"}</b>
         </p>
+
+        <div className="target-hp-row">
+          <label htmlFor="target-current-hp">HP</label>
+
+          <input
+            id="target-current-hp"
+            type="number"
+            min="1"
+            value={targetCurrentHp}
+            onChange={(e) => setTargetCurrentHp(e.target.value)}
+            placeholder={String(defaultMaxHp)}
+            className="target-hp-input"
+          />
+
+          <span className="target-hp-divider">/</span>
+
+          <input
+            id="target-max-hp"
+            type="number"
+            min="1"
+            value={targetMaxHp}
+            onChange={(e) => setTargetMaxHp(e.target.value)}
+            placeholder={String(defaultMaxHp)}
+            className="target-hp-input"
+          />
+        </div>
 
         {!target ? (
           <>
