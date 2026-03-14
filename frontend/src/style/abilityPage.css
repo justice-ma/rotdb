@@ -20,6 +20,18 @@
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
+/* Chrome, Safari, Edge, Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 body {
   margin: 0;
   background: var(--bg-dark);
@@ -184,6 +196,10 @@ body {
     width: 100%;
     max-width: none;
     min-width: 0;
+
+    position: sticky;
+    top: calc(var(--app-header-height) + var(--space-4));
+    align-self: start;
   }
 
   .ability-browser {

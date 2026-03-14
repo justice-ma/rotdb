@@ -18,7 +18,7 @@ simulation engine** for RuneScape 3.
 ## Live Demo
 
 A live preview of the application is available here:
-<a href="https://www.rotdb.com" target="_blank">rot_db</a>
+<a href="https://www.rotdb.com" target="_blank" rel="noopener noreferrer">rot_db</a>
 
 > Note: This project is currently in active development. Some features may be incomplete or change as the system evolves.
 

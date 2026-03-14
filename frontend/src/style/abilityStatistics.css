@@ -299,3 +299,12 @@
     height: 300px;
   }
 }
+
+@media (max-width: 1200px) and (min-width: 901px) {
+  .detailed-ability-container {
+    position: sticky;
+    top: calc(var(--app-header-height) + var(--space-4));
+    align-self: start;
+    margin-top: 0;
+  }
+}
