@@ -17,6 +17,7 @@ public record DamageCalcRequestDto(
         String targetTitle,
         Integer targetCurrentHp,
         Integer targetMaxHp,
+        Integer targetSize,
         List<PotionSelection> potions,
         Spells spell,
         Set<Prayer> selectedPrayers,

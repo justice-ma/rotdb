@@ -365,6 +365,7 @@ export default function AbilityCalculation() {
   const [target, setTarget] = useState(null);
   const [targetCurrentHp, setTargetCurrentHp] = useState("");
   const [targetMaxHp, setTargetMaxHp] = useState("");
+  const [targetSize, setTargetSize] = useState("");
 
   const [familiar, setFamiliar] = useState(null);
 
@@ -468,9 +469,10 @@ export default function AbilityCalculation() {
         selectedPerks,
         itemLevel20,
       },
-      targetTitle: target?.name ?? "Training dummy",
+      targetTitle: target?.title ?? "Training dummy",
       targetCurrentHp: targetCurrentHp === "" ? null : Number(targetCurrentHp),
       targetMaxHp: targetMaxHp === "" ? null : Number(targetMaxHp),
+      targetSize: target ? null : targetSize === "" ? null : Number(targetSize),
       spell: spell?.id ?? null,
       relic: null,
       selectedFamiliar: familiar?.id ?? null,
@@ -489,6 +491,7 @@ export default function AbilityCalculation() {
     familiar,
     selectedPotions,
     itemLevel20,
+    targetSize,
   ]);
 
   const needsMainhand = !equipmentIds.MAINHAND;
@@ -571,6 +574,7 @@ export default function AbilityCalculation() {
     setTargetMaxHp(
       payload.targetMaxHp == null ? "" : String(payload.targetMaxHp),
     );
+    setTargetSize(payload.targetSize == null ? "" : String(payload.targetSize));
 
     setSelectedAbility(null);
     setDetailedResults({});
@@ -637,6 +641,10 @@ export default function AbilityCalculation() {
       : null;
 
     setTarget(targetItem);
+
+    if (targetItem) {
+      setTargetSize("");
+    }
 
     setSelectedEquipmentBySlot(hydratedBySlot);
     setMainhand(hydratedBySlot.MAINHAND ?? null);
@@ -808,6 +816,8 @@ export default function AbilityCalculation() {
           setItemLevel20={setItemLevel20}
           selectedPotions={selectedPotions}
           setSelectedPotions={setSelectedPotions}
+          targetSize={targetSize}
+          setTargetSize={setTargetSize}
         />
       </div>
 

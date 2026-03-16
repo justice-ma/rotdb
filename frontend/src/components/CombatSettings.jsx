@@ -174,6 +174,8 @@ export default function CombatSettings({
   setItemLevel20,
   selectedPotions,
   setSelectedPotions,
+  targetSize,
+  setTargetSize,
 }) {
   const [editingSlot, setEditingSlot] = useState(null);
   const DEFAULT_BOOK_UPTIME = 66;
@@ -776,6 +778,8 @@ export default function CombatSettings({
             setTargetCurrentHp={setTargetCurrentHp}
             targetMaxHp={targetMaxHp}
             setTargetMaxHp={setTargetMaxHp}
+            targetSize={targetSize}
+            setTargetSize={setTargetSize}
           />
         </div>
       </details>

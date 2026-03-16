@@ -9,6 +9,8 @@ export default function TargetPanel({
   setTargetCurrentHp,
   targetMaxHp,
   setTargetMaxHp,
+  targetSize,
+  setTargetSize,
 }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
@@ -130,7 +132,7 @@ export default function TargetPanel({
         </p>
 
         <div className="target-hp-row">
-          <label htmlFor="target-current-hp">HP</label>
+          <label htmlFor="target-current-hp">Health Points</label>
 
           <input
             id="target-current-hp"
@@ -157,6 +159,34 @@ export default function TargetPanel({
 
         {!target ? (
           <>
+            <div className="target-size-row">
+              <label htmlFor="target-size">Target Size</label>
+
+              <input
+                id="target-size"
+                type="number"
+                min="1"
+                max="5"
+                value={targetSize}
+                onChange={(e) => {
+                  let value = e.target.value;
+
+                  if (value === "") {
+                    setTargetSize("");
+                    return;
+                  }
+
+                  let num = Number(value);
+
+                  if (num < 1) num = 1;
+                  if (num > 5) num = 5;
+
+                  setTargetSize(String(num));
+                }}
+                placeholder="1"
+                className="target-size-input"
+              />
+            </div>
             <p>Default target behavior:</p>
             <ul>
               <li>100% accuracy</li>

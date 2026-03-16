@@ -23,20 +23,21 @@ public class TargetContextMapper {
             String targetRequest,
             Integer targetCurrentHp,
             Integer targetMaxHp,
+            Integer targetSize,
             EquipmentModel equipment
     ) {
         TargetContext target = new TargetContext();
         CombatStyles style = equipment.getCombatStyle();
 
         if (targetRequest == null) {
-            applyDefaultHp(target, targetCurrentHp, targetMaxHp);
+            applyDefaultTargetValues(target, targetCurrentHp, targetMaxHp, targetSize);
             return target;
         }
 
         var entityOpt = repo.findByTitle(targetRequest);
 
         if (entityOpt.isEmpty()) {
-            applyDefaultHp(target, targetCurrentHp, targetMaxHp);
+            applyDefaultTargetValues(target, targetCurrentHp, targetMaxHp, targetSize);
             return target;
         }
 
@@ -45,6 +46,15 @@ public class TargetContextMapper {
         target.setName(entity.getName());
         target.setArmour(entity.getArmour1());
         target.setDefence(entity.getDefence1());
+
+        if (target.getSize() < 1) target.setSize(1);
+        if (target.getSize() > 5) target.setSize(5);
+
+        target.setSize(
+                targetSize != null
+                        ? targetSize
+                        : (entity.getSize() != null ? entity.getSize() : 5)
+        );
 
         if (style == MAGIC) {
             target.setAffinity(entity.getAffMagic() == null ? 90 : entity.getAffMagic());
@@ -77,11 +87,19 @@ public class TargetContextMapper {
         return target;
     }
 
-    private void applyDefaultHp(TargetContext target, Integer targetCurrentHp, Integer targetMaxHp) {
+    private void applyDefaultTargetValues(
+            TargetContext target,
+            Integer targetCurrentHp,
+            Integer targetMaxHp,
+            Integer targetSize
+    ) {
         int resolvedMaxHp = targetMaxHp != null ? targetMaxHp : 100000;
         int resolvedCurrentHp = targetCurrentHp != null ? targetCurrentHp : resolvedMaxHp;
+        int resolvedSize = targetSize != null ? targetSize : 1;
 
         target.setMaxHp(resolvedMaxHp);
         target.setCurrentHp(resolvedCurrentHp);
+        target.setSize(resolvedSize);
+        target.normalizeHp();
     }
 }

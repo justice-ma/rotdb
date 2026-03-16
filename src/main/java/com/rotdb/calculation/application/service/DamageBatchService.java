@@ -55,6 +55,7 @@ public class DamageBatchService {
                 base.targetTitle(),
                 base.targetCurrentHp(),
                 base.targetMaxHp(),
+                base.targetSize(),
                 base.potions(),
                 base.spell(),
                 base.selectedPrayers(),

@@ -36,10 +36,10 @@ public final class AbilityDamagePipeline {
                 new CoreModifier(),
                 new PerfectEquilibriumInjector(),
                 new CritDamageModifier(),
+                new CrystalRainArrowsModifier(),
                 new SplitSoulInjector(),
                 new NpcModifier(),
                 new HitCapModifier(),
-                new CrystalRainArrowsModifier(),
                 new AggregationModifier()
         );
     }

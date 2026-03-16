@@ -63,6 +63,7 @@ public final class DamageRequestMapper {
                 request.targetTitle(),
                 request.targetCurrentHp(),
                 request.targetMaxHp(),
+                request.targetSize(),
                 equipment);
         dr.setTarget(target);
         dr.setSpell(spell);

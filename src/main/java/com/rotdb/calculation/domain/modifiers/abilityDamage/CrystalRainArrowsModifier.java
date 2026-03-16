@@ -27,6 +27,7 @@ public class CrystalRainArrowsModifier implements Modifier {
                 default:
                     expectedNumberOfArrows = 5;
             }
+
             while (expectedNumberOfArrows > 0) {
                 for (int i = 0; i < context.getAbility().getHits().size(); i++) {
                     AbilityHitsContext hit = context.getAbility().getHits().get(i);
