@@ -247,3 +247,19 @@
   font-size: 12px;
   color: var(--text-muted);
 }
+
+.slot-with-extra {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.book-uptime-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.book-uptime-label {
+  font-size: 0.9rem;
+}

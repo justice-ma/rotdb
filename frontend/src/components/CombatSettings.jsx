@@ -176,6 +176,7 @@ export default function CombatSettings({
   setSelectedPotions,
 }) {
   const [editingSlot, setEditingSlot] = useState(null);
+  const DEFAULT_BOOK_UPTIME = 66;
 
   const visibleSlots = useMemo(() => {
     if (style === "RANGED") return SLOTS;
@@ -197,6 +198,17 @@ export default function CombatSettings({
 
   const isTwoHandedMainhand =
     selectedEquipmentBySlot?.MAINHAND?.slot === "TWOHANDED";
+
+  const selectedPocket = selectedEquipmentBySlot?.POCKET;
+
+  const pocketSupportsBookUptime = useMemo(() => {
+    const pocketName = selectedPocket?.name?.toLowerCase?.() ?? "";
+
+    return (
+      pocketName.includes("scripture of ful") ||
+      pocketName.includes("scripture of amascut")
+    );
+  }, [selectedPocket]);
 
   function setQueryForSlot(slot, value) {
     setQueries((prev) => ({ ...prev, [slot]: value }));
@@ -290,6 +302,45 @@ export default function CombatSettings({
     if (slot === "MAINHAND" && typeof setMainhand === "function") {
       setMainhand(item);
     }
+
+    if (slot === "POCKET") {
+      const pocketName = item?.name?.toLowerCase?.() ?? "";
+      const supportsBookUptime =
+        pocketName.includes("scripture of ful") ||
+        pocketName.includes("scripture of amascut");
+
+      if (supportsBookUptime) {
+        const buff = (allBuffs ?? []).find((b) => b.id === "BOOKUPTIME");
+        const min = buff?.min ?? 0;
+        const max = buff?.max ?? 100;
+        const defaultValue = Math.max(min, Math.min(max, DEFAULT_BOOK_UPTIME));
+
+        setBuffs((prev) => {
+          const enabled = prev?.enabledBuffs ?? [];
+          const stacks = prev?.buffStacks ?? {};
+
+          if (stacks.BOOKUPTIME !== undefined && stacks.BOOKUPTIME !== null) {
+            return {
+              ...prev,
+              enabledBuffs: enabled.includes("BOOKUPTIME")
+                ? enabled
+                : [...enabled, "BOOKUPTIME"],
+            };
+          }
+
+          return {
+            ...prev,
+            enabledBuffs: enabled.includes("BOOKUPTIME")
+              ? enabled
+              : [...enabled, "BOOKUPTIME"],
+            buffStacks: {
+              ...stacks,
+              BOOKUPTIME: defaultValue,
+            },
+          };
+        });
+      }
+    }
   }
 
   function onBeginEdit(slot) {
@@ -360,6 +411,50 @@ export default function CombatSettings({
     setSpellLoading(false);
   }
 
+  const [bookUptimeTouched, setBookUptimeTouched] = useState(false);
+
+  useEffect(() => {
+    setBookUptimeTouched(false);
+  }, [selectedPocket]);
+
+  function updateBookUptime(value) {
+    const buff = (allBuffs ?? []).find((b) => b.id === "BOOKUPTIME");
+    const min = buff?.min ?? 0;
+    const max = buff?.max ?? 100;
+
+    setBuffs((prev) => {
+      const enabled = prev?.enabledBuffs ?? [];
+      const stacks = { ...(prev?.buffStacks ?? {}) };
+
+      if (value === "") {
+        return {
+          ...prev,
+          enabledBuffs: enabled.includes("BOOKUPTIME")
+            ? enabled
+            : [...enabled, "BOOKUPTIME"],
+          buffStacks: {
+            ...stacks,
+            BOOKUPTIME: "",
+          },
+        };
+      }
+
+      const numericValue = Number(value);
+      const clamped = Math.max(min, Math.min(max, numericValue));
+
+      return {
+        ...prev,
+        enabledBuffs: enabled.includes("BOOKUPTIME")
+          ? enabled
+          : [...enabled, "BOOKUPTIME"],
+        buffStacks: {
+          ...stacks,
+          BOOKUPTIME: Number.isNaN(clamped) ? "" : clamped,
+        },
+      };
+    });
+  }
+
   useEffect(() => {
     if (!isTwoHandedMainhand) return;
     if (!selectedEquipmentBySlot?.OFFHAND) return;
@@ -410,6 +505,29 @@ export default function CombatSettings({
 
     setSpellQuery(spell.name ?? "");
   }, [spell]);
+
+  useEffect(() => {
+    if (pocketSupportsBookUptime) return;
+
+    setBuffs((prev) => {
+      const enabled = prev?.enabledBuffs ?? [];
+      const stacks = prev?.buffStacks ?? {};
+
+      if (!enabled.includes("BOOKUPTIME") && stacks.BOOKUPTIME === undefined) {
+        return prev;
+      }
+
+      const nextEnabled = enabled.filter((id) => id !== "BOOKUPTIME");
+      const nextStacks = { ...stacks };
+      delete nextStacks.BOOKUPTIME;
+
+      return {
+        ...prev,
+        enabledBuffs: nextEnabled,
+        buffStacks: nextStacks,
+      };
+    });
+  }, [pocketSupportsBookUptime, setBuffs]);
 
   useEffect(() => {
     const controllers = {};
@@ -547,7 +665,6 @@ export default function CombatSettings({
                 error={errorBySlot[slot]}
                 onPick={onPick}
                 selected={selectedEquipmentBySlot?.[slot]}
-                onClear={onClear}
                 onBeginEdit={onBeginEdit}
                 disabled={slot === "OFFHAND" && isTwoHandedMainhand}
               />
@@ -564,6 +681,31 @@ export default function CombatSettings({
                 onPick={onPickSpell}
                 onClear={onClearSpell}
               />
+            ) : null}
+
+            {pocketSupportsBookUptime ? (
+              <div className="slot-block">
+                <div className="book-uptime-field">
+                  <input
+                    id="book-uptime"
+                    className="slot-input"
+                    type="number"
+                    min="0"
+                    max="100"
+                    step="1"
+                    value={
+                      !bookUptimeTouched && buffs?.buffStacks?.BOOKUPTIME === 66
+                        ? ""
+                        : (buffs?.buffStacks?.BOOKUPTIME ?? "")
+                    }
+                    onChange={(e) => {
+                      setBookUptimeTouched(true);
+                      updateBookUptime(e.target.value);
+                    }}
+                    placeholder="Book uptime (Defaults to 66%)"
+                  />
+                </div>
+              </div>
             ) : null}
           </div>
         </div>

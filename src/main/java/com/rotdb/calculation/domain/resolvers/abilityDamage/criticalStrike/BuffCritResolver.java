@@ -1,0 +1,56 @@
+package com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike;
+
+import com.rotdb.calculation.domain.model.context.AbilityContext;
+import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.calculation.domain.model.enums.BuffId;
+import com.rotdb.calculation.domain.model.enums.Familiars;
+import com.rotdb.calculation.domain.model.equipment.FamiliarContext;
+import com.rotdb.calculation.domain.model.player.BuffContext;
+
+import static com.rotdb.calculation.ability.AbilityId.*;
+import static com.rotdb.calculation.domain.model.enums.CombatStyles.*;
+
+public class BuffCritResolver {
+    public static double resolve(CalculationContext context) {
+        BuffContext buff = context.getBuffs();
+        AbilityContext ability = context.getAbility();
+        FamiliarContext familiar = context.getFamiliar();
+
+        double criticalStrikeChance = 0;
+        if (buff.has(BuffId.FURYBUFF) && ability.getCombatStyle() == MELEE) criticalStrikeChance += 0.25;
+        if (buff.has(BuffId.GREATERFURYBUFF) && ability.getCombatStyle() == MELEE) criticalStrikeChance = 1;
+        if (ability.getId() == SMOKETENDRILS || ability.getId() == SHADOWTENDRILS) criticalStrikeChance = 1;
+        if (buff.has(BuffId.CONCENTRATEDBLASTBUFF)  && ability.getCombatStyle() == MAGIC) {
+            if (buff.has(BuffId.RUNICCHARGE)) {
+                criticalStrikeChance += 0.45;
+            } else {
+                criticalStrikeChance += 0.15;
+            }
+        }
+        if (buff.has(BuffId.GREATERCONCENTRATEDBLASTBUFF)  && ability.getCombatStyle() == MAGIC) {
+            if (buff.has(BuffId.RUNICCHARGE)) {
+                criticalStrikeChance += 0.51;
+            } else {
+                criticalStrikeChance += 0.21;
+            }
+        }
+
+
+        if (familiar.getName() == Familiars.KALGERIONDEMON) {
+            criticalStrikeChance += 0.01;
+        }
+
+        if (buff.has(BuffId.KALG)) {
+            criticalStrikeChance += 0.05;
+        }
+
+        if (buff.has(BuffId.ECLIPSEDSOUL)) {
+            criticalStrikeChance += 0.04;
+        }
+
+        if (buff.has(BuffId.NOFEAR) && buff.stacks(BuffId.NOFEAR) > 0 && ability.getId() == METEORSTRIKE) {
+            criticalStrikeChance += 0.2 * buff.stacks(BuffId.NOFEAR);
+        }
+        return criticalStrikeChance;
+    }
+}
