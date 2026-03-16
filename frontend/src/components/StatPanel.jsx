@@ -29,7 +29,7 @@ export default function StatsPanel({ skills, setSkills }) {
   }
 
   return (
-    <div className="stats-grid">
+    <div className="skills-grid">
       {SKILL_FIELDS.map((skill) => {
         if (skill.key === "currentHp") {
           return (
