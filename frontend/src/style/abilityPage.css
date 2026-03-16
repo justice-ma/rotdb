@@ -34,15 +34,22 @@ input[type="number"] {
 
 body {
   margin: 0;
-  background: var(--bg-dark);
   color: var(--text);
-  padding: 0 12px;
+  padding: 0;
+
+  background-color: var(--bg-dark);
+
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.08) 1px,
+    transparent 1px
+  );
+  background-size: 20px 20px;
 }
 
 .ability-page {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-5);
+  gap: calc(var(--space-5) + var(--space-1));
   padding: var(--space-4);
   min-height: 100vh;
   box-sizing: border-box;

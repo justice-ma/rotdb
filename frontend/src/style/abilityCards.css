@@ -68,12 +68,10 @@
 }
 
 .ability-card.selected {
-  background: linear-gradient(
-    180deg,
-    rgba(63, 185, 233, 0.18),
-    rgba(63, 185, 233, 0.05)
-  );
-
+  background:
+    linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)),
+    linear-gradient(180deg, rgba(63, 185, 233, 0.16), rgba(63, 185, 233, 0.06)),
+    var(--bg-dark);
   border-color: var(--text-accent);
 
   box-shadow:

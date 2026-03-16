@@ -2,8 +2,9 @@
   background-color: var(--bg);
   margin: 2.5em 0;
   padding: var(--space-4);
-  border: 1px solid var(--border);
   border-radius: 10px;
+
+  box-shadow: 0 14px 20px rgba(0, 0, 0, 0.25);
 
   display: flex;
   flex-direction: column;
@@ -20,7 +21,6 @@
 
 .damage-card,
 .bar-chart {
-  border: 1px solid var(--border);
   border-radius: 14px;
   padding: var(--space-4);
   background: linear-gradient(180deg, var(--bg-light), var(--bg));
@@ -53,10 +53,6 @@
     rgba(63, 185, 233, 0.18),
     rgba(63, 185, 233, 0.05)
   );
-  border-color: var(--text-accent);
-  box-shadow:
-    0 0 0 1px rgba(63, 185, 233, 0.25),
-    0 8px 24px rgba(0, 0, 0, 0.45);
 }
 
 .min-max {
@@ -117,15 +113,13 @@
 }
 
 .stats-grid {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1em;
 }
 
-@media (min-width: 900px) {
-  .stats-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+.stats-grid > * {
+  min-width: 0;
 }
 
 .stat-title {
@@ -168,7 +162,7 @@
   flex: 0 0 auto;
   background: var(--bg-dark);
   color: var(--text);
-  border: 1px solid var(--border-light);
+  border: 2px solid transparent;
   border-radius: 999px;
   padding: 0.4rem 0.9rem;
   font-size: 14px;
@@ -192,7 +186,7 @@
   gap: 0.2rem;
   padding: 0.2rem;
   background: hsl(0 0% 14%);
-  border: 1px solid hsl(0 0% 28%);
+  border: 1px solid transparent;
   border-radius: 999px;
 }
 
