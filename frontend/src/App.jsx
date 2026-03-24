@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Abilities from "./components/Abilities";
 import AbilityCalculation from "./pages/AbilityCalculation";
 import Header from "./components/Header";
 

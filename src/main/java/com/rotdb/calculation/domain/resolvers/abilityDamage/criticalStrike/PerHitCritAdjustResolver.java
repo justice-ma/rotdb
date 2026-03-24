@@ -27,8 +27,10 @@ public class PerHitCritAdjustResolver {
         } else if (ability.getId() == THEFINALFLURRY) {
             if (hitIndex < 2) {
                 criticalStrikeChance += 0.25;
+                criticalStrikeDamage += 0.25;
             } else {
                 criticalStrikeChance += 0.5;
+                criticalStrikeDamage += 0.5;
             }
         }
 
