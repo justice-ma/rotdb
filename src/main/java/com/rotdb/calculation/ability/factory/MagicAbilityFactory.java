@@ -169,10 +169,10 @@ public class MagicAbilityFactory {
 
     public static AbilityContext asphyxiate() {
         return new AbilityContext(4,
-                List.of(new AbilityHitsContext(1.1, 1.3, false, THRESHOLD, 1),
-                        new AbilityHitsContext(1.1, 1.3, false, THRESHOLD, 3),
-                        new AbilityHitsContext(1.1, 1.3, false, THRESHOLD, 5),
-                        new AbilityHitsContext(1.1, 1.3, false, THRESHOLD, 7)),
+                List.of(new AbilityHitsContext(1.2, 1.4, false, THRESHOLD, 1),
+                        new AbilityHitsContext(1.2, 1.4, false, THRESHOLD, 3),
+                        new AbilityHitsContext(1.2, 1.4, false, THRESHOLD, 5),
+                        new AbilityHitsContext(1.2, 1.4, false, THRESHOLD, 7)),
                 "Asphyxiate",
                 -25,
                 34,

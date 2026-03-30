@@ -36,7 +36,7 @@ public enum BuffId {
     CONCENTRATEDBLASTBUFF(0, 0, false, "Concentrated Blast"),
     GREATERCONCENTRATEDBLASTBUFF(0, 0, false, "Greater Concentrated Blast"),
     RAPIDFIREBUFF(0, 0, false, "Rapidfire"),
-    ASPHYXIATEBUFF(0, 0, false, "Tumeken's"),
+    ASPHYXIATEBUFF(0, 0, false, "Channelled Might"),
     CHILL(0, 0, false, "Chill"),
     BLOODLUST(0, 0, false, "Bloodlust"),
     CONFLAGRATE(0, 0, false, "Conflagrate"),

@@ -34,6 +34,11 @@ public class PerHitCritAdjustResolver {
             }
         }
 
+        if (ability.getId() == WILDMAGIC) {
+            criticalStrikeChance += 0.1;
+            criticalStrikeDamage += 0.2;
+        }
+
         if (ability.getCombatStyle() == MAGIC && ability.isChannel() &&
                 ring.getEffect().contains(Effect.CHANNELLERSRING) && hit.getType() == HitType.BASE) {
             criticalStrikeChance += 0.04 * hitIndex;

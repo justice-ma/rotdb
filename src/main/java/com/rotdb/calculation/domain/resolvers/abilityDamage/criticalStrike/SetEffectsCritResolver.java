@@ -63,11 +63,15 @@ public class SetEffectsCritResolver {
             criticalStrikeChance += 0.4;
         }
 
+        if (buff.has(BuffId.ASPHYXIATEBUFF)) {
+            criticalStrikeDamage += 0.15;
+        }
+
         if (equipment.getTumekensPieces() >= 3 && buff.has(BuffId.SUNSHINE)) {
             criticalStrikeChance += 0.015 * equipment.getTumekensPieces();
 
             if (equipment.getTumekensPieces() == 5 && buff.has(BuffId.ASPHYXIATEBUFF) ) {
-                criticalStrikeDamage += 0.35;
+                criticalStrikeDamage += 0.2;
             }
         }
         return new CritBonus(criticalStrikeChance, criticalStrikeDamage);
