@@ -2,7 +2,6 @@ package com.rotdb.calculation.api.dto;
 
 import com.rotdb.calculation.ability.AbilityId;
 import com.rotdb.calculation.domain.model.enums.*;
-import com.rotdb.calculation.domain.model.enums.*;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,7 @@ public record DamageCalcRequestDto(
         EquipmentIds equipment,
         Long ammoId,
         BuffIds buffs,
-        String targetTitle,
+        java.lang.String targetTitle,
         Integer targetCurrentHp,
         Integer targetMaxHp,
         Integer targetSize,

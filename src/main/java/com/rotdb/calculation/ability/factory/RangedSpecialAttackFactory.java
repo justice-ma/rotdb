@@ -41,8 +41,8 @@ public class RangedSpecialAttackFactory {
 
     public static AbilityContext shadowfall() {
         return new AbilityContext(3,
-                List.of(new AbilityHitsContext(0.85, 1.05, false, THRESHOLD, 2),
-                        new AbilityHitsContext(0.85, 1.05, false, THRESHOLD, 2),
+                List.of(new AbilityHitsContext(0.2, 1.05, false, THRESHOLD, 2),
+                        new AbilityHitsContext(0.2, 1.05, false, THRESHOLD, 2),
                         new AbilityHitsContext(2.55, 2.95, false, THRESHOLD, 3)),
                 "Shadowfall",
                 -65,
