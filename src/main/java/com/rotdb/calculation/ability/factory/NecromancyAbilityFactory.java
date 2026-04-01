@@ -182,17 +182,7 @@ public class NecromancyAbilityFactory {
 
     public static AbilityContext bloat() {
         return new AbilityContext(11,
-                List.of(new AbilityHitsContext(1.35, 1.65, false, THRESHOLD, 2),
-                        new AbilityHitsContext(0.3375, 0.4125, true, THRESHOLD, 6),
-                        new AbilityHitsContext(0.3375, 0.4125, true, THRESHOLD, 9),
-                        new AbilityHitsContext(0.3375, 0.4125, true, THRESHOLD, 12),
-                        new AbilityHitsContext(0.3375, 0.4125, true, THRESHOLD, 15),
-                        new AbilityHitsContext(0.3375, 0.4125, true, THRESHOLD, 18),
-                        new AbilityHitsContext(0.3375, 0.4125, true, THRESHOLD, 21),
-                        new AbilityHitsContext(0.3375, 0.4125, true, THRESHOLD, 24),
-                        new AbilityHitsContext(0.3375, 0.4125, true, THRESHOLD, 27),
-                        new AbilityHitsContext(0.3375, 0.4125, true, THRESHOLD, 30),
-                        new AbilityHitsContext(0.3375, 0.4125, true, THRESHOLD, 33)),
+                List.of(new AbilityHitsContext(1.35, 1.65, false, THRESHOLD, 2)),
                 "Bloat",
                 20,
                 0,

@@ -4,6 +4,7 @@ import com.rotdb.calculation.domain.modifiers.abilityDamage.*;
 import com.rotdb.calculation.domain.modifiers.abilityDamage.*;
 import com.rotdb.calculation.domain.modifiers.baseDamage.BaseAbilityDamageModifier;
 import com.rotdb.calculation.domain.modifiers.hitChance.HitChanceModifier;
+import com.rotdb.calculation.domain.modifiers.injectors.BloatInjector;
 import com.rotdb.calculation.domain.modifiers.injectors.InstabilityInjector;
 import com.rotdb.calculation.domain.modifiers.injectors.PerfectEquilibriumInjector;
 import com.rotdb.calculation.domain.modifiers.injectors.SplitSoulInjector;
@@ -37,6 +38,7 @@ public final class AbilityDamagePipeline {
                 new PerfectEquilibriumInjector(),
                 new CritDamageModifier(),
                 new CrystalRainArrowsModifier(),
+                new BloatInjector(),
                 new SplitSoulInjector(),
                 new NpcModifier(),
                 new HitCapModifier(),
