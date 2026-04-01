@@ -18,19 +18,35 @@ public class SlayerGearMultiplicativeResolver {
         TargetContext target = context.getTarget();
         EquipmentSlot head = context.getEquipment().getHead();
 
-        double mod = 1;
-        if (head.getEffect().contains(Effect.SLAYERHELM)) {
-            if (head.getEffect().contains(Effect.FULL)) {
-                mod *= 1.075;
-            } else if (head.getEffect().contains(Effect.REINFORCED)) {
-                mod *= 1.08;
-            } else if (head.getEffect().contains(Effect.STRONG)) {
-                mod *= 1.085;
+        double mod = 1.0;
+
+        int slayerHelmTier = 0;
+
+        if (buff.has(BuffId.SLAYERHELM)) {
+            slayerHelmTier = buff.stacks(BuffId.SLAYERHELM);
+        } else if (head.getEffect().contains(Effect.SLAYERHELM)) {
+            if (head.getEffect().contains(Effect.CORRUPTED)) {
+                slayerHelmTier = 6;
             } else if (head.getEffect().contains(Effect.MIGHTY)) {
-                mod *= 1.09;
-            } else if (head.getEffect().contains(Effect.CORRUPTED)) {
-                mod *= 1.095;
+                slayerHelmTier = 5;
+            } else if (head.getEffect().contains(Effect.STRONG)) {
+                slayerHelmTier = 4;
+            } else if (head.getEffect().contains(Effect.REINFORCED)) {
+                slayerHelmTier = 3;
+            } else if (head.getEffect().contains(Effect.FULL)) {
+                slayerHelmTier = 2;
             } else {
+                slayerHelmTier = 1;
+            }
+        }
+
+        switch (slayerHelmTier) {
+            case 6 -> mod *= 1.095;
+            case 5 -> mod *= 1.09;
+            case 4 -> mod *= 1.085;
+            case 3 -> mod *= 1.08;
+            case 2 -> mod *= 1.075;
+            case 1 -> {
                 if (style == MELEE) {
                     mod *= 1.075;
                 }
@@ -64,9 +80,8 @@ public class SlayerGearMultiplicativeResolver {
             }
         }
 
-        if (perk.has(Perks.GENOCIDAL) && target.getCurrentTask() > 0) {
-            double modifier = (1 / 10.0) * Math.floor(5 * (1 - ((target.getCurrentTask() * 1.0) / target.getStartingTask())) * 10) / 100.0;
-            mod *= 1 + modifier;
+        if (perk.has(Perks.GENOCIDAL)) {
+            mod *= 1 + (perk.getGenocidalRank() / 100.0);
         }
         return mod;
     }

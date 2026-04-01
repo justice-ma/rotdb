@@ -13,7 +13,7 @@ public record DamageCalcRequestDto(
         EquipmentIds equipment,
         Long ammoId,
         BuffIds buffs,
-        java.lang.String targetTitle,
+        String targetTitle,
         Integer targetCurrentHp,
         Integer targetMaxHp,
         Integer targetSize,
@@ -30,5 +30,5 @@ public record DamageCalcRequestDto(
                                Long ringId, Long neckId, Long capeId, Long quiverId) {}
     public record BuffIds (Set<BuffId> enabledBuffs, Map<BuffId, Integer> buffStacks) {}
     public record PotionSelection (Potions pot, Stats stat) {}
-    public record PerkSelection (Map<Perks, Integer> selectedPerks, Boolean itemLevel20) {}
+    public record PerkSelection (Map<Perks, Integer> selectedPerks, Boolean itemLevel20, Double genocidalRank) {}
 }

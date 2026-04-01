@@ -77,7 +77,8 @@ public enum BuffId {
     CROESUSSPORED(0, 0, false, "Croesus Spored"),
     BERSERKERSFURY(0, 0, false, "Berserker's Fury"),
     LIVINGDEATH(0, 0, false, "Living Death"),
-    BOOKUPTIME(0, 100, true, "Book Uptime");
+    BOOKUPTIME(0, 100, true, "Book Uptime"),
+    SLAYERHELM(0, 6, true, "Slayer Helmet");
 
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;

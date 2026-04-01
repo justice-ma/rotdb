@@ -5,6 +5,8 @@ import "../style/perksPanel.css";
 export default function PerksPanel({
   selectedPerks,
   setSelectedPerks,
+  genocidalRank,
+  setGenocidalRank,
   itemLevel20,
   setItemLevel20,
 }) {
@@ -63,7 +65,7 @@ export default function PerksPanel({
 
       return {
         ...(prev ?? {}),
-        [perk.id]: perkRanks[perk.id] ?? 1,
+        [perk.id]: perk.id === "GENOCIDAL" ? 1 : (perkRanks[perk.id] ?? 1),
       };
     });
   }
@@ -77,6 +79,10 @@ export default function PerksPanel({
 
     if (document.activeElement === inputRefs.current[perkId]) {
       inputRefs.current[perkId]?.blur();
+    }
+
+    if (perkId === "GENOCIDAL") {
+      setGenocidalRank(null);
     }
   }
 
@@ -96,6 +102,21 @@ export default function PerksPanel({
   }
 
   function updatePerkRank(perk, value) {
+    if (perk.id === "GENOCIDAL") {
+      if (value === "") {
+        setGenocidalRank(null);
+        return;
+      }
+
+      const parsed = Number(value);
+      if (Number.isNaN(parsed)) return;
+
+      const clamped = Math.max(0, Math.min(4.9, parsed));
+      setGenocidalRank(clamped);
+      activatePerk(perk);
+      return;
+    }
+
     setPerkRanks((prev) => ({
       ...prev,
       [perk.id]: value,
@@ -125,6 +146,20 @@ export default function PerksPanel({
   }
 
   function normalizePerkRank(perk) {
+    if (perk.id === "GENOCIDAL") {
+      if (genocidalRank == null || genocidalRank === "") {
+        if (selectedPerks?.[perk.id] != null) {
+          setGenocidalRank(0.0);
+        }
+        return;
+      }
+
+      const parsed = Number(genocidalRank);
+      const clamped = Number.isNaN(parsed) ? 0 : Math.max(0, Math.min(4.9, parsed));
+      setGenocidalRank(clamped);
+      return;
+    }
+
     const current = perkRanks[perk.id];
 
     if (current == null || current === "") {
@@ -189,7 +224,10 @@ export default function PerksPanel({
       <div className="perks-grid">
         {perks.map((perk) => {
           const selected = selectedPerks?.[perk.id] != null;
-          const rank = perkRanks[perk.id] ?? "";
+          const rank =
+            perk.id === "GENOCIDAL"
+              ? (genocidalRank ?? "")
+              : (perkRanks[perk.id] ?? "");
 
           return (
             <div
@@ -205,10 +243,11 @@ export default function PerksPanel({
                 }}
                 className="perk-rank-input"
                 type="number"
-                min={1}
-                max={perk.max}
+                min={perk.id === "GENOCIDAL" ? 0 : 1}
+                max={perk.id === "GENOCIDAL" ? 4.9 : perk.max}
+                step={perk.id === "GENOCIDAL" ? 0.1 : 1}
                 value={rank}
-                placeholder="1"
+                placeholder={perk.id === "GENOCIDAL" ? "0.0" : "1"}
                 onMouseDown={(e) => e.stopPropagation()}
                 onClick={(e) => e.stopPropagation()}
                 onFocus={() => handleInputFocus(perk)}

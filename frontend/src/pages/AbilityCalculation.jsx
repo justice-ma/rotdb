@@ -361,6 +361,7 @@ export default function AbilityCalculation() {
 
   const [selectedPrayers, setSelectedPrayers] = useState([]);
   const [selectedPerks, setSelectedPerks] = useState({});
+  const [genocidalRank, setGenocidalRank] = useState(null);
 
   const [target, setTarget] = useState(null);
   const [targetCurrentHp, setTargetCurrentHp] = useState("");
@@ -468,6 +469,7 @@ export default function AbilityCalculation() {
       perks: {
         selectedPerks,
         itemLevel20,
+        genocidalRank,
       },
       targetTitle: target?.title ?? "Training dummy",
       targetCurrentHp: targetCurrentHp === "" ? null : Number(targetCurrentHp),
@@ -485,6 +487,7 @@ export default function AbilityCalculation() {
     spell,
     selectedPrayers,
     selectedPerks,
+    genocidalRank,
     target,
     targetCurrentHp,
     targetMaxHp,
@@ -565,6 +568,10 @@ export default function AbilityCalculation() {
     setBuffs(payload.buffs ?? {});
     setSelectedPrayers(payload.selectedPrayers ?? []);
     setSelectedPerks(payload.perks?.selectedPerks ?? {});
+    setGenocidalRank(
+      payload.perks?.genocidalRank ??
+        (payload.perks?.selectedPerks?.GENOCIDAL != null ? 0 : null),
+    );
     setItemLevel20(payload.perks?.itemLevel20 ?? false);
     setSelectedPotions(payload.potions ?? [{ pot: "NONE", stat: "ALL" }]);
 
@@ -798,6 +805,8 @@ export default function AbilityCalculation() {
           setSelectedPrayers={setSelectedPrayers}
           selectedPerks={selectedPerks}
           setSelectedPerks={setSelectedPerks}
+          genocidalRank={genocidalRank}
+          setGenocidalRank={setGenocidalRank}
           target={target}
           setTarget={setTarget}
           targetCurrentHp={targetCurrentHp}

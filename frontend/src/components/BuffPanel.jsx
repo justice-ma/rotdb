@@ -323,6 +323,10 @@ const BUFF_UI_META = {
     category: BUFF_CATEGORY.ABILITY_BUFFS,
     styles: [STYLE.NECROMANCY],
   },
+  SLAYERHELM: {
+    category: BUFF_CATEGORY.SLAYER_BUFFS,
+    styles: [STYLE.MELEE, STYLE.MAGIC, STYLE.RANGED, STYLE.NECROMANCY],
+  }
 };
 
 const CATEGORY_ORDER = [
@@ -396,7 +400,8 @@ export default function BuffPanel({ style, buffs, setBuffs, allBuffs }) {
       }
 
       const numericValue = Number(value);
-      const clamped = Math.max(buff.min, Math.min(buff.max, numericValue));
+      const effectiveMax = getBuffMax(buff, prev?.enabledBuffs ?? []);
+      const clamped = Math.max(buff.min, Math.min(effectiveMax, numericValue));
 
       return {
         ...prev,
@@ -431,6 +436,13 @@ export default function BuffPanel({ style, buffs, setBuffs, allBuffs }) {
   const visibleCategories = CATEGORY_ORDER.filter(
     (category) => groupedBuffs[category]?.length,
   );
+
+  function getBuffMax(buff, enabledBuffs) {
+    if (buff.id === "PERFECTEQUILIBRIUMSTACKS") {
+      return enabledBuffs.includes("BALANCEBYFORCE") ? 3 : 7;
+    }
+    return buff.max;
+  }
 
   const activeBuffs = groupedBuffs[activeCategory] ?? [];
 
@@ -483,7 +495,7 @@ export default function BuffPanel({ style, buffs, setBuffs, allBuffs }) {
                     <input
                       type="number"
                       min={buff.min}
-                      max={buff.max}
+                      max={getBuffMax(buff, enabledBuffs)}
                       value={buffStacks[buff.id] ?? ""}
                       placeholder={buff.min}
                       onClick={(e) => e.stopPropagation()}

@@ -7,6 +7,7 @@ import java.util.Map;
 public class PerkContext {
     private Map<Perks, Integer> perk;
     private boolean equipmentLevel20;
+    private Double genocidalRank;
 
     public boolean has(Perks selectedPerk) {
         return perk.containsKey(selectedPerk);
@@ -14,6 +15,10 @@ public class PerkContext {
 
     public int rank(Perks selectedPerk) {
         return perk.get(selectedPerk);
+    }
+
+    public double genocidalRank() {
+        return genocidalRank == null ? 0.0 : genocidalRank;
     }
 
     public Map<Perks, Integer> getPerk() {
@@ -30,5 +35,13 @@ public class PerkContext {
 
     public void setEquipmentLevel20(boolean equipmentLevel20) {
         this.equipmentLevel20 = equipmentLevel20;
+    }
+
+    public Double getGenocidalRank() {
+        return genocidalRank;
+    }
+
+    public void setGenocidalRank(Double genocidalRank) {
+        this.genocidalRank = genocidalRank;
     }
 }
