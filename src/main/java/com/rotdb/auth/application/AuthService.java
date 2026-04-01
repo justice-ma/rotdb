@@ -6,6 +6,8 @@ import com.rotdb.auth.api.RegisterRequest;
 import com.rotdb.auth.api.RegisterResult;
 import com.rotdb.auth.domain.User;
 import com.rotdb.auth.persistence.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +52,12 @@ public class AuthService {
         }
         String token = jwtService.generateToken(user.getEmail());
         return new LoginResult(token, user.getId(), user.getEmail(), user.getUsername());
+    }
+
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        assert authentication != null;
+        return (User) authentication.getPrincipal();
     }
 
     private String validateAndNormalizeUsername(String username) {

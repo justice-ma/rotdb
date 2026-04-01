@@ -1,16 +1,17 @@
 package com.rotdb.presets.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.rotdb.auth.application.AuthService;
 import com.rotdb.auth.domain.User;
 import com.rotdb.calculation.api.dto.DamageCalcRequestDto;
 import com.rotdb.presets.api.PresetRequest;
 import com.rotdb.presets.api.PresetResult;
 import com.rotdb.presets.domain.UserPreset;
 import com.rotdb.presets.persistence.UserPresetRepository;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,22 +21,18 @@ import java.util.List;
 public class PresetService {
     private final UserPresetRepository userPresetRepository;
     private final ObjectMapper objectMapper;
+    private final AuthService authService;
 
 
-    public PresetService(UserPresetRepository userPresetRepository, ObjectMapper objectMapper) {
+    public PresetService(UserPresetRepository userPresetRepository, ObjectMapper objectMapper, AuthService authService) {
         this.userPresetRepository = userPresetRepository;
         this.objectMapper = objectMapper;
+        this.authService = authService;
     }
 
     public PresetResult createPreset(PresetRequest request) {
-        User user = getCurrentUser();
-        String jsonPayload;
-        try {
-            jsonPayload = objectMapper.writeValueAsString(request.payload());
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to serialize preset payload", e);
-        }
-
+        User user = authService.getCurrentUser();
+        String jsonPayload = serializePayload(request.payload());
         UserPreset preset = new UserPreset();
         preset.setUser(user);
         preset.setPresetName(request.presetName());
@@ -49,7 +46,7 @@ public class PresetService {
     }
 
     public List<PresetResult> getPresetsForCurrentUser() {
-        Long userId = getCurrentUser().getId();
+        Long userId = authService.getCurrentUser().getId();
         List<UserPreset> presets = userPresetRepository.findAllByUserId(userId);
         List<PresetResult> result = new ArrayList<>();
 
@@ -70,9 +67,62 @@ public class PresetService {
         return result;
     }
 
-    public User getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        assert authentication != null;
-        return (User) authentication.getPrincipal();
+    public PresetResult getPresetById(Long presetId) {
+        Long userId = authService.getCurrentUser().getId();
+        UserPreset preset = userPresetRepository.findByIdAndUserId(presetId, userId);
+
+        if (preset == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Preset not found for this user");
+        }
+
+        try
+        {
+            return new PresetResult(
+                    preset.getId(),
+                    preset.getPresetName(),
+                    objectMapper.readValue(preset.getPayload(), DamageCalcRequestDto.class),
+                    preset.getCreatedAt(),
+                    preset.getUpdatedAt()
+                    );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to deserialize preset payload for preset id " + preset.getId(), e);
+        }
+    }
+
+    public PresetResult updatePreset(Long presetId, PresetRequest request) {
+        User user = authService.getCurrentUser();
+        UserPreset preset = userPresetRepository.findByIdAndUserId(presetId, user.getId());
+
+        if (preset == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Preset not found for this user");
+        }
+
+        preset.setUpdatedAt(LocalDateTime.now());
+        preset.setPresetName(request.presetName());
+        preset.setPayload(serializePayload(request.payload()));
+
+        userPresetRepository.save(preset);
+        return new PresetResult(preset.getId(), preset.getPresetName(), request.payload(), preset.getCreatedAt(), preset.getUpdatedAt());
+    }
+
+    public void deletePreset(Long presetId) {
+        User user = authService.getCurrentUser();
+        UserPreset preset = userPresetRepository.findByIdAndUserId(presetId, user.getId());
+
+        if (preset == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Preset not found for this user");
+        }
+
+        userPresetRepository.deleteById(presetId);
+    }
+
+    private String serializePayload(DamageCalcRequestDto payload) {
+        String jsonPayload;
+        try {
+            jsonPayload = objectMapper.writeValueAsString(payload);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to serialize preset payload", e);
+        }
+        return jsonPayload;
     }
 }

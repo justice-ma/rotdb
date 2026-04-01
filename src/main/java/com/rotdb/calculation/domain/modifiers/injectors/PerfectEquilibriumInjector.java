@@ -17,6 +17,8 @@ import com.rotdb.calculation.domain.modifiers.abilityDamage.InvisibleAbilityModi
 import com.rotdb.calculation.domain.modifiers.abilityDamage.MultiplicativeModifier;
 import com.rotdb.calculation.domain.modifiers.abilityDamage.PreciseModifier;
 import com.rotdb.calculation.domain.modifiers.abilityDamage.StyleSpecificModifier;
+import com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike.CritRange;
+import com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike.CritDamageRangeResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,12 +87,12 @@ public class PerfectEquilibriumInjector implements Modifier {
                     continue;
                 }
 
-                PreCritResult worldMin = runProcPreCrit(context, baseDamage, triggerMin);
+                int[] worldMin = runProcPreCrit(context, baseDamage, triggerMin);
 
-                PreCritResult worldMax = runProcPreCrit(context, baseDamage, triggerMax);
+                int[] worldMax = runProcPreCrit(context, baseDamage, triggerMax);
 
-                int procMin = worldMin.min;
-                int procMax = worldMax.max;
+                int procMin = worldMin[0];
+                int procMax = worldMax[1];
 
                 if (procMax < procMin) procMax = procMin;
 
@@ -106,6 +108,14 @@ public class PerfectEquilibriumInjector implements Modifier {
                 proc.setCurrentMin(procMin);
                 proc.setCurrentMax(procMax);
                 proc.setCurrentDamage(procAvg);
+
+                proc.setCritChanceModifier(parent.getCritChanceModifier());
+                proc.setCritDamageModifier(parent.getCritDamageModifier());
+
+                CritRange procCritRange = CritDamageRangeResolver.resolve(context, proc);
+                proc.setMinCritDamage(procCritRange.getMinMod());
+                proc.setMaxCritDamage(procCritRange.getMaxMod());
+                proc.setAverageCritDamage((procCritRange.getMinMod() + procCritRange.getMaxMod()) / 2);
 
                 proc.setNonCritMin(procMin);
                 proc.setNonCritMax(procMax);
@@ -130,7 +140,7 @@ public class PerfectEquilibriumInjector implements Modifier {
         }
     }
 
-    private PreCritResult runProcPreCrit(CalculationContext context, int baseDamage, int triggerX) {
+    private int[] runProcPreCrit(CalculationContext context, int baseDamage, int triggerX) {
         // Build proc multipliers for THIS world (trigger fixed to X)
         double procMinMult = (((double) triggerX / baseDamage) * 0.33) + 0.12;
         double procMaxMult = (((double) triggerX / baseDamage) * 0.37) + 0.16;
@@ -154,22 +164,11 @@ public class PerfectEquilibriumInjector implements Modifier {
             // After pre-crit pipeline, these should be populated
             int min = tmpHit.getCurrentMin();
             int max = tmpHit.getCurrentMax();
-            int avg = tmpHit.getCurrentDamage();
-            return new PreCritResult(min, max, avg);
+            return new int[] { min, max };
 
         } finally {
             context.setAbility(originalAbility);
         }
     }
 
-    private static class PreCritResult {
-        final int min;
-        final int max;
-        final int avg;
-        PreCritResult(int min, int max, int avg) {
-            this.min = min;
-            this.max = max;
-            this.avg = avg;
-        }
-    }
 }
