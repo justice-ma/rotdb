@@ -13,12 +13,15 @@ public class PerkContextMapper {
     public PerkContext from(DamageCalcRequestDto.PerkSelection request) {
         PerkContext perks = new PerkContext();
         Map<Perks, Integer> cleanedPerks = new HashMap<>();
-        if (request == null || request.selectedPerks().isEmpty()) {
+        if (request == null || request.selectedPerks() == null || request.selectedPerks().isEmpty()) {
             perks.setPerk(cleanedPerks);
+            perks.setGenocidalRank(0.0);
             return perks;
         }
 
         perks.setEquipmentLevel20(request.itemLevel20() != null && request.itemLevel20());
+        double genocidalRank = request.genocidalRank() == null ? 0.0 : request.genocidalRank();
+        perks.setGenocidalRank(Math.max(0.0, Math.min(4.9, genocidalRank)));
 
         for (Map.Entry<Perks, Integer> perk : request.selectedPerks().entrySet()) {
             if (perk.getKey() == null) continue;

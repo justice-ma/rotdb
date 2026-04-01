@@ -1,4 +1,4 @@
-package com.rotdb.calculation.application.mapper;
+package com.rotdb.calculation.application.normalization;
 
 import com.rotdb.calculation.domain.model.enums.BuffId;
 import com.rotdb.calculation.domain.model.player.BuffContext;
