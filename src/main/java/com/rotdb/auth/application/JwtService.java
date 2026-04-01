@@ -3,6 +3,7 @@ package com.rotdb.auth.application;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -13,8 +14,13 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private final String SECRET_KEY = "my-super-secret-key-for-rotdb-auth-123456789";
-    private final Key SIGNING_KEY = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+    private final String SECRET_KEY;
+    private final Key SIGNING_KEY;
+
+    public JwtService(@Value("${jwt.secret}") String secretKey) {
+        this.SECRET_KEY = secretKey;
+        this.SIGNING_KEY = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+    }
 
     public String generateToken(String email) {
         return Jwts.builder()

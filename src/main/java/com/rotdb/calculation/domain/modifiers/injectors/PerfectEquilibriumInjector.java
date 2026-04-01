@@ -56,6 +56,9 @@ public class PerfectEquilibriumInjector implements Modifier {
         int baseCount = hits.size();
 
         int stacks = context.getBuffs().has(BuffId.PERFECTEQUILIBRIUMSTACKS) ? context.getBuffs().stacks(BuffId.PERFECTEQUILIBRIUMSTACKS) : 0;
+        if (context.getBuffs().has(BuffId.BALANCEBYFORCE)) {
+            stacks = Math.min(3, stacks);
+        }
         int thresh = context.getBuffs().has(BuffId.BALANCEBYFORCE) ? 4 : 8;
 
         int baseDamage = context.getDamage().getBaseDamage();

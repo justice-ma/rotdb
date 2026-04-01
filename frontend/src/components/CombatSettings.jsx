@@ -156,6 +156,8 @@ export default function CombatSettings({
   setSelectedPrayers,
   selectedPerks,
   setSelectedPerks,
+  genocidalRank,
+  setGenocidalRank,
   target,
   setTarget,
   targetCurrentHp,
@@ -762,6 +764,8 @@ export default function CombatSettings({
           <PerksPanel
             selectedPerks={selectedPerks}
             setSelectedPerks={setSelectedPerks}
+            genocidalRank={genocidalRank}
+            setGenocidalRank={setGenocidalRank}
             itemLevel20={itemLevel20}
             setItemLevel20={setItemLevel20}
           />
