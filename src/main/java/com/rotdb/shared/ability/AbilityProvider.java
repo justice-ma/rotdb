@@ -1,4 +1,4 @@
-package com.rotdb.calculation.ability;
+package com.rotdb.shared.ability;
 
 import com.rotdb.calculation.ability.factory.*;
 import com.rotdb.calculation.domain.model.context.AbilityContext;
@@ -7,6 +7,7 @@ import com.rotdb.calculation.domain.model.enums.Effect;
 import com.rotdb.calculation.domain.model.enums.Slots;
 import com.rotdb.calculation.domain.model.equipment.EquipmentModel;
 import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
+import com.rotdb.shared.ability.factory.*;
 
 public final class AbilityProvider {
 
@@ -88,7 +89,7 @@ public final class AbilityProvider {
             case TOUCHOFDEATH -> NecromancyAbilityFactory.touchOfDeath();
             case DEATHSKULLS -> NecromancyAbilityFactory.deathSkulls();
             case DEATHSKULLSIGNEOUS -> NecromancyAbilityFactory.deathSkullsIgneous();
-            case BLOODSIPHON -> NecromancyAbilityFactory.bLoodSiphon();
+            case BLOODSIPHON -> NecromancyAbilityFactory.bloodSiphon();
             case BLOODSIPHONHEAL -> NecromancyAbilityFactory.bloodSiphonHeal();
             case CONJUREPUTRIDZOMBIE -> NecromancyAbilityFactory.conjurePutridZombie();
             case COMMANDPUTRIDZOMBIE -> NecromancyAbilityFactory.commandPutridZombie();

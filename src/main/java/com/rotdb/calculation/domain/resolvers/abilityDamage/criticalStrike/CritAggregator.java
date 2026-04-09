@@ -2,6 +2,7 @@ package com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike;
 
 import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.calculation.domain.model.enums.AbilityTier;
 import com.rotdb.calculation.domain.model.enums.Perks;
 import com.rotdb.calculation.domain.model.player.BuffContext;
 
@@ -33,6 +34,11 @@ public class CritAggregator {
 
             if (context.getPerks().has(Perks.EQUILIBRIUM)
                     && context.getPerks().rank(Perks.EQUILIBRIUM) > 0) {
+                hit.setCritChanceModifier(0);
+                continue;
+            }
+
+            if (hit.getTier() == AbilityTier.CONJURE) {
                 hit.setCritChanceModifier(0);
                 continue;
             }

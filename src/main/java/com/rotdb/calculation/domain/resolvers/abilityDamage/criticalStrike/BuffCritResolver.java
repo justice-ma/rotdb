@@ -7,7 +7,6 @@ import com.rotdb.calculation.domain.model.enums.Familiars;
 import com.rotdb.calculation.domain.model.equipment.FamiliarContext;
 import com.rotdb.calculation.domain.model.player.BuffContext;
 
-import static com.rotdb.calculation.ability.AbilityId.*;
 import static com.rotdb.calculation.domain.model.enums.CombatStyles.*;
 
 public class BuffCritResolver {

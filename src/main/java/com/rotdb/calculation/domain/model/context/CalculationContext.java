@@ -30,8 +30,8 @@ public class CalculationContext {
     private boolean perfectEquilibriumSecondPass;
     private double hitChance;
 
-    public boolean debug = false;
-    public boolean finalPrint = false;
+    public boolean debug = true;
+    public boolean finalPrint = true;
 
     public EquipmentSlot getEquipmentSlot() {
         return equipmentSlot;

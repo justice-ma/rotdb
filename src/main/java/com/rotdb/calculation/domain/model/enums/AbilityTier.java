@@ -4,5 +4,6 @@ public enum AbilityTier {
     BASIC,
     THRESHOLD,
     ULTIMATE,
-    SPECIAL
+    SPECIAL,
+    CONJURE
 }

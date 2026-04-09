@@ -1,4 +1,4 @@
-package com.rotdb.calculation.ability;
+package com.rotdb.shared.ability;
 
 import com.rotdb.calculation.domain.model.enums.AbilityTier;
 import com.rotdb.calculation.domain.model.enums.CombatStyles;

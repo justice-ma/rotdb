@@ -4,7 +4,6 @@ import com.rotdb.calculation.domain.model.context.AbilityContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.model.enums.Perks;
 import com.rotdb.calculation.domain.model.equipment.PerkContext;
-import static com.rotdb.calculation.ability.AbilityId.*;
 
 public class CorePerkAddResolver {
     public static int resolve(CalculationContext context) {

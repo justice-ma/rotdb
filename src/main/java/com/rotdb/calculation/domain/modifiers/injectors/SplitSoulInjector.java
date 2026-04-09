@@ -31,7 +31,7 @@ public class SplitSoulInjector implements Modifier {
         SoulSplitCalculator calc = new SoulSplitCalculator();
 
         List<AbilityHitsContext> hits = context.getAbility().getHits();
-        int baseCount = hits.size(); // snapshot to prevent chaining
+        int baseCount = hits.size();
 
         for (int i = 0; i < baseCount; i++) {
             AbilityHitsContext parent = hits.get(i);

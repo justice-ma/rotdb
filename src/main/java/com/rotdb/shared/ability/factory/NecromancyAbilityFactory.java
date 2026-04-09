@@ -1,11 +1,11 @@
-package com.rotdb.calculation.ability.factory;
+package com.rotdb.shared.ability.factory;
 
 import com.rotdb.calculation.domain.model.context.AbilityContext;
 import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.enums.CombatStyles;
 import java.util.List;
-import static com.rotdb.calculation.ability.AbilityId.*;
-import static com.rotdb.calculation.ability.Handedness.*;
+import static com.rotdb.shared.ability.AbilityId.*;
+import static com.rotdb.shared.ability.Handedness.*;
 import static com.rotdb.calculation.domain.model.enums.AbilityTier.*;
 import static com.rotdb.calculation.domain.model.enums.Targetting.*;
 
@@ -25,7 +25,7 @@ public class NecromancyAbilityFactory {
 
     public static AbilityContext conjureSkeletonWarrior() {
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(0.22, 0.28, false, BASIC, 4)),
+                List.of(new AbilityHitsContext(0.22, 0.28, false, CONJURE, 4)),
                 "Conjure Skeleton Warrior",
                 0,
                 0,
@@ -38,8 +38,8 @@ public class NecromancyAbilityFactory {
 
     public static AbilityContext commandSkeletonWarrior() {
         return new AbilityContext(2,
-                List.of(new AbilityHitsContext(0.22, 0.28, false, BASIC, 1),
-                        new AbilityHitsContext(0.22, 0.28, false, BASIC, 2)),
+                List.of(new AbilityHitsContext(0.22, 0.28, false, CONJURE, 1),
+                        new AbilityHitsContext(0.22, 0.28, false, CONJURE, 2)),
                 "Command Skeleton Warrior",
                 0,
                 25,
@@ -111,7 +111,7 @@ public class NecromancyAbilityFactory {
                 DEATHSKULLSIGNEOUS);
     }
 
-    public static AbilityContext bLoodSiphon() {
+    public static AbilityContext bloodSiphon() {
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(1.17, 1.43, false, THRESHOLD, 10)),
                 "Blood Siphon",
@@ -142,8 +142,8 @@ public class NecromancyAbilityFactory {
 
     public static AbilityContext conjurePutridZombie() {
         return new AbilityContext(2,
-                List.of(new AbilityHitsContext(0.18, 0.22, false, BASIC, 6),
-                        new AbilityHitsContext(0.08, 0.12, false, BASIC, 3)),
+                List.of(new AbilityHitsContext(0.18, 0.22, false, CONJURE, 6),
+                        new AbilityHitsContext(0.08, 0.12, false, CONJURE, 3)),
                 "Conjure Putrid Zombie",
                 0,
                 0,
@@ -156,7 +156,7 @@ public class NecromancyAbilityFactory {
 
     public static AbilityContext commandPutridZombie() {
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(3.6, 4.4, false, BASIC, 4)),
+                List.of(new AbilityHitsContext(3.6, 4.4, false, CONJURE, 4)),
                 "Command Putrid Zombie",
                 0,
                 0,
@@ -169,7 +169,7 @@ public class NecromancyAbilityFactory {
 
     public static AbilityContext conjureVengefulGhost() {
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(0.18, 0.22, false, BASIC, 7)),
+                List.of(new AbilityHitsContext(0.18, 0.22, false, CONJURE, 7)),
                 "Conjure Vengeful Ghost",
                 0,
                 0,
@@ -283,7 +283,7 @@ public class NecromancyAbilityFactory {
 
     public static AbilityContext commandPhantomGuardian() {
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(0.45, 0.55, false, THRESHOLD, 4)),
+                List.of(new AbilityHitsContext(0.45, 0.55, false, CONJURE, 4)),
                 "Command Phantom Guardian",
                 0,
                 15,

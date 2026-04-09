@@ -1,4 +1,4 @@
-package com.rotdb.calculation.ability;
+package com.rotdb.shared.ability;
 
 public enum Handedness {
     TWO_HANDED,

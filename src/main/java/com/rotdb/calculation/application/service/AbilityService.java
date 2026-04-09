@@ -1,6 +1,6 @@
 package com.rotdb.calculation.application.service;
 
-import com.rotdb.calculation.ability.AbilityId;
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.calculation.api.dto.AbilityDto;
 import com.rotdb.calculation.domain.model.enums.CombatStyles;
 import org.springframework.stereotype.Component;

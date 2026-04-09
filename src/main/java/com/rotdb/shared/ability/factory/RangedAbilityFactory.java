@@ -1,4 +1,4 @@
-package com.rotdb.calculation.ability.factory;
+package com.rotdb.shared.ability.factory;
 
 import com.rotdb.calculation.domain.model.context.AbilityContext;
 import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
@@ -6,8 +6,8 @@ import com.rotdb.calculation.domain.model.enums.CombatStyles;
 
 import java.util.List;
 
-import static com.rotdb.calculation.ability.AbilityId.*;
-import static com.rotdb.calculation.ability.Handedness.*;
+import static com.rotdb.shared.ability.AbilityId.*;
+import static com.rotdb.shared.ability.Handedness.*;
 import static com.rotdb.calculation.domain.model.enums.AbilityTier.*;
 import static com.rotdb.calculation.domain.model.enums.Targetting.*;
 

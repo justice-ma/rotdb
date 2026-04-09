@@ -9,7 +9,6 @@ import com.rotdb.calculation.domain.model.enums.HitType;
 import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
 import com.rotdb.calculation.domain.model.player.BuffContext;
 
-import static com.rotdb.calculation.ability.AbilityId.*;
 import static com.rotdb.calculation.domain.model.enums.CombatStyles.MAGIC;
 
 public class PerHitCritAdjustResolver {

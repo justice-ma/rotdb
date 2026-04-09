@@ -4,7 +4,6 @@ import com.rotdb.calculation.calculator.EquilibriumCalc;
 import com.rotdb.calculation.calculator.EruptiveCalc;
 
 public class RangedBaseDamageResolver {
-    // TODO: Upon implementation : Shard of Genesis
     public static int twoHand(int r, double b, int mt, int er, int a, int eq) {
         double d = 145 * 2.5 * (Math.log(1 + (0.6 * (r / 145.0))) / Math.log(1.6));
         double base = (d * 1.5 + (9.6 * Math.min(mt, a) + b)

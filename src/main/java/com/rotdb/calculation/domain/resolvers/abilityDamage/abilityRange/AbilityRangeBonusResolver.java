@@ -1,6 +1,6 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.abilityRange;
 
-import com.rotdb.calculation.ability.AbilityId;
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.model.enums.BuffId;
 

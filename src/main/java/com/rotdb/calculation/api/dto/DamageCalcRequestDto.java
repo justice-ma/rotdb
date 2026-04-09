@@ -1,6 +1,6 @@
 package com.rotdb.calculation.api.dto;
 
-import com.rotdb.calculation.ability.AbilityId;
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.calculation.domain.model.enums.*;
 
 import java.util.List;

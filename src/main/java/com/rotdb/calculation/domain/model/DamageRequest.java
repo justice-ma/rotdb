@@ -1,11 +1,10 @@
 package com.rotdb.calculation.domain.model;
 
-import com.rotdb.calculation.ability.AbilityId;
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.calculation.domain.model.context.TargetContext;
 import com.rotdb.calculation.domain.model.equipment.EquipmentModel;
 import com.rotdb.calculation.domain.model.equipment.FamiliarContext;
 import com.rotdb.calculation.domain.model.equipment.PerkContext;
-import com.rotdb.calculation.domain.model.player.*;
 import com.rotdb.calculation.domain.model.player.*;
 
 import java.util.List;

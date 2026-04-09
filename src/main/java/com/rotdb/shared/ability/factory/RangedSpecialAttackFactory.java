@@ -1,12 +1,12 @@
-package com.rotdb.calculation.ability.factory;
+package com.rotdb.shared.ability.factory;
 
 import com.rotdb.calculation.domain.model.context.AbilityContext;
 import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
 
 import java.util.List;
 
-import static com.rotdb.calculation.ability.AbilityId.*;
-import static com.rotdb.calculation.ability.Handedness.*;
+import static com.rotdb.shared.ability.AbilityId.*;
+import static com.rotdb.shared.ability.Handedness.*;
 import static com.rotdb.calculation.domain.model.enums.AbilityTier.*;
 import static com.rotdb.calculation.domain.model.enums.CombatStyles.*;
 import static com.rotdb.calculation.domain.model.enums.Targetting.*;
@@ -41,9 +41,9 @@ public class RangedSpecialAttackFactory {
 
     public static AbilityContext shadowfall() {
         return new AbilityContext(3,
-                List.of(new AbilityHitsContext(0.2, 1.05, false, THRESHOLD, 2),
-                        new AbilityHitsContext(0.2, 1.05, false, THRESHOLD, 2),
-                        new AbilityHitsContext(2.55, 2.95, false, THRESHOLD, 3)),
+                List.of(new AbilityHitsContext(0.2, 1.05, false, THRESHOLD, 3),
+                        new AbilityHitsContext(0.2, 1.05, false, THRESHOLD, 3),
+                        new AbilityHitsContext(2.55, 2.95, false, THRESHOLD, 4)),
                 "Shadowfall",
                 -65,
                 0,

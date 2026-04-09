@@ -1,6 +1,6 @@
 package com.rotdb.calculation.domain.model.context;
 
-import com.rotdb.calculation.ability.AbilityProvider;
+import com.rotdb.shared.ability.AbilityProvider;
 import com.rotdb.calculation.domain.model.DamageRequest;
 import com.rotdb.calculation.domain.model.enums.Effect;
 import com.rotdb.calculation.domain.model.enums.Prayer;

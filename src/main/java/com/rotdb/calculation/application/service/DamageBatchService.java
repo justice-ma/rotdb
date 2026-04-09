@@ -1,6 +1,6 @@
 package com.rotdb.calculation.application.service;
 
-import com.rotdb.calculation.ability.AbilityId;
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.calculation.api.dto.AbilityCardResultDto;
 import com.rotdb.calculation.api.dto.DamageCalcRequestDto;
 import com.rotdb.calculation.api.mapper.DamageRequestMapper;

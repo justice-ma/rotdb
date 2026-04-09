@@ -1,7 +1,7 @@
 package com.rotdb.calculation.domain.model.context;
 
-import com.rotdb.calculation.ability.AbilityId;
-import com.rotdb.calculation.ability.Handedness;
+import com.rotdb.shared.ability.AbilityId;
+import com.rotdb.shared.ability.Handedness;
 import com.rotdb.calculation.domain.model.enums.CombatStyles;
 import com.rotdb.calculation.domain.model.enums.Targetting;
 

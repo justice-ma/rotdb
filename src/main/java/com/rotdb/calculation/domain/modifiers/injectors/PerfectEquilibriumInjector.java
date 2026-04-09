@@ -1,6 +1,6 @@
 package com.rotdb.calculation.domain.modifiers.injectors;
 
-import com.rotdb.calculation.ability.AbilityId;
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.calculation.domain.model.context.AbilityContext;
 import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
