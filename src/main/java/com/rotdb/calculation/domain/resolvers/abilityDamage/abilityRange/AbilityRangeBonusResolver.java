@@ -3,6 +3,7 @@ package com.rotdb.calculation.domain.resolvers.abilityDamage.abilityRange;
 import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.model.enums.BuffId;
+import com.rotdb.calculation.domain.model.enums.Effect;
 
 public class AbilityRangeBonusResolver {
     public static AbilityRangeBonus resolve(CalculationContext context) {

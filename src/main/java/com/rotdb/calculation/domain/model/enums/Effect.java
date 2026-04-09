@@ -79,4 +79,5 @@ public enum Effect {
     ONYXE,
     RUBYE,
     PERNIXQUIVER,
+    OMNIGUARD
 }

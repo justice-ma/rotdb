@@ -24,6 +24,7 @@ public class NpcModifier implements Modifier {
             mod *= SigilMultiplierResolver.resolve(context);
             if (!b.isZero()) applyHauntedBonus(hit, b);
             mod *= PostHauntedMultiplierResolver.resolve(context);
+            mod *= AbilityMultiplierResolver.resolve(context);
             hit.calculateDamages(mod);
             Debug.stageRow(context, i, hit);
         }
