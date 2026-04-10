@@ -1,5 +1,6 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.abilityRange;
 
+import com.rotdb.calculation.domain.model.enums.Perks;
 import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.model.enums.BuffId;
@@ -38,6 +39,12 @@ public class AbilityRangeBonusResolver {
                 context.getAbility().getId() == AbilityId.COMMANDSKELETONWARRIOR && context.getBuffs().has(BuffId.RAGE)) {
             min += context.getAbility().getHits().getFirst().getMin() * (0.03 * context.getBuffs().stacks(BuffId.RAGE));
             max += context.getAbility().getHits().getFirst().getMax() * (0.03 * context.getBuffs().stacks(BuffId.RAGE));
+        }
+
+        if ((context.getAbility().getId() == AbilityId.DISMEMBER || context.getAbility().getId() == AbilityId.COMBUST)
+            && context.getPerks().has(Perks.LUNGING)) {
+            min += context.getAbility().getHits().getFirst().getMin() * (0.1 + 0.03 * context.getPerks().rank(Perks.LUNGING));
+            max += context.getAbility().getHits().getFirst().getMax() * (0.1 + 0.03 * context.getPerks().rank(Perks.LUNGING));
         }
 
         return new AbilityRangeBonus(min, max);

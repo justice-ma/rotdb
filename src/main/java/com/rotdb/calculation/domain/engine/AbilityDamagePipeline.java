@@ -23,6 +23,7 @@ public final class AbilityDamagePipeline {
                 new SoulInjector(),
                 new NecrosisInjector(),
                 new NightmareGauntletsInjector(),
+                new MasterworkSpearOfAnnihilationInjector(),
                 new BaseAbilityDamageModifier(),
                 new CriticalStrikeModifier(),
                 new InstabilityInjector(),

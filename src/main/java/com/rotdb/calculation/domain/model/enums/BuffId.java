@@ -83,7 +83,8 @@ public enum BuffId {
     SOULSTACKS(0, 5, true, "Soul Stacks"),
     NECROSIS(0, 12, true, "Necrosis"),
     RAGE(0, 25, true, "Rage Stacks"),
-    VALOUR(0, 25, true, "Valour Stacks");
+    VALOUR(0, 25, true, "Valour Stacks"),
+    STRENGTHCAPE(0, 0, false, "Strength Cape");
 
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;

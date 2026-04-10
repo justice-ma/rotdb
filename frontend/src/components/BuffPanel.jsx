@@ -347,6 +347,10 @@ const BUFF_UI_META = {
     category: BUFF_CATEGORY.STACKS,
     styles: [STYLE.NECROMANCY],
   },
+  STRENGTHCAPE: {
+    category: BUFF_CATEGORY.PASSIVE_BUFFS,
+    styles: [STYLE.MELEE],
+  },
 };
 
 const CATEGORY_ORDER = [
