@@ -79,9 +79,8 @@ public class NecromancyAbilityFactory {
     public static AbilityContext deathSkulls() {
         return new AbilityContext(3,
                 List.of(new AbilityHitsContext(2.25, 2.75, false, ULTIMATE, 3),
-                        new AbilityHitsContext(2.25, 2.75, false, ULTIMATE, 6),
                         new AbilityHitsContext(2.25, 2.75, false, ULTIMATE, 9),
-                        new AbilityHitsContext(2.25, 2.75, false, ULTIMATE, 12)),
+                        new AbilityHitsContext(2.25, 2.75, false, ULTIMATE, 15)),
                 "Death Skulls",
                 -60,
                 100,
@@ -95,11 +94,8 @@ public class NecromancyAbilityFactory {
     public static AbilityContext deathSkullsIgneous() {
         return new AbilityContext(5,
                 List.of(new AbilityHitsContext(2.25, 2.75, false, ULTIMATE, 3),
-                        new AbilityHitsContext(2.25, 2.75, false, ULTIMATE, 6),
                         new AbilityHitsContext(2.25, 2.75, false, ULTIMATE, 9),
-                        new AbilityHitsContext(2.25, 2.75, false, ULTIMATE, 12),
                         new AbilityHitsContext(2.25, 2.75, false, ULTIMATE, 15),
-                        new AbilityHitsContext(2.25, 2.75, false, ULTIMATE, 18),
                         new AbilityHitsContext(2.25, 2.75, false, ULTIMATE, 21)),
                 "Death Skulls",
                 -60,
