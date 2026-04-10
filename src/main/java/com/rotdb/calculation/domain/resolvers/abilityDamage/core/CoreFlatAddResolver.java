@@ -18,7 +18,7 @@ public class CoreFlatAddResolver {
             add += (int) (context.getSkills().getBoostedAttack() * 1.35);
         }
 
-        if (offhand.getEffect().contains(Effect.OFFHANDLENG) && buffs.has(BuffId.CHILL)) {
+        if (offhand.getEffect().contains(Effect.OFFHANDLENG) && buffs.has(BuffId.FROSTBLADES)) {
             add += (int) (context.getDamage().getBaseDamage() * 0.24);
         }
 

@@ -159,7 +159,7 @@ const BUFF_UI_META = {
     category: BUFF_CATEGORY.ABILITY_BUFFS,
     styles: [STYLE.MAGIC],
   },
-  CHILL: {
+  FROSTBLADES: {
     category: BUFF_CATEGORY.STACKS,
     styles: [STYLE.MELEE],
   },

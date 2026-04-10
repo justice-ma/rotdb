@@ -37,7 +37,7 @@ public enum BuffId {
     GREATERCONCENTRATEDBLASTBUFF(0, 0, false, "Greater Concentrated Blast"),
     RAPIDFIREBUFF(0, 0, false, "Rapidfire"),
     ASPHYXIATEBUFF(0, 0, false, "Channelled Might"),
-    CHILL(0, 0, false, "Chill"),
+    FROSTBLADES(0, 0, false, "Frostblades"),
     BLOODLUST(0, 0, false, "Bloodlust"),
     CONFLAGRATE(0, 0, false, "Conflagrate"),
     STONEOFJAS(0, 6, true, "Stone of Jas"),
