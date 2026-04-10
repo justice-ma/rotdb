@@ -23,6 +23,7 @@ public final class AbilityDamagePipeline {
                 new NecrosisInjector(),
                 new NightmareGauntletsInjector(),
                 new MeleeBleedsInjector(),
+                new RunicChargeInjector(),
                 new BaseAbilityDamageModifier(),
                 new CriticalStrikeModifier(),
                 new InstabilityInjector(),
