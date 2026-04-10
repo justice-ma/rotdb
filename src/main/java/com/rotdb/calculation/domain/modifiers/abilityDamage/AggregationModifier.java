@@ -29,15 +29,6 @@ public class AggregationModifier implements Modifier {
 
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
-            if (hit.getNonCritMin() > hit.getNonCritMax()) {
-                hit.setCurrentMin(hit.getCurrentMax() - 1);
-                hit.setNonCritMin(hit.getNonCritMax() - 1);
-                hit.setCritMin(hit.getCritMax() - 1);
-
-                hit.setCurrentDamage((hit.getCurrentMin() + hit.getCurrentMax()) / 2);
-                hit.setCritDamage((hit.getCritMin() + hit.getCritMax()) / 2);
-                hit.setNonCritDamage((hit.getNonCritMin() + hit.getNonCritMax()) / 2);
-            }
 
             if (hit.getType() == HitType.BASE || hit.getType() == HitType.SPLITSOUL || hit.getType() == HitType.PERFECTEQUILIBRIUM) {
                 min += hit.getCurrentMin();

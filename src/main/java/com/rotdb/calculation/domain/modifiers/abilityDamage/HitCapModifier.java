@@ -9,6 +9,15 @@ public class HitCapModifier implements Modifier {
         int hits = context.getAbility().getHits().size();
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
+            if (hit.getNonCritMin() > hit.getNonCritMax()) {
+                hit.setCurrentMin(hit.getCurrentMax() - 1);
+                hit.setNonCritMin(hit.getNonCritMax() - 1);
+                hit.setCritMin(hit.getCritMax() - 1);
+
+                hit.setCurrentDamage((hit.getCurrentMin() + hit.getCurrentMax()) / 2);
+                hit.setCritDamage((hit.getCritMin() + hit.getCritMax()) / 2);
+                hit.setNonCritDamage((hit.getNonCritMin() + hit.getNonCritMax()) / 2);
+            }
             hit.setCritMin(Math.min(30_000, hit.getCritMin()));
             hit.setCritMax(Math.min(30_000, hit.getCritMax()));
             hit.setCritDamage(Math.min(30_000, hit.getCritDamage()));
