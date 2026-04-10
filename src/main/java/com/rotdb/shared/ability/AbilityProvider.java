@@ -103,13 +103,22 @@ public final class AbilityProvider {
             case COMMANDPHANTOMGUARDIAN -> NecromancyAbilityFactory.commandPhantomGuardian();
 
             // Melee Specs
+            case IGNEOUSSHOWDOWN -> MeleeSpecialAttackFactory.igneousShowdown();
+            case IGNEOUSSHOWDOWNRECAST -> MeleeSpecialAttackFactory.igneousShowdownRecast();
+            case THEFINALFLURRY -> MeleeSpecialAttackFactory.theFinalFlurry();
+            case SLICEANDDICE -> MeleeSpecialAttackFactory.sliceAndDice();
+            case ICYTEMPEST -> MeleeSpecialAttackFactory.icyTempest();
+            case QUICKSMASH -> MeleeSpecialAttackFactory.quickSmash();
+            case SUNFALLSLAM -> MeleeSpecialAttackFactory.sunfallSlam();
+            case DRACONICSLASH -> MeleeSpecialAttackFactory.draconicSlash();
+            case POWERSTAB -> MeleeSpecialAttackFactory.powerstab();
+            case SWEEP -> MeleeSpecialAttackFactory.sweep();
+            case DRACONICCLEAVE -> MeleeSpecialAttackFactory.draconicCleave();
+            case OBLITERATE -> MeleeSpecialAttackFactory.obliterate();
             case ENERGYDRAIN -> MeleeSpecialAttackFactory.energyDrain();
             case WEAKEN -> MeleeSpecialAttackFactory.weaken();
-            case THEFINALFLURRY -> MeleeSpecialAttackFactory.theFinalFlurry();
             case SPEARWALL -> MeleeSpecialAttackFactory.spearWall();
             case CLOBBER -> MeleeSpecialAttackFactory.clobber();
-            case QUICKSMASH -> MeleeSpecialAttackFactory.quickSmash();
-            case SWEEP -> MeleeSpecialAttackFactory.sweep();
             case IMPALE -> MeleeSpecialAttackFactory.impale();
             case LIQUEFY -> MeleeSpecialAttackFactory.liquefy();
             case FAVOUROFTHEWARGOD -> MeleeSpecialAttackFactory.favourOfTheWarGod();
@@ -117,40 +126,31 @@ public final class AbilityProvider {
             case DRACONICPUNCTURE -> MeleeSpecialAttackFactory.draconicPuncture();
             case BACKSTAB -> MeleeSpecialAttackFactory.backstab();
             case AIMEDSTRIKE -> MeleeSpecialAttackFactory.aimedStrike();
-            case OBLITERATE -> MeleeSpecialAttackFactory.obliterate();
             case HEALINGBLADE -> MeleeSpecialAttackFactory.healingBlade();
             case ICECLEAVE -> MeleeSpecialAttackFactory.iceCleave();
             case DISRUPT -> MeleeSpecialAttackFactory.disrupt();
             case WARSTRIKE -> MeleeSpecialAttackFactory.warstrike();
             case DRACONICBLOW -> MeleeSpecialAttackFactory.draconicBlow();
-            case DRACONICSLASH -> MeleeSpecialAttackFactory.draconicSlash();
             case FEINT -> MeleeSpecialAttackFactory.feint();
-            case IGNEOUSSHOWDOWN -> MeleeSpecialAttackFactory.igneousShowdown();
-            case IGNEOUSSHOWDOWNRECAST -> MeleeSpecialAttackFactory.igneousShowdownRecast();
-            case DRACONICCLEAVE -> MeleeSpecialAttackFactory.draconicCleave();
             case SARADOMINSLIGHTNING -> MeleeSpecialAttackFactory.saradominsLightning();
-            case SUNFALLSLAM -> MeleeSpecialAttackFactory.sunfallSlam();
-            case POWERSTAB -> MeleeSpecialAttackFactory.powerstab();
             case ARMADYLSJUDGEMENT -> MeleeSpecialAttackFactory.armadylsJudgement();
             case BLACKHOLE -> MeleeSpecialAttackFactory.blackhole();
             case VINECALL -> MeleeSpecialAttackFactory.vineCall();
-            case ICYTEMPEST -> MeleeSpecialAttackFactory.icyTempest();
-            case SLICEANDDICE -> MeleeSpecialAttackFactory.sliceAndDice();
 
             // Magic Specs
-            case FROMTHESHADOWS -> MagicSpecialAttackFactory.fromTheShadows();
+            case SOULFIRE -> MagicSpecialAttackFactory.soulfire();
             case INSTABILITY -> MagicSpecialAttackFactory.instability();
-            case RUNEFLAME -> MagicSpecialAttackFactory.runeFlame();
             case CLAWSOFGUTHIX -> MagicSpecialAttackFactory.clawsOfGuthix();
+            case TEMPESTOFARMADYL -> MagicSpecialAttackFactory.tempestOfArmadyl();
+            case IBANBLAST -> MagicSpecialAttackFactory.ibanBlast();
+            case THELASTCOMMAND -> MagicSpecialAttackFactory.theLastCommand();
+            case FROMTHESHADOWS -> MagicSpecialAttackFactory.fromTheShadows();
+            case RUNEFLAME -> MagicSpecialAttackFactory.runeFlame();
             case DEVOUR -> MagicSpecialAttackFactory.devour();
             case SARADOMINSTRIKE -> MagicSpecialAttackFactory.saradominStrike();
             case FLAMESOFZAMORAK -> MagicSpecialAttackFactory.flamesOfZamorak();
             case MIASMICBARRAGE -> MagicSpecialAttackFactory.miasmicBarrage();
-            case THELASTCOMMAND -> MagicSpecialAttackFactory.theLastCommand();
             case REAP -> MagicSpecialAttackFactory.reap();
-            case TEMPESTOFARMADYL -> MagicSpecialAttackFactory.tempestOfArmadyl();
-            case IBANBLAST -> MagicSpecialAttackFactory.ibanBlast();
-            case SOULFIRE -> MagicSpecialAttackFactory.soulfire();
 
             // Ranged Specs
             case CHAINHIT -> RangedSpecialAttackFactory.chainHit();
