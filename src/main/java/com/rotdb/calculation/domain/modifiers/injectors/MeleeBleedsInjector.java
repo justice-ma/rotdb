@@ -12,7 +12,7 @@ import java.util.List;
 
 import static com.rotdb.shared.ability.AbilityId.*;
 
-public class MasterworkSpearOfAnnihilationInjector implements Modifier {
+public class MeleeBleedsInjector implements Modifier {
     public void apply(CalculationContext context) {
         if (context.getEquipment().getMainhand().getEffect().contains(Effect.MASTERWORKSPEAROFANNIHILATION)
             && (context.getAbility().getId() == DISMEMBER ||
@@ -32,7 +32,7 @@ public class MasterworkSpearOfAnnihilationInjector implements Modifier {
             }
         }
 
-        if (context.getBuffs().has(BuffId.STRENGTHCAPE) && context.getAbility().getId() == DISMEMBER) {
+        if ((context.getBuffs().has(BuffId.STRENGTHCAPE) || context.getEquipment().getCape().getEffect().contains(Effect.STRENGTHCAPE)) && context.getAbility().getId() == DISMEMBER) {
             for (int i = 0; i < 3; i++) {
                 double min = context.getAbility().getHits().get(1).getMin();
                 double max = context.getAbility().getHits().get(1).getMax();

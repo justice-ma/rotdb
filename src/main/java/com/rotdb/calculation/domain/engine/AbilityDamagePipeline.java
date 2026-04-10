@@ -1,7 +1,6 @@
 package com.rotdb.calculation.domain.engine;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.modifiers.abilityDamage.*;
-import com.rotdb.calculation.domain.modifiers.abilityDamage.*;
 import com.rotdb.calculation.domain.modifiers.baseDamage.BaseAbilityDamageModifier;
 import com.rotdb.calculation.domain.modifiers.hitChance.HitChanceModifier;
 import com.rotdb.calculation.domain.modifiers.injectors.*;
@@ -23,7 +22,7 @@ public final class AbilityDamagePipeline {
                 new SoulInjector(),
                 new NecrosisInjector(),
                 new NightmareGauntletsInjector(),
-                new MasterworkSpearOfAnnihilationInjector(),
+                new MeleeBleedsInjector(),
                 new BaseAbilityDamageModifier(),
                 new CriticalStrikeModifier(),
                 new InstabilityInjector(),
