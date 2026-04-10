@@ -12,7 +12,7 @@ import java.util.List;
 public class NecrosisInjector implements Modifier {
     public void apply(CalculationContext context) {
         if (context.getEquipment().getCombatStyle() != CombatStyles.NECROMANCY && !context.getBuffs().has(BuffId.NECROSIS)
-            && context.getBuffs().stacks(BuffId.NECROSIS) <= 0 && context.getAbility().getId() == AbilityId.DEATHGRASP) {
+            && context.getBuffs().stacks(BuffId.NECROSIS) <= 0 && context.getAbility().getId() != AbilityId.DEATHGRASP) {
             return;
         }
 
