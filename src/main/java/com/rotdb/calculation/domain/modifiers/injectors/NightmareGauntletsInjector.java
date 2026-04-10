@@ -24,7 +24,7 @@ public class NightmareGauntletsInjector implements Modifier {
             double max = hits.getFirst().getMax() * 0.5;
 
             hits.add(new AbilityHitsContext(
-                min, max, false, AbilityTier.THRESHOLD, 3
+                min, max, false, AbilityTier.ENHANCED, 3
             ));
         }
     }

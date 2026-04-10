@@ -33,7 +33,7 @@ public class BloatInjector implements Modifier {
             AbilityHitsContext bleed = new AbilityHitsContext();
             bleed.setHitTiming(hits.get(i).getHitTiming() + 4);
             bleed.setDot(true);
-            bleed.setTier(AbilityTier.THRESHOLD);
+            bleed.setTier(AbilityTier.BASIC);
             bleed.setParentIndex(i);
 
             bleed.setCritMin(minCritDamage);

@@ -2,7 +2,7 @@ package com.rotdb.calculation.domain.model.enums;
 
 public enum AbilityTier {
     BASIC,
-    THRESHOLD,
+    ENHANCED,
     ULTIMATE,
     SPECIAL,
     CONJURE

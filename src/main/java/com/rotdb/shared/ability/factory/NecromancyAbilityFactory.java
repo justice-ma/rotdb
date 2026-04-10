@@ -52,7 +52,7 @@ public class NecromancyAbilityFactory {
 
     public static AbilityContext fingerOfDeath() {
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(2.7, 3.3, false, THRESHOLD, 2)),
+                List.of(new AbilityHitsContext(2.7, 3.3, false, ENHANCED, 2)),
                 "Finger of Death",
                 -60,
                 0,
@@ -109,7 +109,7 @@ public class NecromancyAbilityFactory {
 
     public static AbilityContext bloodSiphon() {
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(1.17, 1.43, false, THRESHOLD, 10)),
+                List.of(new AbilityHitsContext(1.17, 1.43, false, ENHANCED, 10)),
                 "Blood Siphon",
                 0,
                 75,
@@ -122,10 +122,10 @@ public class NecromancyAbilityFactory {
 
     public static AbilityContext bloodSiphonHeal() {
         return new AbilityContext(4,
-                List.of(new AbilityHitsContext(0.22, 0.28, false, THRESHOLD, 1),
-                        new AbilityHitsContext(0.22, 0.28, false, THRESHOLD, 3),
-                        new AbilityHitsContext(0.22, 0.28, false, THRESHOLD, 5),
-                        new AbilityHitsContext(0.22, 0.28, false, THRESHOLD, 7)),
+                List.of(new AbilityHitsContext(0.22, 0.28, false, ENHANCED, 1),
+                        new AbilityHitsContext(0.22, 0.28, false, ENHANCED, 3),
+                        new AbilityHitsContext(0.22, 0.28, false, ENHANCED, 5),
+                        new AbilityHitsContext(0.22, 0.28, false, ENHANCED, 7)),
                 "Blood Siphon AOE",
                 0,
                 75,
@@ -178,7 +178,7 @@ public class NecromancyAbilityFactory {
 
     public static AbilityContext bloat() {
         return new AbilityContext(11,
-                List.of(new AbilityHitsContext(1.35, 1.65, false, THRESHOLD, 2)),
+                List.of(new AbilityHitsContext(1.35, 1.65, false, ENHANCED, 2)),
                 "Bloat",
                 20,
                 0,
@@ -204,7 +204,7 @@ public class NecromancyAbilityFactory {
 
     public static AbilityContext soulStrike() {
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(1.35, 1.65, false, THRESHOLD, 2)),
+                List.of(new AbilityHitsContext(1.35, 1.65, false, ENHANCED, 2)),
                 "Soul Strike",
                 0,
                 0,
@@ -217,7 +217,7 @@ public class NecromancyAbilityFactory {
 
     public static AbilityContext spectralScythe() {
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(0.72, 0.88, false, THRESHOLD, 1)),
+                List.of(new AbilityHitsContext(0.72, 0.88, false, ENHANCED, 1)),
                 "Spectral Scythe",
                 10,
                 25,
@@ -230,7 +230,7 @@ public class NecromancyAbilityFactory {
 
     public static AbilityContext spectralHurricane() {
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(1.8, 2.2, false, THRESHOLD, 3)),
+                List.of(new AbilityHitsContext(1.8, 2.2, false, ENHANCED, 3)),
                 "Spectral Scythe",
                 20,
                 0,
@@ -243,7 +243,7 @@ public class NecromancyAbilityFactory {
 
     public static AbilityContext spectralMeteorStrike() {
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(2.25, 2.75, false, THRESHOLD, 2)),
+                List.of(new AbilityHitsContext(2.25, 2.75, false, ENHANCED, 2)),
                 "Spectral Scythe",
                 30,
                 0,
@@ -256,8 +256,8 @@ public class NecromancyAbilityFactory {
 
     public static AbilityContext volleyOfSouls() {
         return new AbilityContext(5,
-                List.of(new AbilityHitsContext(1.35, 1.65, false, THRESHOLD, 2),
-                        new AbilityHitsContext(1.35, 1.65, false, THRESHOLD, 2)),
+                List.of(new AbilityHitsContext(1.35, 1.65, false, ENHANCED, 2),
+                        new AbilityHitsContext(1.35, 1.65, false, ENHANCED, 2)),
                 "Volley of Souls",
                 0,
                 0,

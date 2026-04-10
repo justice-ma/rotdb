@@ -16,7 +16,7 @@ public class SoulInjector implements Modifier {
             if (context.getBuffs().has(BuffId.SOULSTACKS) && context.getBuffs().stacks(BuffId.SOULSTACKS) >= 2) {
                 for (int stack = 2; stack < context.getBuffs().stacks(BuffId.SOULSTACKS); stack++) {
                     hits.add(new AbilityHitsContext(
-                        1.35, 1.65, false, AbilityTier.THRESHOLD, 2)
+                        1.35, 1.65, false, AbilityTier.ENHANCED, 2)
                     );
                 }
             }

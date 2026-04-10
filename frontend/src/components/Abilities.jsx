@@ -17,7 +17,7 @@ export default function Abilities({
     return acc;
   }, {});
 
-  const typeOrder = ["BASIC", "THRESHOLD", "ULTIMATE", "SPECIAL", "OTHER"];
+  const typeOrder = ["BASIC", "ENHANCED", "CONJURE", "ULTIMATE", "SPECIAL"];
   const orderedTypes = Object.keys(grouped).sort((x, y) => {
     const ax = typeOrder.indexOf(x);
     const ay = typeOrder.indexOf(y);

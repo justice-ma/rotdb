@@ -5,7 +5,6 @@ import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.model.context.TargetContext;
 import com.rotdb.calculation.domain.model.enums.*;
-import com.rotdb.calculation.domain.model.enums.*;
 import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
 import com.rotdb.calculation.domain.model.player.BuffContext;
 import com.rotdb.calculation.domain.model.player.SpellContext;
@@ -40,7 +39,7 @@ public class AmmoBuffInvisibleResolver {
         }
 
         if (style == RANGED && ammo.getEffect().contains(Effect.WENARROWS) && buff.has(BuffId.WENSTACKS) && buff.stacks(BuffId.WENSTACKS) == 10) {
-            if (hit.getTier() == AbilityTier.THRESHOLD || hit.getTier() == AbilityTier.ULTIMATE) {
+            if (hit.getTier() == AbilityTier.ENHANCED || hit.getTier() == AbilityTier.ULTIMATE) {
                 return 1.3;
             }
         }

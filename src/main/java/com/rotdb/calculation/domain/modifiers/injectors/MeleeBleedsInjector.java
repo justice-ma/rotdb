@@ -26,7 +26,7 @@ public class MeleeBleedsInjector implements Modifier {
             int additionalHits = (int) (context.getAbility().getNumberOfHits() * 0.5);
 
             for (int i = 0; i < additionalHits; i++) {
-                hits.add(new AbilityHitsContext(min, max, true, AbilityTier.THRESHOLD,
+                hits.add(new AbilityHitsContext(min, max, true, AbilityTier.ENHANCED,
                         context.getAbility().getHits()
                                 .get(context.getAbility().getNumberOfHits() - 1 + i).getHitTiming() + hitTiming));
             }
@@ -38,7 +38,7 @@ public class MeleeBleedsInjector implements Modifier {
                 double max = context.getAbility().getHits().get(1).getMax();
                 int hitTiming = hitTiming(context.getAbility().getId());
                 List<AbilityHitsContext> hits = context.getAbility().getHits();
-                hits.add(new AbilityHitsContext(min, max, true, AbilityTier.THRESHOLD, context.getAbility().getHits()
+                hits.add(new AbilityHitsContext(min, max, true, AbilityTier.ENHANCED, context.getAbility().getHits()
                         .get(context.getAbility().getNumberOfHits() - 1 + i).getHitTiming() + hitTiming));
             }
         }

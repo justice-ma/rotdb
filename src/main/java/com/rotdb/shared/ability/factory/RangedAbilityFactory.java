@@ -27,8 +27,8 @@ public class RangedAbilityFactory {
 
     public static AbilityContext snapShot() {
         return new AbilityContext(2,
-                List.of(new AbilityHitsContext(1.35, 1.55, false, THRESHOLD, 2),
-                        new AbilityHitsContext(1.35, 1.55, false, THRESHOLD, 2)),
+                List.of(new AbilityHitsContext(1.35, 1.55, false, ENHANCED, 2),
+                        new AbilityHitsContext(1.35, 1.55, false, ENHANCED, 2)),
                 "Snap Shot",
                 -25,
                 9,
@@ -41,7 +41,7 @@ public class RangedAbilityFactory {
 
     public static AbilityContext snipe() {
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(3, 3.6, false, THRESHOLD, 3)),
+                List.of(new AbilityHitsContext(3, 3.6, false, ENHANCED, 3)),
                 "Snipe",
                 0,
                 100,
@@ -117,7 +117,7 @@ public class RangedAbilityFactory {
 
     public static AbilityContext bombardment() {
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(2.2, 2.6, false, THRESHOLD, 3)),
+                List.of(new AbilityHitsContext(2.2, 2.6, false, ENHANCED, 3)),
                 "Bombardment",
                 -25,
                 9,
@@ -143,14 +143,14 @@ public class RangedAbilityFactory {
 
     public static AbilityContext rapidFire() {
         return new AbilityContext(8,
-                List.of(new AbilityHitsContext(0.75, 0.85, false, THRESHOLD, 2),
-                        new AbilityHitsContext(0.75, 0.85, false, THRESHOLD, 3),
-                        new AbilityHitsContext(0.75, 0.85, false, THRESHOLD, 4),
-                        new AbilityHitsContext(0.75, 0.85, false, THRESHOLD, 5),
-                        new AbilityHitsContext(0.75, 0.85, false, THRESHOLD, 6),
-                        new AbilityHitsContext(0.75, 0.85, false, THRESHOLD, 7),
-                        new AbilityHitsContext(0.75, 0.85, false, THRESHOLD, 8),
-                        new AbilityHitsContext(0.75, 0.85, false, THRESHOLD, 9)),
+                List.of(new AbilityHitsContext(0.75, 0.85, false, ENHANCED, 2),
+                        new AbilityHitsContext(0.75, 0.85, false, ENHANCED, 3),
+                        new AbilityHitsContext(0.75, 0.85, false, ENHANCED, 4),
+                        new AbilityHitsContext(0.75, 0.85, false, ENHANCED, 5),
+                        new AbilityHitsContext(0.75, 0.85, false, ENHANCED, 6),
+                        new AbilityHitsContext(0.75, 0.85, false, ENHANCED, 7),
+                        new AbilityHitsContext(0.75, 0.85, false, ENHANCED, 8),
+                        new AbilityHitsContext(0.75, 0.85, false, ENHANCED, 9)),
                 "Rapid Fire",
                 -25,
                 34,
@@ -197,11 +197,11 @@ public class RangedAbilityFactory {
 
     public static AbilityContext corruptionShot() {
         return new AbilityContext(5,
-                List.of(new AbilityHitsContext(0.9, 1.1, true, THRESHOLD, 2),
-                        new AbilityHitsContext(0.9, 1.1, true, THRESHOLD, 4),
-                        new AbilityHitsContext(0.9, 1.1, true, THRESHOLD, 6),
-                        new AbilityHitsContext(0.9, 1.1, true, THRESHOLD, 8),
-                        new AbilityHitsContext(0.9, 1.1, true, THRESHOLD, 10)),
+                List.of(new AbilityHitsContext(0.9, 1.1, true, ENHANCED, 2),
+                        new AbilityHitsContext(0.9, 1.1, true, ENHANCED, 4),
+                        new AbilityHitsContext(0.9, 1.1, true, ENHANCED, 6),
+                        new AbilityHitsContext(0.9, 1.1, true, ENHANCED, 8),
+                        new AbilityHitsContext(0.9, 1.1, true, ENHANCED, 10)),
                 "Corruption Shot",
                 -20,
                 25,
@@ -214,7 +214,7 @@ public class RangedAbilityFactory {
 
     public static AbilityContext shadowTendrils() {
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(2, 2.4, false, THRESHOLD, 2)),
+                List.of(new AbilityHitsContext(2, 2.4, false, ENHANCED, 2)),
                 "Shadow Tendrils",
                 0,
                 75,
