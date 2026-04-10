@@ -166,8 +166,9 @@ public class EquipmentMapper {
                     break;
                 case AMMO:
                     slot.setId(item.getId());
-                    slot.setDamageTier(item.getDamageTier() == null ? 0 : item.getDamageTier());
-                    slot.setAccuracyTier(item.getAccuracyTier() == null ? 0 : item.getAccuracyTier());
+                    slot.setDamageTier(item.getDamageTier() == null ? item.getTier() == null ? 0 :
+                            item.getTier(): item.getDamageTier());
+                    slot.setAccuracyTier(item.getAccuracyTier() == null ? item.getTier() == null ? 0 : item.getTier() : item.getAccuracyTier());
                     slot.setRequiredLevel(item.getRequirementsRaw() == null ? "0" : item.getRequirementsRaw());
                     slot.setStrength(item.getStrength() == null ? 0 : item.getStrength());
                     slot.setRanged(item.getRanged() == null ? 0 : item.getRanged());

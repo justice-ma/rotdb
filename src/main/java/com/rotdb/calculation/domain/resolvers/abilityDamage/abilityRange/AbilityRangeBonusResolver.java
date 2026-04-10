@@ -36,10 +36,8 @@ public class AbilityRangeBonusResolver {
 
         if (context.getAbility().getId() == AbilityId.CONJURESKELETONWARRIOR ||
                 context.getAbility().getId() == AbilityId.COMMANDSKELETONWARRIOR && context.getBuffs().has(BuffId.RAGE)) {
-            System.out.println("ACCESSED");
             min += context.getAbility().getHits().getFirst().getMin() * (0.03 * context.getBuffs().stacks(BuffId.RAGE));
             max += context.getAbility().getHits().getFirst().getMax() * (0.03 * context.getBuffs().stacks(BuffId.RAGE));
-            System.out.println(min);
         }
 
         return new AbilityRangeBonus(min, max);

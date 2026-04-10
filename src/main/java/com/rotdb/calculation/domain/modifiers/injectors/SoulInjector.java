@@ -11,14 +11,10 @@ import java.util.List;
 
 public class SoulInjector implements Modifier {
     public void apply(CalculationContext context) {
-        System.out.println("SOUL INJECTOR");
         if (context.getAbility().getId() == AbilityId.VOLLEYOFSOULS) {
             List<AbilityHitsContext> hits = context.getAbility().getHits();
-            System.out.println("ACCESSED 1");
             if (context.getBuffs().has(BuffId.SOULSTACKS) && context.getBuffs().stacks(BuffId.SOULSTACKS) >= 2) {
-                System.out.println("ACCESSED 2");
                 for (int stack = 2; stack < context.getBuffs().stacks(BuffId.SOULSTACKS); stack++) {
-                    System.out.println("ACCESSED 3");
                     hits.add(new AbilityHitsContext(
                         1.35, 1.65, false, AbilityTier.THRESHOLD, 2)
                     );
