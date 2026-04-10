@@ -3,6 +3,7 @@ package com.rotdb.calculation.domain.modifiers.injectors;
 import com.rotdb.calculation.calculator.SoulSplitCalculator;
 import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.calculation.domain.model.enums.AbilityTier;
 import com.rotdb.calculation.domain.model.enums.BuffId;
 import com.rotdb.calculation.domain.model.enums.CombatStyles;
 import com.rotdb.calculation.domain.resolvers.Debug;
@@ -34,6 +35,9 @@ public class SplitSoulInjector implements Modifier {
         int baseCount = hits.size();
 
         for (int i = 0; i < baseCount; i++) {
+            if (hits.get(i).getTier() == AbilityTier.CONJURE) {
+                return;
+            }
             AbilityHitsContext parent = hits.get(i);
 
             AbilityHitsContext proc = new AbilityHitsContext();
