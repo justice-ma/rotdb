@@ -22,6 +22,7 @@ public final class AbilityDamagePipeline {
                 new DbaStatBoostModifier(),
                 new SoulInjector(),
                 new NecrosisInjector(),
+                new NightmareGauntletsInjector(),
                 new BaseAbilityDamageModifier(),
                 new CriticalStrikeModifier(),
                 new InstabilityInjector(),
