@@ -22,9 +22,6 @@ public class PreciseModifier implements Modifier {
                     double preciseMod = (perk.rank(Perks.PRECISE) * 0.015);
                     hit.setCurrentMin((int) (hit.getCurrentMin() + hit.getCurrentMax() * preciseMod));
                 }
-                if (hit.getCurrentMin() > hit.getCurrentMax()) {
-                    hit.setCurrentMin(hit.getCurrentMax() - 1);
-                }
             }
             Debug.stageRow(context, i, hit);
         }
