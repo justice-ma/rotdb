@@ -13,7 +13,7 @@ public class BuffContextMapper {
         buff.setBuffSet(buffs.enabledBuffs());
         buff.setBuffStacks(buffs.buffStacks());
 
-        if (!buff.getBuffStacks().containsKey(BuffId.BOOKUPTIME)) {
+        if (buff.getBuffSet() != null && buff.getBuffStacks() != null && !buff.getBuffStacks().containsKey(BuffId.BOOKUPTIME)) {
             buff.getBuffSet().add(BuffId.BOOKUPTIME);
             buff.getBuffStacks().put(BuffId.BOOKUPTIME, 66);
         }

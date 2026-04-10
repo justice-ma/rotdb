@@ -1,13 +1,12 @@
 package com.rotdb.shared.ability;
 
-import com.rotdb.calculation.ability.factory.*;
+import com.rotdb.shared.ability.factory.*;
 import com.rotdb.calculation.domain.model.context.AbilityContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.model.enums.Effect;
 import com.rotdb.calculation.domain.model.enums.Slots;
 import com.rotdb.calculation.domain.model.equipment.EquipmentModel;
 import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
-import com.rotdb.shared.ability.factory.*;
 
 public final class AbilityProvider {
 

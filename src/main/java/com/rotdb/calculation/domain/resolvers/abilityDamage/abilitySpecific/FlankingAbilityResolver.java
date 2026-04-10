@@ -11,7 +11,7 @@ public class FlankingAbilityResolver {
         PerkContext perk = context.getPerks();
         AbilityContext ability = context.getAbility();
         if ((ability.getId() == AbilityId.IMPACT || ability.getId() == AbilityId.BINDINGSHOT ||
-                ability.getId() == AbilityId.BACKHAND) && perk.has(Perks.FLANKING)) {
+                ability.getId() == AbilityId.BACKHAND) || ability.getId() == AbilityId.SOULSTRIKE && perk.has(Perks.FLANKING)) {
             return (1 + (0.4 * perk.rank(Perks.FLANKING)));
         }
         return 1;

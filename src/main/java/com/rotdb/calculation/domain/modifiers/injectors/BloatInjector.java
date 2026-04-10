@@ -1,6 +1,6 @@
 package com.rotdb.calculation.domain.modifiers.injectors;
 
-import com.rotdb.calculation.ability.AbilityId;
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.model.enums.AbilityTier;
@@ -17,9 +17,9 @@ public class BloatInjector implements Modifier {
         List<AbilityHitsContext> hits = context.getAbility().getHits();
         AbilityHitsContext base = context.getAbility().getHits().getFirst();
 
-        int minCritDamage = (int) (base.getMinCritDamage() * 0.25);
+        int minCritDamage = (int) (base.getCritMin() * 0.25);
         int critDamage = (int) (base.getCritDamage() * 0.25);
-        int maxCritDamage = (int) (base.getMaxCritDamage() * 0.25);
+        int maxCritDamage = (int) (base.getCritMax() * 0.25);
 
         int minNonCritDamage = (int) (base.getNonCritMin() * 0.25);
         int nonCritDamage = (int) (base.getNonCritDamage() * 0.25);
@@ -36,9 +36,9 @@ public class BloatInjector implements Modifier {
             bleed.setTier(AbilityTier.THRESHOLD);
             bleed.setParentIndex(i);
 
-            bleed.setMinCritDamage(minCritDamage);
+            bleed.setCritMin(minCritDamage);
             bleed.setCritDamage(critDamage);
-            bleed.setMaxCritDamage(maxCritDamage);
+            bleed.setCritMax(maxCritDamage);
 
             bleed.setNonCritMin(minNonCritDamage);
             bleed.setNonCritDamage(nonCritDamage);

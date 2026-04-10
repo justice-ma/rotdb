@@ -23,6 +23,25 @@ public class AbilityRangeBonusResolver {
             max += 0.07 * time;
         }
 
+        if (context.getAbility().getId() == AbilityId.SPECTRALMETEORSTRIKE) {
+            double targetHp = 1 - (context.getTarget().getCurrentHp() * 1.0 / context.getTarget().getMaxHp());
+            min += targetHp * context.getAbility().getHits().getFirst().getMin();
+            max += targetHp * context.getAbility().getHits().getFirst().getMax();
+        }
+
+        if (context.getAbility().getId() == AbilityId.COMMANDPHANTOMGUARDIAN && context.getBuffs().has(BuffId.VALOUR)) {
+            min += context.getAbility().getHits().getFirst().getMin() * (0.2 * context.getBuffs().stacks(BuffId.VALOUR)) - context.getAbility().getHits().getFirst().getMin();
+            max += context.getAbility().getHits().getFirst().getMax() * (0.2 * context.getBuffs().stacks(BuffId.VALOUR)) - context.getAbility().getHits().getFirst().getMax();
+        }
+
+        if (context.getAbility().getId() == AbilityId.CONJURESKELETONWARRIOR ||
+                context.getAbility().getId() == AbilityId.COMMANDSKELETONWARRIOR && context.getBuffs().has(BuffId.RAGE)) {
+            System.out.println("ACCESSED");
+            min += context.getAbility().getHits().getFirst().getMin() * (0.03 * context.getBuffs().stacks(BuffId.RAGE));
+            max += context.getAbility().getHits().getFirst().getMax() * (0.03 * context.getBuffs().stacks(BuffId.RAGE));
+            System.out.println(min);
+        }
+
         return new AbilityRangeBonus(min, max);
     }
 }

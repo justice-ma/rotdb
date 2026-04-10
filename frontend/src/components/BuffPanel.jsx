@@ -330,7 +330,23 @@ const BUFF_UI_META = {
   DEATHSPARK: {
     category: BUFF_CATEGORY.STACKS,
     styles: [STYLE.NECROMANCY],
-  }
+  },
+  SOULSTACKS: {
+    category: BUFF_CATEGORY.STACKS,
+    styles: [STYLE.NECROMANCY],
+  },
+  NECROSIS: {
+    category: BUFF_CATEGORY.STACKS,
+    styles: [STYLE.NECROMANCY],
+  },
+  RAGE: {
+    category: BUFF_CATEGORY.STACKS,
+    styles: [STYLE.NECROMANCY],
+  },
+  VALOUR: {
+    category: BUFF_CATEGORY.STACKS,
+    styles: [STYLE.NECROMANCY],
+  },
 };
 
 const CATEGORY_ORDER = [

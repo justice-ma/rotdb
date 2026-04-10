@@ -79,7 +79,11 @@ public enum BuffId {
     LIVINGDEATH(0, 0, false, "Living Death"),
     BOOKUPTIME(0, 100, true, "Book Uptime"),
     SLAYERHELM(0, 6, true, "Slayer Helmet"),
-    DEATHSPARK(0, 5, true, "Death Spark");
+    DEATHSPARK(0, 5, true, "Death Spark"),
+    SOULSTACKS(0, 5, true, "Soul Stacks"),
+    NECROSIS(0, 12, true, "Necrosis"),
+    RAGE(0, 25, true, "Rage Stacks"),
+    VALOUR(0, 25, true, "Valour Stacks");
 
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;

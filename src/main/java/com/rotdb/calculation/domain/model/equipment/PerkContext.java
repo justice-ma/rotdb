@@ -14,11 +14,10 @@ public class PerkContext {
     }
 
     public int rank(Perks selectedPerk) {
+        if (perk.get(selectedPerk) == null) {
+            return 0;
+        }
         return perk.get(selectedPerk);
-    }
-
-    public double genocidalRank() {
-        return genocidalRank == null ? 0.0 : genocidalRank;
     }
 
     public Map<Perks, Integer> getPerk() {

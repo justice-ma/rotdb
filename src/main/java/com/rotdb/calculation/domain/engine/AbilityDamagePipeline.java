@@ -4,10 +4,7 @@ import com.rotdb.calculation.domain.modifiers.abilityDamage.*;
 import com.rotdb.calculation.domain.modifiers.abilityDamage.*;
 import com.rotdb.calculation.domain.modifiers.baseDamage.BaseAbilityDamageModifier;
 import com.rotdb.calculation.domain.modifiers.hitChance.HitChanceModifier;
-import com.rotdb.calculation.domain.modifiers.injectors.BloatInjector;
-import com.rotdb.calculation.domain.modifiers.injectors.InstabilityInjector;
-import com.rotdb.calculation.domain.modifiers.injectors.PerfectEquilibriumInjector;
-import com.rotdb.calculation.domain.modifiers.injectors.SplitSoulInjector;
+import com.rotdb.calculation.domain.modifiers.injectors.*;
 import com.rotdb.calculation.domain.modifiers.stats.DbaStatBoostModifier;
 import com.rotdb.calculation.domain.modifiers.stats.StatBoostModifier;
 import com.rotdb.calculation.domain.modifiers.Modifier;
@@ -23,6 +20,8 @@ public final class AbilityDamagePipeline {
         steps = List.of(
                 new StatBoostModifier(),
                 new DbaStatBoostModifier(),
+                new SoulInjector(),
+                new NecrosisInjector(),
                 new BaseAbilityDamageModifier(),
                 new CriticalStrikeModifier(),
                 new InstabilityInjector(),

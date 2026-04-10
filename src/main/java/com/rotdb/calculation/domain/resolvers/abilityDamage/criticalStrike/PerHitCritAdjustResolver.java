@@ -10,6 +10,7 @@ import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
 import com.rotdb.calculation.domain.model.player.BuffContext;
 
 import static com.rotdb.calculation.domain.model.enums.CombatStyles.MAGIC;
+import static com.rotdb.shared.ability.AbilityId.*;
 
 public class PerHitCritAdjustResolver {
     public static CritBonus resolve(CalculationContext context, AbilityHitsContext hit, int hitIndex) {
