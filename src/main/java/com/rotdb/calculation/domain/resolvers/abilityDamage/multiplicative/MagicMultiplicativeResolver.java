@@ -2,8 +2,10 @@ package com.rotdb.calculation.domain.resolvers.abilityDamage.multiplicative;
 
 import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.calculation.domain.model.enums.AbilityTier;
 import com.rotdb.calculation.domain.model.enums.BuffId;
 import com.rotdb.calculation.domain.model.enums.CombatStyles;
+import com.rotdb.calculation.domain.model.enums.HitType;
 import com.rotdb.calculation.domain.model.player.BuffContext;
 
 import static com.rotdb.calculation.domain.model.enums.AbilityTier.BASIC;
@@ -20,7 +22,8 @@ public class MagicMultiplicativeResolver {
                 mod *= 1.5;
             }
 
-            if (buff.has(BuffId.TITHESTACKS) && buff.stacks(BuffId.TITHESTACKS) > 0 && hit.getTier() == BASIC) {
+            if (buff.has(BuffId.TITHESTACKS) && buff.stacks(BuffId.TITHESTACKS) > 0 && hit.getTier() == BASIC
+                && hit.getType() != HitType.INSTABILITY) {
                 mod *= 1 + buff.stacks(BuffId.TITHESTACKS) / 100.0;
             }
         }
