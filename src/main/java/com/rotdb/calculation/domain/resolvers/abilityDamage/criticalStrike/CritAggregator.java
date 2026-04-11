@@ -10,9 +10,6 @@ public class CritAggregator {
     public static void apply(CalculationContext context) {
         double baseChance = 0.1;
         double baseDamage = BaseCritResolver.resolve(context);
-
-        BuffContext buffs = context.getBuffs();
-
         CritBonus setBonus = SetEffectsCritResolver.resolve(context);
         CritBonus gearBonus = GearCritResolver.resolve(context);
 

@@ -4,6 +4,7 @@ import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.model.enums.AbilityTier;
 import com.rotdb.calculation.domain.model.enums.BuffId;
+import com.rotdb.calculation.domain.model.enums.Effect;
 import com.rotdb.calculation.domain.model.enums.HitType;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike.CritDamageRangeResolver;
@@ -20,7 +21,7 @@ public class InstabilityInjector implements Modifier {
         List<AbilityHitsContext> hits = context.getAbility().getHits();
         int baseCount = hits.size();
 
-        for (int i = 0; i < baseCount; i++) {
+        for (int i = 0, j = 1; i < baseCount; i++, j++) {
             AbilityHitsContext parent = hits.get(i);
 
             if (!parentCanCrit(context, parent)) {
@@ -28,6 +29,7 @@ public class InstabilityInjector implements Modifier {
             }
 
             double procCritChance = parent.getCritChanceModifier();
+            double procCritDamage = parent.getCritDamageModifier();
             // Instability should not inherit conc / gconc crit bonus
             if (context.getBuffs().has(BuffId.CONCENTRATEDBLASTBUFF)) {
                 procCritChance -= context.getBuffs().has(BuffId.RUNICCHARGE) ? 0.51 : 0.21;
@@ -35,7 +37,15 @@ public class InstabilityInjector implements Modifier {
                 procCritChance -= context.getBuffs().has(BuffId.RUNICCHARGE) ? 0.45 : 0.15;
             }
 
+            if (context.getEquipment().getRing().getEffect().contains(Effect.CHANNELLERSRING)) {
+                procCritChance -= 0.04 * j;
+                if (context.getBuffs().has(BuffId.ENCHANTMENTOFMETAPHYSICS)) {
+                    procCritDamage -= 0.025 * j;
+                }
+            }
+
             procCritChance = Math.max(0, Math.min(procCritChance, 1));
+            procCritDamage = Math.max(0, procCritDamage);
 
             AbilityHitsContext proc = new AbilityHitsContext(
                     0.7, 0.9,
@@ -47,7 +57,7 @@ public class InstabilityInjector implements Modifier {
             );
 
             proc.setCritChanceModifier(procCritChance);
-            proc.setCritDamageModifier(parent.getCritDamageModifier());
+            proc.setCritDamageModifier(procCritDamage);
             proc.setMinCritDamage(CritDamageRangeResolver.resolve(context, proc).getMinMod());
             proc.setMaxCritDamage(CritDamageRangeResolver.resolve(context, proc).getMaxMod());
             proc.setAverageCritDamage((proc.getMinCritDamage() + proc.getMaxCritDamage()) / 2);

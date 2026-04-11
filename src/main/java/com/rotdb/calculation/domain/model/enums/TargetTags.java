@@ -15,5 +15,6 @@ public enum TargetTags {
     DINOSAUR,
     HEXHUNTER,
     INQUISITOR,
-    TERRASAUR
+    TERRASAUR,
+    JADINKO
 }

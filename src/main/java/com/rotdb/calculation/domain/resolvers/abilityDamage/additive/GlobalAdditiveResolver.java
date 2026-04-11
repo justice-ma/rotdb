@@ -4,6 +4,7 @@ import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.model.context.TargetContext;
 import com.rotdb.calculation.domain.model.enums.BuffId;
 import com.rotdb.calculation.domain.model.enums.Effect;
+import com.rotdb.calculation.domain.model.enums.TargetTags;
 import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
 import com.rotdb.calculation.domain.model.player.BuffContext;
 
@@ -18,7 +19,7 @@ public class GlobalAdditiveResolver {
             mod += Math.min(buff.stacks(BuffId.STONEOFJAS) / 100.0, 0.06);
         }
 
-        if (buff.has(BuffId.DRACONICFRUIT) && target.getName().startsWith("Mutated jadinko")) {
+        if (buff.has(BuffId.DRACONICFRUIT) && target.getTags().contains(TargetTags.JADINKO)) {
             mod += 0.02;
         }
 

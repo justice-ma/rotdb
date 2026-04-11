@@ -39,13 +39,11 @@ public class PerHitCritAdjustResolver {
             criticalStrikeDamage += 0.2;
         }
 
-        if (hit.getType() != HitType.BASE) {
-            if (ability.getCombatStyle() == MAGIC && ability.isChannel() &&
-                    ring.getEffect().contains(Effect.CHANNELLERSRING)) {
-                criticalStrikeChance += 0.04 * hitIndex;
-                if (buff.has(BuffId.ENCHANTMENTOFMETAPHYSICS)) {
-                    criticalStrikeDamage += 0.025 * hitIndex;
-                }
+        if (ability.getCombatStyle() == MAGIC && ability.isChannel() &&
+                ring.getEffect().contains(Effect.CHANNELLERSRING) && hit.getType() == HitType.BASE) {
+            criticalStrikeChance += 0.04 * hitIndex;
+            if (buff.has(BuffId.ENCHANTMENTOFMETAPHYSICS)) {
+                criticalStrikeDamage += 0.025 * hitIndex;
             }
         }
         return new CritBonus(criticalStrikeChance, criticalStrikeDamage);
