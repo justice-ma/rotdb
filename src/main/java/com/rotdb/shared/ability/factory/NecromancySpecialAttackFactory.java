@@ -1,15 +1,15 @@
 package com.rotdb.shared.ability.factory;
 
-import com.rotdb.calculation.domain.model.context.AbilityContext;
-import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 
 import java.util.List;
 
 import static com.rotdb.shared.ability.AbilityId.*;
 import static com.rotdb.shared.ability.Handedness.*;
-import static com.rotdb.calculation.domain.model.enums.AbilityTier.ENHANCED;
-import static com.rotdb.calculation.domain.model.enums.CombatStyles.NECROMANCY;
-import static com.rotdb.calculation.domain.model.enums.Targetting.SINGLE_TARGET;
+import static com.rotdb.shared.combat.domain.model.enums.AbilityTier.ENHANCED;
+import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.NECROMANCY;
+import static com.rotdb.shared.combat.domain.model.enums.Targetting.SINGLE_TARGET;
 
 public class NecromancySpecialAttackFactory {
     public static AbilityContext deathGrasp() {

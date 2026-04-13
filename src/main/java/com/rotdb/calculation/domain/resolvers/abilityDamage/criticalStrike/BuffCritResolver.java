@@ -1,12 +1,13 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike;
 
-import com.rotdb.calculation.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.BuffId;
-import com.rotdb.calculation.domain.model.enums.Familiars;
-import com.rotdb.calculation.domain.model.equipment.FamiliarContext;
-import com.rotdb.calculation.domain.model.player.BuffContext;
-import static com.rotdb.calculation.domain.model.enums.CombatStyles.*;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.Familiars;
+import com.rotdb.shared.combat.domain.model.equipment.FamiliarContext;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
+
 import static com.rotdb.shared.ability.AbilityId.*;
 
 public class BuffCritResolver {
@@ -16,17 +17,17 @@ public class BuffCritResolver {
         FamiliarContext familiar = context.getFamiliar();
 
         double criticalStrikeChance = 0;
-        if (buff.has(BuffId.FURYBUFF) && ability.getCombatStyle() == MELEE) criticalStrikeChance += 0.25;
-        if (buff.has(BuffId.GREATERFURYBUFF) && ability.getCombatStyle() == MELEE) criticalStrikeChance = 1;
+        if (buff.has(BuffId.FURYBUFF) && ability.getCombatStyle() == CombatStyles.MELEE) criticalStrikeChance += 0.25;
+        if (buff.has(BuffId.GREATERFURYBUFF) && ability.getCombatStyle() == CombatStyles.MELEE) criticalStrikeChance = 1;
         if (ability.getId() == SMOKETENDRILS || ability.getId() == SHADOWTENDRILS) criticalStrikeChance = 1;
-        if (buff.has(BuffId.CONCENTRATEDBLASTBUFF)  && ability.getCombatStyle() == MAGIC) {
+        if (buff.has(BuffId.CONCENTRATEDBLASTBUFF)  && ability.getCombatStyle() == CombatStyles.MAGIC) {
             if (buff.has(BuffId.RUNICCHARGE)) {
                 criticalStrikeChance += 0.45;
             } else {
                 criticalStrikeChance += 0.15;
             }
         }
-        if (buff.has(BuffId.GREATERCONCENTRATEDBLASTBUFF)  && ability.getCombatStyle() == MAGIC) {
+        if (buff.has(BuffId.GREATERCONCENTRATEDBLASTBUFF)  && ability.getCombatStyle() == CombatStyles.MAGIC) {
             if (buff.has(BuffId.RUNICCHARGE)) {
                 criticalStrikeChance += 0.51;
             } else {

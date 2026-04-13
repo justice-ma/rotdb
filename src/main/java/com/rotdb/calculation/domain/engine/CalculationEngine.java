@@ -6,7 +6,7 @@ import com.rotdb.calculation.application.validation.PrayerRequestValidator;
 import com.rotdb.calculation.domain.model.HitResult;
 import com.rotdb.calculation.domain.model.DamageRequest;
 import com.rotdb.calculation.domain.model.DamageResult;
-import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.model.context.ContextBuilder;
 import com.rotdb.calculation.domain.model.context.DamageContext;

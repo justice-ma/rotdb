@@ -1,8 +1,8 @@
 package com.rotdb.calculation.api.dto;
 
-import com.rotdb.calculation.domain.model.enums.CombatStyles;
-import com.rotdb.calculation.domain.model.enums.PrayerBook;
-import com.rotdb.calculation.domain.model.enums.PrayerExclusivityGroup;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.PrayerBook;
+import com.rotdb.shared.combat.domain.model.enums.PrayerExclusivityGroup;
 
 import java.util.EnumSet;
 

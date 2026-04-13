@@ -1,10 +1,9 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.abilityRange;
 
-import com.rotdb.calculation.domain.model.enums.Perks;
+import com.rotdb.shared.combat.domain.model.enums.Perks;
 import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.BuffId;
-import com.rotdb.calculation.domain.model.enums.Effect;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 
 public class AbilityRangeBonusResolver {
     public static AbilityRangeBonus resolve(CalculationContext context) {

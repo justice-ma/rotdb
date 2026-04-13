@@ -1,7 +1,7 @@
 package com.rotdb.calculation.application.mapper;
 
 import com.rotdb.calculation.api.dto.DamageCalcRequestDto;
-import com.rotdb.calculation.domain.model.player.SkillsContext;
+import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 import org.springframework.stereotype.Component;
 
 @Component

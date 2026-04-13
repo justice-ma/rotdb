@@ -1,8 +1,8 @@
 package com.rotdb.calculation.application.mapper;
 
 import com.rotdb.calculation.api.dto.DamageCalcRequestDto;
-import com.rotdb.calculation.domain.model.enums.Slots;
-import com.rotdb.calculation.domain.model.equipment.EquipmentModel;
+import com.rotdb.shared.combat.domain.model.enums.Slots;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.calculation.persistence.mapper.EquipmentMapper;
 import com.rotdb.calculation.persistence.repository.EquipmentRepository;
 import org.springframework.stereotype.Component;

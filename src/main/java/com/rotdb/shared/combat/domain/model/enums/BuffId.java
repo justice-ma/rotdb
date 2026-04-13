@@ -84,7 +84,16 @@ public enum BuffId {
     NECROSIS(0, 12, true, "Necrosis"),
     RAGE(0, 25, true, "Rage Stacks"),
     VALOUR(0, 25, true, "Valour Stacks"),
-    STRENGTHCAPE(0, 0, false, "Strength Cape");
+    STRENGTHCAPE(0, 0, false, "Strength Cape"),
+    HEIGHTENEDSENSES(0, 0, false, "Heightened Senses"),
+    METEORSTRIKE(0, 0, false, "Meteor Strike"),
+    ADRENALINEPOTION(0, 0, false, "Adrenaline Potion"),
+    SUPERADRENALINEPOTION(0, 0, false, "Super Adrenaline Potion"),
+    ADRENALINERENEWAL(0, 0, false, "Adrenaline Renewal"),
+    VESTMENTSBLEED(0, 0, false, "Vestments Adrenaline Refund"),
+    ASYLUMSURGEONSRINGPROC(0, 0, false, "Asylum Surgeon's Ring Proc"),
+    RINGOFDEATHPROC(0, 0, false, "Ring of Death Proc"),
+    IMPATIENTPROC(0, 0, false, "Impatient Proc");
 
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;

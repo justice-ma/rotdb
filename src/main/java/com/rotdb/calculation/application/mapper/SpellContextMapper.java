@@ -1,7 +1,7 @@
 package com.rotdb.calculation.application.mapper;
 
-import com.rotdb.calculation.domain.model.enums.Spells;
-import com.rotdb.calculation.domain.model.player.SpellContext;
+import com.rotdb.shared.combat.domain.model.enums.Spells;
+import com.rotdb.shared.combat.domain.model.player.SpellContext;
 import org.springframework.stereotype.Component;
 
 @Component

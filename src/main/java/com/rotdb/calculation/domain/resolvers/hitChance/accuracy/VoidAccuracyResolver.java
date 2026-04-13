@@ -1,8 +1,8 @@
 package com.rotdb.calculation.domain.resolvers.hitChance.accuracy;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.Effect;
-import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
+import com.rotdb.shared.combat.domain.model.enums.Effect;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.multiplicative;
 
-import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 
 public class MultiplicativeResolver {

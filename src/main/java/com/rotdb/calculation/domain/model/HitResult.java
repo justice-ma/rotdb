@@ -1,6 +1,6 @@
 package com.rotdb.calculation.domain.model;
 
-import com.rotdb.calculation.domain.model.enums.HitType;
+import com.rotdb.shared.combat.domain.model.enums.HitType;
 
 public class HitResult {
     private final int hitMinDamage, hitMaxDamage, hitAvgDamage, hitMinCrit,

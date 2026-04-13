@@ -1,10 +1,10 @@
 package com.rotdb.calculation.domain.modifiers.baseDamage;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.BuffId;
-import com.rotdb.calculation.domain.model.enums.CombatStyles;
-import com.rotdb.calculation.domain.model.enums.Effect;
-import com.rotdb.calculation.domain.model.enums.Perks;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.Effect;
+import com.rotdb.shared.combat.domain.model.enums.Perks;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.resolvers.baseAbilityDamage.MagicBaseDamageResolver;
 import com.rotdb.calculation.domain.resolvers.baseAbilityDamage.MeleeBaseDamageResolver;

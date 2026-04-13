@@ -1,6 +1,6 @@
 package com.rotdb.calculation.persistence.repository;
 
-import com.rotdb.calculation.domain.model.enums.Slots;
+import com.rotdb.shared.combat.domain.model.enums.Slots;
 import com.rotdb.calculation.persistence.entity.EquipmentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

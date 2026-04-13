@@ -1,7 +1,7 @@
 package com.rotdb.calculation.application.mapper;
 
 import com.rotdb.calculation.api.dto.DamageCalcRequestDto;
-import com.rotdb.calculation.domain.model.player.PotionContext;
+import com.rotdb.shared.combat.domain.model.player.PotionContext;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

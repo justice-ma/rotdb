@@ -1,6 +1,6 @@
 package com.rotdb.calculation.api.controller;
 
-import com.rotdb.calculation.domain.model.enums.Slots;
+import com.rotdb.shared.combat.domain.model.enums.Slots;
 import com.rotdb.calculation.persistence.entity.EquipmentEntity;
 import com.rotdb.calculation.persistence.repository.EquipmentRepository;
 import org.springframework.web.bind.annotation.*;

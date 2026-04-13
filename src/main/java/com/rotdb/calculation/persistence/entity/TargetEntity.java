@@ -1,7 +1,7 @@
 package com.rotdb.calculation.persistence.entity;
 
-import com.rotdb.calculation.domain.model.enums.CombatStyles;
-import com.rotdb.calculation.domain.model.enums.TargetTags;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.TargetTags;
 import com.rotdb.calculation.persistence.converter.TargetTagsConverter;
 import jakarta.persistence.*;
 

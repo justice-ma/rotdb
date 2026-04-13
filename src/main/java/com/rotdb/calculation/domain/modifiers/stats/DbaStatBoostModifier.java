@@ -1,9 +1,9 @@
 package com.rotdb.calculation.domain.modifiers.stats;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.BuffId;
-import com.rotdb.calculation.domain.model.player.BuffContext;
-import com.rotdb.calculation.domain.model.player.SkillsContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 
 public class DbaStatBoostModifier implements Modifier {

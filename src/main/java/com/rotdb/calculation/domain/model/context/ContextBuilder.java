@@ -2,15 +2,17 @@ package com.rotdb.calculation.domain.model.context;
 
 import com.rotdb.shared.ability.AbilityProvider;
 import com.rotdb.calculation.domain.model.DamageRequest;
-import com.rotdb.calculation.domain.model.enums.Effect;
-import com.rotdb.calculation.domain.model.enums.Prayer;
-import com.rotdb.calculation.domain.model.equipment.EquipmentModel;
-import com.rotdb.calculation.domain.model.equipment.FamiliarContext;
-import com.rotdb.calculation.domain.model.equipment.PerkContext;
-import com.rotdb.calculation.domain.model.player.BuffContext;
-import com.rotdb.calculation.domain.model.player.SkillsContext;
-import com.rotdb.calculation.domain.model.player.SpellContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.enums.Effect;
+import com.rotdb.shared.combat.domain.model.enums.Prayer;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
+import com.rotdb.shared.combat.domain.model.equipment.FamiliarContext;
+import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.player.SkillsContext;
+import com.rotdb.shared.combat.domain.model.player.SpellContext;
 import com.rotdb.calculation.domain.resolvers.PrayerResolver;
+import com.rotdb.shared.combat.domain.model.context.TargetContext;
 
 import java.util.EnumSet;
 
@@ -79,7 +81,7 @@ public class ContextBuilder {
     public static CalculationContext build(DamageRequest request) {
         CalculationContext context = new CalculationContext();
         context.setEquipment(request.getEquipment());
-        context.setAbility(AbilityProvider.get(request.getAbilityId(), context));
+        context.setAbility(AbilityProvider.get(request.getAbilityId(), context.getEquipment()));
         context.setBuffs(request.getBuffs());
         context.setTarget(request.getTarget());
         context.setSkills(request.getSkills());

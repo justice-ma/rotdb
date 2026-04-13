@@ -1,10 +1,10 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.multiplicative;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.BuffId;
-import com.rotdb.calculation.domain.model.enums.Perks;
-import com.rotdb.calculation.domain.model.equipment.PerkContext;
-import com.rotdb.calculation.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.Perks;
+import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
 
 public class PerkMultiplicativeResolver {
     public static double resolve(CalculationContext context) {

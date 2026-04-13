@@ -1,7 +1,7 @@
 package com.rotdb.calculation.api.controller;
 
 import com.rotdb.calculation.api.dto.BuffDto;
-import com.rotdb.calculation.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

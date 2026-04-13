@@ -1,14 +1,11 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.multiplicative;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.context.TargetContext;
-import com.rotdb.calculation.domain.model.enums.*;
-import com.rotdb.calculation.domain.model.enums.*;
-import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
-import com.rotdb.calculation.domain.model.equipment.PerkContext;
-import com.rotdb.calculation.domain.model.player.BuffContext;
-
-import static com.rotdb.calculation.domain.model.enums.CombatStyles.*;
+import com.rotdb.shared.combat.domain.model.context.TargetContext;
+import com.rotdb.shared.combat.domain.model.enums.*;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
+import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
 
 public class SlayerGearMultiplicativeResolver {
     public static double resolve(CalculationContext context) {
@@ -47,25 +44,25 @@ public class SlayerGearMultiplicativeResolver {
             case 3 -> mod *= 1.08;
             case 2 -> mod *= 1.075;
             case 1 -> {
-                if (style == MELEE) {
+                if (style == CombatStyles.MELEE) {
                     mod *= 1.075;
                 }
             }
         }
 
-        if (head.getEffect().contains(Effect.FOCUSSIGHT) && style == RANGED) {
+        if (head.getEffect().contains(Effect.FOCUSSIGHT) && style == CombatStyles.RANGED) {
             mod *= 1.075;
         }
 
-        if (head.getEffect().contains(Effect.BLACKMASK) && style == MELEE) {
+        if (head.getEffect().contains(Effect.BLACKMASK) && style == CombatStyles.MELEE) {
             mod *= 1.075;
         }
 
-        if (head.getEffect().contains(Effect.HEXCREST) && style == MAGIC) {
+        if (head.getEffect().contains(Effect.HEXCREST) && style == CombatStyles.MAGIC) {
             mod *= 1.075;
         }
 
-        if (head.getEffect().contains(Effect.SPECTRALLENS) && style == NECROMANCY) {
+        if (head.getEffect().contains(Effect.SPECTRALLENS) && style == CombatStyles.NECROMANCY) {
             mod *= 1.075;
         }
 

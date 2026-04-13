@@ -1,7 +1,7 @@
 package com.rotdb.calculation.application.mapper;
 
-import com.rotdb.calculation.domain.model.enums.Prayer;
-import com.rotdb.calculation.domain.model.player.PrayerContext;
+import com.rotdb.shared.combat.domain.model.enums.Prayer;
+import com.rotdb.shared.combat.domain.model.player.PrayerContext;
 import org.springframework.stereotype.Component;
 
 import java.util.EnumSet;

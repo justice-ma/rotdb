@@ -1,15 +1,11 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.multiplicative;
 
-import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.BuffId;
-import com.rotdb.calculation.domain.model.enums.CombatStyles;
-import com.rotdb.calculation.domain.model.enums.Effect;
-import com.rotdb.calculation.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
 
-import java.util.List;
-
-import static com.rotdb.calculation.domain.model.enums.CombatStyles.RANGED;
+import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.RANGED;
 
 public class RangedMultiplicativeResolver {
     public static double resolve(CalculationContext context) {

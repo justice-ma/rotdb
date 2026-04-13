@@ -1,10 +1,10 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.styleSpecific;
 
-import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.context.TargetContext;
-import com.rotdb.calculation.domain.model.enums.Effect;
-import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
+import com.rotdb.shared.combat.domain.model.context.TargetContext;
+import com.rotdb.shared.combat.domain.model.enums.Effect;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
 
 public class RangedStyleEffects {
     public static void apply(CalculationContext context, AbilityHitsContext hit) {

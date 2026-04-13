@@ -1,7 +1,7 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.multiplicative;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.player.PrayerContext;
+import com.rotdb.shared.combat.domain.model.player.PrayerContext;
 
 public class PrayerMultiplicativeResolver {
     public static double resolve(CalculationContext context) {

@@ -2,8 +2,8 @@ package com.rotdb.calculation.application.mapper;
 
 import com.rotdb.calculation.api.dto.DamageCalcRequestDto;
 import com.rotdb.calculation.application.normalization.BuffRequestNormalizer;
-import com.rotdb.calculation.domain.model.enums.BuffId;
-import com.rotdb.calculation.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
 import org.springframework.stereotype.Component;
 
 @Component

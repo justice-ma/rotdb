@@ -14,7 +14,10 @@ public enum Perks {
     DRAGONSLAYER(1, 1, false, "Dragon Slayer"),
     DEMONSLAYER(1, 1, false, "Demon Slayer"),
     GENOCIDAL(1, 1, false, "Genocidal"),
-    LUNGING(1, 4, false, "Lunging");
+    LUNGING(1, 4, false, "Lunging"),
+    IMPATIENT(1, 4, true, "Impatient"),
+    RELENTLESS(1, 5, true, "Relentless"),
+    INVIGORATING(1, 4, false, "Invigorating");
 
     private final int minTier;
     private final int maxTier;

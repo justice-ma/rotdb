@@ -1,7 +1,7 @@
 package com.rotdb.calculation.api.controller;
 
 import com.rotdb.calculation.api.dto.PerkDto;
-import com.rotdb.calculation.domain.model.enums.Perks;
+import com.rotdb.shared.combat.domain.model.enums.Perks;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,7 +1,7 @@
 package com.rotdb.calculation.api.controller;
 
 import com.rotdb.calculation.api.dto.PrayerDto;
-import com.rotdb.calculation.domain.model.enums.Prayer;
+import com.rotdb.shared.combat.domain.model.enums.Prayer;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

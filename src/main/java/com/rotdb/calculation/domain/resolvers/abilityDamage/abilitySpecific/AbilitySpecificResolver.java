@@ -1,6 +1,6 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.abilitySpecific;
 
-import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 
 public class AbilitySpecificResolver {

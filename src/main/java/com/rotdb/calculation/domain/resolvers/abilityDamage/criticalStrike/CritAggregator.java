@@ -1,10 +1,9 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike;
 
-import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.AbilityTier;
-import com.rotdb.calculation.domain.model.enums.Perks;
-import com.rotdb.calculation.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
+import com.rotdb.shared.combat.domain.model.enums.Perks;
 
 public class CritAggregator {
     public static void apply(CalculationContext context) {

@@ -1,7 +1,7 @@
 package com.rotdb.calculation.application.mapper;
 
-import com.rotdb.calculation.domain.model.enums.Familiars;
-import com.rotdb.calculation.domain.model.equipment.FamiliarContext;
+import com.rotdb.shared.combat.domain.model.enums.Familiars;
+import com.rotdb.shared.combat.domain.model.equipment.FamiliarContext;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -1,6 +1,6 @@
-package com.rotdb.calculation.domain.model.player;
+package com.rotdb.shared.combat.domain.model.player;
 
-import com.rotdb.calculation.domain.model.enums.Prayer;
+import com.rotdb.shared.combat.domain.model.enums.Prayer;
 
 import java.util.EnumSet;
 

@@ -14,4 +14,16 @@ public class AbilityCooldownContext {
     public void setCooldownMap(Map<AbilityId, Integer> cooldownMap) {
         this.cooldownMap = cooldownMap;
     }
+
+    public int getRemaining(AbilityId abilityId) {
+        return cooldownMap.getOrDefault(abilityId, 0);
+    }
+
+    public boolean isOnCooldown(AbilityId abilityId) {
+        return getRemaining(abilityId) > 0;
+    }
+
+    public void tick() {
+        cooldownMap.replaceAll((id, ticks) -> Math.max(0, ticks - 1));
+    }
 }

@@ -1,21 +1,21 @@
 package com.rotdb.simulation.domain.validation;
 
-import com.rotdb.calculation.domain.model.context.AbilityContext;
-import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.shared.ability.AbilityProvider;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
 import com.rotdb.simulation.domain.model.context.RotationContext;
+import com.rotdb.simulation.domain.resolvers.adrenaline.*;
 
 public class AdrenalineValidator implements Validator {
-    public boolean validate(RotationContext rc, CalculationContext cc) {
-        AbilityContext ability = AbilityProvider.get(rc.getAbilityContext().getAbilityId(), cc);
-        rc.getAdrenalineContext().setAdrenaline(rc.getAdrenalineContext().getAdrenaline() + ability.getAdrenaline());
-        if (rc.getAdrenalineContext().getAdrenaline() + ability.getAdrenaline() < 0) {
-            throw new RuntimeException("Warning: May not have adrenaline required for " + ability.getName());
-        }
-        if (rc.getAdrenalineContext().getAdrenaline() > 100) {
-            rc.getAdrenalineContext().setAdrenaline(100);
-            throw new RuntimeException("Warning: Adrenaline capped after " + ability.getName());
-        }
+    public boolean validate(RotationContext rc, EquipmentModel eq, BuffContext buff) {
+        System.out.println("Before Ability Processing: " + rc.getAdrenalineContext().getAdrenaline() + " Upper: " + rc.getAdrenalineContext().getMaximumBound());
+
+        AdrenalineBoundsResolver.resolve(rc, eq, buff);
+        MeteorStrikeResolver.resolve(rc.getAdrenalineContext(), buff);
+        AdrenalinePotionResolver.resolve(rc.getAdrenalineContext(), buff);
+        EquipmentAdrenalineResolver.resolve(rc, eq, buff);
+
+        AdrenalineDeltaResolver.resolve(rc);
+
         return true;
     }
 }

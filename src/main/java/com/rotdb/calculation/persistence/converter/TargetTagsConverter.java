@@ -1,6 +1,6 @@
 package com.rotdb.calculation.persistence.converter;
 
-import com.rotdb.calculation.domain.model.enums.TargetTags;
+import com.rotdb.shared.combat.domain.model.enums.TargetTags;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

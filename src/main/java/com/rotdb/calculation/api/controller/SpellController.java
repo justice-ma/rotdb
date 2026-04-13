@@ -1,7 +1,7 @@
 package com.rotdb.calculation.api.controller;
 
 import com.rotdb.calculation.api.dto.SpellDto;
-import com.rotdb.calculation.domain.model.enums.Spells;
+import com.rotdb.shared.combat.domain.model.enums.Spells;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -1,7 +1,7 @@
 package com.rotdb.calculation.application.validation;
 
-import com.rotdb.calculation.domain.model.enums.Prayer;
-import com.rotdb.calculation.domain.model.enums.PrayerBook;
+import com.rotdb.shared.combat.domain.model.enums.Prayer;
+import com.rotdb.shared.combat.domain.model.enums.PrayerBook;
 
 import java.util.*;
 import java.util.stream.Collectors;

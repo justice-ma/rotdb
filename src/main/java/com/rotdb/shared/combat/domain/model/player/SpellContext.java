@@ -1,6 +1,6 @@
-package com.rotdb.calculation.domain.model.player;
+package com.rotdb.shared.combat.domain.model.player;
 
-import com.rotdb.calculation.domain.model.enums.Spells;
+import com.rotdb.shared.combat.domain.model.enums.Spells;
 
 public class SpellContext {
     private Spells spell;

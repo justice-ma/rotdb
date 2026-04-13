@@ -1,10 +1,10 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.npc;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.context.TargetContext;
-import com.rotdb.calculation.domain.model.enums.Perks;
-import com.rotdb.calculation.domain.model.enums.TargetTags;
-import com.rotdb.calculation.domain.model.equipment.PerkContext;
+import com.rotdb.shared.combat.domain.model.context.TargetContext;
+import com.rotdb.shared.combat.domain.model.enums.Perks;
+import com.rotdb.shared.combat.domain.model.enums.TargetTags;
+import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
 
 public class PerkMultiplierResolver {
     public static double resolve(CalculationContext context) {

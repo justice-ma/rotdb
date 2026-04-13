@@ -1,9 +1,9 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.npc;
 
 import com.rotdb.shared.ability.AbilityId;
-import com.rotdb.calculation.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 
 public class AbilityMultiplierResolver {
     public static double resolve(CalculationContext context) {

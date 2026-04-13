@@ -1,7 +1,7 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.abilitySpecific;
 
 import com.rotdb.shared.ability.AbilityId;
-import com.rotdb.calculation.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 
 public class CorruptionPerHitResolver {

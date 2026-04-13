@@ -1,6 +1,6 @@
-package com.rotdb.calculation.domain.model.player;
+package com.rotdb.shared.combat.domain.model.player;
 
-import com.rotdb.calculation.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 
 import java.util.List;
 import java.util.Map;

@@ -1,5 +1,7 @@
 package com.rotdb.simulation.domain.model.context;
 
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
+
 public class RotationContext {
     private AbilityCooldownContext abilityCooldownContext;
     private AdrenalineContext adrenalineContext;

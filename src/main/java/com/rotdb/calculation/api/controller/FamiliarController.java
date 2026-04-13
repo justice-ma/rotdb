@@ -1,7 +1,7 @@
 package com.rotdb.calculation.api.controller;
 
 import com.rotdb.calculation.api.dto.FamiliarDto;
-import com.rotdb.calculation.domain.model.enums.Familiars;
+import com.rotdb.shared.combat.domain.model.enums.Familiars;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,16 +1,14 @@
 package com.rotdb.calculation.domain.modifiers.stats;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.Stats;
-import com.rotdb.calculation.domain.model.player.BuffContext;
-import com.rotdb.calculation.domain.model.player.PotionContext;
-import com.rotdb.calculation.domain.model.player.SkillsContext;
+import com.rotdb.shared.combat.domain.model.enums.Stats;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.player.PotionContext;
+import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import static com.rotdb.calculation.domain.model.enums.Stats.*;
 
 public class StatBoostModifier implements Modifier {
     public void apply(CalculationContext context) {
@@ -32,7 +30,7 @@ public class StatBoostModifier implements Modifier {
         for (PotionContext pot : buffs.getPotionBuffs()) {
             int flatBonus = pot.getPotion().getFlatBonus();
             double multiplicativeBonus = pot.getPotion().getMultiplicativeBonus();
-            if (pot.getStat() == ALL) {
+            if (pot.getStat() == Stats.ALL) {
                 skill.setBoostedAttack(Math.max(skill.getBaseAttack() +
                         (int) (skill.getBaseAttack() * multiplicativeBonus) + flatBonus, skill.getBoostedAttack()));
                 skill.setBoostedStrength(Math.max(skill.getBaseStrength() +
@@ -45,36 +43,36 @@ public class StatBoostModifier implements Modifier {
                         (int) (skill.getBaseRanged() * multiplicativeBonus) + flatBonus, skill.getBoostedRanged()));
                 skill.setBoostedNecromancy(Math.max(skill.getBaseNecromancy() +
                         (int) (skill.getBaseNecromancy() * multiplicativeBonus) + flatBonus, skill.getBoostedNecromancy()));
-                boosted.add(ATTACK);
-                boosted.add(STRENGTH);
-                boosted.add(DEFENCE);
-                boosted.add(MAGIC);
-                boosted.add(RANGED);
-                boosted.add(NECROMANCY);
-            } else if (pot.getStat() == ATTACK && !boosted.contains(ATTACK)) {
+                                boosted.add(Stats.ATTACK);
+                                boosted.add(Stats.STRENGTH);
+                                boosted.add(Stats.DEFENCE);
+                                boosted.add(Stats.MAGIC);
+                                boosted.add(Stats.RANGED);
+                                boosted.add(Stats.NECROMANCY);
+                        } else if (pot.getStat() == Stats.ATTACK && !boosted.contains(Stats.ATTACK)) {
                 skill.setBoostedAttack(skill.getBaseAttack() +
                         (int) (skill.getBaseAttack() * multiplicativeBonus) + flatBonus);
-                boosted.add(ATTACK);
-            } else if (pot.getStat() == STRENGTH && !boosted.contains(STRENGTH)) {
+                                boosted.add(Stats.ATTACK);
+                        } else if (pot.getStat() == Stats.STRENGTH && !boosted.contains(Stats.STRENGTH)) {
                 skill.setBoostedStrength(skill.getBaseStrength() +
                         (int) (skill.getBaseStrength() * multiplicativeBonus) + flatBonus);
-                boosted.add(STRENGTH);
-            } else if (pot.getStat() == DEFENCE && !boosted.contains(DEFENCE)) {
+                                boosted.add(Stats.STRENGTH);
+                        } else if (pot.getStat() == Stats.DEFENCE && !boosted.contains(Stats.DEFENCE)) {
                 skill.setBoostedDefence(skill.getBaseDefence() +
                         (int) (skill.getBaseDefence() * multiplicativeBonus) + flatBonus);
-                boosted.add(DEFENCE);
-            } else if (pot.getStat() == MAGIC && !boosted.contains(MAGIC)) {
+                                boosted.add(Stats.DEFENCE);
+                        } else if (pot.getStat() == Stats.MAGIC && !boosted.contains(Stats.MAGIC)) {
                 skill.setBoostedMagic(skill.getBaseMagic() +
                         (int) (skill.getBaseMagic() * multiplicativeBonus) + flatBonus);
-                boosted.add(MAGIC);
-            } else if (pot.getStat() == RANGED && !boosted.contains(RANGED)) {
+                                boosted.add(Stats.MAGIC);
+                        } else if (pot.getStat() == Stats.RANGED && !boosted.contains(Stats.RANGED)) {
                 skill.setBoostedRanged(skill.getBaseRanged() +
                         (int) (skill.getBaseRanged() * multiplicativeBonus) + flatBonus);
-                boosted.add(RANGED);
-            } else if (pot.getStat() == NECROMANCY && !boosted.contains(NECROMANCY)) {
+                                boosted.add(Stats.RANGED);
+                        } else if (pot.getStat() == Stats.NECROMANCY && !boosted.contains(Stats.NECROMANCY)) {
                 skill.setBoostedNecromancy(skill.getBaseNecromancy() +
                         (int) (skill.getBaseNecromancy() * multiplicativeBonus) + flatBonus);
-                boosted.add(NECROMANCY);
+                                boosted.add(Stats.NECROMANCY);
             }
         }
     }

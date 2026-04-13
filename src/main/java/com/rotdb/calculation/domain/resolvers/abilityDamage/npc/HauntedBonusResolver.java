@@ -1,11 +1,11 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.npc;
 
-import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.BuffId;
-import com.rotdb.calculation.domain.model.enums.Effect;
-import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
-import com.rotdb.calculation.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.Effect;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
 
 public class HauntedBonusResolver {
     // TODO: NEXUS GOES IN QUIVER SLOT - CREATE QUIVER SLOT

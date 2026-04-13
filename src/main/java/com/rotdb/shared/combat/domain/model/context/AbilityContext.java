@@ -1,4 +1,4 @@
-package com.rotdb.calculation.domain.model.context;
+package com.rotdb.shared.combat.domain.model.context;
 
 import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.ability.Handedness;

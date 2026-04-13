@@ -1,11 +1,11 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.styleSpecific;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.context.TargetContext;
-import com.rotdb.calculation.domain.model.enums.CombatStyles;
-import com.rotdb.calculation.domain.model.enums.Effect;
-import com.rotdb.calculation.domain.model.enums.TargetTags;
-import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
+import com.rotdb.shared.combat.domain.model.context.TargetContext;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.Effect;
+import com.rotdb.shared.combat.domain.model.enums.TargetTags;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
 
 public class ArrowResolver {
     public static double resolve(CalculationContext context) {

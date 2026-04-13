@@ -1,6 +1,7 @@
-package com.rotdb.calculation.domain.model.equipment;
+package com.rotdb.shared.combat.domain.model.equipment;
 
-import com.rotdb.calculation.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.Effect;
 
 public class EquipmentModel {
     private EquipmentSlot head, body, legs, boots, gloves, cape, pocket, neck, ring, ammo, mainhand, offhand, quiver;
@@ -86,6 +87,41 @@ public class EquipmentModel {
                 + getAmmo().getNecromancy()
                 + getMainhand().getNecromancy()
                 + getQuiver().getNecromancy();
+    }
+
+    public int getTotalVestmentsOfHavoc() {
+        int pieces = 0;
+
+        pieces += getHead().getEffect().contains(Effect.VESTMENTSOFHAVOC) ? 1 : 0;
+        pieces += getBody().getEffect().contains(Effect.VESTMENTSOFHAVOC) ? 1 : 0;
+        pieces += getLegs().getEffect().contains(Effect.VESTMENTSOFHAVOC) ? 1 : 0;
+        pieces += getBoots().getEffect().contains(Effect.VESTMENTSOFHAVOC) ? 1 : 0;
+
+        return pieces;
+    }
+
+    public int getTotalDracolichPieces() {
+        int pieces = 0;
+
+        pieces += getHead().getEffect().contains(Effect.DRACOLICH) ? 1 : 0;
+        pieces += getBody().getEffect().contains(Effect.DRACOLICH) ? 1 : 0;
+        pieces += getLegs().getEffect().contains(Effect.DRACOLICH) ? 1 : 0;
+        pieces += getGloves().getEffect().contains(Effect.DRACOLICH) ? 1 : 0;
+        pieces += getBoots().getEffect().contains(Effect.DRACOLICH) ? 1 : 0;
+
+        return pieces;
+    }
+
+    public int getTotalEliteDracolichPieces() {
+        int pieces = 0;
+
+        pieces += getHead().getEffect().contains(Effect.ELITEDRACOLICH) ? 1 : 0;
+        pieces += getBody().getEffect().contains(Effect.ELITEDRACOLICH) ? 1 : 0;
+        pieces += getLegs().getEffect().contains(Effect.ELITEDRACOLICH) ? 1 : 0;
+        pieces += getGloves().getEffect().contains(Effect.ELITEDRACOLICH) ? 1 : 0;
+        pieces += getBoots().getEffect().contains(Effect.ELITEDRACOLICH) ? 1 : 0;
+
+        return pieces;
     }
 
     public EquipmentSlot getOffhand() {

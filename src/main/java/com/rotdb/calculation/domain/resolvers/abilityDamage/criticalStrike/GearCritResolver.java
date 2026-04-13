@@ -1,13 +1,12 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike;
 
-import com.rotdb.calculation.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.BuffId;
-import com.rotdb.calculation.domain.model.enums.Effect;
-import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
-import com.rotdb.calculation.domain.model.player.BuffContext;
-
-import static com.rotdb.calculation.domain.model.enums.CombatStyles.*;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.Effect;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
 
 public class GearCritResolver {
     public static CritBonus resolve(CalculationContext context) {
@@ -27,7 +26,7 @@ public class GearCritResolver {
             criticalStrikeChance += 0.05;
         }
 
-        if (ring.getEffect().contains(Effect.CHAMPIONSRING) && buff.has(BuffId.BLEEDS) && buff.stacks(BuffId.BLEEDS) > 0 && ability.getCombatStyle() == MELEE) {
+        if (ring.getEffect().contains(Effect.CHAMPIONSRING) && buff.has(BuffId.BLEEDS) && buff.stacks(BuffId.BLEEDS) > 0 && ability.getCombatStyle() == CombatStyles.MELEE) {
             if (buff.has(BuffId.ENCHANTMENTOFHEROISM)) {
                 criticalStrikeChance += 0.04;
                 criticalStrikeDamage += 0.015 * buff.stacks(BuffId.BLEEDS);
@@ -37,7 +36,7 @@ public class GearCritResolver {
         }
 
         // TODO: Check that weapon is a bow some day
-        if (ring.getEffect().contains(Effect.STALKERSRING) && ability.getCombatStyle() == RANGED) {
+        if (ring.getEffect().contains(Effect.STALKERSRING) && ability.getCombatStyle() == CombatStyles.RANGED) {
             if (buff.has(BuffId.ENCHANTMENTOFSHADOWS)) {
                 criticalStrikeChance += 0.04;
                 criticalStrikeDamage += 0.03;
@@ -46,7 +45,7 @@ public class GearCritResolver {
             }
         }
 
-        if (ring.getEffect().contains(Effect.CHANNELLERSRING) && ability.getCombatStyle() == MAGIC &&
+        if (ring.getEffect().contains(Effect.CHANNELLERSRING) && ability.getCombatStyle() == CombatStyles.MAGIC &&
                 ability.isChannel()) {
             if (buff.has(BuffId.ENCHANTMENTOFMETAPHYSICS)) {
                 criticalStrikeChance += 0.04;
@@ -56,7 +55,7 @@ public class GearCritResolver {
             }
         }
 
-        if (ammo.getEffect().contains(Effect.DEATHSPOREARROWS) && ability.getCombatStyle() == RANGED) {
+        if (ammo.getEffect().contains(Effect.DEATHSPOREARROWS) && ability.getCombatStyle() == CombatStyles.RANGED) {
             criticalStrikeChance += 0.03;
         }
 

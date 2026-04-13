@@ -1,8 +1,8 @@
 package com.rotdb.calculation.domain.resolvers;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.Prayer;
-import com.rotdb.calculation.domain.model.player.PrayerContext;
+import com.rotdb.shared.combat.domain.model.enums.Prayer;
+import com.rotdb.shared.combat.domain.model.player.PrayerContext;
 
 import java.util.EnumSet;
 import java.util.List;

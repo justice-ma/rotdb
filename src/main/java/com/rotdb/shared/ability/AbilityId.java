@@ -1,10 +1,9 @@
 package com.rotdb.shared.ability;
 
-import com.rotdb.calculation.domain.model.enums.AbilityTier;
-import com.rotdb.calculation.domain.model.enums.CombatStyles;
-
-import static com.rotdb.calculation.domain.model.enums.AbilityTier.*;
-import static com.rotdb.calculation.domain.model.enums.CombatStyles.*;
+import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import static com.rotdb.shared.combat.domain.model.enums.AbilityTier.*;
+import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.*;
 
 public enum AbilityId {
     MELEEAUTO(MELEE, BASIC,"Attack", "/ability_icons/attack.png"),

@@ -1,6 +1,6 @@
-package com.rotdb.calculation.domain.model.equipment;
+package com.rotdb.shared.combat.domain.model.equipment;
 
-import com.rotdb.calculation.domain.model.enums.Familiars;
+import com.rotdb.shared.combat.domain.model.enums.Familiars;
 
 public class FamiliarContext {
     private Familiars name;

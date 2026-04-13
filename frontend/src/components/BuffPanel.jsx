@@ -440,12 +440,10 @@ export default function BuffPanel({ style, buffs, setBuffs, allBuffs }) {
 
   const mergedBuffs = (allBuffs ?? [])
     .filter((buff) => !PRAYER_MOVED_BUFF_IDS.includes(buff.id))
+    .filter((buff) => Boolean(BUFF_UI_META[buff.id]))
     .map((buff) => ({
       ...buff,
-      ...(BUFF_UI_META[buff.id] ?? {
-        category: BUFF_CATEGORY.OTHER,
-        styles: [STYLE.MELEE, STYLE.RANGED, STYLE.MAGIC, STYLE.NECROMANCY],
-      }),
+      ...BUFF_UI_META[buff.id],
     }))
     .filter((buff) => (buff.styles ?? []).includes(style))
     .filter((buff) => buff.label.toLowerCase().includes(search.toLowerCase()));

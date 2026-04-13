@@ -1,15 +1,15 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.npc;
 
-import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.BuffId;
-import com.rotdb.calculation.domain.model.enums.CombatStyles;
-import com.rotdb.calculation.domain.model.enums.Effect;
-import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
-import com.rotdb.calculation.domain.model.player.BuffContext;
-import com.rotdb.calculation.domain.model.player.SkillsContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.Effect;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 
-import static com.rotdb.calculation.domain.model.enums.CombatStyles.MAGIC;
+import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.MAGIC;
 
 public class FlatAddResolver {
     public static double resolve(CalculationContext context, AbilityHitsContext hit) {

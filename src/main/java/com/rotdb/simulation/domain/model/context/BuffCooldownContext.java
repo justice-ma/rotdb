@@ -1,6 +1,6 @@
 package com.rotdb.simulation.domain.model.context;
 
-import com.rotdb.calculation.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 
 import java.util.Map;
 

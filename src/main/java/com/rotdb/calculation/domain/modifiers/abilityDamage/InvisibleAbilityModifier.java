@@ -1,8 +1,8 @@
 package com.rotdb.calculation.domain.modifiers.abilityDamage;
 
-import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.HitType;
+import com.rotdb.shared.combat.domain.model.enums.HitType;
 import com.rotdb.calculation.domain.resolvers.Debug;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.resolvers.abilityDamage.invisible.InvisibleAggregator;

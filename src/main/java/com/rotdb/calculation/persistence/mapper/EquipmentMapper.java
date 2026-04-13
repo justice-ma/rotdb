@@ -1,9 +1,9 @@
 package com.rotdb.calculation.persistence.mapper;
 
-import com.rotdb.calculation.domain.model.enums.CombatStyles;
-import com.rotdb.calculation.domain.model.enums.WeaponStyle;
-import com.rotdb.calculation.domain.model.equipment.EquipmentModel;
-import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.WeaponStyle;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
 import com.rotdb.calculation.persistence.entity.EquipmentEntity;
 import org.springframework.stereotype.Component;
 

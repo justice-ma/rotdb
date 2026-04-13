@@ -1,13 +1,13 @@
 package com.rotdb.shared.ability.factory;
 
-import com.rotdb.calculation.domain.model.context.AbilityContext;
-import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
-import com.rotdb.calculation.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import java.util.List;
 import static com.rotdb.shared.ability.AbilityId.*;
 import static com.rotdb.shared.ability.Handedness.*;
-import static com.rotdb.calculation.domain.model.enums.AbilityTier.*;
-import static com.rotdb.calculation.domain.model.enums.Targetting.*;
+import static com.rotdb.shared.combat.domain.model.enums.AbilityTier.*;
+import static com.rotdb.shared.combat.domain.model.enums.Targetting.*;
 
 public class NecromancyAbilityFactory {
     public static AbilityContext necromancy() {

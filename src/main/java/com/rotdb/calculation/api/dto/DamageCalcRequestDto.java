@@ -1,7 +1,7 @@
 package com.rotdb.calculation.api.dto;
 
 import com.rotdb.shared.ability.AbilityId;
-import com.rotdb.calculation.domain.model.enums.*;
+import com.rotdb.shared.combat.domain.model.enums.*;
 
 import java.util.List;
 import java.util.Map;

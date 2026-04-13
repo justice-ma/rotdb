@@ -1,11 +1,11 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.invisible;
 
-import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.Perks;
-import com.rotdb.calculation.domain.model.equipment.PerkContext;
+import com.rotdb.shared.combat.domain.model.enums.Perks;
+import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
 
-import static com.rotdb.calculation.domain.model.enums.AbilityTier.ULTIMATE;
+import static com.rotdb.shared.combat.domain.model.enums.AbilityTier.ULTIMATE;
 
 public class PerkInvisibleResolver {
     public static double resolve(CalculationContext context, AbilityHitsContext hit) {

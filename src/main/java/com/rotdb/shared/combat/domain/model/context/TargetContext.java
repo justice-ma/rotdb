@@ -1,4 +1,4 @@
-package com.rotdb.shared.combat.domain.model;
+package com.rotdb.shared.combat.domain.model.context;
 
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.shared.combat.domain.model.enums.TargetTags;

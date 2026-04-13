@@ -1,8 +1,8 @@
 package com.rotdb.calculation.application.mapper;
 
 import com.rotdb.calculation.api.dto.DamageCalcRequestDto;
-import com.rotdb.calculation.domain.model.enums.Perks;
-import com.rotdb.calculation.domain.model.equipment.PerkContext;
+import com.rotdb.shared.combat.domain.model.enums.Perks;
+import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

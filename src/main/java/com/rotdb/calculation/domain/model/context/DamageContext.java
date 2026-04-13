@@ -1,6 +1,6 @@
 package com.rotdb.calculation.domain.model.context;
 
-import com.rotdb.calculation.domain.model.equipment.EquipmentModel;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 
 public class DamageContext {
     private int baseDamage, currentDamage, currentMin, currentMax, critMin, critMax, critDamage, nonCritMin, nonCritMax, nonCritDamage;

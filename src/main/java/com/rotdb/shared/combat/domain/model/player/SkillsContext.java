@@ -1,9 +1,7 @@
-package com.rotdb.calculation.domain.model.player;
+package com.rotdb.shared.combat.domain.model.player;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.CombatStyles;
-
-import static com.rotdb.calculation.domain.model.enums.CombatStyles.*;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 
 public class SkillsContext {
     private Integer boostedNecromancy, constitution, boostedStrength, boostedRanged, boostedMagic, boostedAttack,
@@ -13,7 +11,7 @@ public class SkillsContext {
 
     public Integer getRevelvantStregthLevel(CalculationContext context) {
         CombatStyles style = context.getEquipment().getCombatStyle();
-        return style == MAGIC ? boostedMagic : style == RANGED ? boostedRanged : style == MELEE ? boostedStrength : boostedNecromancy;
+        return style == CombatStyles.MAGIC ? boostedMagic : style == CombatStyles.RANGED ? boostedRanged : style == CombatStyles.MELEE ? boostedStrength : boostedNecromancy;
     }
     
     public void fillMissingWithOne() {

@@ -1,10 +1,10 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.abilitySpecific;
 
 import com.rotdb.shared.ability.AbilityId;
-import com.rotdb.calculation.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.Perks;
-import com.rotdb.calculation.domain.model.equipment.PerkContext;
+import com.rotdb.shared.combat.domain.model.enums.Perks;
+import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
 
 public class FlankingAbilityResolver {
     public static double resolve(CalculationContext context) {

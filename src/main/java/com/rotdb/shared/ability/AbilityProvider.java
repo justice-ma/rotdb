@@ -1,25 +1,25 @@
 package com.rotdb.shared.ability;
 
 import com.rotdb.shared.ability.factory.*;
-import com.rotdb.calculation.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.Effect;
-import com.rotdb.calculation.domain.model.enums.Slots;
-import com.rotdb.calculation.domain.model.equipment.EquipmentModel;
-import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
+import com.rotdb.shared.combat.domain.model.enums.Effect;
+import com.rotdb.shared.combat.domain.model.enums.Slots;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
 
 public final class AbilityProvider {
 
     private AbilityProvider() {}
 
-    public static AbilityContext get(AbilityId id, CalculationContext context) {
+    public static AbilityContext get(AbilityId id, EquipmentModel equipment) {
         return switch (id) {
             // Melee Abilities
             case MELEEAUTO -> MeleeAbilityFactory.attack();
             case ASSAULT -> MeleeAbilityFactory.assault();
             case BLOODLUSTASSAULT -> MeleeAbilityFactory.bloodlustAssault();
             case ADAPTIVESTRIKE ->
-                    context.getEquipment().getMainhand().getSlot() == Slots.TWOHANDED
+                    equipment.getMainhand().getSlot() == Slots.TWOHANDED
                             ? MeleeAbilityFactory.adaptiveStrike2h()
                             : MeleeAbilityFactory.adaptiveStrikeDw();
             case OVERPOWER -> MeleeAbilityFactory.overpower();
@@ -54,7 +54,7 @@ public final class AbilityProvider {
             case COMBUST -> MagicAbilityFactory.combust();
             case CHAIN -> MagicAbilityFactory.chain();
             case GREATERCHAIN -> MagicAbilityFactory.greaterChain();
-            case ASPHYXIATE -> hasAtLeastTumekensPieces(context.getEquipment(), 4)
+            case ASPHYXIATE -> hasAtLeastTumekensPieces(equipment, 4)
                     ? MagicAbilityFactory.asphyxiateTumekens()
                     : MagicAbilityFactory.asphyxiate();
             case CONCENTRATEDBLAST -> MagicAbilityFactory.concentratedBlast();

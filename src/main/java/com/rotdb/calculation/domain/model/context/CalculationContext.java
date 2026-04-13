@@ -1,14 +1,14 @@
 package com.rotdb.calculation.domain.model.context;
 
-import com.rotdb.calculation.domain.model.enums.Prayer;
-import com.rotdb.calculation.domain.model.equipment.EquipmentModel;
-import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
-import com.rotdb.calculation.domain.model.player.BuffContext;
-import com.rotdb.calculation.domain.model.player.PrayerContext;
-import com.rotdb.calculation.domain.model.player.SkillsContext;
-import com.rotdb.calculation.domain.model.player.SpellContext;
-import com.rotdb.calculation.domain.model.equipment.PerkContext;
-import com.rotdb.calculation.domain.model.equipment.FamiliarContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.enums.Prayer;
+import com.rotdb.shared.combat.domain.model.context.TargetContext;
+import com.rotdb.shared.combat.domain.model.equipment.*;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.player.PrayerContext;
+import com.rotdb.shared.combat.domain.model.player.SkillsContext;
+import com.rotdb.shared.combat.domain.model.player.SpellContext;
 
 import java.util.EnumSet;
 

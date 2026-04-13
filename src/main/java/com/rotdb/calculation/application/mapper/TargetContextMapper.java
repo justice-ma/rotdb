@@ -1,15 +1,13 @@
 package com.rotdb.calculation.application.mapper;
 
-import com.rotdb.calculation.domain.model.context.TargetContext;
-import com.rotdb.calculation.domain.model.enums.CombatStyles;
-import com.rotdb.calculation.domain.model.enums.TargetTags;
-import com.rotdb.calculation.domain.model.equipment.EquipmentModel;
+import com.rotdb.shared.combat.domain.model.context.TargetContext;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.TargetTags;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.calculation.persistence.repository.TargetRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.EnumSet;
-
-import static com.rotdb.calculation.domain.model.enums.CombatStyles.*;
 
 @Component
 public class TargetContextMapper {
@@ -56,11 +54,11 @@ public class TargetContextMapper {
                         : (entity.getSize() != null ? entity.getSize() : 5)
         );
 
-        if (style == MAGIC) {
+        if (style == CombatStyles.MAGIC) {
             target.setAffinity(entity.getAffMagic() == null ? 90 : entity.getAffMagic());
-        } else if (style == MELEE) {
+        } else if (style == CombatStyles.MELEE) {
             target.setAffinity(entity.getAffMelee() == null ? 90 : entity.getAffMelee());
-        } else if (style == RANGED) {
+        } else if (style == CombatStyles.RANGED) {
             target.setAffinity(entity.getAffRanged() == null ? 90 : entity.getAffRanged());
         } else {
             target.setAffinity(60);

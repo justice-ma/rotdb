@@ -1,9 +1,9 @@
 package com.rotdb.calculation.application.normalization;
 
 import com.rotdb.calculation.domain.model.DamageRequest;
-import com.rotdb.calculation.domain.model.context.TargetContext;
-import com.rotdb.calculation.domain.model.equipment.PerkContext;
-import com.rotdb.calculation.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.context.TargetContext;
+import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
 
 import java.util.Objects;
 

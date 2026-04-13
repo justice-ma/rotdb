@@ -1,7 +1,7 @@
 package com.rotdb.calculation.api.controller;
 
 import com.rotdb.calculation.api.dto.AbilityDto;
-import com.rotdb.calculation.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.calculation.application.service.AbilityService;
 import org.springframework.web.bind.annotation.*;
 

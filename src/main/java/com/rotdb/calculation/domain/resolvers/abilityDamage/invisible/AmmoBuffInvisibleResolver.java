@@ -1,15 +1,13 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.invisible;
 
-import com.rotdb.calculation.domain.model.context.AbilityContext;
-import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.context.TargetContext;
-import com.rotdb.calculation.domain.model.enums.*;
-import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
-import com.rotdb.calculation.domain.model.player.BuffContext;
-import com.rotdb.calculation.domain.model.player.SpellContext;
-
-import static com.rotdb.calculation.domain.model.enums.CombatStyles.*;
+import com.rotdb.shared.combat.domain.model.context.TargetContext;
+import com.rotdb.shared.combat.domain.model.enums.*;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.player.SpellContext;
 
 public class AmmoBuffInvisibleResolver {
     public static double resolve(CalculationContext context, AbilityHitsContext hit, int hitIndex) {
@@ -20,13 +18,13 @@ public class AmmoBuffInvisibleResolver {
         BuffContext buff = context.getBuffs();
         SpellContext spell = context.getSpellContext();
 
-        if (style == MAGIC) {
+        if (style == CombatStyles.MAGIC) {
             if (spell.getSpell() == Spells.CRUMBLEUNDEAD && target.has(TargetTags.UNDEAD)) {
                 return 1.3;
             }
         }
 
-        if (style == MELEE) {
+        if (style == CombatStyles.MELEE) {
             if (buff.has(BuffId.CHAOSROAR)) {
                 if (hit.isDot() || !ability.isChannel()) {
                     return 1.75;
@@ -38,7 +36,7 @@ public class AmmoBuffInvisibleResolver {
             }
         }
 
-        if (style == RANGED && ammo.getEffect().contains(Effect.WENARROWS) && buff.has(BuffId.WENSTACKS) && buff.stacks(BuffId.WENSTACKS) == 10) {
+        if (style == CombatStyles.RANGED && ammo.getEffect().contains(Effect.WENARROWS) && buff.has(BuffId.WENSTACKS) && buff.stacks(BuffId.WENSTACKS) == 10) {
             if (hit.getTier() == AbilityTier.ENHANCED || hit.getTier() == AbilityTier.ULTIMATE) {
                 return 1.3;
             }

@@ -1,12 +1,12 @@
 package com.rotdb.calculation.domain.modifiers.injectors;
 
 import com.rotdb.shared.ability.AbilityId;
-import com.rotdb.calculation.domain.model.context.AbilityContext;
-import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.BuffId;
-import com.rotdb.calculation.domain.model.enums.CombatStyles;
-import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
 import com.rotdb.calculation.domain.modifiers.abilityDamage.AbilityRangeModifier;
 import com.rotdb.calculation.domain.modifiers.abilityDamage.AbilitySpecificModifier;
 import com.rotdb.calculation.domain.modifiers.abilityDamage.AdditiveModifier;
@@ -23,7 +23,7 @@ import com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike.CritD
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.rotdb.calculation.domain.model.enums.HitType.PERFECTEQUILIBRIUM;
+import static com.rotdb.shared.combat.domain.model.enums.HitType.PERFECTEQUILIBRIUM;
 
 public class PerfectEquilibriumInjector implements Modifier {
 

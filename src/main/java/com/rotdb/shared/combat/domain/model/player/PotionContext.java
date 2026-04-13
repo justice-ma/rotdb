@@ -1,7 +1,7 @@
-package com.rotdb.calculation.domain.model.player;
+package com.rotdb.shared.combat.domain.model.player;
 
-import com.rotdb.calculation.domain.model.enums.Potions;
-import com.rotdb.calculation.domain.model.enums.Stats;
+import com.rotdb.shared.combat.domain.model.enums.Potions;
+import com.rotdb.shared.combat.domain.model.enums.Stats;
 
 public class PotionContext {
     private Potions potion;

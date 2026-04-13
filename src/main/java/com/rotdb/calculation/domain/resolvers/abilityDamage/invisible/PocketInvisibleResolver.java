@@ -1,8 +1,8 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.invisible;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.BuffId;
-import com.rotdb.calculation.domain.model.enums.Effect;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.Effect;
 
 public class PocketInvisibleResolver {
     public static double resolve(CalculationContext context) {

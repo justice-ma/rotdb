@@ -1,15 +1,15 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.abilitySpecific;
 
 import com.rotdb.shared.ability.AbilityId;
-import com.rotdb.calculation.domain.model.context.AbilityContext;
-import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.context.TargetContext;
-import com.rotdb.calculation.domain.model.enums.BuffId;
-import com.rotdb.calculation.domain.model.enums.CombatStyles;
-import com.rotdb.calculation.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.context.TargetContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
 
-import static com.rotdb.calculation.domain.model.enums.CombatStyles.MELEE;
+import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.MELEE;
 
 public class MeleeAbilitySpecificResolver {
     public static double resolve(CalculationContext context, AbilityHitsContext hit) {

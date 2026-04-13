@@ -2,7 +2,7 @@ package com.rotdb.calculation.application.validation;
 
 
 import com.rotdb.calculation.domain.model.DamageRequest;
-import com.rotdb.calculation.domain.model.enums.Slots;
+import com.rotdb.shared.combat.domain.model.enums.Slots;
 
 import java.util.Objects;
 

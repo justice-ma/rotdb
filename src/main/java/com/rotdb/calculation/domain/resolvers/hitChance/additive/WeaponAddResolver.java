@@ -1,9 +1,9 @@
 package com.rotdb.calculation.domain.resolvers.hitChance.additive;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.Effect;
-import com.rotdb.calculation.domain.model.enums.TargetTags;
-import com.rotdb.calculation.domain.model.equipment.EquipmentSlot;
+import com.rotdb.shared.combat.domain.model.enums.Effect;
+import com.rotdb.shared.combat.domain.model.enums.TargetTags;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
 
 public class WeaponAddResolver {
     public static int resolve(CalculationContext context) {

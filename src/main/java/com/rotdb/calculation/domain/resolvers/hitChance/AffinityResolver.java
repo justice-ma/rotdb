@@ -1,8 +1,8 @@
 package com.rotdb.calculation.domain.resolvers.hitChance;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.BuffId;
-import com.rotdb.calculation.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
 
 public class AffinityResolver {
     public static int resolve(CalculationContext context) {

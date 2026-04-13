@@ -1,9 +1,9 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.multiplicative;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.context.TargetContext;
-import com.rotdb.calculation.domain.model.enums.Familiars;
-import com.rotdb.calculation.domain.model.equipment.FamiliarContext;
+import com.rotdb.shared.combat.domain.model.context.TargetContext;
+import com.rotdb.shared.combat.domain.model.enums.Familiars;
+import com.rotdb.shared.combat.domain.model.equipment.FamiliarContext;
 
 public class FamiliarMultiplicativeResolver {
     public static double resolve(CalculationContext context) {

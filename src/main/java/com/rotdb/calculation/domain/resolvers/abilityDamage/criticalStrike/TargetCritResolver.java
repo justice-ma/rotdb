@@ -1,11 +1,11 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike;
 
-import com.rotdb.calculation.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.model.enums.BuffId;
-import com.rotdb.calculation.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
 
-import static com.rotdb.calculation.domain.model.enums.CombatStyles.MAGIC;
+import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.MAGIC;
 
 public class TargetCritResolver {
     public static double resolve(CalculationContext context) {
