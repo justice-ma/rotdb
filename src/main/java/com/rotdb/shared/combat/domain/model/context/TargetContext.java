@@ -1,8 +1,8 @@
-package com.rotdb.calculation.domain.model.context;
+package com.rotdb.shared.combat.domain.model;
 
-import com.rotdb.calculation.domain.model.enums.CombatStyles;
-import com.rotdb.calculation.domain.model.enums.TargetTags;
-import com.rotdb.calculation.domain.model.enums.WeaponStyle;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.TargetTags;
+import com.rotdb.shared.combat.domain.model.enums.WeaponStyle;
 
 import java.util.EnumSet;
 

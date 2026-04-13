@@ -2,8 +2,8 @@ package com.rotdb.calculation.domain.model.context;
 
 import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.ability.Handedness;
-import com.rotdb.calculation.domain.model.enums.CombatStyles;
-import com.rotdb.calculation.domain.model.enums.Targetting;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.Targetting;
 
 import java.util.ArrayList;
 import java.util.List;

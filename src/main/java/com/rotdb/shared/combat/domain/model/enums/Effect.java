@@ -1,4 +1,4 @@
-package com.rotdb.calculation.domain.model.enums;
+package com.rotdb.shared.combat.domain.model.enums;
 
 public enum Effect {
     WARPRIESTOFTUSKA,

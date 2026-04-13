@@ -1,7 +1,7 @@
 package com.rotdb.calculation.domain.model.context;
 
-import com.rotdb.calculation.domain.model.enums.AbilityTier;
-import com.rotdb.calculation.domain.model.enums.HitType;
+import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
+import com.rotdb.shared.combat.domain.model.enums.HitType;
 
 public class AbilityHitsContext {
     private int parentIndex, critMin, critMax, critDamage, nonCritMin, nonCritMax, nonCritDamage, currentDamage,

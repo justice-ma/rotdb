@@ -1,4 +1,4 @@
-package com.rotdb.calculation.domain.model.enums;
+package com.rotdb.shared.combat.domain.model.enums;
 
 public enum Potions {
     ELDER(5, 0.17, "Elder"),

@@ -1,15 +1,15 @@
 package com.rotdb.shared.ability.factory;
 
-import com.rotdb.calculation.domain.model.context.AbilityContext;
-import com.rotdb.calculation.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 
 import java.util.List;
 
 import static com.rotdb.shared.ability.AbilityId.*;
 import static com.rotdb.shared.ability.Handedness.*;
-import static com.rotdb.calculation.domain.model.enums.AbilityTier.*;
-import static com.rotdb.calculation.domain.model.enums.CombatStyles.*;
-import static com.rotdb.calculation.domain.model.enums.Targetting.*;
+import static com.rotdb.shared.combat.domain.model.enums.AbilityTier.*;
+import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.*;
+import static com.rotdb.shared.combat.domain.model.enums.Targetting.*;
 
 public class RangedSpecialAttackFactory {
     public static AbilityContext chainHit() {
@@ -41,8 +41,8 @@ public class RangedSpecialAttackFactory {
 
     public static AbilityContext shadowfall() {
         return new AbilityContext(3,
-                List.of(new AbilityHitsContext(0.2, 1.05, false, ENHANCED, 3),
-                        new AbilityHitsContext(0.2, 1.05, false, ENHANCED, 3),
+                List.of(new AbilityHitsContext(0.85, 1.05, false, ENHANCED, 3),
+                        new AbilityHitsContext(0.85, 1.05, false, ENHANCED, 3),
                         new AbilityHitsContext(2.55, 2.95, false, ENHANCED, 4)),
                 "Shadowfall",
                 -65,
