@@ -1,17 +1,17 @@
 package com.rotdb.simulation.domain.validation;
 
-import com.rotdb.shared.combat.domain.model.context.AbilityContext;
-import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.ability.AbilityProvider;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
+import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
-import com.rotdb.simulation.domain.model.context.RotationContext;
+import com.rotdb.simulation.domain.model.context.RotationSnapshot;
 
 import java.util.Map;
 
 public class AbilityCooldownValidator implements Validator {
-    public boolean validate(RotationContext rc, EquipmentModel eq, BuffContext buff) {
+    public boolean validate(RotationSnapshot rc, PerkContext perks, EquipmentModel eq, BuffContext buff) {
         AbilityContext ability = AbilityProvider.get(rc.getAbilityContext().getId(), eq);
         int cooldown = rc.getAbilityCooldownContext().getCooldownMap().getOrDefault(ability.getId(), 0);
 

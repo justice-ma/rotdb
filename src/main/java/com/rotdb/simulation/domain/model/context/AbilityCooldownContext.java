@@ -2,10 +2,11 @@ package com.rotdb.simulation.domain.model.context;
 
 import com.rotdb.shared.ability.AbilityId;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class AbilityCooldownContext {
-    private Map<AbilityId, Integer> cooldownMap;
+    private Map<AbilityId, Integer> cooldownMap = new HashMap<>();
 
     public Map<AbilityId, Integer> getCooldownMap() {
         return cooldownMap;
