@@ -1,15 +1,18 @@
 package com.rotdb.calculation.api.controller;
 
-import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.calculation.api.dto.AbilityCardResultDto;
 import com.rotdb.calculation.api.dto.DamageCalcRequestDto;
 import com.rotdb.calculation.api.mapper.DamageRequestMapper;
 import com.rotdb.calculation.api.request.BatchDamageCalcRequest;
+import com.rotdb.calculation.application.service.DamageBatchService;
 import com.rotdb.calculation.domain.engine.CalculationEngine;
 import com.rotdb.calculation.domain.model.DamageRequest;
 import com.rotdb.calculation.domain.model.DamageResult;
-import com.rotdb.calculation.application.service.DamageBatchService;
-import org.springframework.web.bind.annotation.*;
+import com.rotdb.shared.ability.AbilityId;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 

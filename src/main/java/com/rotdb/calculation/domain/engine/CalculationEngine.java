@@ -3,13 +3,13 @@ package com.rotdb.calculation.domain.engine;
 import com.rotdb.calculation.application.normalization.DamageRequestNormalizer;
 import com.rotdb.calculation.application.validation.DamageRequestValidator;
 import com.rotdb.calculation.application.validation.PrayerRequestValidator;
-import com.rotdb.calculation.domain.model.HitResult;
 import com.rotdb.calculation.domain.model.DamageRequest;
 import com.rotdb.calculation.domain.model.DamageResult;
-import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.calculation.domain.model.HitResult;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.model.context.ContextBuilder;
 import com.rotdb.calculation.domain.model.context.DamageContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +21,7 @@ public final class CalculationEngine {
     private final DamageRequestNormalizer normalizer = new DamageRequestNormalizer();
     private final DamageRequestValidator validator = new DamageRequestValidator();
     private final PrayerRequestValidator prayerValidator = new PrayerRequestValidator();
+
     public DamageResult calculateAbilityDamage(DamageRequest request) {
         validator.validate(request);
         request = normalizer.normalize(request);
@@ -51,7 +52,11 @@ public final class CalculationEngine {
                             h.getNonCritMax(),
                             h.getNonCritDamage(),
                             i,
-                            h.getType()
+                            h.getHitTiming(),
+                            h.getCritChanceModifier(),
+                            h.getType(),
+                            context.getAbility().getId(),
+                            h.isDot()
                     );
                 })
                 .toList();

@@ -19,8 +19,11 @@ public class DamageRequest {
     private FamiliarContext familiar;
     private PrayerContext selectedPrayers;
     private SpellContext spell;
-    
-    public DamageRequest() {};
+
+    public DamageRequest() {
+    }
+
+    ;
 
     public DamageRequest(EquipmentModel equipment, AbilityId abilityId, BuffContext buffs, TargetContext target,
                          SkillsContext skills, PerkContext perks,

@@ -1,6 +1,5 @@
 package com.rotdb.calculation.application.service;
 
-import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.calculation.api.dto.AbilityCardResultDto;
 import com.rotdb.calculation.api.dto.DamageCalcRequestDto;
 import com.rotdb.calculation.api.mapper.DamageRequestMapper;
@@ -8,6 +7,7 @@ import com.rotdb.calculation.api.request.BatchDamageCalcRequest;
 import com.rotdb.calculation.domain.engine.CalculationEngine;
 import com.rotdb.calculation.domain.model.DamageRequest;
 import com.rotdb.calculation.domain.model.DamageResult;
+import com.rotdb.shared.ability.AbilityId;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;

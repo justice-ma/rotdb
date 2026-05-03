@@ -7,9 +7,10 @@ import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import java.util.List;
 
 import static com.rotdb.shared.ability.AbilityId.*;
-import static com.rotdb.shared.ability.Handedness.*;
+import static com.rotdb.shared.ability.Handedness.BOTH;
 import static com.rotdb.shared.combat.domain.model.enums.AbilityTier.*;
-import static com.rotdb.shared.combat.domain.model.enums.Targetting.*;
+import static com.rotdb.shared.combat.domain.model.enums.Targetting.MULTI_TARGET;
+import static com.rotdb.shared.combat.domain.model.enums.Targetting.SINGLE_TARGET;
 
 public class RangedAbilityFactory {
     public static AbilityContext ranged() {
@@ -44,7 +45,7 @@ public class RangedAbilityFactory {
                 List.of(new AbilityHitsContext(3, 3.6, false, ENHANCED, 3)),
                 "Snipe",
                 0,
-                100,
+                103,
                 true,
                 BOTH,
                 SINGLE_TARGET,

@@ -1,82 +1,99 @@
 package com.rotdb.simulation.domain.model.context;
 
-import com.rotdb.shared.ability.AbilityId;
-import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
-import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
+import com.rotdb.simulation.domain.model.cooldown.CooldownKey;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class TickSnapshot {
-    private ArrayList<AbilityId> releasedAbility;
-    private AbilityId stalledAbility;
-    private AdrenalineContext adrenaline;
-    private ArrayList<AbilityHitsContext> hits;
-    private EquipmentModel equipment;
-    private AbilityCooldownContext abilityCooldowns;
-    private BuffRotationContext buffs;
-    private boolean processed;
+    private int tick;
+    private List<AbilityPlacement> placedAbilities;
+    private RotationCombatState startingCombatState;
+    private RotationCombatState endingCombatState;
+    private Map<CooldownKey, Integer> startingCooldownMap;
+    private Map<CooldownKey, Integer> endingCooldownMap;
+    private double startingAdrenaline;
+    private double endingAdrenaline;
+    private List<TimelineHit> landedHits;
+    private List<String> warnings; // I think ideally in the future there is a determinant amount of things that can go wrong, this should likely be an enum of warnings.
 
-    public AbilityId getStalledAbility() {
-        return stalledAbility;
+    public int getTick() {
+        return tick;
     }
 
-    public void setStalledAbility(AbilityId stalledAbility) {
-        this.stalledAbility = stalledAbility;
+    public void setTick(int tick) {
+        this.tick = tick;
     }
 
-    public AdrenalineContext getAdrenaline() {
-        return adrenaline;
+    public List<AbilityPlacement> getPlacedAbilities() {
+        return placedAbilities;
     }
 
-    public void setAdrenaline(AdrenalineContext adrenaline) {
-        this.adrenaline = adrenaline;
+    public void setPlacedAbilities(List<AbilityPlacement> placedAbilities) {
+        this.placedAbilities = placedAbilities;
     }
 
-    public EquipmentModel getEquipment() {
-        return equipment;
+    public RotationCombatState getStartingCombatState() {
+        return startingCombatState;
     }
 
-    public void setEquipment(EquipmentModel equipment) {
-        this.equipment = equipment;
+    public void setStartingCombatState(RotationCombatState startingCombatState) {
+        this.startingCombatState = startingCombatState;
     }
 
-    public AbilityCooldownContext getAbilityCooldowns() {
-        return abilityCooldowns;
+    public RotationCombatState getEndingCombatState() {
+        return endingCombatState;
     }
 
-    public void setAbilityCooldowns(AbilityCooldownContext abilityCooldowns) {
-        this.abilityCooldowns = abilityCooldowns;
+    public void setEndingCombatState(RotationCombatState endingCombatState) {
+        this.endingCombatState = endingCombatState;
     }
 
-    public BuffRotationContext getBuffs() {
-        return buffs;
+    public Map<CooldownKey, Integer> getStartingCooldownMap() {
+        return startingCooldownMap;
     }
 
-    public void setBuffs(BuffRotationContext buffs) {
-        this.buffs = buffs;
+    public void setStartingCooldownMap(Map<CooldownKey, Integer> startingCooldownMap) {
+        this.startingCooldownMap = startingCooldownMap;
     }
 
-    public boolean isProcessed() {
-        return processed;
+    public Map<CooldownKey, Integer> getEndingCooldownMap() {
+        return endingCooldownMap;
     }
 
-    public void setProcessed(boolean processed) {
-        this.processed = processed;
+    public void setEndingCooldownMap(Map<CooldownKey, Integer> endingCooldownMap) {
+        this.endingCooldownMap = endingCooldownMap;
     }
 
-    public ArrayList<AbilityId> getReleasedAbility() {
-        return releasedAbility;
+    public double getStartingAdrenaline() {
+        return startingAdrenaline;
     }
 
-    public void setReleasedAbility(ArrayList<AbilityId> releasedAbility) {
-        this.releasedAbility = releasedAbility;
+    public void setStartingAdrenaline(double startingAdrenaline) {
+        this.startingAdrenaline = startingAdrenaline;
     }
 
-    public ArrayList<AbilityHitsContext> getHits() {
-        return hits;
+    public double getEndingAdrenaline() {
+        return endingAdrenaline;
     }
 
-    public void setHits(ArrayList<AbilityHitsContext> hits) {
-        this.hits = hits;
+    public void setEndingAdrenaline(double endingAdrenaline) {
+        this.endingAdrenaline = endingAdrenaline;
+    }
+
+    public List<TimelineHit> getLandedHits() {
+        return landedHits;
+    }
+
+    public void setLandedHits(List<TimelineHit> landedHits) {
+        this.landedHits = landedHits;
+    }
+
+    public List<String> getWarnings() {
+        return warnings;
+    }
+
+    public void setWarnings(List<String> warnings) {
+        this.warnings = warnings;
     }
 }

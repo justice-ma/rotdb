@@ -1,10 +1,10 @@
 package com.rotdb.calculation.domain.modifiers.injectors;
 
+import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
-import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
-import com.rotdb.calculation.domain.modifiers.Modifier;
 
 import java.util.List;
 

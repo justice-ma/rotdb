@@ -3,11 +3,14 @@ package com.rotdb.shared.ability.factory;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+
 import java.util.List;
+
 import static com.rotdb.shared.ability.AbilityId.*;
-import static com.rotdb.shared.ability.Handedness.*;
+import static com.rotdb.shared.ability.Handedness.BOTH;
 import static com.rotdb.shared.combat.domain.model.enums.AbilityTier.*;
-import static com.rotdb.shared.combat.domain.model.enums.Targetting.*;
+import static com.rotdb.shared.combat.domain.model.enums.Targetting.MULTI_TARGET;
+import static com.rotdb.shared.combat.domain.model.enums.Targetting.SINGLE_TARGET;
 
 public class NecromancyAbilityFactory {
     public static AbilityContext necromancy() {

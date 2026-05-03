@@ -1,24 +1,17 @@
 package com.rotdb.calculation.domain.modifiers.injectors;
 
+import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.calculation.domain.modifiers.Modifier;
+import com.rotdb.calculation.domain.modifiers.abilityDamage.*;
+import com.rotdb.calculation.domain.resolvers.Debug;
+import com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike.CritDamageRangeResolver;
+import com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike.CritRange;
 import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
-import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
-import com.rotdb.calculation.domain.modifiers.abilityDamage.AbilityRangeModifier;
-import com.rotdb.calculation.domain.modifiers.abilityDamage.AbilitySpecificModifier;
-import com.rotdb.calculation.domain.modifiers.abilityDamage.AdditiveModifier;
-import com.rotdb.calculation.domain.modifiers.abilityDamage.CoreModifier;
-import com.rotdb.calculation.domain.resolvers.Debug;
-import com.rotdb.calculation.domain.modifiers.Modifier;
-import com.rotdb.calculation.domain.modifiers.abilityDamage.InvisibleAbilityModifier;
-import com.rotdb.calculation.domain.modifiers.abilityDamage.MultiplicativeModifier;
-import com.rotdb.calculation.domain.modifiers.abilityDamage.PreciseModifier;
-import com.rotdb.calculation.domain.modifiers.abilityDamage.StyleSpecificModifier;
-import com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike.CritRange;
-import com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike.CritDamageRangeResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -167,7 +160,7 @@ public class PerfectEquilibriumInjector implements Modifier {
             // After pre-crit pipeline, these should be populated
             int min = tmpHit.getCurrentMin();
             int max = tmpHit.getCurrentMax();
-            return new int[] { min, max };
+            return new int[]{min, max};
 
         } finally {
             context.setAbility(originalAbility);

@@ -237,14 +237,14 @@ public class MeleeAbilityFactory {
 
     public static AbilityContext dismember() {
         return new AbilityContext(8,
-                List.of(new AbilityHitsContext(0.25, 0.35,true, ENHANCED, 2),
-                        new AbilityHitsContext(0.25, 0.35,true, ENHANCED, 4),
-                        new AbilityHitsContext(0.25, 0.35,true, ENHANCED, 6),
-                        new AbilityHitsContext(0.25, 0.35,true, ENHANCED, 8),
-                        new AbilityHitsContext(0.25, 0.35,true, ENHANCED, 10),
-                        new AbilityHitsContext(0.25, 0.35,true, ENHANCED, 12),
-                        new AbilityHitsContext(0.25, 0.35,true, ENHANCED, 14),
-                        new AbilityHitsContext(0.25, 0.35,true, ENHANCED, 16)),
+                List.of(new AbilityHitsContext(0.25, 0.35, true, ENHANCED, 2),
+                        new AbilityHitsContext(0.25, 0.35, true, ENHANCED, 4),
+                        new AbilityHitsContext(0.25, 0.35, true, ENHANCED, 6),
+                        new AbilityHitsContext(0.25, 0.35, true, ENHANCED, 8),
+                        new AbilityHitsContext(0.25, 0.35, true, ENHANCED, 10),
+                        new AbilityHitsContext(0.25, 0.35, true, ENHANCED, 12),
+                        new AbilityHitsContext(0.25, 0.35, true, ENHANCED, 14),
+                        new AbilityHitsContext(0.25, 0.35, true, ENHANCED, 16)),
                 "Dismember",
                 0,
                 40,
@@ -366,6 +366,6 @@ public class MeleeAbilityFactory {
                 false,
                 BOTH,
                 SINGLE_TARGET,
-                CombatStyles.MELEE,CHAOSROAR);
+                CombatStyles.MELEE, CHAOSROAR);
     }
 }

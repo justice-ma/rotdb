@@ -1,10 +1,12 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.core;
 
-import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.enums.Perks;
 import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
-import static com.rotdb.shared.ability.AbilityId.*;
+
+import static com.rotdb.shared.ability.AbilityId.GREATERRICOCHET;
+import static com.rotdb.shared.ability.AbilityId.RICOCHET;
 
 public class CorePerkAddResolver {
     public static int resolve(CalculationContext context) {

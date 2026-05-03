@@ -1,7 +1,7 @@
 package com.rotdb.calculation.domain.resolvers.hitChance.additive;
 
-import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
 

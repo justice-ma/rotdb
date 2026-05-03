@@ -1,16 +1,16 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.abilityRange;
 
-import com.rotdb.shared.combat.domain.model.enums.Perks;
-import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.Perks;
 
 public class AbilityRangeBonusResolver {
     public static AbilityRangeBonus resolve(CalculationContext context) {
         double min = 0;
         double max = 0;
 
-        int lengStacks = context.getBuffs().has(BuffId.PRIMORDIALICESTACKS) ? context.getBuffs().stacks(BuffId.PRIMORDIALICESTACKS): 0;
+        int lengStacks = context.getBuffs().has(BuffId.PRIMORDIALICESTACKS) ? context.getBuffs().stacks(BuffId.PRIMORDIALICESTACKS) : 0;
         int time = context.getBuffs().has(BuffId.TIMESINCELASTATTACK) ? context.getBuffs().stacks(BuffId.TIMESINCELASTATTACK) : 0;
 
         if (lengStacks > 0 && context.getAbility().getId() == AbilityId.ICYTEMPEST) {
@@ -41,7 +41,7 @@ public class AbilityRangeBonusResolver {
         }
 
         if ((context.getAbility().getId() == AbilityId.DISMEMBER || context.getAbility().getId() == AbilityId.COMBUST)
-            && context.getPerks().has(Perks.LUNGING)) {
+                && context.getPerks().has(Perks.LUNGING)) {
             min += context.getAbility().getHits().getFirst().getMin() * (0.1 + 0.03 * context.getPerks().rank(Perks.LUNGING));
             max += context.getAbility().getHits().getFirst().getMax() * (0.1 + 0.03 * context.getPerks().rank(Perks.LUNGING));
         }

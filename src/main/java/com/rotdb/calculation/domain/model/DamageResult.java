@@ -6,6 +6,7 @@ public class DamageResult {
     private final int totalMinDamage, totalMaxDamage, totalAvgDamage, totalMinCrit,
             totalMaxCrit, totalAvgCrit, totalMinNonCrit, totalMaxNonCrit, totalAvgNonCrit, minCoeff, maxCoeff;
     private final List<HitResult> hit;
+
     public DamageResult(int totalMinDamage, int totalMaxDamage, int totalAvgDamage, int totalMinCrit, int totalMaxCrit,
                         int totalAvgCrit, int totalMinNonCrit, int totalMaxNonCrit, int totalAvgNonCrit, int minCoeff,
                         int maxCoeff, List<HitResult> hit) {

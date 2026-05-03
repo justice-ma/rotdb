@@ -2,7 +2,6 @@ package com.rotdb.shared.ability;
 
 import com.rotdb.shared.ability.factory.*;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
-import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.enums.Slots;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
@@ -10,7 +9,8 @@ import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
 
 public final class AbilityProvider {
 
-    private AbilityProvider() {}
+    private AbilityProvider() {
+    }
 
     public static AbilityContext get(AbilityId id, EquipmentModel equipment) {
         return switch (id) {
@@ -18,10 +18,9 @@ public final class AbilityProvider {
             case MELEEAUTO -> MeleeAbilityFactory.attack();
             case ASSAULT -> MeleeAbilityFactory.assault();
             case BLOODLUSTASSAULT -> MeleeAbilityFactory.bloodlustAssault();
-            case ADAPTIVESTRIKE ->
-                    equipment.getMainhand().getSlot() == Slots.TWOHANDED
-                            ? MeleeAbilityFactory.adaptiveStrike2h()
-                            : MeleeAbilityFactory.adaptiveStrikeDw();
+            case ADAPTIVESTRIKE -> equipment.getMainhand().getSlot() == Slots.TWOHANDED
+                    ? MeleeAbilityFactory.adaptiveStrike2h()
+                    : MeleeAbilityFactory.adaptiveStrikeDw();
             case OVERPOWER -> MeleeAbilityFactory.overpower();
             case OVERPOWERIGNEOUS -> MeleeAbilityFactory.overpowerIgneous();
             case REND -> MeleeAbilityFactory.rend();
@@ -176,6 +175,7 @@ public final class AbilityProvider {
             case DEATHESSENCE -> NecromancySpecialAttackFactory.deathEssence();
         };
     }
+
     private static boolean hasAtLeastTumekensPieces(EquipmentModel equipment, int required) {
         int count = 0;
 
