@@ -93,7 +93,13 @@ public enum BuffId {
     VESTMENTSBLEED(0, 0, false, "Vestments Adrenaline Refund"),
     ASYLUMSURGEONSRINGPROC(0, 0, false, "Asylum Surgeon's Ring Proc"),
     RINGOFDEATHPROC(0, 0, false, "Ring of Death Proc"),
-    IMPATIENTPROC(0, 0, false, "Impatient Proc");
+    IMPATIENTPROC(0, 0, false, "Impatient Proc"),
+    IMBUESHADOWS(0, 0, false, "Imbue Shadows"),
+    FURYOFTHESMALL(0, 0, false, "Fury of the Small"),
+    NATURALINSTINCT(0, 0, false, "Natural Instinct"),
+    RELENTLESSPROC(0, 0, false, "Relentless Proc"),
+    CONSERVATIONOFENERGY(0, 0, false, "Conservation Of Energy"),
+    RINGOFVIGOUR(0, 0, false, "Ring of Vigour");
 
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;
