@@ -1,0 +1,11 @@
+{
+  "category": "Category:Equipment",
+  "existing_db_titles": 8066,
+  "filtered_wiki_titles": 8266,
+  "insert_statements": 123,
+  "misses": 130,
+  "misses_log": "new_equipment_misses.txt",
+  "output_sql": "insert_new_equipment.sql",
+  "processed_missing_title_candidates": 8266,
+  "template": "Infobox Bonuses"
+}

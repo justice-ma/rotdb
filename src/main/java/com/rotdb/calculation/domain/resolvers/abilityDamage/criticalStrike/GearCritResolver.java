@@ -1,7 +1,7 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike;
 
-import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
@@ -20,6 +20,10 @@ public class GearCritResolver {
         double criticalStrikeDamage = 0;
         if (pocket.getEffect().contains(Effect.GRIMOIRE)) {
             criticalStrikeChance += 0.12;
+        }
+
+        if (pocket.getEffect().contains(Effect.CHAOTICGRIMOIRE)) {
+            criticalStrikeChance += 0.07;
         }
 
         if (ring.getEffect().contains(Effect.REAVERSRING)) {
