@@ -15,20 +15,20 @@ public class BoltResolver {
         //  Procs from sirenic and gemstone can happen after as well if no proc
         //  Gemstone can activate from all styles ------ needs implementation
         double mod = 1;
-            if (ammo.getEffect().contains(Effect.OPALE)) {
-                mod *= 1.1;
-            } else if (ammo.getEffect().contains(Effect.PEARLE)) {
-                // TODO: Add check if target is weak to water/fire +15% if water, -15% if fire
-                mod *= 1.15;
-            }  else if (ammo.getEffect().contains(Effect.DIAMONDE)) {
-                mod *= 1.15;
-            } else if (ammo.getEffect().contains(Effect.DRAGONSTONEE)) {
-                if (!target.has(TargetTags.DRAGON)) {
-                    mod *= 1.25;
-                }
-            } else if (ammo.getEffect().contains(Effect.ONYXE)) {
+        if (ammo.getEffect().contains(Effect.OPALE)) {
+            mod *= 1.1;
+        } else if (ammo.getEffect().contains(Effect.PEARLE)) {
+            // TODO: Add check if target is weak to water/fire +15% if water, -15% if fire
+            mod *= 1.15;
+        } else if (ammo.getEffect().contains(Effect.DIAMONDE)) {
+            mod *= 1.15;
+        } else if (ammo.getEffect().contains(Effect.DRAGONSTONEE)) {
+            if (!target.has(TargetTags.DRAGONSLAYER)) {
                 mod *= 1.25;
             }
+        } else if (ammo.getEffect().contains(Effect.ONYXE)) {
+            mod *= 1.25;
+        }
         return mod;
     }
 }

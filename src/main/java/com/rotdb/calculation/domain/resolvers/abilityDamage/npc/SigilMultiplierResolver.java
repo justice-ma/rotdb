@@ -12,7 +12,7 @@ public class SigilMultiplierResolver {
         BuffContext buff = context.getBuffs();
 
         double mod = 1;
-        if ((target.has(TargetTags.UNDEAD) && buff.has(BuffId.UNDEADSLAYERSIGIL)) || (target.has(TargetTags.DRAGON) && buff.has(BuffId.DRAGONSLAYERSIGIL)) ||
+        if ((target.has(TargetTags.UNDEAD) && buff.has(BuffId.UNDEADSLAYERSIGIL)) || (target.has(TargetTags.DRAGONSLAYER) && buff.has(BuffId.DRAGONSLAYERSIGIL)) ||
                 (target.has(TargetTags.DEMON) && buff.has(BuffId.DEMONSLAYERSIGIL))) {
             mod *= 1.15;
         }
