@@ -13,10 +13,8 @@ import com.rotdb.shared.combat.domain.model.player.PrayerContext;
 import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 import com.rotdb.shared.combat.domain.model.player.SpellContext;
 import com.rotdb.simulation.application.service.RotationTimelineService;
-import com.rotdb.simulation.domain.model.context.AbilityPlacement;
-import com.rotdb.simulation.domain.model.context.RotationCombatState;
-import com.rotdb.simulation.domain.model.context.RotationTimeline;
-import com.rotdb.simulation.domain.model.context.TickSnapshot;
+import com.rotdb.simulation.application.snapshot.SimulationStateSnapshotCopier;
+import com.rotdb.simulation.domain.model.context.*;
 
 import java.util.*;
 
@@ -29,36 +27,80 @@ public class Sandbox {
         placement.setPlacedAbility(AbilityId.DEATHSKULLS);
         abilities.add(placement);
         AbilityPlacement placement2 = new AbilityPlacement();
-        placement2.setPlacementTick(13);
+        placement2.setPlacementTick(60);
         placement2.setPlacedAbility(AbilityId.DEATHSKULLS);
         abilities.add(placement2);
-        CalculationEngine engine = new CalculationEngine();
-        RotationTimeline timeline = new RotationTimelineService(engine)
-                .build(state, abilities);
 
+        List<BuffPlacement> buffs = new ArrayList<>();
+        BuffPlacement buff = new BuffPlacement();
+        buff.setPlacementTick(1);
+        buff.setBuffId(BuffId.RUNICCHARGE);
+        buffs.add(buff);
+        BuffPlacement buff2 = new BuffPlacement();
+        buff2.setPlacementTick(4);
+        buff2.setBuffId(BuffId.SPLITSOUL);
+        buffs.add(buff2);
+
+        CalculationEngine engine = new CalculationEngine();
+        SimulationStateSnapshotCopier stateSnapshotCopier = new SimulationStateSnapshotCopier();
+        RotationTimeline timeline = new RotationTimelineService(engine, stateSnapshotCopier)
+                .build(state, abilities, buffs);
+
+        printTimeline(timeline);
+    }
+
+    private static void printTimeline(RotationTimeline timeline) {
         for (TickSnapshot tick : timeline.getTimeline()) {
-            System.out.print("T" + tick.getTick() + " ability = ");
-            for (int i = 0; i < tick.getPlacedAbilities().size(); i++) {
-                System.out.print((tick.getPlacedAbilities().get(i).getPlacedAbility() == null ? " -- " : tick.getPlacedAbilities().get(i).getPlacedAbility()));
-                if (i != tick.getPlacedAbilities().size() - 1) {
-                    System.out.print(", ");
-                }
-            }
-            System.out.print(" adrenaline=" + tick.getStartingAdrenaline() + " -> " + tick.getEndingAdrenaline()
-                    + " hits=" + tick.getLandedHits().size()
-                    + " cooldowns=" + tick.getEndingCooldownMap());
-            if (!tick.getWarnings().isEmpty()) {
-                System.out.print(", warnings=" + tick.getWarnings().get(0) + "\n");
-            } else {
-                System.out.println("\n");
-            }
+            System.out.println("T" + tick.getTick());
+            System.out.println("  abilities: " + formatAbilities(tick.getPlacedAbilities()));
+            System.out.println("  buffs:     " + formatBuffs(tick.getPlacedBuffs()));
+            System.out.println("  state:     buffs " + tick.getStartingCombatState().getBuffs().getBuffSet()
+                    + " -> " + tick.getEndingCombatState().getBuffs().getBuffSet());
+            System.out.println("  adren:     " + tick.getStartingAdrenaline() + " -> " + tick.getEndingAdrenaline());
+            System.out.println("  hits:      " + tick.getLandedHits().size());
+            System.out.println("  cooldowns: " + tick.getEndingAbilityCooldownMap());
+            System.out.println("             " + tick.getEndingBuffCooldownMap());
+            System.out.println("  warnings:  " + formatWarnings(tick.getWarnings()));
+            System.out.println();
         }
+    }
+
+    private static String formatAbilities(List<AbilityPlacement> abilities) {
+        if (abilities == null || abilities.isEmpty()) {
+            return "--";
+        }
+
+        List<String> names = new ArrayList<>();
+        for (AbilityPlacement ability : abilities) {
+            names.add(ability.getPlacedAbility() == null ? "null" : ability.getPlacedAbility().name());
+        }
+        return String.join(", ", names);
+    }
+
+    private static String formatBuffs(List<BuffPlacement> buffs) {
+        if (buffs == null || buffs.isEmpty()) {
+            return "--";
+        }
+
+        List<String> names = new ArrayList<>();
+        for (BuffPlacement buff : buffs) {
+            names.add(buff.getBuffId() == null ? "null" : buff.getBuffId().name());
+        }
+        return String.join(", ", names);
+    }
+
+    private static String formatWarnings(List<String> warnings) {
+        if (warnings == null || warnings.isEmpty()) {
+            return "--";
+        }
+
+        return String.join(" | ", warnings);
     }
 
     private static RotationCombatState sampleRangedState() {
         EquipmentSlot mainhand = new EquipmentSlot();
         mainhand.setTitle("Sandbox bow");
-        mainhand.setClazz(CombatStyles.RANGED);
+        mainhand.setClazz(CombatStyles.NECROMANCY);
         mainhand.setSlot(Slots.TWOHANDED);
         mainhand.setTier(90);
         mainhand.setDamageTier(90);
@@ -96,9 +138,6 @@ public class Sandbox {
         buffs.setBuffSet(new HashSet<>());
         buffs.setBuffStacks(new HashMap<>());
         buffs.setPotionBuffs(new ArrayList<>());
-        buffs.getBuffSet().add(BuffId.HEIGHTENEDSENSES);
-        buffs.getBuffSet().add(BuffId.RINGOFVIGOUR);
-        buffs.getBuffSet().add(BuffId.LIVINGDEATH);
 
         PerkContext perks = new PerkContext();
         perks.setPerk(new HashMap<>());

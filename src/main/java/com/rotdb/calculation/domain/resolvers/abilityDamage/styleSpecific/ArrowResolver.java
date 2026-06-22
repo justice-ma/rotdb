@@ -14,7 +14,7 @@ public class ArrowResolver {
 
         double mod = 1;
         if (context.getEquipment().getCombatStyle() == CombatStyles.RANGED) {
-            if (ammo.getEffect().contains(Effect.JASDRAGONBANE) & target.has(TargetTags.DRAGON) ||
+            if (ammo.getEffect().contains(Effect.JASDRAGONBANE) & target.has(TargetTags.DRAGONSLAYER) ||
                     ammo.getEffect().contains(Effect.JASDEMONBANE) && target.has(TargetTags.DEMON)) {
                 mod *= 1.3;
             }

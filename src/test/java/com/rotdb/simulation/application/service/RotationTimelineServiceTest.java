@@ -12,10 +12,8 @@ import com.rotdb.shared.combat.domain.model.player.BuffContext;
 import com.rotdb.shared.combat.domain.model.player.PrayerContext;
 import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 import com.rotdb.shared.combat.domain.model.player.SpellContext;
-import com.rotdb.simulation.domain.model.context.AbilityPlacement;
-import com.rotdb.simulation.domain.model.context.RotationCombatState;
-import com.rotdb.simulation.domain.model.context.RotationTimeline;
-import com.rotdb.simulation.domain.model.context.TickSnapshot;
+import com.rotdb.simulation.application.snapshot.SimulationStateSnapshotCopier;
+import com.rotdb.simulation.domain.model.context.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -24,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RotationTimelineServiceTest {
     CalculationEngine engine = new CalculationEngine();
+    SimulationStateSnapshotCopier copier = new SimulationStateSnapshotCopier();
 
     @Test
     void deadshotIgneous_placesHitsOnExpectedTicks() {
@@ -35,8 +34,8 @@ public class RotationTimelineServiceTest {
         deadshot.setPlacedAbility(AbilityId.DEADSHOTIGNEOUS);
 
         // Act
-        RotationTimeline timeline = new RotationTimelineService(engine)
-                .build(state, List.of(deadshot));
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(state, List.of(deadshot), List.of());
 
         // Assert
         assertEquals(5, timeline.getTimeline().size());
@@ -73,9 +72,11 @@ public class RotationTimelineServiceTest {
         abilities.add(deadshot);
         abilities.add(greaterRicochet);
 
+        List<BuffPlacement> buffs = new ArrayList<>();
+
         // Act
-        RotationTimeline timeline = new RotationTimelineService(engine)
-                .build(state, abilities);
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(state, abilities, buffs);
 
         // Assert
         assertEquals(7, timeline.getTimeline().size());

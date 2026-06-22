@@ -1,7 +1,7 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike;
 
-import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.shared.combat.domain.model.enums.Effect;

@@ -1,7 +1,7 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike;
 
-import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
@@ -29,13 +29,20 @@ public class SetEffectsCritResolver {
 
         for (EquipmentSlot piece : equipmentSlots) {
             if (piece == null) continue;
-            if (piece.getEffect().contains(Effect.WARPRIESTOFTUSKA)) equipment.setTuskaPieces(equipment.getTuskaPieces() + 1);
-            if (piece.getEffect().contains(Effect.ANIMACOREOFSLISKE)) equipment.setSliskePieces(equipment.getSliskePieces() + 1);
-            if (piece.getEffect().contains(Effect.TECTONIC)) equipment.setTectonicPieces(equipment.getEliteTectonicPieces() + 1);
-            if (piece.getEffect().contains(Effect.ELITETECTONIC)) equipment.setEliteTectonicPieces(equipment.getEliteTectonicPieces() + 1);
-            if (piece.getEffect().contains(Effect.DRACOLICH)) equipment.setDracolichPieces(equipment.getDracolichPieces() + 1);
-            if (piece.getEffect().contains(Effect.ELITEDRACOLICH)) equipment.setEliteDracolichPieces(equipment.getEliteDracolichPieces() + 1);
-            if (piece.getEffect().contains(Effect.TUMEKENS)) equipment.setTumekensPieces(equipment.getTumekensPieces() + 1);
+            if (piece.getEffect().contains(Effect.WARPRIESTOFTUSKA))
+                equipment.setTuskaPieces(equipment.getTuskaPieces() + 1);
+            if (piece.getEffect().contains(Effect.ANIMACOREOFSLISKE))
+                equipment.setSliskePieces(equipment.getSliskePieces() + 1);
+            if (piece.getEffect().contains(Effect.TECTONIC))
+                equipment.setTectonicPieces(equipment.getEliteTectonicPieces() + 1);
+            if (piece.getEffect().contains(Effect.ELITETECTONIC))
+                equipment.setEliteTectonicPieces(equipment.getEliteTectonicPieces() + 1);
+            if (piece.getEffect().contains(Effect.DRACOLICH))
+                equipment.setDracolichPieces(equipment.getDracolichPieces() + 1);
+            if (piece.getEffect().contains(Effect.ELITEDRACOLICH))
+                equipment.setEliteDracolichPieces(equipment.getEliteDracolichPieces() + 1);
+            if (piece.getEffect().contains(Effect.TUMEKENS))
+                equipment.setTumekensPieces(equipment.getTumekensPieces() + 1);
         }
 
         if (equipment.getTuskaPieces() >= 3) {
@@ -54,7 +61,7 @@ public class SetEffectsCritResolver {
             criticalStrikeChance += 0.02 * equipment.getEliteTectonicPieces();
         }
 
-        if (equipment.getDracolichPieces() >= 3 && buff.has(BuffId.RAPIDFIREBUFF)  && ability.getCombatStyle() == CombatStyles.RANGED) {
+        if (equipment.getDracolichPieces() >= 3 && buff.has(BuffId.RAPIDFIREBUFF) && ability.getCombatStyle() == CombatStyles.RANGED) {
             criticalStrikeChance += 0.2;
         }
 
@@ -69,7 +76,7 @@ public class SetEffectsCritResolver {
         if (equipment.getTumekensPieces() >= 3 && buff.has(BuffId.SUNSHINE)) {
             criticalStrikeChance += 0.015 * equipment.getTumekensPieces();
 
-            if (equipment.getTumekensPieces() == 5 && buff.has(BuffId.ASPHYXIATEBUFF) ) {
+            if (equipment.getTumekensPieces() == 5 && buff.has(BuffId.ASPHYXIATEBUFF)) {
                 criticalStrikeDamage += 0.2;
             }
         }

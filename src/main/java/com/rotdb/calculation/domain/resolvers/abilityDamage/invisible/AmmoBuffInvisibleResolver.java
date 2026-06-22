@@ -1,8 +1,8 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.invisible;
 
+import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
-import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.context.TargetContext;
 import com.rotdb.shared.combat.domain.model.enums.*;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;

@@ -14,7 +14,7 @@ public class PerkMultiplicativeResolver {
         double mod = 1;
         // TODO: Check that offhand == shield some day!
         if (buff.has(BuffId.REVENGESTACKS) && buff.stacks(BuffId.REVENGESTACKS) > 0) {
-            mod *= 1 + Math.min(10, buff.stacks(BuffId.REVENGESTACKS) ) * 0.05;
+            mod *= 1 + Math.min(10, buff.stacks(BuffId.REVENGESTACKS)) * 0.05;
         }
 
         if (perk.has(Perks.SPENDTHRIFT)) {

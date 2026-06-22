@@ -87,9 +87,9 @@ public enum BuffId {
     STRENGTHCAPE(0, 0, false, "Strength Cape"),
     HEIGHTENEDSENSES(0, 0, false, "Heightened Senses"),
     METEORSTRIKE(0, 0, false, "Meteor Strike"),
-    ADRENALINEPOTION(0, 0, false, "Adrenaline Potion"),
-    SUPERADRENALINEPOTION(0, 0, false, "Super Adrenaline Potion"),
-    ADRENALINERENEWAL(0, 0, false, "Adrenaline Renewal"),
+    ADRENALINEPOTION(0, 0, false, "Adrenaline Potion", BuffCooldownGroup.ADRENALINEPOTION),
+    SUPERADRENALINEPOTION(0, 0, false, "Super Adrenaline Potion", BuffCooldownGroup.ADRENALINEPOTION),
+    ADRENALINERENEWAL(0, 0, false, "Adrenaline Renewal", BuffCooldownGroup.ADRENALINEPOTION),
     VESTMENTSBLEED(0, 0, false, "Vestments Adrenaline Refund"),
     ASYLUMSURGEONSRINGPROC(0, 0, false, "Asylum Surgeon's Ring Proc"),
     RINGOFDEATHPROC(0, 0, false, "Ring of Death Proc"),
@@ -106,12 +106,18 @@ public enum BuffId {
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;
     private final String label;
+    private final BuffCooldownGroup cooldownGroup;
 
     BuffId(int minimumStacks, int maximumStacks, boolean stackable, String label) {
+        this(minimumStacks, maximumStacks, stackable, label, null);
+    }
+
+    BuffId(int minimumStacks, int maximumStacks, boolean stackable, String label, BuffCooldownGroup cooldownGroup) {
         this.minimumStacks = minimumStacks;
         this.maximumStacks = maximumStacks;
         this.stackable = stackable;
         this.label = label;
+        this.cooldownGroup = cooldownGroup;
     }
 
     public int getMinimumStacks() {
@@ -128,5 +134,13 @@ public enum BuffId {
 
     public String getLabel() {
         return label;
+    }
+
+    public BuffCooldownGroup getCooldownGroup() {
+        return cooldownGroup;
+    }
+
+    public boolean hasCooldownGroup() {
+        return cooldownGroup != null;
     }
 }

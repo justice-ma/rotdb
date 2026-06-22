@@ -8,9 +8,10 @@ public class EquipmentModel {
     private CombatStyles combatStyle;
     private int abilityDamage;
     private int tuskaPieces, sliskePieces, tectonicPieces, eliteTectonicPieces, dracolichPieces,
-    eliteDracolichPieces, tumekensPieces;
+            eliteDracolichPieces, tumekensPieces;
 
-    public EquipmentModel() {}
+    public EquipmentModel() {
+    }
 
     public void fillMissingWithEmpty() {
         if (mainhand == null) setMainhand(EquipmentSlot.emptySlot());

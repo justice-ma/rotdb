@@ -10,7 +10,7 @@ import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
 import com.rotdb.simulation.domain.model.context.AbilityPlacement;
 import com.rotdb.simulation.domain.model.context.SimulationState;
-import com.rotdb.simulation.domain.model.cooldown.CooldownKey;
+import com.rotdb.simulation.domain.model.cooldown.AbilityCooldownKey;
 
 import java.util.Map;
 
@@ -19,9 +19,9 @@ public class CooldownReductionAbilityPlacementResolver {
         EquipmentModel equipment = simulationState.getState().getEquipment();
         BuffContext buff = simulationState.getState().getBuffs();
         AbilityContext ability = AbilityProvider.get(abilityPlacement.getPlacedAbility(), equipment);
-        Map<CooldownKey, Integer> cooldownMap = simulationState.getCooldownMap();
-        CooldownKey key = CooldownKeyResolver.resolve(abilityPlacement.getPlacedAbility());
-        CooldownKey snipeKey = CooldownKeyResolver.resolve(AbilityId.SNIPE);
+        Map<AbilityCooldownKey, Integer> cooldownMap = simulationState.getAbilityCooldownMap();
+        AbilityCooldownKey key = AbilityCooldownKeyResolver.resolve(abilityPlacement.getPlacedAbility());
+        AbilityCooldownKey snipeKey = AbilityCooldownKeyResolver.resolve(AbilityId.SNIPE);
 
         if (buff.has(BuffId.WARPRIESTOFARMADYLPROC) && ability.getCooldownTicks() > 50) {
             int delta = (int) (ability.getCooldownTicks() * 0.15);

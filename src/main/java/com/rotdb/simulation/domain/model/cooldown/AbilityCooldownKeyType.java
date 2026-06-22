@@ -1,6 +1,6 @@
 package com.rotdb.simulation.domain.model.cooldown;
 
-public enum CooldownKeyType {
+public enum AbilityCooldownKeyType {
     ABILITY,
     GROUP,
     GLOBAL

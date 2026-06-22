@@ -1,12 +1,14 @@
 package com.rotdb.simulation.domain.model.context;
 
-import com.rotdb.simulation.domain.model.cooldown.CooldownKey;
+import com.rotdb.simulation.domain.model.buff.BuffCooldownKey;
+import com.rotdb.simulation.domain.model.cooldown.AbilityCooldownKey;
 
 import java.util.Map;
 
 public class SimulationState {
     private RotationCombatState state;
-    private Map<CooldownKey, Integer> cooldownMap;
+    private Map<AbilityCooldownKey, Integer> abilityCooldownMap;
+    private Map<BuffCooldownKey, Integer> buffCooldownMap;
     private double adrenaline;
     private double maximumAdrenaline = 100.0;
 
@@ -18,12 +20,20 @@ public class SimulationState {
         this.state = state;
     }
 
-    public Map<CooldownKey, Integer> getCooldownMap() {
-        return cooldownMap;
+    public Map<AbilityCooldownKey, Integer> getAbilityCooldownMap() {
+        return abilityCooldownMap;
     }
 
-    public void setCooldownMap(Map<CooldownKey, Integer> cooldownMap) {
-        this.cooldownMap = cooldownMap;
+    public void setAbilityCooldownMap(Map<AbilityCooldownKey, Integer> abilityCooldownMap) {
+        this.abilityCooldownMap = abilityCooldownMap;
+    }
+
+    public Map<BuffCooldownKey, Integer> getBuffCooldownMap() {
+        return buffCooldownMap;
+    }
+
+    public void setBuffCooldownMap(Map<BuffCooldownKey, Integer> buffCooldownMap) {
+        this.buffCooldownMap = buffCooldownMap;
     }
 
     public double getAdrenaline() {

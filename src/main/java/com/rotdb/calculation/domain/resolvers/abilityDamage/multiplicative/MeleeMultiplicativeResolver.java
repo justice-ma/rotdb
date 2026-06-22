@@ -32,7 +32,7 @@ public class MeleeMultiplicativeResolver {
             }
 
             if (mainhand.getEffect().contains(Effect.ABYSSALBANE) && target.has(TargetTags.ABYSSALDEMON) ||
-                    mainhand.getEffect().contains(Effect.DRAGONBANE) && target.has(TargetTags.DRAGON) ||
+                    mainhand.getEffect().contains(Effect.DRAGONBANE) && target.has(TargetTags.DRAGONSLAYER) ||
                     mainhand.getEffect().contains(Effect.REVENANTBANE) && target.has(TargetTags.REVENANT)) {
                 mod *= 1.25;
             }

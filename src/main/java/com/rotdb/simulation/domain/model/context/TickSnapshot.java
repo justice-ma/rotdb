@@ -1,6 +1,7 @@
 package com.rotdb.simulation.domain.model.context;
 
-import com.rotdb.simulation.domain.model.cooldown.CooldownKey;
+import com.rotdb.simulation.domain.model.buff.BuffCooldownKey;
+import com.rotdb.simulation.domain.model.cooldown.AbilityCooldownKey;
 
 import java.util.List;
 import java.util.Map;
@@ -8,10 +9,13 @@ import java.util.Map;
 public class TickSnapshot {
     private int tick;
     private List<AbilityPlacement> placedAbilities;
+    private List<BuffPlacement> placedBuffs;
     private RotationCombatState startingCombatState;
     private RotationCombatState endingCombatState;
-    private Map<CooldownKey, Integer> startingCooldownMap;
-    private Map<CooldownKey, Integer> endingCooldownMap;
+    private Map<AbilityCooldownKey, Integer> startingAbilityCooldownMap;
+    private Map<AbilityCooldownKey, Integer> endingAbilityCooldownMap;
+    private Map<BuffCooldownKey, Integer> startingBuffCooldownMap;
+    private Map<BuffCooldownKey, Integer> endingBuffCooldownMap;
     private double startingAdrenaline;
     private double endingAdrenaline;
     private List<TimelineHit> landedHits;
@@ -33,6 +37,14 @@ public class TickSnapshot {
         this.placedAbilities = placedAbilities;
     }
 
+    public List<BuffPlacement> getPlacedBuffs() {
+        return placedBuffs;
+    }
+
+    public void setPlacedBuffs(List<BuffPlacement> placedBuffs) {
+        this.placedBuffs = placedBuffs;
+    }
+
     public RotationCombatState getStartingCombatState() {
         return startingCombatState;
     }
@@ -49,20 +61,36 @@ public class TickSnapshot {
         this.endingCombatState = endingCombatState;
     }
 
-    public Map<CooldownKey, Integer> getStartingCooldownMap() {
-        return startingCooldownMap;
+    public Map<AbilityCooldownKey, Integer> getStartingAbilityCooldownMap() {
+        return startingAbilityCooldownMap;
     }
 
-    public void setStartingCooldownMap(Map<CooldownKey, Integer> startingCooldownMap) {
-        this.startingCooldownMap = startingCooldownMap;
+    public void setStartingAbilityCooldownMap(Map<AbilityCooldownKey, Integer> startingAbilityCooldownMap) {
+        this.startingAbilityCooldownMap = startingAbilityCooldownMap;
     }
 
-    public Map<CooldownKey, Integer> getEndingCooldownMap() {
-        return endingCooldownMap;
+    public Map<AbilityCooldownKey, Integer> getEndingAbilityCooldownMap() {
+        return endingAbilityCooldownMap;
     }
 
-    public void setEndingCooldownMap(Map<CooldownKey, Integer> endingCooldownMap) {
-        this.endingCooldownMap = endingCooldownMap;
+    public void setEndingAbilityCooldownMap(Map<AbilityCooldownKey, Integer> endingAbilityCooldownMap) {
+        this.endingAbilityCooldownMap = endingAbilityCooldownMap;
+    }
+
+    public Map<BuffCooldownKey, Integer> getStartingBuffCooldownMap() {
+        return startingBuffCooldownMap;
+    }
+
+    public void setStartingBuffCooldownMap(Map<BuffCooldownKey, Integer> startingBuffCooldownMap) {
+        this.startingBuffCooldownMap = startingBuffCooldownMap;
+    }
+
+    public Map<BuffCooldownKey, Integer> getEndingBuffCooldownMap() {
+        return endingBuffCooldownMap;
+    }
+
+    public void setEndingBuffCooldownMap(Map<BuffCooldownKey, Integer> endingBuffCooldownMap) {
+        this.endingBuffCooldownMap = endingBuffCooldownMap;
     }
 
     public double getStartingAdrenaline() {

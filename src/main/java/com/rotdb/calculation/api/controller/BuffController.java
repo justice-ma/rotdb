@@ -21,6 +21,6 @@ public class BuffController {
                         buff.isStackable(),
                         buff.getMinimumStacks(),
                         buff.getMaximumStacks()
-        )).toList();
+                )).toList();
     }
 }

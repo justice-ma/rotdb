@@ -2,22 +2,22 @@ package com.rotdb.simulation.application.service;
 
 import com.rotdb.calculation.domain.engine.CalculationEngine;
 import com.rotdb.calculation.domain.model.DamageResult;
-import com.rotdb.simulation.application.processors.AdrenalineProcessor;
-import com.rotdb.simulation.application.processors.CooldownProcessor;
-import com.rotdb.simulation.application.processors.HitsPlacementProcessor;
-import com.rotdb.simulation.application.processors.PlacementProcessor;
+import com.rotdb.simulation.application.processors.*;
+import com.rotdb.simulation.application.snapshot.SimulationStateSnapshotCopier;
 import com.rotdb.simulation.domain.model.context.*;
 
 import java.util.*;
 
 public class RotationTimelineService {
     private final CalculationEngine engine;
+    private final SimulationStateSnapshotCopier snapshotCopier;
 
-    public RotationTimelineService(CalculationEngine engine) {
+    public RotationTimelineService(CalculationEngine engine, SimulationStateSnapshotCopier snapshotCopier) {
         this.engine = engine;
+        this.snapshotCopier = snapshotCopier;
     }
 
-    public RotationTimeline build(RotationCombatState state, List<AbilityPlacement> abilityPlacements) {
+    public RotationTimeline build(RotationCombatState state, List<AbilityPlacement> abilityPlacements, List<BuffPlacement> buffPlacements) {
         RotationTimeline timeline = new RotationTimeline();
         timeline.setTimeline(new ArrayList<>());
 
@@ -26,7 +26,8 @@ public class RotationTimelineService {
         int endingTick = 0;
         int startingTick = Integer.MAX_VALUE;
 
-        Map<Integer, List<AbilityPlacement>> abilities = PlacementProcessor.groupByTick(abilityPlacements);
+        Map<Integer, List<AbilityPlacement>> abilities = PlacementProcessor.groupAbilitiesByTick(abilityPlacements);
+        Map<Integer, List<BuffPlacement>> buffs = PlacementProcessor.groupBuffsByTick(buffPlacements);
         Map<Integer, List<TimelineHit>> timelineHitMap = new HashMap<>();
 
         for (AbilityPlacement abilityPlacement : abilityPlacements) {
@@ -39,11 +40,21 @@ public class RotationTimelineService {
         }
 
         for (int tick = startingTick; tick <= endingTick; tick++) {
+            SimulationState startingStateSnapshot = snapshotCopier.copySimulationState(simulationState);
             AdrenalineProcessor.applyMaximumAdrenalineBound(simulationState);
             List<AbilityPlacement> newAbilities = new ArrayList<>();
             List<TimelineHit> newTimelineHits = new ArrayList<>();
-            TickSnapshot tickSnapshot = initializeTickSnapshot(simulationState, tick);
+            List<BuffPlacement> newBuffs = new ArrayList<>();
+            TickSnapshot tickSnapshot = initializeTickSnapshot(startingStateSnapshot, tick);
             double adrenalineDelta = 0;
+
+            if (buffs.containsKey(tick)) {
+                newBuffs.addAll(buffs.get(tick));
+                for (BuffPlacement buffPlacement : newBuffs) {
+                    simulationState.getState().getBuffs().getBuffSet().add(buffPlacement.getBuffId());
+                    BuffProcessor.initializeCooldown(buffPlacement.getBuffId(), simulationState);
+                }
+            }
 
             if (abilities.containsKey(tick)) {
 
@@ -51,9 +62,9 @@ public class RotationTimelineService {
                 adrenalineDelta = 0;
 
                 for (AbilityPlacement abilityPlacement : newAbilities) {
-                    DamageResult damageResult = engine.calculateAbilityDamage(DamageRequestFactory.getDamageRequest(state, abilityPlacement.getPlacedAbility()));
+                    DamageResult damageResult = engine.calculateAbilityDamage(DamageRequestFactory.getDamageRequest(simulationState.getState(), abilityPlacement.getPlacedAbility()));
 
-                    List<TimelineHit> hits = HitsScheduler.schedule(damageResult, abilityPlacement.getPlacementTick(), state.getEquipment());
+                    List<TimelineHit> hits = HitsScheduler.schedule(damageResult, abilityPlacement.getPlacementTick(), simulationState.getState().getEquipment());
                     HitsPlacementProcessor.addScheduledHits(timelineHitMap, hits);
 
                     for (TimelineHit timelineHit : hits) {
@@ -63,9 +74,9 @@ public class RotationTimelineService {
 
                     adrenalineDelta += AdrenalineProcessor.generateAbilityPlacementAdrenalineDelta(abilityPlacement, simulationState, damageResult);
 
-                    CooldownProcessor.generateWarnings(simulationState, abilityPlacement, tickSnapshot);
-                    CooldownProcessor.initializeCooldown(simulationState, abilityPlacement);
-                    CooldownProcessor.applyPlacementCooldownEffects(simulationState, abilityPlacement, damageResult);
+                    AbilityCooldownProcessor.generateWarnings(simulationState, abilityPlacement, tickSnapshot);
+                    AbilityCooldownProcessor.initializeCooldown(simulationState, abilityPlacement);
+                    AbilityCooldownProcessor.applyPlacementCooldownEffects(simulationState, abilityPlacement, damageResult);
                 }
             }
             adrenalineDelta += AdrenalineProcessor.generateCurrentTickAdrenalineDelta(simulationState);
@@ -78,10 +89,12 @@ public class RotationTimelineService {
                 newTimelineHits.addAll(timelineHitMap.get(tick));
             }
 
-            finalizeTickSnapshot(tickSnapshot, newAbilities, newTimelineHits, simulationState);
+            SimulationState endingStateSnapshot = snapshotCopier.copySimulationState(simulationState);
+            finalizeTickSnapshot(tickSnapshot, newAbilities, newBuffs, newTimelineHits, endingStateSnapshot);
             timeline.getTimeline().add(tickSnapshot);
 
-            CooldownProcessor.decayCooldown(simulationState);
+            AbilityCooldownProcessor.decayCooldown(simulationState);
+            BuffProcessor.decayCooldown(simulationState);
 
             Iterator<Map.Entry<Integer, List<TimelineHit>>> timelineHitsIterator = timelineHitMap.entrySet().iterator();
             while (timelineHitsIterator.hasNext()) {
@@ -97,16 +110,18 @@ public class RotationTimelineService {
         SimulationState simulationState = new SimulationState();
         simulationState.setState(state);
         simulationState.setAdrenaline(100);
-        simulationState.setCooldownMap(new HashMap<>());
+        simulationState.setAbilityCooldownMap(new HashMap<>());
+        simulationState.setBuffCooldownMap(new HashMap<>());
 
-        return simulationState;
+        return snapshotCopier.copySimulationState(simulationState);
     }
 
     private TickSnapshot initializeTickSnapshot(SimulationState state, int tick) {
         TickSnapshot tickSnapshot = new TickSnapshot();
         tickSnapshot.setTick(tick);
         tickSnapshot.setStartingCombatState(state.getState());
-        tickSnapshot.setStartingCooldownMap(new HashMap<>(state.getCooldownMap()));
+        tickSnapshot.setStartingAbilityCooldownMap(new HashMap<>(state.getAbilityCooldownMap()));
+        tickSnapshot.setStartingBuffCooldownMap(new HashMap<>(state.getBuffCooldownMap()));
         tickSnapshot.setStartingAdrenaline(state.getAdrenaline());
         tickSnapshot.setWarnings(new ArrayList<>());
 
@@ -114,11 +129,14 @@ public class RotationTimelineService {
     }
 
     private void finalizeTickSnapshot(TickSnapshot tickSnapshot, List<AbilityPlacement> newAbilities,
-                                      List<TimelineHit> newTimelineHits, SimulationState simulationState) {
+                                      List<BuffPlacement> newBuffs, List<TimelineHit> newTimelineHits,
+                                      SimulationState simulationState) {
         tickSnapshot.setPlacedAbilities(newAbilities);
+        tickSnapshot.setPlacedBuffs(newBuffs);
         tickSnapshot.setLandedHits(newTimelineHits);
         tickSnapshot.setEndingCombatState(simulationState.getState());
-        tickSnapshot.setEndingCooldownMap(new HashMap<>(simulationState.getCooldownMap()));
+        tickSnapshot.setEndingAbilityCooldownMap(new HashMap<>(simulationState.getAbilityCooldownMap()));
+        tickSnapshot.setEndingBuffCooldownMap(new HashMap<>(simulationState.getBuffCooldownMap()));
         tickSnapshot.setEndingAdrenaline(simulationState.getAdrenaline());
     }
 }

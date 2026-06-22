@@ -11,10 +11,10 @@ public class AmmoAddResolver {
         EquipmentSlot ammo = context.getEquipment().getAmmo();
         TargetContext target = context.getTarget();
         int add = 0;
-            if ((ammo.getEffect().contains(Effect.JASDRAGONBANE) && target.has(TargetTags.DRAGON)) ||
-                    (ammo.getEffect().contains(Effect.JASDEMONBANE) && target.has(TargetTags.DEMON))) {
-                add += 20;
-            }
+        if ((ammo.getEffect().contains(Effect.JASDRAGONBANE) && target.has(TargetTags.DRAGONSLAYER)) ||
+                (ammo.getEffect().contains(Effect.JASDEMONBANE) && target.has(TargetTags.DEMON))) {
+            add += 20;
+        }
         return add;
     }
 }
