@@ -6,7 +6,7 @@ public enum TargetTags {
     CONSECRATEDKERIS,
     BOSS,
     ABYSSALDEMON,
-    DRAGONSLAYER,
+    DRAGON,
     REVENANT,
     DEMON,
     SPIDER,

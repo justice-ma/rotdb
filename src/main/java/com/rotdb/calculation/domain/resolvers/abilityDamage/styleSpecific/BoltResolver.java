@@ -23,7 +23,7 @@ public class BoltResolver {
         } else if (ammo.getEffect().contains(Effect.DIAMONDE)) {
             mod *= 1.15;
         } else if (ammo.getEffect().contains(Effect.DRAGONSTONEE)) {
-            if (!target.has(TargetTags.DRAGONSLAYER)) {
+            if (!target.has(TargetTags.DRAGON)) {
                 mod *= 1.25;
             }
         } else if (ammo.getEffect().contains(Effect.ONYXE)) {
