@@ -34,11 +34,11 @@ public class Sandbox {
         List<BuffPlacement> buffs = new ArrayList<>();
         BuffPlacement buff = new BuffPlacement();
         buff.setPlacementTick(1);
-        buff.setBuffId(BuffId.RUNICCHARGE);
+        buff.setBuffId(BuffId.LIVINGDEATH);
         buffs.add(buff);
         BuffPlacement buff2 = new BuffPlacement();
         buff2.setPlacementTick(4);
-        buff2.setBuffId(BuffId.SPLITSOUL);
+        buff2.setBuffId(BuffId.DBA);
         buffs.add(buff2);
 
         CalculationEngine engine = new CalculationEngine();

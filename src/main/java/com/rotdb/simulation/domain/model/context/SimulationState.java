@@ -1,5 +1,6 @@
 package com.rotdb.simulation.domain.model.context;
 
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.simulation.domain.model.buff.BuffCooldownKey;
 import com.rotdb.simulation.domain.model.cooldown.AbilityCooldownKey;
 
@@ -9,6 +10,7 @@ public class SimulationState {
     private RotationCombatState state;
     private Map<AbilityCooldownKey, Integer> abilityCooldownMap;
     private Map<BuffCooldownKey, Integer> buffCooldownMap;
+    private Map<BuffId, Integer> activeBuffDurationMap;
     private double adrenaline;
     private double maximumAdrenaline = 100.0;
 
@@ -34,6 +36,14 @@ public class SimulationState {
 
     public void setBuffCooldownMap(Map<BuffCooldownKey, Integer> buffCooldownMap) {
         this.buffCooldownMap = buffCooldownMap;
+    }
+
+    public Map<BuffId, Integer> getActiveBuffDurationMap() {
+        return activeBuffDurationMap;
+    }
+
+    public void setActiveBuffDurationMap(Map<BuffId, Integer> activeBuffDurationMap) {
+        this.activeBuffDurationMap = activeBuffDurationMap;
     }
 
     public double getAdrenaline() {

@@ -3,6 +3,7 @@ package com.rotdb.simulation.application.processors;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.simulation.domain.model.buff.BuffCooldownKey;
 import com.rotdb.simulation.domain.model.buff.BuffDefinition;
+import com.rotdb.simulation.domain.model.buff.enums.BuffSource;
 import com.rotdb.simulation.domain.model.context.SimulationState;
 import com.rotdb.simulation.domain.provider.BuffProvider;
 import com.rotdb.simulation.domain.resolvers.buff.BuffCooldownKeyResolver;
@@ -13,8 +14,10 @@ import java.util.Map;
 public class BuffProcessor {
     public static void initializeCooldown(BuffId buff, SimulationState state) {
         BuffCooldownKey buffKey = BuffCooldownKeyResolver.resolve(buff);
-        BuffDefinition buffDefinition = BuffProvider.get(buff, state);
-        state.getBuffCooldownMap().put(buffKey, buffDefinition.getCooldownTicks());
+        BuffDefinition buffDefinition = BuffProvider.get(buff, BuffSource.USER_PLACED, state);
+        if (buffDefinition.getCooldownTicks() != null && buffDefinition.getCooldownTicks() > 0) {
+            state.getBuffCooldownMap().put(buffKey, buffDefinition.getCooldownTicks());
+        }
     }
 
     public static void decayCooldown(SimulationState state) {

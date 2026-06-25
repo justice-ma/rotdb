@@ -5,5 +5,6 @@ public enum BuffLifecycle {
     TIMED,
     INSTANT,
     STACK,
-    PERMANENT_STATE
+    PERMANENT_STATE,
+    UNTIL_CONSUMED
 }

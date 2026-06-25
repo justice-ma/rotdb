@@ -1,77 +1,153 @@
 package com.rotdb.simulation.domain.provider;
 
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
-import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
-import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.simulation.domain.model.buff.BuffDefinition;
+import com.rotdb.simulation.domain.model.buff.enums.BuffApplication;
+import com.rotdb.simulation.domain.model.buff.enums.BuffLifecycle;
+import com.rotdb.simulation.domain.model.buff.enums.BuffSource;
+import com.rotdb.simulation.domain.model.buff.factory.AbilityGeneratedBuffDefinitionFactory;
+import com.rotdb.simulation.domain.model.buff.factory.InitialBuffDefinitionFactory;
+import com.rotdb.simulation.domain.model.buff.factory.ProcBuffDefinitionFactory;
+import com.rotdb.simulation.domain.model.buff.factory.UserPlacedBuffDefinitionFactory;
 import com.rotdb.simulation.domain.model.context.SimulationState;
 
 public final class BuffProvider {
     public BuffProvider() {
     }
 
-    public static BuffDefinition get(BuffId id, SimulationState state) {
-        return switch (id) {
-            // Passives
-            case ENCHANTMENTOFSAVAGERY, ENCHANTMENTOFAGONY, ENCHANTMENTOFHEROISM, ENCHANTMENTOFDISPELLING,
-                 ENCHANTMENTOFDREAD, ENCHANTMENTOFSHADOWS, ENCHANTMENTOFAFFLICTION, ENCHANTMENTOFFLAMES,
-                 ENCHANTMENTOFMETAPHYSICS, SHARDOFGENESIS, REAPERSCREW, KALG, ECLIPSEDSOUL,
-                 CONCENTRATEDBLASTBUFF, GREATERCONCENTRATEDBLASTBUFF, BLOODLUST, STONEOFJAS, GUARDHOUSE,
-                 PUZZLEBOX, NOPENOPENOPE, BALANCEOFPOWER, GUARDIANSTRIUMPH, SLAYERLODGE, NOFEAR,
-                 PERFECTEQUILIBRIUMSTACKS, PRIMORDIALICESTACKS, TIMESINCELASTATTACK, REAPERSTACKS, BLEEDS,
-                 BLACKSTONEARROWSTACKS, LORDOFBONESSTACKS, COMBUSTED, FLAMEBOUNDRIVAL, HAUNTED, VULNED, CURSED,
-                 SMOKECLOUDED, OBLITERATED, BANDOSBOOK, CLOBBER, SUNDER, BACKSTAB, CROESUSSPORED, BERSERKERSFURY,
-                 BOOKUPTIME, SLAYERHELM, DEATHSPARK, SOULSTACKS, NECROSIS, RAGE, VALOUR, STRENGTHCAPE,
-                 HEIGHTENEDSENSES, RINGOFDEATHPROC, CONSERVATIONOFENERGY, RINGOFVIGOUR, WARPRIESTOFARMADYLPROC,
-                 CLAWSOFGUTHIX, IMPATIENTPROC, FURYOFTHESMALL, RELENTLESSPROC -> passive(id);
-
-            // Timed
-            case DRACONICFRUIT -> timed(id, 100, 0, false);
-            case SMASH, CHAOSROAR, GALES -> timed(id, 10, 0, false);
-            case SUNSHINE, DEATHSWIFTNESS -> timed(id, 51, 0, false);
-            case BERSERK -> timed(id, 33, 0, true);
-            case LIVINGDEATH -> timed(id, 50, 150, true);
-            case ZGS -> timed(id, 35, 0, false);
-            case UNDEADSLAYERSIGIL, DRAGONSLAYERSIGIL, DEMONSLAYERSIGIL -> timed(id, 17, 100, false);
-            case RUNICCHARGE -> timed(id, 25, 50, false);
-            case SPLITSOUL -> state.getState().getEquipment().getCombatStyle() == CombatStyles.NECROMANCY
-                    ? timed(id, 34, 100, true)
-                    : timed(id, 25, 0, true);
-            case INSTABILITY, BALANCEBYFORCE, ESSENCECORRUPTIONSTACKS -> timed(id, 50, 0, false);
-            case DBA, DRAGONSCIMITAR -> timed(id, 100, 0, true);
-            case FURYBUFF, GREATERFURYBUFF, CONFLAGRATE -> timed(id, 25, 0, false);
-            case RAPIDFIREBUFF -> timedDracolich(state);
-            case ASPHYXIATEBUFF -> state.getState().getEquipment().getTumekensPieces() >= 5
-                    ? timed(id, 15, 0, false)
-                    : timed(id, 6, 0, false);
-            case FROSTBLADES -> state.getState().getEquipment().getOffhand().getEffect().contains(Effect.SHARDABLE)
-                    ? timed(id, 15, 0, false)
-                    : timed(id, 10, 0, false);
-            case RUBYAURORA -> timed(id, 40, 0, false);
-            case GRAVITATE -> timed(id, 50, 0, true);
-            case WENSTACKS -> timed(id, 15, 0, false);
-            case REVENGESTACKS -> timed(id, 32, 0, false);
-            case RUTHELESSSTACKS, TITHESTACKS -> timed(id, 34, 0, false);
-            case METEORSTRIKE, TSUNAMI, IMBUESHADOWS -> timed(id, 50, 100, false);
-            case ADRENALINEPOTION, SUPERADRENALINEPOTION -> timed(id, 0, 200, false);
-            case ADRENALINERENEWAL -> timed(id, 10, 200, false);
-            case VESTMENTSBLEED -> timed(id, 30, 0, false);
-            case ASYLUMSURGEONSRINGPROC -> timed(id, 0, 50, false);
-            case NATURALINSTINCT -> timed(id, 34, 200, true);
+    public static BuffDefinition get(BuffId id, BuffSource source, SimulationState state) {
+        return switch (source) {
+            case INITIAL -> getInitialDefinition(id, state);
+            case USER_PLACED -> getUserPlacedDefinition(id, state);
+            case ABILITY_GENERATED -> getAbilityGeneratedDefinition(id, state);
+            case PROC -> getProcDefinition(id, state);
+            case SYSTEM -> getSystemDefinition(id, state);
         };
     }
 
-    private static BuffDefinition passive(BuffId id) {
-        return new BuffDefinition(id, 0, 0, false, true);
+    private static BuffDefinition getInitialDefinition(BuffId id, SimulationState state) {
+        return switch (id) {
+            case ENCHANTMENTOFAGONY -> InitialBuffDefinitionFactory.enchantmentOfAgony();
+            case ENCHANTMENTOFSAVAGERY -> InitialBuffDefinitionFactory.enchantmentOfSavagery();
+            case ENCHANTMENTOFHEROISM -> InitialBuffDefinitionFactory.enchantmentOfHeroism();
+            case ENCHANTMENTOFDISPELLING -> InitialBuffDefinitionFactory.enchantmentOfDispelling();
+            case ENCHANTMENTOFDREAD -> InitialBuffDefinitionFactory.enchantmentOfDread();
+            case ENCHANTMENTOFSHADOWS -> InitialBuffDefinitionFactory.enchantmentOfShadows();
+            case ENCHANTMENTOFAFFLICTION -> InitialBuffDefinitionFactory.enchantmentOfAffliction();
+            case ENCHANTMENTOFFLAMES -> InitialBuffDefinitionFactory.enchantmentOfFlames();
+            case ENCHANTMENTOFMETAPHYSICS -> InitialBuffDefinitionFactory.enchantmentOfMetaphysics();
+            case SHARDOFGENESIS -> InitialBuffDefinitionFactory.shardOfGenesis();
+            case REAPERSCREW -> InitialBuffDefinitionFactory.reapersCrew();
+            case KALG -> InitialBuffDefinitionFactory.kalg();
+            case ECLIPSEDSOUL -> InitialBuffDefinitionFactory.eclipsedSoul();
+            case STONEOFJAS -> InitialBuffDefinitionFactory.stoneOfJas();
+            case GUARDHOUSE -> InitialBuffDefinitionFactory.guardhouse();
+            case PUZZLEBOX -> InitialBuffDefinitionFactory.puzzlebox();
+            case SLAYERLODGE -> InitialBuffDefinitionFactory.slayerLodge();
+            case NOFEAR -> InitialBuffDefinitionFactory.noFear();
+            case BERSERKERSFURY -> InitialBuffDefinitionFactory.berserkersFury();
+            case SLAYERHELM -> InitialBuffDefinitionFactory.slayerHelm();
+            case STRENGTHCAPE -> InitialBuffDefinitionFactory.strengthCape();
+            case HEIGHTENEDSENSES -> InitialBuffDefinitionFactory.heightenedSenses();
+            case FURYOFTHESMALL -> InitialBuffDefinitionFactory.furyOfTheSmall();
+            case CONSERVATIONOFENERGY -> InitialBuffDefinitionFactory.conservationOfEnergy();
+            case RINGOFVIGOUR -> InitialBuffDefinitionFactory.ringOfVigour();
+            case NOPENOPENOPE -> InitialBuffDefinitionFactory.nopeNopeNope();
+            case HAUNTED -> InitialBuffDefinitionFactory.haunted();
+            case VULNED -> InitialBuffDefinitionFactory.vulned();
+            case CURSED -> InitialBuffDefinitionFactory.cursed();
+            case SMOKECLOUDED -> InitialBuffDefinitionFactory.smokeClouded();
+
+            default -> throw new IllegalArgumentException("Unknown buff type: " + id);
+        };
     }
 
-    private static BuffDefinition timed(BuffId id, int duration, int cooldown, boolean gcdConsuming) {
-        return new BuffDefinition(id, duration, cooldown, gcdConsuming, false);
+    private static BuffDefinition getUserPlacedDefinition(BuffId id, SimulationState state) {
+        return switch (id) {
+            case SUNSHINE -> UserPlacedBuffDefinitionFactory.sunshine();
+            case DEATHSWIFTNESS -> UserPlacedBuffDefinitionFactory.deathSwiftness();
+            case BERSERK -> UserPlacedBuffDefinitionFactory.berserk();
+            case UNDEADSLAYERSIGIL -> UserPlacedBuffDefinitionFactory.undeadSlayerSigil();
+            case DRAGONSLAYERSIGIL -> UserPlacedBuffDefinitionFactory.dragonSlayerSigil();
+            case DEMONSLAYERSIGIL -> UserPlacedBuffDefinitionFactory.demonSlayerSigil();
+            case RUNICCHARGE -> UserPlacedBuffDefinitionFactory.runicCharge();
+            case DBA -> UserPlacedBuffDefinitionFactory.dba();
+            case GRAVITATE -> UserPlacedBuffDefinitionFactory.gravitate();
+            case HAUNTED -> UserPlacedBuffDefinitionFactory.haunted();
+            case VULNED -> UserPlacedBuffDefinitionFactory.vulned();
+            case CURSED -> UserPlacedBuffDefinitionFactory.cursed();
+            case SMOKECLOUDED -> UserPlacedBuffDefinitionFactory.smokeClouded();
+            case LIVINGDEATH -> UserPlacedBuffDefinitionFactory.livingDeath();
+            case ADRENALINEPOTION -> UserPlacedBuffDefinitionFactory.adrenalinePotion();
+            case SUPERADRENALINEPOTION -> UserPlacedBuffDefinitionFactory.superAdrenalinePotion();
+            case ADRENALINERENEWAL -> UserPlacedBuffDefinitionFactory.adrenalineRenewal();
+            case IMBUESHADOWS -> UserPlacedBuffDefinitionFactory.imbueShadows();
+            case NATURALINSTINCT -> UserPlacedBuffDefinitionFactory.naturalInstinct();
+            case SPLITSOUL -> UserPlacedBuffDefinitionFactory.splitSoul();
+
+            default -> throw new IllegalArgumentException("Unknown buff type: " + id);
+        };
     }
 
-    private static BuffDefinition timedDracolich(SimulationState state) {
-        int pieces = Math.max(state.getState().getEquipment().getDracolichPieces(), state.getState().getEquipment().getEliteDracolichPieces());
-        int duration = (pieces * 3) + 5;
-        return new BuffDefinition(BuffId.RAPIDFIREBUFF, duration, 0, false, false);
+    private static BuffDefinition getAbilityGeneratedDefinition(BuffId id, SimulationState state) {
+        return switch (id) {
+            case SMASH -> AbilityGeneratedBuffDefinitionFactory.smash();
+            case CHAOSROAR -> AbilityGeneratedBuffDefinitionFactory.chaosRoar();
+            case BALANCEBYFORCE -> AbilityGeneratedBuffDefinitionFactory.balanceByForce();
+            case DRAGONSCIMITAR -> AbilityGeneratedBuffDefinitionFactory.dragonScimitar();
+            case FURYBUFF -> AbilityGeneratedBuffDefinitionFactory.furyBuff();
+            case GREATERFURYBUFF -> AbilityGeneratedBuffDefinitionFactory.greaterFuryBuff();
+            case CONCENTRATEDBLASTBUFF -> AbilityGeneratedBuffDefinitionFactory.concentratedBlastBuff();
+            case GREATERCONCENTRATEDBLASTBUFF -> AbilityGeneratedBuffDefinitionFactory.greaterConcentratedBlastBuff();
+            case RAPIDFIREBUFF -> AbilityGeneratedBuffDefinitionFactory.rapidFireBuff();
+            case ASPHYXIATEBUFF -> AbilityGeneratedBuffDefinitionFactory.asphyxiateBuff();
+            case CONFLAGRATE -> AbilityGeneratedBuffDefinitionFactory.conflagrate();
+            case OBLITERATED -> AbilityGeneratedBuffDefinitionFactory.obliterated();
+            case CLAWSOFGUTHIX -> AbilityGeneratedBuffDefinitionFactory.clawsOfGuthix();
+            case CLOBBER -> AbilityGeneratedBuffDefinitionFactory.clobber();
+            case SUNDER -> AbilityGeneratedBuffDefinitionFactory.sunder();
+            case BACKSTAB -> AbilityGeneratedBuffDefinitionFactory.backstab();
+            case METEORSTRIKE -> AbilityGeneratedBuffDefinitionFactory.meteorStrike();
+            case VESTMENTSBLEED -> AbilityGeneratedBuffDefinitionFactory.vestmentsBleed();
+            case TSUNAMI -> AbilityGeneratedBuffDefinitionFactory.tsunami();
+            case INSTABILITY -> AbilityGeneratedBuffDefinitionFactory.instability();
+            case COMBUSTED -> AbilityGeneratedBuffDefinitionFactory.combusted();
+            case FLAMEBOUNDRIVAL -> AbilityGeneratedBuffDefinitionFactory.flameboundRival();
+            case ZGS -> AbilityGeneratedBuffDefinitionFactory.zgs();
+            case GALES -> AbilityGeneratedBuffDefinitionFactory.gales();
+
+            default -> throw new IllegalArgumentException("Unknown buff type: " + id);
+        };
+    }
+
+    private static BuffDefinition getProcDefinition(BuffId id, SimulationState state) {
+        return switch (id) {
+            case FROSTBLADES -> ProcBuffDefinitionFactory.frostblades();
+            case RUBYAURORA -> ProcBuffDefinitionFactory.rubyAurora();
+            case WENSTACKS -> ProcBuffDefinitionFactory.wenStacks();
+            case IMPATIENTPROC -> ProcBuffDefinitionFactory.impatientProc();
+            case RELENTLESSPROC -> ProcBuffDefinitionFactory.relentlessProc();
+            case ASYLUMSURGEONSRINGPROC -> ProcBuffDefinitionFactory.asylumSurgeonsRingProc();
+            case RINGOFDEATHPROC -> ProcBuffDefinitionFactory.ringOfDeathProc();
+            case WARPRIESTOFARMADYLPROC -> ProcBuffDefinitionFactory.warpriestOfArmadylProc();
+
+            default -> throw new IllegalArgumentException("Unknown buff type: " + id);
+        };
+    }
+
+    private static BuffDefinition getSystemDefinition(BuffId id, SimulationState state) {
+        return switch (id) {
+            case TIMESINCELASTATTACK -> new BuffDefinition(
+                    BuffId.TIMESINCELASTATTACK,
+                    BuffSource.SYSTEM,
+                    BuffLifecycle.STACK,
+                    BuffApplication.NONE,
+                    null,
+                    null,
+                    false,
+                    true
+            );
+            default -> throw new IllegalArgumentException("Unknown buff type: " + id);
+        };
     }
 }

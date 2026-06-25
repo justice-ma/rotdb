@@ -11,10 +11,17 @@ public class DbaStatBoostModifier implements Modifier {
         BuffContext buffs = context.getBuffs();
         SkillsContext skill = context.getSkills();
         if (buffs.has(BuffId.DBA)) {
-            int boost = (((int) (skill.getBoostedAttack() * 0.1) + (int) (skill.getBoostedDefence() * 0.1) +
-                    (int) (skill.getBoostedMagic() * 0.1) + (int) (skill.getBoostedRanged() * 0.1) +
-                    (int) (skill.getBoostedNecromancy() * 0.1)) / 4) + 10;
-            skill.setBoostedStrength(Math.max(skill.getBoostedStrength(), skill.getBaseStrength() + boost));
+            int def = skill.getBoostedDefence() == null ? skill.getBaseDefence() == null ? 1 : skill.getBaseDefence() : skill.getBoostedDefence();
+            int att = skill.getBoostedAttack() == null ? skill.getBaseAttack() == null ? 1 : skill.getBaseAttack() : skill.getBoostedAttack();
+            int magic = skill.getBoostedMagic() == null ? skill.getBaseMagic() == null ? 1 : skill.getBaseMagic() : skill.getBoostedMagic();
+            int ranged = skill.getBoostedRanged() == null ? skill.getBaseRanged() == null ? 1 : skill.getBaseRanged() : skill.getBoostedRanged();
+            int necro = skill.getBoostedNecromancy() == null ? skill.getBaseNecromancy() == null ? 1 : skill.getBaseNecromancy() : skill.getBoostedNecromancy();
+
+            int boost = (((int) (att * 0.1) + (int) (def * 0.1) +
+                    (int) (magic * 0.1) + (int) (ranged * 0.1) +
+                    (int) (necro * 0.1)) / 4) + 10;
+            skill.setBoostedStrength(Math.max(skill.getBoostedStrength() == null ? skill.getBaseStrength() :
+                    skill.getBoostedStrength(), skill.getBaseStrength() + boost));
         }
     }
 }

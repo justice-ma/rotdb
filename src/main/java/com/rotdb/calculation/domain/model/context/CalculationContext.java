@@ -2,9 +2,12 @@ package com.rotdb.calculation.domain.model.context;
 
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
-import com.rotdb.shared.combat.domain.model.enums.Prayer;
 import com.rotdb.shared.combat.domain.model.context.TargetContext;
-import com.rotdb.shared.combat.domain.model.equipment.*;
+import com.rotdb.shared.combat.domain.model.enums.Prayer;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
+import com.rotdb.shared.combat.domain.model.equipment.FamiliarContext;
+import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
 import com.rotdb.shared.combat.domain.model.player.PrayerContext;
 import com.rotdb.shared.combat.domain.model.player.SkillsContext;
