@@ -60,6 +60,7 @@ public class Sandbox {
             System.out.println("  hits:      " + tick.getLandedHits().size());
             System.out.println("  cooldowns: " + tick.getEndingAbilityCooldownMap());
             System.out.println("             " + tick.getEndingBuffCooldownMap());
+            System.out.println("  durations: " + tick.getEndingActiveBuffDurationMap());
             System.out.println("  warnings:  " + formatWarnings(tick.getWarnings()));
             System.out.println();
         }

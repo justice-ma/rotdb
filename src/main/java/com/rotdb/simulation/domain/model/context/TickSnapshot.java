@@ -1,5 +1,6 @@
 package com.rotdb.simulation.domain.model.context;
 
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.simulation.domain.model.buff.BuffCooldownKey;
 import com.rotdb.simulation.domain.model.cooldown.AbilityCooldownKey;
 
@@ -16,6 +17,8 @@ public class TickSnapshot {
     private Map<AbilityCooldownKey, Integer> endingAbilityCooldownMap;
     private Map<BuffCooldownKey, Integer> startingBuffCooldownMap;
     private Map<BuffCooldownKey, Integer> endingBuffCooldownMap;
+    private Map<BuffId, Integer> startingActiveBuffDurationMap;
+    private Map<BuffId, Integer> endingActiveBuffDurationMap;
     private double startingAdrenaline;
     private double endingAdrenaline;
     private List<TimelineHit> landedHits;
@@ -91,6 +94,22 @@ public class TickSnapshot {
 
     public void setEndingBuffCooldownMap(Map<BuffCooldownKey, Integer> endingBuffCooldownMap) {
         this.endingBuffCooldownMap = endingBuffCooldownMap;
+    }
+
+    public Map<BuffId, Integer> getStartingActiveBuffDurationMap() {
+        return startingActiveBuffDurationMap;
+    }
+
+    public void setStartingActiveBuffDurationMap(Map<BuffId, Integer> startingActiveBuffDurationMap) {
+        this.startingActiveBuffDurationMap = startingActiveBuffDurationMap;
+    }
+
+    public Map<BuffId, Integer> getEndingActiveBuffDurationMap() {
+        return endingActiveBuffDurationMap;
+    }
+
+    public void setEndingActiveBuffDurationMap(Map<BuffId, Integer> endingActiveBuffDurationMap) {
+        this.endingActiveBuffDurationMap = endingActiveBuffDurationMap;
     }
 
     public double getStartingAdrenaline() {

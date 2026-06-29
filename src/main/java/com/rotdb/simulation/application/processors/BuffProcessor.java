@@ -20,6 +20,13 @@ public class BuffProcessor {
         }
     }
 
+    public static void initializeBuffDuration(BuffId buff, SimulationState state) {
+        BuffDefinition buffDefinition = BuffProvider.get(buff, BuffSource.USER_PLACED, state);
+        if (buffDefinition.getDurationTicks() != null && buffDefinition.getDurationTicks() > 0) {
+            state.getActiveBuffDurationMap().put(buff, buffDefinition.getDurationTicks());
+        }
+    }
+
     public static void decayCooldown(SimulationState state) {
         for (Map.Entry<BuffCooldownKey, Integer> entry : state.getBuffCooldownMap().entrySet()) {
             entry.setValue(entry.getValue() - 1);
@@ -29,6 +36,21 @@ public class BuffProcessor {
         while (iterator.hasNext()) {
             if (iterator.next().getValue() <= 0) {
                 iterator.remove();
+            }
+        }
+    }
+
+    public static void decayBuffDuration(SimulationState state) {
+        for (Map.Entry<BuffId, Integer> entry : state.getActiveBuffDurationMap().entrySet()) {
+            entry.setValue(entry.getValue() - 1);
+        }
+
+        Iterator<Map.Entry<BuffId, Integer>> iterator = state.getActiveBuffDurationMap().entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<BuffId, Integer> entry = iterator.next();
+            if (entry.getValue() <= 0) {
+                iterator.remove();
+                state.getState().getBuffs().getBuffSet().remove(entry.getKey());
             }
         }
     }

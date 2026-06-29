@@ -20,6 +20,7 @@ public class SimulationStateSnapshotCopier {
         copy.setMaximumAdrenaline(source.getMaximumAdrenaline());
         copy.setAbilityCooldownMap(new HashMap<>(source.getAbilityCooldownMap()));
         copy.setBuffCooldownMap(new HashMap<>(source.getBuffCooldownMap()));
+        copy.setActiveBuffDurationMap(new HashMap<>(source.getActiveBuffDurationMap()));
 
         return copy;
     }

@@ -53,6 +53,7 @@ public class RotationTimelineService {
                 for (BuffPlacement buffPlacement : newBuffs) {
                     simulationState.getState().getBuffs().getBuffSet().add(buffPlacement.getBuffId());
                     BuffProcessor.initializeCooldown(buffPlacement.getBuffId(), simulationState);
+                    BuffProcessor.initializeBuffDuration(buffPlacement.getBuffId(), simulationState);
                 }
             }
 
@@ -95,6 +96,7 @@ public class RotationTimelineService {
 
             AbilityCooldownProcessor.decayCooldown(simulationState);
             BuffProcessor.decayCooldown(simulationState);
+            BuffProcessor.decayBuffDuration(simulationState);
 
             Iterator<Map.Entry<Integer, List<TimelineHit>>> timelineHitsIterator = timelineHitMap.entrySet().iterator();
             while (timelineHitsIterator.hasNext()) {
@@ -112,6 +114,7 @@ public class RotationTimelineService {
         simulationState.setAdrenaline(100);
         simulationState.setAbilityCooldownMap(new HashMap<>());
         simulationState.setBuffCooldownMap(new HashMap<>());
+        simulationState.setActiveBuffDurationMap(new HashMap<>());
 
         return snapshotCopier.copySimulationState(simulationState);
     }
@@ -122,6 +125,7 @@ public class RotationTimelineService {
         tickSnapshot.setStartingCombatState(state.getState());
         tickSnapshot.setStartingAbilityCooldownMap(new HashMap<>(state.getAbilityCooldownMap()));
         tickSnapshot.setStartingBuffCooldownMap(new HashMap<>(state.getBuffCooldownMap()));
+        tickSnapshot.setStartingActiveBuffDurationMap(new HashMap<>(state.getActiveBuffDurationMap()));
         tickSnapshot.setStartingAdrenaline(state.getAdrenaline());
         tickSnapshot.setWarnings(new ArrayList<>());
 
@@ -137,6 +141,7 @@ public class RotationTimelineService {
         tickSnapshot.setEndingCombatState(simulationState.getState());
         tickSnapshot.setEndingAbilityCooldownMap(new HashMap<>(simulationState.getAbilityCooldownMap()));
         tickSnapshot.setEndingBuffCooldownMap(new HashMap<>(simulationState.getBuffCooldownMap()));
+        tickSnapshot.setEndingActiveBuffDurationMap(new HashMap<>(simulationState.getActiveBuffDurationMap()));
         tickSnapshot.setEndingAdrenaline(simulationState.getAdrenaline());
     }
 }
