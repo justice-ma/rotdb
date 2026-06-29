@@ -1,7 +1,7 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike;
 
-import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
 import com.rotdb.shared.combat.domain.model.enums.Perks;
 
@@ -43,6 +43,7 @@ public class CritAggregator {
             double hitCritDamage = globalDamage;
 
             CritBonus perHit = PerHitCritAdjustResolver.resolve(context, hit, i);
+
             hitCritChance += perHit.getChanceDelta();
             hitCritDamage += perHit.getDamageDelta();
 

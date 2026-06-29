@@ -1,16 +1,17 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike;
 
+import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
-import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.enums.HitType;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
 
-import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.MAGIC;
 import static com.rotdb.shared.ability.AbilityId.*;
+import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.MAGIC;
+import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.MELEE;
 
 public class PerHitCritAdjustResolver {
     public static CritBonus resolve(CalculationContext context, AbilityHitsContext hit, int hitIndex) {
@@ -46,6 +47,13 @@ public class PerHitCritAdjustResolver {
                 criticalStrikeDamage += 0.025 * hitIndex;
             }
         }
+
+        if (ability.getCombatStyle() == MELEE && buff.has(BuffId.GREATERFURYBUFF) && hitIndex > 0) {
+            criticalStrikeChance -= 1;
+        } else if (ability.getCombatStyle() == MELEE && buff.has(BuffId.FURYBUFF) && hitIndex > 0) {
+            criticalStrikeChance -= 0.25;
+        }
+
         return new CritBonus(criticalStrikeChance, criticalStrikeDamage);
     }
 }
