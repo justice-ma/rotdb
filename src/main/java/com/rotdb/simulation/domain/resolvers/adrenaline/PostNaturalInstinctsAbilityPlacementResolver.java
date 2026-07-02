@@ -7,8 +7,10 @@ import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
+import com.rotdb.simulation.domain.model.buff.enums.BuffSource;
 import com.rotdb.simulation.domain.model.context.AbilityPlacement;
 import com.rotdb.simulation.domain.model.context.SimulationState;
+import com.rotdb.simulation.domain.provider.BuffProvider;
 
 public class PostNaturalInstinctsAbilityPlacementResolver {
     public static double resolve(AbilityPlacement abilityPlacement, SimulationState simulationState) {
@@ -32,7 +34,7 @@ public class PostNaturalInstinctsAbilityPlacementResolver {
 
         if (buff.has(BuffId.ASYLUMSURGEONSRINGPROC) && ability.getAdrenaline() < 0
                 && eq.getRing().getEffect().contains(Effect.ASYLUMSURGEONSRING)) {
-            adrenalineDelta += 15;
+            adrenalineDelta += BuffProvider.get(BuffId.ASYLUMSURGEONSRINGPROC, BuffSource.PROC, simulationState).getActivationAdrenalineDelta();
         }
 
         return adrenalineDelta;

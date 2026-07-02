@@ -1,7 +1,10 @@
 package com.rotdb.shared.ability.factory;
 
+import com.rotdb.shared.ability.model.GeneratedBuffEffect;
+import com.rotdb.shared.ability.model.GeneratedBuffTiming;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 
 import java.util.List;
 
@@ -40,6 +43,11 @@ public class MagicAbilityFactory {
     }
 
     public static AbilityContext soniceWave() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.SONICWAVE,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(0.9, 1.1, false, BASIC, 2)),
                 "Sonic Wave",
@@ -49,10 +57,16 @@ public class MagicAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MAGIC,
-                SONICWAVE);
+                SONICWAVE,
+                generatedBuffEffects);
     }
 
     public static AbilityContext greaterSonicWave() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.GREATERSONICWAVE,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(1.15, 1.35, false, BASIC, 2)),
                 "Greater Sonic Wave",
@@ -62,7 +76,8 @@ public class MagicAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MAGIC,
-                GREATERSONICWAVE);
+                GREATERSONICWAVE,
+                generatedBuffEffects);
     }
 
     public static AbilityContext omnipower() {
@@ -205,6 +220,11 @@ public class MagicAbilityFactory {
     }
 
     public static AbilityContext concentratedBlast() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.CONCENTRATEDBLASTBUFF,
+                GeneratedBuffTiming.ON_COMPLETION
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(3,
                 List.of(new AbilityHitsContext(0.3, 0.4, false, BASIC, 1),
                         new AbilityHitsContext(0.3, 0.4, false, BASIC, 2),
@@ -216,10 +236,16 @@ public class MagicAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MAGIC,
-                CONCENTRATEDBLAST);
+                CONCENTRATEDBLAST,
+                generatedBuffEffects);
     }
 
     public static AbilityContext greaterConcentratedBlast() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.GREATERCONCENTRATEDBLASTBUFF,
+                GeneratedBuffTiming.ON_COMPLETION
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(3,
                 List.of(new AbilityHitsContext(0.4, 0.5, false, BASIC, 1),
                         new AbilityHitsContext(0.4, 0.5, false, BASIC, 2),
@@ -231,7 +257,8 @@ public class MagicAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MAGIC,
-                GREATERCONCENTRATEDBLAST);
+                GREATERCONCENTRATEDBLAST,
+                generatedBuffEffects);
     }
 
     public static AbilityContext magmaTempest() {
@@ -288,6 +315,11 @@ public class MagicAbilityFactory {
     }
 
     public static AbilityContext tsunami() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.TSUNAMI,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(2.25, 2.75, false, ULTIMATE, 3)),
                 "Tsunami",
@@ -297,6 +329,7 @@ public class MagicAbilityFactory {
                 BOTH,
                 MULTI_TARGET,
                 MAGIC,
-                TSUNAMI);
+                TSUNAMI,
+                generatedBuffEffects);
     }
 }

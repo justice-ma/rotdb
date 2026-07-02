@@ -9,7 +9,8 @@ import java.util.Map;
 
 public class TickSnapshot {
     private int tick;
-    private List<AbilityPlacement> placedAbilities;
+    private List<AbilityPlacement> castAbilities;
+    private List<AbilityPlacement> releasedAbilities;
     private List<BuffPlacement> placedBuffs;
     private RotationCombatState startingCombatState;
     private RotationCombatState endingCombatState;
@@ -17,8 +18,8 @@ public class TickSnapshot {
     private Map<AbilityCooldownKey, Integer> endingAbilityCooldownMap;
     private Map<BuffCooldownKey, Integer> startingBuffCooldownMap;
     private Map<BuffCooldownKey, Integer> endingBuffCooldownMap;
-    private Map<BuffId, Integer> startingActiveBuffDurationMap;
-    private Map<BuffId, Integer> endingActiveBuffDurationMap;
+    private Map<BuffId, ActiveBuffState> startingActiveBuffDurationMap;
+    private Map<BuffId, ActiveBuffState> endingActiveBuffDurationMap;
     private double startingAdrenaline;
     private double endingAdrenaline;
     private List<TimelineHit> landedHits;
@@ -32,12 +33,20 @@ public class TickSnapshot {
         this.tick = tick;
     }
 
-    public List<AbilityPlacement> getPlacedAbilities() {
-        return placedAbilities;
+    public List<AbilityPlacement> getCastAbilities() {
+        return castAbilities;
     }
 
-    public void setPlacedAbilities(List<AbilityPlacement> placedAbilities) {
-        this.placedAbilities = placedAbilities;
+    public void setCastAbilities(List<AbilityPlacement> castAbilities) {
+        this.castAbilities = castAbilities;
+    }
+
+    public List<AbilityPlacement> getReleasedAbilities() {
+        return releasedAbilities;
+    }
+
+    public void setReleasedAbilities(List<AbilityPlacement> releasedAbilities) {
+        this.releasedAbilities = releasedAbilities;
     }
 
     public List<BuffPlacement> getPlacedBuffs() {
@@ -96,19 +105,19 @@ public class TickSnapshot {
         this.endingBuffCooldownMap = endingBuffCooldownMap;
     }
 
-    public Map<BuffId, Integer> getStartingActiveBuffDurationMap() {
+    public Map<BuffId, ActiveBuffState> getStartingActiveBuffDurationMap() {
         return startingActiveBuffDurationMap;
     }
 
-    public void setStartingActiveBuffDurationMap(Map<BuffId, Integer> startingActiveBuffDurationMap) {
+    public void setStartingActiveBuffDurationMap(Map<BuffId, ActiveBuffState> startingActiveBuffDurationMap) {
         this.startingActiveBuffDurationMap = startingActiveBuffDurationMap;
     }
 
-    public Map<BuffId, Integer> getEndingActiveBuffDurationMap() {
+    public Map<BuffId, ActiveBuffState> getEndingActiveBuffDurationMap() {
         return endingActiveBuffDurationMap;
     }
 
-    public void setEndingActiveBuffDurationMap(Map<BuffId, Integer> endingActiveBuffDurationMap) {
+    public void setEndingActiveBuffDurationMap(Map<BuffId, ActiveBuffState> endingActiveBuffDurationMap) {
         this.endingActiveBuffDurationMap = endingActiveBuffDurationMap;
     }
 

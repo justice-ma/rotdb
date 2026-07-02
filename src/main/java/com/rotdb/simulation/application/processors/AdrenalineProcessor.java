@@ -3,10 +3,7 @@ package com.rotdb.simulation.application.processors;
 import com.rotdb.calculation.domain.model.DamageResult;
 import com.rotdb.shared.ability.AbilityProvider;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
-import com.rotdb.simulation.domain.model.context.AbilityPlacement;
-import com.rotdb.simulation.domain.model.context.SimulationState;
-import com.rotdb.simulation.domain.model.context.TickSnapshot;
-import com.rotdb.simulation.domain.model.context.TimelineHit;
+import com.rotdb.simulation.domain.model.context.*;
 import com.rotdb.simulation.domain.resolvers.adrenaline.*;
 
 import java.util.List;
@@ -40,8 +37,8 @@ public class AdrenalineProcessor {
         simulationState.setAdrenaline(simulationState.getAdrenaline() + adrenalineDelta);
     }
 
-    public static void generateWarnings(SimulationState simulationState, TickSnapshot tickSnapshot) {
-        if (simulationState.getAdrenaline() < 0) {
+    public static void generateWarnings(SimulationState simulationState, TickSnapshot tickSnapshot, List<BuffPlacement> newBuffs, List<AbilityPlacement> newAbilities) {
+        if (simulationState.getAdrenaline() < 0 && (newBuffs != null && !newBuffs.isEmpty() || newAbilities != null && !newAbilities.isEmpty())) {
             tickSnapshot.getWarnings().add("Adrenaline may not be sufficient.");
         }
 

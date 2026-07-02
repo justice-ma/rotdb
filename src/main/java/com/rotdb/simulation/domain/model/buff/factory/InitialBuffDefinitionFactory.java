@@ -136,7 +136,9 @@ public class InitialBuffDefinitionFactory {
                 null,
                 null,
                 false,
-                true
+                true,
+                null,
+                null
         );
     }
 
@@ -149,7 +151,9 @@ public class InitialBuffDefinitionFactory {
                 null,
                 null,
                 false,
-                true
+                true,
+                null,
+                null
         );
     }
 }

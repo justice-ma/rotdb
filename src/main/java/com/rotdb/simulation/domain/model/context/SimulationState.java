@@ -10,7 +10,7 @@ public class SimulationState {
     private RotationCombatState state;
     private Map<AbilityCooldownKey, Integer> abilityCooldownMap;
     private Map<BuffCooldownKey, Integer> buffCooldownMap;
-    private Map<BuffId, Integer> activeBuffDurationMap;
+    private Map<BuffId, ActiveBuffState> activeBuffDurationMap;
     private double adrenaline;
     private double maximumAdrenaline = 100.0;
 
@@ -38,11 +38,11 @@ public class SimulationState {
         this.buffCooldownMap = buffCooldownMap;
     }
 
-    public Map<BuffId, Integer> getActiveBuffDurationMap() {
+    public Map<BuffId, ActiveBuffState> getActiveBuffDurationMap() {
         return activeBuffDurationMap;
     }
 
-    public void setActiveBuffDurationMap(Map<BuffId, Integer> activeBuffDurationMap) {
+    public void setActiveBuffDurationMap(Map<BuffId, ActiveBuffState> activeBuffDurationMap) {
         this.activeBuffDurationMap = activeBuffDurationMap;
     }
 

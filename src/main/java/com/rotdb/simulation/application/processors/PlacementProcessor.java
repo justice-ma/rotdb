@@ -2,6 +2,8 @@ package com.rotdb.simulation.application.processors;
 
 import com.rotdb.simulation.domain.model.context.AbilityPlacement;
 import com.rotdb.simulation.domain.model.context.BuffPlacement;
+import com.rotdb.simulation.domain.model.context.SimulationState;
+import com.rotdb.simulation.domain.model.context.TickSnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,16 +11,31 @@ import java.util.List;
 import java.util.Map;
 
 public class PlacementProcessor {
-    public static Map<Integer, List<AbilityPlacement>> groupAbilitiesByTick(List<AbilityPlacement> abilityPlacements) {
+    public static Map<Integer, List<AbilityPlacement>> groupAbilitiesByCastTick(List<AbilityPlacement> abilityPlacements) {
         Map<Integer, List<AbilityPlacement>> abilities = new HashMap<>();
 
         for (AbilityPlacement abilityPlacement : abilityPlacements) {
-            if (abilities.containsKey(abilityPlacement.getPlacementTick())) {
-                abilities.get(abilityPlacement.getPlacementTick()).add(abilityPlacement);
+            if (abilities.containsKey(abilityPlacement.getCastTick())) {
+                abilities.get(abilityPlacement.getCastTick()).add(abilityPlacement);
             } else {
                 List<AbilityPlacement> newList = new ArrayList<>();
                 newList.add(abilityPlacement);
-                abilities.put(abilityPlacement.getPlacementTick(), newList);
+                abilities.put(abilityPlacement.getCastTick(), newList);
+            }
+        }
+        return abilities;
+    }
+
+    public static Map<Integer, List<AbilityPlacement>> groupAbilityByReleaseTick(List<AbilityPlacement> abilityPlacements) {
+        Map<Integer, List<AbilityPlacement>> abilities = new HashMap<>();
+
+        for (AbilityPlacement abilityPlacement : abilityPlacements) {
+            if (abilities.containsKey(abilityPlacement.getReleaseTick())) {
+                abilities.get(abilityPlacement.getReleaseTick()).add(abilityPlacement);
+            } else {
+                List<AbilityPlacement> newList = new ArrayList<>();
+                newList.add(abilityPlacement);
+                abilities.put(abilityPlacement.getReleaseTick(), newList);
             }
         }
         return abilities;
@@ -37,5 +54,11 @@ public class PlacementProcessor {
             }
         }
         return buffs;
+    }
+
+    public static void generateAbilityReleaseWarnings(SimulationState simulationState, AbilityPlacement abilityPlacement, TickSnapshot tickSnapshot) {
+        if (abilityPlacement.getCastTick() > abilityPlacement.getReleaseTick()) {
+            tickSnapshot.getWarnings().add("Ability cannot be released before it is cast.");
+        }
     }
 }

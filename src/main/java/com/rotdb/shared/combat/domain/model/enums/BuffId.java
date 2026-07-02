@@ -12,7 +12,8 @@ public enum BuffId {
     ENCHANTMENTOFMETAPHYSICS(0, 0, false, "Metaphysics"),
     SHARDOFGENESIS(0, 0, false, "Shard of Genesis"),
     DRACONICFRUIT(0, 0, false, "Draconic Fruit"),
-    SMASH(0, 0, false, "Rend"),
+    REND(0, 0, false, "Rend"),
+    RENDBLEED(0, 0, false, "Rend Bleed"),
     CHAOSROAR(0, 0, false, "Chaos Roar"),
     SUNSHINE(0, 0, false, "Sunshine"),
     DEATHSWIFTNESS(0, 0, false, "Death Swiftness"),
@@ -101,7 +102,14 @@ public enum BuffId {
     CONSERVATIONOFENERGY(0, 0, false, "Conservation Of Energy"),
     RINGOFVIGOUR(0, 0, false, "Ring of Vigour"),
     TSUNAMI(0, 0, false, "Tsunami"),
-    WARPRIESTOFARMADYLPROC(0, 0, false, "Warpriest of Armadyl Proc");
+    WARPRIESTOFARMADYLPROC(0, 0, false, "Warpriest of Armadyl Proc"),
+    SONICWAVE(0, 0, false, "Sonic Wave"),
+    GREATERSONICWAVE(0, 0, false, "Greater Sonic Wave"),
+    GREATERBARGE(0, 0, false, "Greater Barge"),
+    SUNFALLSLAM(0, 0, false, "Sunfall Slam"),
+    COMMANDSKELETONWARRIOR(0, 0, false, "Commands Skeleton Warrior"),
+    SOULREAVE(0, 0, false, "Soul Reave"),
+    DEATHESSENCE(0, 0, false, "Death Essence");
 
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;

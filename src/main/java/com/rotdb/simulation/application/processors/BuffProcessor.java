@@ -1,29 +1,98 @@
 package com.rotdb.simulation.application.processors;
 
+import com.rotdb.shared.ability.AbilityProvider;
+import com.rotdb.shared.ability.model.GeneratedBuffEffect;
+import com.rotdb.shared.ability.model.GeneratedBuffTiming;
+import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.simulation.domain.model.buff.AppliedBuffResult;
 import com.rotdb.simulation.domain.model.buff.BuffCooldownKey;
 import com.rotdb.simulation.domain.model.buff.BuffDefinition;
 import com.rotdb.simulation.domain.model.buff.enums.BuffSource;
-import com.rotdb.simulation.domain.model.context.SimulationState;
+import com.rotdb.simulation.domain.model.context.*;
 import com.rotdb.simulation.domain.provider.BuffProvider;
+import com.rotdb.simulation.domain.resolvers.buff.AbilityGeneratedBuffEffectResolver;
 import com.rotdb.simulation.domain.resolvers.buff.BuffCooldownKeyResolver;
+import com.rotdb.simulation.domain.resolvers.cooldown.AbilityCooldownKeyResolver;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class BuffProcessor {
-    public static void initializeCooldown(BuffId buff, SimulationState state) {
-        BuffCooldownKey buffKey = BuffCooldownKeyResolver.resolve(buff);
-        BuffDefinition buffDefinition = BuffProvider.get(buff, BuffSource.USER_PLACED, state);
-        if (buffDefinition.getCooldownTicks() != null && buffDefinition.getCooldownTicks() > 0) {
-            state.getBuffCooldownMap().put(buffKey, buffDefinition.getCooldownTicks());
+    public static BuffDefinition applyUserPlacedBuff(BuffPlacement buffPlacement, SimulationState state, TickSnapshot snapshot) {
+        BuffDefinition buffDefinition = BuffProvider.get(buffPlacement.getBuffId(), BuffSource.USER_PLACED, state);
+        processAdrenalineDelta(buffDefinition, state);
+        generateWarnings(state, snapshot, buffDefinition);
+        initializeCooldown(buffDefinition.getBuffId(), state, buffDefinition);
+        processGlobalCooldown(buffDefinition, state, snapshot);
+        switch (buffDefinition.getLifecycle()) {
+            case TIMED -> {
+                initializeBuffDuration(buffDefinition.getBuffId(), state, buffDefinition, null);
+                addToBuffSet(state, buffDefinition);
+            }
+            case UNTIL_CONSUMED -> {
+                addToBuffSet(state, buffDefinition);
+            }
+        }
+        return buffDefinition;
+    }
+
+    private static AppliedBuffResult applyAbilityGeneratedBuff(GeneratedBuffEffect buffEffect, SimulationState state) {
+        BuffDefinition buffDefinition = BuffProvider.get(buffEffect.buffId(), BuffSource.ABILITY_GENERATED, state);
+        AppliedBuffResult appliedBuffResult = new AppliedBuffResult(
+                buffDefinition,
+                buffEffect.durationOverrideTicks() == null ? buffDefinition.getDurationTicks() : buffEffect.durationOverrideTicks()
+        );
+        processAdrenalineDelta(buffDefinition, state);
+        initializeCooldown(buffDefinition.getBuffId(), state, buffDefinition);
+        switch (buffDefinition.getLifecycle()) {
+            case TIMED -> {
+                initializeBuffDuration(buffDefinition.getBuffId(), state, buffDefinition, buffEffect.durationOverrideTicks());
+                addToBuffSet(state, buffDefinition);
+            }
+            case UNTIL_CONSUMED -> {
+                addToBuffSet(state, buffDefinition);
+            }
+        }
+        return appliedBuffResult;
+    }
+
+    public static List<AppliedBuffResult> applyAbilityGeneratedBuffsWithTiming(AbilityPlacement abilityPlacement, SimulationState state, GeneratedBuffTiming timing) {
+        AbilityContext ability = AbilityProvider.get(abilityPlacement.getPlacedAbility(), state.getState().getEquipment());
+        List<AppliedBuffResult> buffs = new ArrayList<>();
+        for (GeneratedBuffEffect buff : ability.getGeneratedBuffEffects()) {
+            if (buff.buffTiming() == timing) {
+                buffs.add(applyAbilityGeneratedBuff(buff, state));
+            }
+        }
+        for (GeneratedBuffEffect buff : AbilityGeneratedBuffEffectResolver.resolve(abilityPlacement, state, ability, timing)) {
+            if (buff.buffTiming() == timing) {
+                buffs.add(applyAbilityGeneratedBuff(buff, state));
+            }
+        }
+        return buffs;
+    }
+
+    private static void initializeCooldown(BuffId buff, SimulationState state, BuffDefinition buffDefinition) {
+        if (buffDefinition.getCooldownTicks() != null) {
+            BuffCooldownKey buffKey = BuffCooldownKeyResolver.resolve(buff);
+            if (buffDefinition.getCooldownTicks() != null && buffDefinition.getCooldownTicks() > 0) {
+                state.getBuffCooldownMap().put(buffKey, buffDefinition.getCooldownTicks());
+            }
         }
     }
 
-    public static void initializeBuffDuration(BuffId buff, SimulationState state) {
-        BuffDefinition buffDefinition = BuffProvider.get(buff, BuffSource.USER_PLACED, state);
-        if (buffDefinition.getDurationTicks() != null && buffDefinition.getDurationTicks() > 0) {
-            state.getActiveBuffDurationMap().put(buff, buffDefinition.getDurationTicks());
+    private static void initializeBuffDuration(BuffId buff, SimulationState state, BuffDefinition buffDefinition, Integer durationOverrideTicks) {
+        Integer durationTicks = durationOverrideTicks == null ? buffDefinition.getDurationTicks() : durationOverrideTicks;
+        ActiveBuffState activeBuffState = new ActiveBuffState(
+                buff,
+                buffDefinition.getSource(),
+                durationTicks
+        );
+        if (durationTicks != null && durationTicks > 0) {
+            state.getActiveBuffDurationMap().put(buff, activeBuffState);
         }
     }
 
@@ -41,17 +110,59 @@ public class BuffProcessor {
     }
 
     public static void decayBuffDuration(SimulationState state) {
-        for (Map.Entry<BuffId, Integer> entry : state.getActiveBuffDurationMap().entrySet()) {
-            entry.setValue(entry.getValue() - 1);
+        for (Map.Entry<BuffId, ActiveBuffState> entry : state.getActiveBuffDurationMap().entrySet()) {
+            entry.getValue().setDuration(entry.getValue().getDuration() - 1);
         }
 
-        Iterator<Map.Entry<BuffId, Integer>> iterator = state.getActiveBuffDurationMap().entrySet().iterator();
+        Iterator<Map.Entry<BuffId, ActiveBuffState>> iterator = state.getActiveBuffDurationMap().entrySet().iterator();
         while (iterator.hasNext()) {
-            Map.Entry<BuffId, Integer> entry = iterator.next();
-            if (entry.getValue() <= 0) {
+            Map.Entry<BuffId, ActiveBuffState> entry = iterator.next();
+            if (entry.getValue().getDuration() <= 0) {
                 iterator.remove();
-                state.getState().getBuffs().getBuffSet().remove(entry.getKey());
+                BuffDefinition buffDefinition = BuffProvider.get(entry.getKey(), entry.getValue().getSource(), state);
+                removeFromBuffSet(state, buffDefinition, entry.getKey());
             }
+        }
+    }
+
+    private static void addToBuffSet(SimulationState state, BuffDefinition buffDefinition) {
+        switch (buffDefinition.getApplication()) {
+            case PLAYER_BUFF_SET -> state.getState().getBuffs().getBuffSet().add(buffDefinition.getBuffId());
+            case TARGET_BUFF_SET -> state.getState().getTarget().getDebuffs().add(buffDefinition.getBuffId());
+        }
+    }
+
+    private static void removeFromBuffSet(SimulationState state, BuffDefinition buffDefinition, BuffId buffId) {
+        switch (buffDefinition.getApplication()) {
+            case PLAYER_BUFF_SET -> state.getState().getBuffs().getBuffSet().remove(buffId);
+            case TARGET_BUFF_SET -> state.getState().getTarget().getDebuffs().remove(buffId);
+        }
+    }
+
+    private static void generateWarnings(SimulationState state, TickSnapshot tickSnapshot, BuffDefinition buffDefinition) {
+        BuffId buffId = buffDefinition.getBuffId();
+        BuffCooldownKey buffKey = BuffCooldownKeyResolver.resolve(buffId);
+        if (state.getBuffCooldownMap().containsKey(buffKey)) {
+            tickSnapshot.getWarnings().add(buffId.getLabel() + " may be on cooldown.");
+        }
+
+        if (state.getActiveBuffDurationMap().containsKey(buffId)) {
+            tickSnapshot.getWarnings().add(buffId.getLabel() + " may still be active.");
+        }
+    }
+
+    private static void processAdrenalineDelta(BuffDefinition buffDefinition, SimulationState state) {
+        if (buffDefinition.getActivationAdrenalineDelta() != null) {
+            state.setAdrenaline(state.getAdrenaline() + buffDefinition.getActivationAdrenalineDelta());
+        }
+    }
+
+    private static void processGlobalCooldown(BuffDefinition buffDefinition, SimulationState state, TickSnapshot snapshot) {
+        if (buffDefinition.isGcdConsuming()) {
+            if (state.getAbilityCooldownMap().containsKey(AbilityCooldownKeyResolver.resolveGlobalCooldown())) {
+                snapshot.getWarnings().add("Global cooldown may not be ready.");
+            }
+            state.getAbilityCooldownMap().put(AbilityCooldownKeyResolver.resolveGlobalCooldown(), 3);
         }
     }
 }

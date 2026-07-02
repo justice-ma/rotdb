@@ -7,8 +7,12 @@ import com.rotdb.simulation.domain.model.buff.enums.BuffLifecycle;
 import com.rotdb.simulation.domain.model.buff.enums.BuffSource;
 
 public class AbilityGeneratedBuffDefinitionFactory {
-    public static BuffDefinition smash() {
-        return create(BuffId.SMASH, BuffLifecycle.TIMED, 10, null);
+    public static BuffDefinition rend() {
+        return create(BuffId.REND, BuffLifecycle.TIMED, 10, null);
+    }
+
+    public static BuffDefinition rendBleed() {
+        return create(BuffId.RENDBLEED, BuffLifecycle.TIMED, 25, null);
     }
 
     public static BuffDefinition chaosRoar() {
@@ -71,12 +75,58 @@ public class AbilityGeneratedBuffDefinitionFactory {
         return create(BuffId.BACKSTAB, BuffLifecycle.TIMED, 100, null, BuffApplication.TARGET_BUFF_SET);
     }
 
+    public static BuffDefinition sonicWave() {
+        return create(BuffId.SONICWAVE, BuffLifecycle.TIMED, 15, null, BuffApplication.PLAYER_BUFF_SET);
+    }
+
+    public static BuffDefinition greaterSonicWave() {
+        return create(BuffId.GREATERSONICWAVE, BuffLifecycle.TIMED, 15, null, BuffApplication.PLAYER_BUFF_SET);
+    }
+
+    public static BuffDefinition greaterBarge() {
+        return create(BuffId.GREATERBARGE, BuffLifecycle.TIMED, 10, null, BuffApplication.PLAYER_BUFF_SET);
+    }
+
+    public static BuffDefinition sunfallSlam() {
+        return create(BuffId.SUNFALLSLAM, BuffLifecycle.TIMED, 50, 100, BuffApplication.PLAYER_BUFF_SET);
+    }
+
+    public static BuffDefinition soulReave() {
+        return create(BuffId.SOULREAVE, BuffLifecycle.TIMED, 50, 100, BuffApplication.PLAYER_BUFF_SET);
+    }
+
+    public static BuffDefinition deathEssence() {
+        return create(BuffId.DEATHESSENCE, BuffLifecycle.TIMED, 50, 100, BuffApplication.PLAYER_BUFF_SET);
+    }
+
     public static BuffDefinition meteorStrike() {
-        return create(BuffId.METEORSTRIKE, BuffLifecycle.TIMED, 50, null);
+        return new BuffDefinition(
+                BuffId.METEORSTRIKE,
+                BuffSource.ABILITY_GENERATED,
+                BuffLifecycle.TIMED,
+                BuffApplication.PLAYER_BUFF_SET,
+                50,
+                null,
+                false,
+                false,
+                null,
+                4.5
+        );
     }
 
     public static BuffDefinition vestmentsBleed() {
-        return create(BuffId.VESTMENTSBLEED, BuffLifecycle.TIMED, 50, 30);
+        return new BuffDefinition(
+                BuffId.VESTMENTSBLEED,
+                BuffSource.ABILITY_GENERATED,
+                BuffLifecycle.TIMED,
+                BuffApplication.PLAYER_BUFF_SET,
+                30,
+                null,
+                false,
+                false,
+                null,
+                0.5
+        );
     }
 
     public static BuffDefinition tsunami() {
@@ -112,7 +162,9 @@ public class AbilityGeneratedBuffDefinitionFactory {
                 duration,
                 cooldown,
                 false,
-                false
+                false,
+                null,
+                null
         );
     }
 
@@ -125,7 +177,39 @@ public class AbilityGeneratedBuffDefinitionFactory {
                 duration,
                 cooldown,
                 false,
-                false
+                false,
+                null,
+                null
+        );
+    }
+
+    private static BuffDefinition create(BuffId id, BuffLifecycle lifecycle, Integer duration, Integer cooldown, Double adrenalineDelta, Double tickAdrenalineDelta) {
+        return new BuffDefinition(
+                id,
+                BuffSource.ABILITY_GENERATED,
+                lifecycle,
+                BuffApplication.PLAYER_BUFF_SET,
+                duration,
+                cooldown,
+                false,
+                false,
+                adrenalineDelta,
+                tickAdrenalineDelta
+        );
+    }
+
+    private static BuffDefinition create(BuffId id, BuffLifecycle lifecycle, Integer duration, Integer cooldown, BuffApplication application, Double adrenalineDelta) {
+        return new BuffDefinition(
+                id,
+                BuffSource.ABILITY_GENERATED,
+                lifecycle,
+                application,
+                duration,
+                cooldown,
+                false,
+                false,
+                adrenalineDelta,
+                null
         );
     }
 }

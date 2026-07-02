@@ -58,7 +58,7 @@ const BUFF_UI_META = {
     category: BUFF_CATEGORY.ENCHANTMENTS,
     styles: [STYLE.MAGIC],
   },
-  SMASH: {
+  REND: {
     category: BUFF_CATEGORY.ABILITY_BUFFS,
     styles: [STYLE.MELEE],
   },

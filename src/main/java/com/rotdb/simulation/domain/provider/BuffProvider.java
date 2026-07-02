@@ -84,6 +84,7 @@ public final class BuffProvider {
             case IMBUESHADOWS -> UserPlacedBuffDefinitionFactory.imbueShadows();
             case NATURALINSTINCT -> UserPlacedBuffDefinitionFactory.naturalInstinct();
             case SPLITSOUL -> UserPlacedBuffDefinitionFactory.splitSoul();
+            case COMMANDSKELETONWARRIOR -> UserPlacedBuffDefinitionFactory.commandSkeletonWarrior();
 
             default -> throw new IllegalArgumentException("Unknown buff type: " + id);
         };
@@ -91,7 +92,8 @@ public final class BuffProvider {
 
     private static BuffDefinition getAbilityGeneratedDefinition(BuffId id, SimulationState state) {
         return switch (id) {
-            case SMASH -> AbilityGeneratedBuffDefinitionFactory.smash();
+            case REND -> AbilityGeneratedBuffDefinitionFactory.rend();
+            case RENDBLEED -> AbilityGeneratedBuffDefinitionFactory.rendBleed();
             case CHAOSROAR -> AbilityGeneratedBuffDefinitionFactory.chaosRoar();
             case BALANCEBYFORCE -> AbilityGeneratedBuffDefinitionFactory.balanceByForce();
             case DRAGONSCIMITAR -> AbilityGeneratedBuffDefinitionFactory.dragonScimitar();
@@ -115,6 +117,12 @@ public final class BuffProvider {
             case FLAMEBOUNDRIVAL -> AbilityGeneratedBuffDefinitionFactory.flameboundRival();
             case ZGS -> AbilityGeneratedBuffDefinitionFactory.zgs();
             case GALES -> AbilityGeneratedBuffDefinitionFactory.gales();
+            case SONICWAVE -> AbilityGeneratedBuffDefinitionFactory.sonicWave();
+            case GREATERSONICWAVE -> AbilityGeneratedBuffDefinitionFactory.greaterSonicWave();
+            case GREATERBARGE -> AbilityGeneratedBuffDefinitionFactory.greaterBarge();
+            case SUNFALLSLAM -> AbilityGeneratedBuffDefinitionFactory.sunfallSlam();
+            case SOULREAVE -> AbilityGeneratedBuffDefinitionFactory.soulReave();
+            case DEATHESSENCE -> AbilityGeneratedBuffDefinitionFactory.deathEssence();
 
             default -> throw new IllegalArgumentException("Unknown buff type: " + id);
         };
@@ -145,7 +153,9 @@ public final class BuffProvider {
                     null,
                     null,
                     false,
-                    true
+                    true,
+                    null,
+                    null
             );
             default -> throw new IllegalArgumentException("Unknown buff type: " + id);
         };

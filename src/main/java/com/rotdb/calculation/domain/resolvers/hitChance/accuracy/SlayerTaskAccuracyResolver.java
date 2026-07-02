@@ -14,7 +14,7 @@ public class SlayerTaskAccuracyResolver {
 
         double accuracyModifier = 0;
 
-        if (gloves.getEffect().contains(Effect.DRAGONSLAYERGLOVES) && context.getTarget().has(TargetTags.DRAGONSLAYER))
+        if (gloves.getEffect().contains(Effect.DRAGONSLAYERGLOVES) && context.getTarget().has(TargetTags.DRAGON))
             accuracyModifier += 0.1;
         if (head.getEffect().contains(Effect.SLAYERHELM)) {
             if (head.getEffect().contains(Effect.FULL)) {

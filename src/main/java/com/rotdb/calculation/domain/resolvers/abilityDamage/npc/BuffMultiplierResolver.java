@@ -14,7 +14,7 @@ public class BuffMultiplierResolver {
         BuffContext buff = context.getBuffs();
         EquipmentSlot gloves = context.getEquipment().getGloves();
         double mod = 1;
-        if (buff.has(BuffId.SMASH) && gloves.getEffect().contains(Effect.GLOVESOFPASSAGE) && hit.isDot()) {
+        if (buff.has(BuffId.RENDBLEED) && gloves.getEffect().contains(Effect.GLOVESOFPASSAGE) && hit.isDot()) {
             if (buff.has(BuffId.ENCHANTMENTOFAGONY)) {
                 mod *= 1.25;
             } else {

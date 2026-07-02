@@ -1,7 +1,10 @@
 package com.rotdb.shared.ability.factory;
 
+import com.rotdb.shared.ability.model.GeneratedBuffEffect;
+import com.rotdb.shared.ability.model.GeneratedBuffTiming;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 
 import java.util.List;
@@ -130,6 +133,11 @@ public class RangedAbilityFactory {
     }
 
     public static AbilityContext galeshot() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.GALES,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(0.9, 1.1, false, BASIC, 2)),
                 "Galeshot",
@@ -139,7 +147,8 @@ public class RangedAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.RANGED,
-                GALESHOT);
+                GALESHOT,
+                generatedBuffEffects);
     }
 
     public static AbilityContext rapidFire() {

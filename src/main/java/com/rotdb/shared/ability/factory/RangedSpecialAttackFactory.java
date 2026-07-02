@@ -1,7 +1,11 @@
 package com.rotdb.shared.ability.factory;
 
+import com.rotdb.shared.ability.model.AbilityCooldownTiming;
+import com.rotdb.shared.ability.model.GeneratedBuffEffect;
+import com.rotdb.shared.ability.model.GeneratedBuffTiming;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 
 import java.util.List;
 
@@ -96,7 +100,8 @@ public class RangedSpecialAttackFactory {
                 BOTH,
                 MULTI_TARGET,
                 RANGED,
-                CRYSTALRAIN);
+                CRYSTALRAIN,
+                AbilityCooldownTiming.ON_RELEASE);
     }
 
     public static AbilityContext hamstring() {
@@ -153,6 +158,11 @@ public class RangedSpecialAttackFactory {
     }
 
     public static AbilityContext balanceByForce() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.BALANCEBYFORCE,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(2.35, 2.55, false, ENHANCED, 2)),
                 "Balance by Force",
@@ -162,7 +172,8 @@ public class RangedSpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 RANGED,
-                BALANCEBYFORCE);
+                BALANCEBYFORCE,
+                generatedBuffEffects);
     }
 
     public static AbilityContext phantomStrike() {

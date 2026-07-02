@@ -125,6 +125,18 @@ public class EquipmentModel {
         return pieces;
     }
 
+    public int getTotalTumekensPieces() {
+        int pieces = 0;
+
+        pieces += getHead().getEffect().contains(Effect.TUMEKENS) ? 1 : 0;
+        pieces += getBody().getEffect().contains(Effect.TUMEKENS) ? 1 : 0;
+        pieces += getLegs().getEffect().contains(Effect.TUMEKENS) ? 1 : 0;
+        pieces += getGloves().getEffect().contains(Effect.TUMEKENS) ? 1 : 0;
+        pieces += getBoots().getEffect().contains(Effect.TUMEKENS) ? 1 : 0;
+
+        return pieces;
+    }
+
     public EquipmentSlot getOffhand() {
         return offhand == null ? EquipmentSlot.emptySlot() : offhand;
     }

@@ -9,11 +9,13 @@ public class TimelineHit {
     private final double critChance;
     private final HitType hitType;
     private final AbilityId parentAbility;
+    private final Integer placementId;
     private final boolean dot, channelled;
 
     public TimelineHit(int hitMinDamage, int hitMaxDamage, int hitAvgDamage, int hitMinCrit, int hitMaxCrit,
                        int hitAvgCrit, int hitMinNonCrit, int hitMaxNonCrit, int hitAvgNonCrit, int hitIndex,
-                       int hitTiming, int landingTick, double critChance, HitType hitType, AbilityId parentAbility, boolean dot, boolean channelled) {
+                       int hitTiming, int landingTick, double critChance, HitType hitType, AbilityId parentAbility, Integer placementId,
+                       boolean dot, boolean channelled) {
         this.hitMinDamage = hitMinDamage;
         this.hitMaxDamage = hitMaxDamage;
         this.hitAvgDamage = hitAvgDamage;
@@ -29,6 +31,7 @@ public class TimelineHit {
         this.critChance = critChance;
         this.hitType = hitType;
         this.parentAbility = parentAbility;
+        this.placementId = placementId;
         this.dot = dot;
         this.channelled = channelled;
     }
@@ -99,5 +102,9 @@ public class TimelineHit {
 
     public boolean isChannelled() {
         return channelled;
+    }
+
+    public Integer getPlacementId() {
+        return placementId;
     }
 }

@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RotationTimelineServiceTest {
     CalculationEngine engine = new CalculationEngine();
@@ -30,7 +30,7 @@ public class RotationTimelineServiceTest {
         RotationCombatState state = sampleRangedState();
 
         AbilityPlacement deadshot = new AbilityPlacement();
-        deadshot.setPlacementTick(0);
+        deadshot.setCastTick(0);
         deadshot.setPlacedAbility(AbilityId.DEADSHOTIGNEOUS);
 
         // Act
@@ -45,8 +45,8 @@ public class RotationTimelineServiceTest {
         TickSnapshot tick4 = timeline.getTimeline().get(4);
 
         assertEquals(0, tick0.getTick());
-        assertEquals(1, tick0.getPlacedAbilities().size());
-        assertEquals(AbilityId.DEADSHOTIGNEOUS, tick0.getPlacedAbilities().getFirst().getPlacedAbility());
+        assertEquals(1, tick0.getCastAbilities().size());
+        assertEquals(AbilityId.DEADSHOTIGNEOUS, tick0.getCastAbilities().getFirst().getPlacedAbility());
 
         assertEquals(100.0, tick0.getStartingAdrenaline());
         assertEquals(40.0, tick0.getEndingAdrenaline());
@@ -61,11 +61,11 @@ public class RotationTimelineServiceTest {
         RotationCombatState state = sampleRangedState();
 
         AbilityPlacement deadshot = new AbilityPlacement();
-        deadshot.setPlacementTick(0);
+        deadshot.setCastTick(0);
         deadshot.setPlacedAbility(AbilityId.DEADSHOTIGNEOUS);
 
         AbilityPlacement greaterRicochet = new AbilityPlacement();
-        greaterRicochet.setPlacementTick(3);
+        greaterRicochet.setCastTick(3);
         greaterRicochet.setPlacedAbility(AbilityId.GREATERRICOCHET);
 
         List<AbilityPlacement> abilities = new ArrayList<>();
@@ -79,6 +79,7 @@ public class RotationTimelineServiceTest {
                 .build(state, abilities, buffs);
 
         // Assert
+
         assertEquals(7, timeline.getTimeline().size());
 
         TickSnapshot tick0 = timeline.getTimeline().get(0);
@@ -88,11 +89,11 @@ public class RotationTimelineServiceTest {
         TickSnapshot tick6 = timeline.getTimeline().get(6);
 
         assertEquals(0, tick0.getTick());
-        assertEquals(1, tick0.getPlacedAbilities().size());
-        assertEquals(AbilityId.DEADSHOTIGNEOUS, tick0.getPlacedAbilities().getFirst().getPlacedAbility());
+        assertEquals(1, tick0.getCastAbilities().size());
+        assertEquals(AbilityId.DEADSHOTIGNEOUS, tick0.getCastAbilities().getFirst().getPlacedAbility());
 
-        assertEquals(1, tick3.getPlacedAbilities().size());
-        assertEquals(AbilityId.GREATERRICOCHET, tick3.getPlacedAbilities().getFirst().getPlacedAbility());
+        assertEquals(1, tick3.getCastAbilities().size());
+        assertEquals(AbilityId.GREATERRICOCHET, tick3.getCastAbilities().getFirst().getPlacedAbility());
 
         assertEquals(100.0, tick0.getStartingAdrenaline());
         assertEquals(40.0, tick0.getEndingAdrenaline());
@@ -103,6 +104,47 @@ public class RotationTimelineServiceTest {
         assertEquals(4, tick4.getLandedHits().size());
         assertEquals(1, tick5.getLandedHits().size());
         assertEquals(6, tick6.getLandedHits().size());
+    }
+
+    @Test
+    void rapidFire_applies_rapidFireBuff_on_completion() {
+        RotationCombatState state = sampleRangedState();
+        EquipmentSlot head = new EquipmentSlot();
+        EquipmentSlot body = new EquipmentSlot();
+        EquipmentSlot legs = new EquipmentSlot();
+        EquipmentSlot boots = new EquipmentSlot();
+        EquipmentSlot gloves = new EquipmentSlot();
+
+        head.setEffect(EnumSet.of(Effect.ELITEDRACOLICH));
+        body.setEffect(EnumSet.of(Effect.ELITEDRACOLICH));
+        legs.setEffect(EnumSet.of(Effect.ELITEDRACOLICH));
+        boots.setEffect(EnumSet.of(Effect.ELITEDRACOLICH));
+        gloves.setEffect(EnumSet.of(Effect.ELITEDRACOLICH));
+
+        state.getEquipment().setHead(head);
+        state.getEquipment().setBody(body);
+        state.getEquipment().setLegs(legs);
+        state.getEquipment().setBoots(boots);
+        state.getEquipment().setGloves(gloves);
+
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        AbilityPlacement rapidFire = new AbilityPlacement();
+        rapidFire.setCastTick(0);
+        rapidFire.setReleaseTick(0);
+        rapidFire.setPlacedAbility(AbilityId.RAPIDFIRE);
+        abilities.add(rapidFire);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(state, abilities, buffs);
+
+        TickSnapshot tick9 = timeline.getTimeline().get(9);
+        TickSnapshot tick8 = timeline.getTimeline().get(8);
+
+
+        assertTrue(tick9.getEndingCombatState().getBuffs().getBuffSet().contains(BuffId.RAPIDFIREBUFF));
+        assertFalse(tick8.getEndingCombatState().getBuffs().getBuffSet().contains(BuffId.RAPIDFIREBUFF));
     }
 
     private static RotationCombatState sampleRangedState() {

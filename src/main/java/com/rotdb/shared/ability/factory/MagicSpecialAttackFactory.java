@@ -1,7 +1,11 @@
 package com.rotdb.shared.ability.factory;
 
+import com.rotdb.shared.ability.model.AbilityCooldownTiming;
+import com.rotdb.shared.ability.model.GeneratedBuffEffect;
+import com.rotdb.shared.ability.model.GeneratedBuffTiming;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 
 import java.util.List;
 
@@ -31,6 +35,11 @@ public class MagicSpecialAttackFactory {
     }
 
     public static AbilityContext instability() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.INSTABILITY,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(1.2, 1.4, false, ENHANCED, 2)),
                 "Instability",
@@ -40,7 +49,10 @@ public class MagicSpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MAGIC,
-                INSTABILITY);
+                INSTABILITY,
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_RELEASE,
+                true);
     }
 
     public static AbilityContext runeFlame() {
@@ -57,6 +69,11 @@ public class MagicSpecialAttackFactory {
     }
 
     public static AbilityContext clawsOfGuthix() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.CLAWSOFGUTHIX,
+                GeneratedBuffTiming.ON_HIT
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(2, 2.4, false, ENHANCED, 1)),
                 "Claws of Guthix",
@@ -66,7 +83,8 @@ public class MagicSpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MAGIC,
-                CLAWSOFGUTHIX);
+                CLAWSOFGUTHIX,
+                generatedBuffEffects);
     }
 
     public static AbilityContext devour() {
@@ -178,6 +196,11 @@ public class MagicSpecialAttackFactory {
     }
 
     public static AbilityContext soulfire() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.CONFLAGRATE,
+                GeneratedBuffTiming.ON_CAST
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(7,
                 List.of(new AbilityHitsContext(1.3, 1.6, false, ENHANCED, 3),
                         new AbilityHitsContext(1.7, 2, true, ENHANCED, 3),
@@ -193,6 +216,9 @@ public class MagicSpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MAGIC,
-                SOULFIRE);
+                SOULFIRE,
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_RELEASE,
+                true);
     }
 }

@@ -21,6 +21,8 @@ public class EquipmentAdrenalineAbilityPlacementResolver {
         if (buff.has(BuffId.VESTMENTSBLEED) && eq.getTotalVestmentsOfHavoc() >= 2 &&
                 ability.getId().getTier() == AbilityTier.ULTIMATE && ability.getId().getStyle() == CombatStyles.MELEE) {
             adrenalineDelta += 20;
+            simulationState.getState().getBuffs().getBuffSet().remove(BuffId.VESTMENTSBLEED);
+            simulationState.getActiveBuffDurationMap().remove(BuffId.VESTMENTSBLEED);
         }
 
         if (buff.has(BuffId.BLEEDS) && ability.getId().getStyle() == CombatStyles.MELEE &&

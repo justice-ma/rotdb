@@ -1,7 +1,11 @@
 package com.rotdb.shared.ability.factory;
 
+import com.rotdb.shared.ability.model.AbilityCooldownTiming;
+import com.rotdb.shared.ability.model.GeneratedBuffEffect;
+import com.rotdb.shared.ability.model.GeneratedBuffTiming;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 
 import java.util.List;
 
@@ -22,10 +26,16 @@ public class NecromancySpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 NECROMANCY,
-                DEATHGRASP);
+                DEATHGRASP,
+                AbilityCooldownTiming.ON_RELEASE);
     }
 
     public static AbilityContext soulCrush() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.SOULREAVE,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(1.35, 1.65, false, ENHANCED, 2)),
                 "Soul Crush",
@@ -35,10 +45,18 @@ public class NecromancySpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 NECROMANCY,
-                SOULCRUSH);
+                SOULCRUSH,
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_RELEASE,
+                true);
     }
 
     public static AbilityContext deathEssence() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.DEATHESSENCE,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(3.6, 4.4, false, ENHANCED, 2)),
                 "Death Essence",
@@ -48,6 +66,9 @@ public class NecromancySpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 NECROMANCY,
-                DEATHESSENCE);
+                DEATHESSENCE,
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_RELEASE,
+                true);
     }
 }

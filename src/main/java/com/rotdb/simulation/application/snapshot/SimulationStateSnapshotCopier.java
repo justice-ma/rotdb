@@ -1,12 +1,14 @@
 package com.rotdb.simulation.application.snapshot;
 
 import com.rotdb.shared.combat.domain.model.context.TargetContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
 import com.rotdb.shared.combat.domain.model.equipment.FamiliarContext;
 import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
 import com.rotdb.shared.combat.domain.model.player.*;
+import com.rotdb.simulation.domain.model.context.ActiveBuffState;
 import com.rotdb.simulation.domain.model.context.RotationCombatState;
 import com.rotdb.simulation.domain.model.context.SimulationState;
 
@@ -20,7 +22,17 @@ public class SimulationStateSnapshotCopier {
         copy.setMaximumAdrenaline(source.getMaximumAdrenaline());
         copy.setAbilityCooldownMap(new HashMap<>(source.getAbilityCooldownMap()));
         copy.setBuffCooldownMap(new HashMap<>(source.getBuffCooldownMap()));
-        copy.setActiveBuffDurationMap(new HashMap<>(source.getActiveBuffDurationMap()));
+
+        Map<BuffId, ActiveBuffState> copyOfActiveBuffDurationMap = new HashMap<>();
+        for (Map.Entry<BuffId, ActiveBuffState> entry : source.getActiveBuffDurationMap().entrySet()) {
+            ActiveBuffState activeBuffState = new ActiveBuffState(
+                    entry.getValue().getBuffId(),
+                    entry.getValue().getSource(),
+                    entry.getValue().getDuration()
+            );
+            copyOfActiveBuffDurationMap.put(entry.getKey(), activeBuffState);
+        }
+        copy.setActiveBuffDurationMap(new HashMap<>(copyOfActiveBuffDurationMap));
 
         return copy;
     }
@@ -122,6 +134,9 @@ public class SimulationStateSnapshotCopier {
         copy.setWeakness(source.getTarget().getWeakness());
         copy.setWeaponWeakness(source.getTarget().getWeaponWeakness());
         copy.setTags(EnumSet.copyOf(source.getTarget().getTags()));
+        copy.setDebuffs(source.getTarget().getDebuffs() == null || source.getTarget().getDebuffs().isEmpty()
+                ? EnumSet.noneOf(BuffId.class)
+                : EnumSet.copyOf(source.getTarget().getDebuffs()));
         return copy;
     }
 

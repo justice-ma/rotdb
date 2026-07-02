@@ -49,6 +49,10 @@ public class BuffRequestNormalizer {
             }
         }
 
+        if (cleanedBuffs.contains(BuffId.REND)) {
+            cleanedBuffs.add(BuffId.RENDBLEED);
+        }
+
         result.setBuffStacks(cleanedStacks);
         result.setBuffSet(cleanedBuffs);
         return result;

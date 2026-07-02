@@ -26,7 +26,7 @@ public class MeleeAdditiveResolver {
                 mod += 0.12;
             }
 
-            if (gloves.getEffect().contains(Effect.GLOVESOFPASSAGE) && buff.has(BuffId.SMASH)) {
+            if (gloves.getEffect().contains(Effect.GLOVESOFPASSAGE) && buff.has(BuffId.REND)) {
                 if (context.getAbility().isChannel()) {
                     if (hitIndex == 0) {
                         mod += buff.has(BuffId.ENCHANTMENTOFAGONY) ? 0.16 : 0.1;

@@ -14,8 +14,10 @@ public class BuffDefinition {
     private final Integer cooldownTicks;
     private final boolean gcdConsuming;
     private final boolean passive;
+    private final Double activationAdrenalineDelta;
+    private final Double tickAdrenalineDelta;
 
-    public BuffDefinition(BuffId buffId, BuffSource source, BuffLifecycle lifecycle, BuffApplication application, Integer durationTicks, Integer cooldownTicks, boolean gcdConsuming, boolean passive) {
+    public BuffDefinition(BuffId buffId, BuffSource source, BuffLifecycle lifecycle, BuffApplication application, Integer durationTicks, Integer cooldownTicks, boolean gcdConsuming, boolean passive, Double adrenalineDelta, Double tickAdrenalineDelta) {
         this.buffId = buffId;
         this.source = source;
         this.lifecycle = lifecycle;
@@ -24,6 +26,8 @@ public class BuffDefinition {
         this.cooldownTicks = cooldownTicks;
         this.gcdConsuming = gcdConsuming;
         this.passive = passive;
+        this.activationAdrenalineDelta = adrenalineDelta;
+        this.tickAdrenalineDelta = tickAdrenalineDelta;
     }
 
     public BuffId getBuffId() {
@@ -56,5 +60,13 @@ public class BuffDefinition {
 
     public boolean isPassive() {
         return passive;
+    }
+
+    public Double getActivationAdrenalineDelta() {
+        return activationAdrenalineDelta;
+    }
+
+    public Double getTickAdrenalineDelta() {
+        return tickAdrenalineDelta;
     }
 }
