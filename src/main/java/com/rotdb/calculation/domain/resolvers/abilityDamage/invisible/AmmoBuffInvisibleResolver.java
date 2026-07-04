@@ -36,7 +36,7 @@ public class AmmoBuffInvisibleResolver {
             }
         }
 
-        if (style == CombatStyles.RANGED && ammo.getEffect().contains(Effect.WENARROWS) && buff.has(BuffId.WENSTACKS) && buff.stacks(BuffId.WENSTACKS) == 10) {
+        if (style == CombatStyles.RANGED && ammo.getEffect().contains(Effect.WENARROWS) && buff.has(BuffId.WENARROWPROC)) {
             if (hit.getTier() == AbilityTier.ENHANCED || hit.getTier() == AbilityTier.ULTIMATE) {
                 return 1.3;
             }

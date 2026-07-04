@@ -33,6 +33,8 @@ public class SimulationStateSnapshotCopier {
             copyOfActiveBuffDurationMap.put(entry.getKey(), activeBuffState);
         }
         copy.setActiveBuffDurationMap(new HashMap<>(copyOfActiveBuffDurationMap));
+        copy.setSimulationConfig(source.getSimulationConfig());
+        copy.setProcAccumulators(new HashMap<>(source.getProcAccumulators()));
 
         return copy;
     }

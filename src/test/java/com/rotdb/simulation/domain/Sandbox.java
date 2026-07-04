@@ -14,6 +14,8 @@ import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 import com.rotdb.shared.combat.domain.model.player.SpellContext;
 import com.rotdb.simulation.application.service.RotationTimelineService;
 import com.rotdb.simulation.application.snapshot.SimulationStateSnapshotCopier;
+import com.rotdb.simulation.domain.model.config.ProcMode;
+import com.rotdb.simulation.domain.model.config.SimulationConfig;
 import com.rotdb.simulation.domain.model.context.*;
 
 import java.util.*;
@@ -23,24 +25,29 @@ public class Sandbox {
         RotationCombatState state = sampleRangedState();
         List<AbilityPlacement> abilities = new ArrayList<>();
         AbilityPlacement placement = new AbilityPlacement();
-        placement.setCastTick(0);
-        placement.setPlacedAbility(AbilityId.REND);
+        placement.setCastTick(3);
+        placement.setPlacedAbility(AbilityId.CORRUPTIONSHOT);
         placement.setReleaseTick(0);
         abilities.add(placement);
         AbilityPlacement placement2 = new AbilityPlacement();
-//        placement2.setCastTick(0);
-//        placement2.setReleaseTick(0);
-//        placement2.setPlacedAbility(AbilityId.GREATERFURY);
-//        abilities.add(placement2);
+        placement2.setCastTick(9);
+        placement2.setReleaseTick(0);
+        placement2.setPlacedAbility(AbilityId.GREATERFLURRY);
+        abilities.add(placement2);
+        AbilityPlacement placement3 = new AbilityPlacement();
+        placement3.setCastTick(18);
+        placement3.setReleaseTick(0);
+        placement3.setPlacedAbility(AbilityId.GREATERFLURRY);
+        abilities.add(placement3);
 
         List<BuffPlacement> buffs = new ArrayList<>();
         BuffPlacement buff = new BuffPlacement();
-        buff.setPlacementTick(4);
-//        buff.setBuffId(BuffId.SUNSHINE);
-//        buffs.add(buff);
+        buff.setPlacementTick(0);
+        buff.setBuffId(BuffId.IMBUESHADOWS);
+        buffs.add(buff);
 //        BuffPlacement buff2 = new BuffPlacement();
 //        buff2.setPlacementTick(0);
-//        buff2.setBuffId(BuffId.ADRENALINERENEWAL);
+//        buff2.setBuffId(BuffId.SUPERADRENALINEPOTION);
 //        buffs.add(buff2);
 //        BuffPlacement buff3 = new BuffPlacement();
 //        buff3.setPlacementTick(4);
@@ -51,10 +58,15 @@ public class Sandbox {
 //        buff4.setBuffId(BuffId.SMOKECLOUDED);
 //        buffs.add(buff4);
 
+        state.getBuffs().getBuffSet().add(BuffId.VULNED);
+
+        SimulationConfig config = new SimulationConfig();
+        config.setProcMode(ProcMode.SEEDED_RANDOM);
+        config.setRandomSeed(67L);
         CalculationEngine engine = new CalculationEngine();
         SimulationStateSnapshotCopier stateSnapshotCopier = new SimulationStateSnapshotCopier();
         RotationTimeline timeline = new RotationTimelineService(engine, stateSnapshotCopier)
-                .build(state, abilities, buffs);
+                .build(state, abilities, buffs, config);
 
         printTimeline(timeline);
     }
@@ -67,6 +79,7 @@ public class Sandbox {
             System.out.println("  buffs:     " + formatBuffs(tick.getPlacedBuffs()));
             System.out.println("  state:     buffs  " + tick.getStartingCombatState().getBuffs().getBuffSet()
                     + " -> " + tick.getEndingCombatState().getBuffs().getBuffSet());
+            System.out.println("             stacks " + formatStacks(tick.getEndingCombatState().getBuffs().getBuffStacks()));
             System.out.println("             debuffs" + tick.getStartingCombatState().getTarget().getDebuffs()
                     + " -> " + tick.getEndingCombatState().getTarget().getDebuffs());
             System.out.println("  adren:     " + tick.getStartingAdrenaline() + " -> " + tick.getEndingAdrenaline());
@@ -103,6 +116,18 @@ public class Sandbox {
         return String.join(", ", names);
     }
 
+    private static String formatStacks(Map<BuffId, Integer> stacks) {
+        if (stacks == null || stacks.isEmpty()) {
+            return "--";
+        }
+
+        List<String> names = new ArrayList<>();
+        stacks.forEach((key, value) -> {
+            names.add(key.toString() + " -> " + value);
+        });
+        return String.join(", ", names);
+    }
+
     private static String formatWarnings(List<String> warnings) {
         if (warnings == null || warnings.isEmpty()) {
             return "--";
@@ -125,17 +150,18 @@ public class Sandbox {
 
     private static RotationCombatState sampleRangedState() {
         EquipmentSlot mainhand = new EquipmentSlot();
-        mainhand.setTitle("Sandbox bow");
-        mainhand.setClazz(CombatStyles.NECROMANCY);
+        mainhand.setTitle("Dark Shard of Leng");
+        mainhand.setClazz(CombatStyles.RANGED);
         mainhand.setSlot(Slots.TWOHANDED);
         mainhand.setTier(90);
         mainhand.setDamageTier(90);
         mainhand.setAccuracyTier(90);
         mainhand.setRanged(0);
-        mainhand.setEffect(EnumSet.noneOf(Effect.class));
+        mainhand.setEffect(EnumSet.of(Effect.PRIMORDIALICESTACKS));
 
         EquipmentSlot ammo = EquipmentSlot.emptySlot();
         ammo.setDamageTier(90);
+        ammo.setEffect(EnumSet.of(Effect.WENARROWS));
 
         EquipmentSlot head = new EquipmentSlot();
         EquipmentSlot body = new EquipmentSlot();
@@ -143,11 +169,11 @@ public class Sandbox {
         EquipmentSlot boots = new EquipmentSlot();
         EquipmentSlot gloves = new EquipmentSlot();
 
-        head.setEffect(EnumSet.of(Effect.TUMEKENS));
-        body.setEffect(EnumSet.of(Effect.TUMEKENS));
+        head.setEffect(EnumSet.of(Effect.VESTMENTSOFHAVOC));
+        body.setEffect(EnumSet.of(Effect.VESTMENTSOFHAVOC));
         legs.setEffect(EnumSet.of(Effect.TUMEKENS));
         boots.setEffect(EnumSet.of(Effect.TUMEKENS));
-        gloves.setEffect(EnumSet.of(Effect.GLOVESOFPASSAGE));
+        gloves.setEffect(EnumSet.of(Effect.TUMEKENS));
 
         EquipmentModel equipment = new EquipmentModel();
         equipment.setMainhand(mainhand);

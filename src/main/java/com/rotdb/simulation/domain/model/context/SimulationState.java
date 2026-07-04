@@ -2,9 +2,11 @@ package com.rotdb.simulation.domain.model.context;
 
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.simulation.domain.model.buff.BuffCooldownKey;
+import com.rotdb.simulation.domain.model.config.SimulationConfig;
 import com.rotdb.simulation.domain.model.cooldown.AbilityCooldownKey;
 
 import java.util.Map;
+import java.util.Random;
 
 public class SimulationState {
     private RotationCombatState state;
@@ -13,6 +15,9 @@ public class SimulationState {
     private Map<BuffId, ActiveBuffState> activeBuffDurationMap;
     private double adrenaline;
     private double maximumAdrenaline = 100.0;
+    private SimulationConfig simulationConfig;
+    private Map<BuffId, Double> procAccumulators;
+    private Random random = new Random();
 
     public RotationCombatState getState() {
         return state;
@@ -64,5 +69,29 @@ public class SimulationState {
 
     public double getBaseMaximumAdrenaline() {
         return 100.0;
+    }
+
+    public SimulationConfig getSimulationConfig() {
+        return simulationConfig;
+    }
+
+    public void setSimulationConfig(SimulationConfig simulationConfig) {
+        this.simulationConfig = simulationConfig;
+    }
+
+    public Map<BuffId, Double> getProcAccumulators() {
+        return procAccumulators;
+    }
+
+    public void setProcAccumulators(Map<BuffId, Double> procAccumulators) {
+        this.procAccumulators = procAccumulators;
+    }
+
+    public Random getRandom() {
+        return random;
+    }
+
+    public void setRandom(Random random) {
+        this.random = random;
     }
 }

@@ -4,6 +4,7 @@ import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.ability.model.GeneratedBuffEffect;
 import com.rotdb.shared.ability.model.GeneratedBuffTiming;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
@@ -16,8 +17,10 @@ import com.rotdb.simulation.domain.provider.BuffProvider;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.MELEE;
+
 public class AbilityGeneratedBuffEffectResolver {
-    public static List<GeneratedBuffEffect> resolve(AbilityPlacement abilityPlacement, SimulationState state, AbilityContext abilityContext, GeneratedBuffTiming timing) {
+    public static List<GeneratedBuffEffect> resolve(AbilityPlacement abilityPlacement, SimulationState state, AbilityContext abilityContext, GeneratedBuffTiming timing, boolean vestmentsBleedActiveAtTickStart) {
         EquipmentModel eq = state.getState().getEquipment();
         List<GeneratedBuffEffect> buffs = new ArrayList<>();
         int dracoPieces = eq.getTotalEliteDracolichPieces();
@@ -52,6 +55,24 @@ public class AbilityGeneratedBuffEffectResolver {
                     BuffId.RENDBLEED,
                     GeneratedBuffTiming.ON_RELEASE,
                     rendBleed.getDurationTicks()
+            ));
+        }
+
+        if (abilityContext.getId() == AbilityId.GREATERBARGE && state.getState().getBuffs().stacks(BuffId.TIMESINCELASTATTACK) > 7) {
+            BuffDefinition greaterBarge = BuffProvider.get(BuffId.GREATERBARGE, BuffSource.ABILITY_GENERATED, state);
+            buffs.add(new GeneratedBuffEffect(
+                    BuffId.GREATERBARGE,
+                    GeneratedBuffTiming.ON_CAST,
+                    greaterBarge.getDurationTicks()
+            ));
+        }
+
+        if (abilityContext.getCombatStyle() == MELEE && abilityContext.getId().getTier() == AbilityTier.ULTIMATE && eq.getTotalVestmentsOfHavoc() > 1 && !vestmentsBleedActiveAtTickStart) {
+            BuffDefinition vestments = BuffProvider.get(BuffId.VESTMENTSBLEED, BuffSource.ABILITY_GENERATED, state);
+            buffs.add(new GeneratedBuffEffect(
+                    BuffId.VESTMENTSBLEED,
+                    GeneratedBuffTiming.ON_CAST,
+                    vestments.getDurationTicks()
             ));
         }
         return buffs;

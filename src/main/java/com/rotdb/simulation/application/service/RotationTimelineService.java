@@ -6,11 +6,13 @@ import com.rotdb.shared.ability.AbilityProvider;
 import com.rotdb.shared.ability.model.AbilityCooldownTiming;
 import com.rotdb.shared.ability.model.GeneratedBuffTiming;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.simulation.application.processors.*;
 import com.rotdb.simulation.application.snapshot.SimulationStateSnapshotCopier;
 import com.rotdb.simulation.domain.model.buff.AppliedBuffResult;
 import com.rotdb.simulation.domain.model.buff.BuffDefinition;
 import com.rotdb.simulation.domain.model.buff.enums.BuffSource;
+import com.rotdb.simulation.domain.model.config.SimulationConfig;
 import com.rotdb.simulation.domain.model.context.*;
 import com.rotdb.simulation.domain.provider.BuffProvider;
 
@@ -25,11 +27,11 @@ public class RotationTimelineService {
         this.snapshotCopier = snapshotCopier;
     }
 
-    public RotationTimeline build(RotationCombatState state, List<AbilityPlacement> abilityPlacements, List<BuffPlacement> buffPlacements) {
+    public RotationTimeline build(RotationCombatState state, List<AbilityPlacement> abilityPlacements, List<BuffPlacement> buffPlacements, SimulationConfig config) {
         RotationTimeline timeline = new RotationTimeline();
         timeline.setTimeline(new ArrayList<>());
 
-        SimulationState simulationState = initializeState(state);
+        SimulationState simulationState = initializeState(state, config);
 
         int endingTick = 0;
         int startingTick = Integer.MAX_VALUE;
@@ -72,12 +74,15 @@ public class RotationTimelineService {
             List<BuffPlacement> newBuffs = new ArrayList<>();
             TickSnapshot tickSnapshot = initializeTickSnapshot(startingStateSnapshot, tick);
             double adrenalineDelta = 0;
+            boolean vestmentsBleedActiveAtTickStart = simulationState.getState().getBuffs().has(BuffId.VESTMENTSBLEED);
 
             if (buffs.containsKey(tick)) {
                 newBuffs.addAll(buffs.get(tick));
                 for (BuffPlacement buffPlacement : newBuffs) {
-                    if (BuffProcessor.applyUserPlacedBuff(buffPlacement, simulationState, tickSnapshot).getDurationTicks() != null) {
-                        endingTick = Math.max(BuffProvider.get(buffPlacement.getBuffId(), BuffSource.USER_PLACED, simulationState).getDurationTicks() + tick, endingTick);
+                    for (AppliedBuffResult buff : BuffProcessor.applyUserPlacedBuff(buffPlacement, simulationState, tickSnapshot)) {
+                        if (buff.resolvedDurationTicks() != null) {
+                            endingTick = Math.max(endingTick, buff.resolvedDurationTicks() + tick);
+                        }
                     }
                 }
             }
@@ -100,7 +105,7 @@ public class RotationTimelineService {
                         AbilityCooldownProcessor.initializeCooldown(simulationState, abilityPlacement);
                         AbilityCooldownProcessor.applyPlacementCooldownEffects(simulationState, abilityPlacement, damageResult);
                     }
-                    for (AppliedBuffResult buff : BuffProcessor.applyAbilityGeneratedBuffsWithTiming(abilityPlacement, simulationState, GeneratedBuffTiming.ON_CAST)) {
+                    for (AppliedBuffResult buff : BuffProcessor.applyAbilityGeneratedBuffsWithTiming(abilityPlacement, simulationState, GeneratedBuffTiming.ON_CAST, vestmentsBleedActiveAtTickStart)) {
                         if (buff.resolvedDurationTicks() != null) {
                             endingTick = Math.max(buff.resolvedDurationTicks() + tick, endingTick);
                         }
@@ -115,6 +120,9 @@ public class RotationTimelineService {
 
                     List<TimelineHit> hits = HitsScheduler.schedule(damageResult, abilityPlacement, simulationState.getState().getEquipment());
                     HitsPlacementProcessor.addScheduledHits(timelineHitMap, hits);
+                    for (BuffDefinition buff : StackProcessor.applyOnReleaseStacks(abilityPlacement, simulationState)) {
+                        endingTick = Math.max(endingTick, buff.getDurationTicks() + tick);
+                    }
 
                     for (TimelineHit timelineHit : hits) {
                         int landingTick = timelineHit.getLandingTick();
@@ -126,7 +134,7 @@ public class RotationTimelineService {
                         AbilityCooldownProcessor.initializeCooldown(simulationState, abilityPlacement);
                         AbilityCooldownProcessor.applyPlacementCooldownEffects(simulationState, abilityPlacement, damageResult);
                     }
-                    for (AppliedBuffResult buff : BuffProcessor.applyAbilityGeneratedBuffsWithTiming(abilityPlacement, simulationState, GeneratedBuffTiming.ON_RELEASE)) {
+                    for (AppliedBuffResult buff : BuffProcessor.applyAbilityGeneratedBuffsWithTiming(abilityPlacement, simulationState, GeneratedBuffTiming.ON_RELEASE, vestmentsBleedActiveAtTickStart)) {
                         if (buff.resolvedDurationTicks() != null) {
                             endingTick = Math.max(buff.resolvedDurationTicks() + tick, endingTick);
                         }
@@ -153,7 +161,8 @@ public class RotationTimelineService {
                 newTimelineHits.addAll(timelineHitMap.get(tick));
                 List<AppliedBuffResult> appliedBuffResults = new ArrayList<>();
                 for (TimelineHit timelineHit : newTimelineHits) {
-                    appliedBuffResults.addAll(BuffProcessor.applyAbilityGeneratedBuffsWithTiming(placementIdMap.get(timelineHit.getPlacementId()), simulationState, GeneratedBuffTiming.ON_HIT));
+                    appliedBuffResults.addAll(BuffProcessor.applyAbilityGeneratedBuffsWithTiming(placementIdMap.get(timelineHit.getPlacementId()), simulationState, GeneratedBuffTiming.ON_HIT, vestmentsBleedActiveAtTickStart));
+                    StackProcessor.applyOnHitStacks(placementIdMap.get(timelineHit.getPlacementId()), simulationState, timelineHit);
                 }
                 for (AppliedBuffResult buff : appliedBuffResults) {
                     if (buff.resolvedDurationTicks() != null) {
@@ -164,7 +173,7 @@ public class RotationTimelineService {
 
             if (completionMap.containsKey(tick)) {
                 for (AbilityPlacement abilityPlacement : completionMap.get(tick)) {
-                    for (AppliedBuffResult buff : BuffProcessor.applyAbilityGeneratedBuffsWithTiming(abilityPlacement, simulationState, GeneratedBuffTiming.ON_COMPLETION)) {
+                    for (AppliedBuffResult buff : BuffProcessor.applyAbilityGeneratedBuffsWithTiming(abilityPlacement, simulationState, GeneratedBuffTiming.ON_COMPLETION, vestmentsBleedActiveAtTickStart)) {
                         if (buff.resolvedDurationTicks() != null) {
                             endingTick = Math.max(buff.resolvedDurationTicks() + tick, endingTick);
                         }
@@ -190,15 +199,23 @@ public class RotationTimelineService {
         return timeline;
     }
 
-    private SimulationState initializeState(RotationCombatState state) {
+    public RotationTimeline build(RotationCombatState state, List<AbilityPlacement> abilityPlacements, List<BuffPlacement> buffPlacements) {
+        return build(state, abilityPlacements, buffPlacements, SimulationConfig.defaults());
+    }
+
+    private SimulationState initializeState(RotationCombatState state, SimulationConfig config) {
         SimulationState simulationState = new SimulationState();
         simulationState.setState(state);
         simulationState.setAdrenaline(100);
         simulationState.setAbilityCooldownMap(new HashMap<>());
         simulationState.setBuffCooldownMap(new HashMap<>());
         simulationState.setActiveBuffDurationMap(new HashMap<>());
+        simulationState.setSimulationConfig(config);
+        simulationState.setProcAccumulators(new HashMap<>());
 
-        return snapshotCopier.copySimulationState(simulationState);
+        SimulationState initialized = snapshotCopier.copySimulationState(simulationState);
+        initialized.setRandom(config.getRandomSeed() == null ? new Random() : new Random(config.getRandomSeed()));
+        return initialized;
     }
 
     private TickSnapshot initializeTickSnapshot(SimulationState state, int tick) {

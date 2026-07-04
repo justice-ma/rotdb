@@ -13,6 +13,7 @@ import com.rotdb.simulation.domain.model.context.*;
 import com.rotdb.simulation.domain.provider.BuffProvider;
 import com.rotdb.simulation.domain.resolvers.buff.AbilityGeneratedBuffEffectResolver;
 import com.rotdb.simulation.domain.resolvers.buff.BuffCooldownKeyResolver;
+import com.rotdb.simulation.domain.resolvers.buff.BuffPlacementTriggeredEffectResolver;
 import com.rotdb.simulation.domain.resolvers.cooldown.AbilityCooldownKeyResolver;
 
 import java.util.ArrayList;
@@ -21,8 +22,14 @@ import java.util.List;
 import java.util.Map;
 
 public class BuffProcessor {
-    public static BuffDefinition applyUserPlacedBuff(BuffPlacement buffPlacement, SimulationState state, TickSnapshot snapshot) {
+    public static List<AppliedBuffResult> applyUserPlacedBuff(BuffPlacement buffPlacement, SimulationState state, TickSnapshot snapshot) {
         BuffDefinition buffDefinition = BuffProvider.get(buffPlacement.getBuffId(), BuffSource.USER_PLACED, state);
+        List<AppliedBuffResult> appliedBuffResults = new ArrayList<>();
+        appliedBuffResults.add(new AppliedBuffResult(
+                buffDefinition,
+                buffDefinition.getDurationTicks()
+        ));
+
         processAdrenalineDelta(buffDefinition, state);
         generateWarnings(state, snapshot, buffDefinition);
         initializeCooldown(buffDefinition.getBuffId(), state, buffDefinition);
@@ -36,10 +43,23 @@ public class BuffProcessor {
                 addToBuffSet(state, buffDefinition);
             }
         }
-        return buffDefinition;
+
+        boolean vestmentsAlreadyApplied = state.getState().getBuffs().has(BuffId.VESTMENTSBLEED);
+
+        for (GeneratedBuffEffect buff : BuffPlacementTriggeredEffectResolver.resolve(buffPlacement, state)) {
+            appliedBuffResults.add(applyGeneratedBuff(buff, state));
+        }
+
+        if (vestmentsAlreadyApplied && buffDefinition.getBuffId() == BuffId.BERSERK) {
+            state.setAdrenaline(state.getAdrenaline() + 20);
+            state.getActiveBuffDurationMap().remove(BuffId.VESTMENTSBLEED);
+            state.getState().getBuffs().getBuffSet().remove(BuffId.VESTMENTSBLEED);
+        }
+
+        return appliedBuffResults;
     }
 
-    private static AppliedBuffResult applyAbilityGeneratedBuff(GeneratedBuffEffect buffEffect, SimulationState state) {
+    private static AppliedBuffResult applyGeneratedBuff(GeneratedBuffEffect buffEffect, SimulationState state) {
         BuffDefinition buffDefinition = BuffProvider.get(buffEffect.buffId(), BuffSource.ABILITY_GENERATED, state);
         AppliedBuffResult appliedBuffResult = new AppliedBuffResult(
                 buffDefinition,
@@ -59,17 +79,19 @@ public class BuffProcessor {
         return appliedBuffResult;
     }
 
-    public static List<AppliedBuffResult> applyAbilityGeneratedBuffsWithTiming(AbilityPlacement abilityPlacement, SimulationState state, GeneratedBuffTiming timing) {
+    public static List<AppliedBuffResult> applyAbilityGeneratedBuffsWithTiming(AbilityPlacement abilityPlacement, SimulationState state,
+                                                                               GeneratedBuffTiming timing, boolean vestmentsBleedActiveAtTickStart) {
         AbilityContext ability = AbilityProvider.get(abilityPlacement.getPlacedAbility(), state.getState().getEquipment());
         List<AppliedBuffResult> buffs = new ArrayList<>();
         for (GeneratedBuffEffect buff : ability.getGeneratedBuffEffects()) {
             if (buff.buffTiming() == timing) {
-                buffs.add(applyAbilityGeneratedBuff(buff, state));
+                buffs.add(applyGeneratedBuff(buff, state));
             }
         }
-        for (GeneratedBuffEffect buff : AbilityGeneratedBuffEffectResolver.resolve(abilityPlacement, state, ability, timing)) {
+
+        for (GeneratedBuffEffect buff : AbilityGeneratedBuffEffectResolver.resolve(abilityPlacement, state, ability, timing, vestmentsBleedActiveAtTickStart)) {
             if (buff.buffTiming() == timing) {
-                buffs.add(applyAbilityGeneratedBuff(buff, state));
+                buffs.add(applyGeneratedBuff(buff, state));
             }
         }
         return buffs;
@@ -120,7 +142,7 @@ public class BuffProcessor {
             if (entry.getValue().getDuration() <= 0) {
                 iterator.remove();
                 BuffDefinition buffDefinition = BuffProvider.get(entry.getKey(), entry.getValue().getSource(), state);
-                removeFromBuffSet(state, buffDefinition, entry.getKey());
+                clearStaleBuffState(state, buffDefinition, entry.getKey());
             }
         }
     }
@@ -132,10 +154,11 @@ public class BuffProcessor {
         }
     }
 
-    private static void removeFromBuffSet(SimulationState state, BuffDefinition buffDefinition, BuffId buffId) {
+    private static void clearStaleBuffState(SimulationState state, BuffDefinition buffDefinition, BuffId buffId) {
         switch (buffDefinition.getApplication()) {
             case PLAYER_BUFF_SET -> state.getState().getBuffs().getBuffSet().remove(buffId);
             case TARGET_BUFF_SET -> state.getState().getTarget().getDebuffs().remove(buffId);
+            case PLAYER_STACKS -> state.getState().getBuffs().getBuffStacks().remove(buffId);
         }
     }
 

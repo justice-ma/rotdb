@@ -131,8 +131,10 @@ public final class BuffProvider {
     private static BuffDefinition getProcDefinition(BuffId id, SimulationState state) {
         return switch (id) {
             case FROSTBLADES -> ProcBuffDefinitionFactory.frostblades();
+            case PRIMORDIALICESTACKS -> ProcBuffDefinitionFactory.primordialIceStacks();
             case RUBYAURORA -> ProcBuffDefinitionFactory.rubyAurora();
-            case WENSTACKS -> ProcBuffDefinitionFactory.wenStacks();
+            case WENARROWPROC -> ProcBuffDefinitionFactory.wenArrowProc();
+            case WENARROWSTACKS -> ProcBuffDefinitionFactory.wenArrowStacks();
             case IMPATIENTPROC -> ProcBuffDefinitionFactory.impatientProc();
             case RELENTLESSPROC -> ProcBuffDefinitionFactory.relentlessProc();
             case ASYLUMSURGEONSRINGPROC -> ProcBuffDefinitionFactory.asylumSurgeonsRingProc();

@@ -183,7 +183,7 @@ const BUFF_UI_META = {
     category: BUFF_CATEGORY.SPECIAL_ATTACKS,
     styles: [STYLE.MELEE],
   },
-  WENSTACKS: {
+  WENARROWPROC: {
     category: BUFF_CATEGORY.STACKS,
     styles: [STYLE.RANGED],
   },

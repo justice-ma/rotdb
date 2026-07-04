@@ -55,10 +55,6 @@ public class GearCritResolver {
             }
         }
 
-        if (ammo.getEffect().contains(Effect.DEATHSPOREARROWS) && ability.getCombatStyle() == CombatStyles.RANGED) {
-            criticalStrikeChance += 0.03;
-        }
-
         return new CritBonus(criticalStrikeChance, criticalStrikeDamage);
     }
 }

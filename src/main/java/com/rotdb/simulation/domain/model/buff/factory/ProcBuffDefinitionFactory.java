@@ -11,12 +11,20 @@ public class ProcBuffDefinitionFactory {
         return create(BuffId.FROSTBLADES, BuffLifecycle.TIMED, BuffApplication.PLAYER_BUFF_SET, 15, 0, null);
     }
 
+    public static BuffDefinition primordialIceStacks() {
+        return create(BuffId.PRIMORDIALICESTACKS, BuffLifecycle.UNTIL_CONSUMED, BuffApplication.PLAYER_STACKS, null, null, null);
+    }
+
     public static BuffDefinition rubyAurora() {
         return create(BuffId.RUBYAURORA, BuffLifecycle.TIMED, BuffApplication.PLAYER_BUFF_SET, 40, null, null);
     }
 
-    public static BuffDefinition wenStacks() {
-        return create(BuffId.WENSTACKS, BuffLifecycle.TIMED, BuffApplication.PLAYER_BUFF_SET, 15, null, null);
+    public static BuffDefinition wenArrowProc() {
+        return create(BuffId.WENARROWPROC, BuffLifecycle.TIMED, BuffApplication.PLAYER_BUFF_SET, 15, null, null);
+    }
+
+    public static BuffDefinition wenArrowStacks() {
+        return create(BuffId.WENARROWSTACKS, BuffLifecycle.TIMED, BuffApplication.PLAYER_STACKS, 50, null, null);
     }
 
     public static BuffDefinition impatientProc() {
