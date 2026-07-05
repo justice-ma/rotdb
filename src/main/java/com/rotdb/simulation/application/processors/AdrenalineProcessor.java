@@ -1,8 +1,13 @@
 package com.rotdb.simulation.application.processors;
 
+import com.rotdb.calculation.domain.engine.CalculationEngine;
+import com.rotdb.calculation.domain.engine.CalculationMode;
 import com.rotdb.calculation.domain.model.DamageResult;
+import com.rotdb.calculation.domain.model.HitResult;
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.ability.AbilityProvider;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
+import com.rotdb.simulation.application.service.DamageRequestFactory;
 import com.rotdb.simulation.domain.model.context.*;
 import com.rotdb.simulation.domain.resolvers.adrenaline.*;
 
@@ -21,9 +26,14 @@ public class AdrenalineProcessor {
         return (baseDelta + additiveDelta) * multiplicativeModifier + postNaturalInstinctsDelta;
     }
 
-    public static double generatePreHitTickAdrenalineDelta(SimulationState simulationState, List<TimelineHit> timelineHits) {
+    public static double generatePreHitTickAdrenalineDelta(SimulationState simulationState, List<ScheduledHit> timelineHits) {
+        CalculationEngine engine = new CalculationEngine();
+        DamageResult damageResult =
+                engine.calculateAbilityDamage(DamageRequestFactory.getDamageRequest(simulationState.getState(),
+                        AbilityId.TSUNAMI), CalculationMode.HIT, 0);
+        HitResult hitResult = damageResult.getHit().getFirst();
         double additiveDelta =
-                AdrenalineBuffUltimatePreHitTickResolver.resolve(simulationState, timelineHits)
+                AdrenalineBuffUltimatePreHitTickResolver.resolve(simulationState, timelineHits, hitResult)
                         + EquipmentAdrenalinePreHitTickResolver.resolve(simulationState, timelineHits);
         double multiplicativeModifier = MultiplicativeAdrenalinePreHitTickResolver.resolve(simulationState);
         return additiveDelta * multiplicativeModifier;

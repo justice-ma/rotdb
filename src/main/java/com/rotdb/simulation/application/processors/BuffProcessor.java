@@ -14,6 +14,7 @@ import com.rotdb.simulation.domain.provider.BuffProvider;
 import com.rotdb.simulation.domain.resolvers.buff.AbilityGeneratedBuffEffectResolver;
 import com.rotdb.simulation.domain.resolvers.buff.BuffCooldownKeyResolver;
 import com.rotdb.simulation.domain.resolvers.buff.BuffPlacementTriggeredEffectResolver;
+import com.rotdb.simulation.domain.resolvers.buff.StackResolver;
 import com.rotdb.simulation.domain.resolvers.cooldown.AbilityCooldownKeyResolver;
 
 import java.util.ArrayList;
@@ -143,6 +144,12 @@ public class BuffProcessor {
                 iterator.remove();
                 BuffDefinition buffDefinition = BuffProvider.get(entry.getKey(), entry.getValue().getSource(), state);
                 clearStaleBuffState(state, buffDefinition, entry.getKey());
+                for (BuffId expiredStack : StackResolver.resolveStacksRemovedWithExpiredBuff(entry.getKey())) {
+                    if (expiredStack != null) {
+                        state.getState().getBuffs().getBuffStacks().remove(expiredStack);
+                        state.getActiveBuffDurationMap().remove(expiredStack);
+                    }
+                }
             }
         }
     }

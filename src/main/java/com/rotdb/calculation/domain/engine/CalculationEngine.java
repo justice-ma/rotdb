@@ -12,6 +12,7 @@ import com.rotdb.calculation.domain.model.context.DamageContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -22,16 +23,28 @@ public final class CalculationEngine {
     private final DamageRequestValidator validator = new DamageRequestValidator();
     private final PrayerRequestValidator prayerValidator = new PrayerRequestValidator();
 
-    public DamageResult calculateAbilityDamage(DamageRequest request) {
+    public DamageResult calculateAbilityDamage(DamageRequest request, CalculationMode mode, Integer hitIndex) {
         validator.validate(request);
         request = normalizer.normalize(request);
 
         CalculationContext context = ContextBuilder.build(request);
 
-        prayerValidator.validatePrayers(context.getSelectedPrayers());
+        if (mode == CalculationMode.HIT) {
+            CalculationContext newContext = ContextBuilder.build(request);
+            List<AbilityHitsContext> hits = newContext.getAbility().getHits();
+            List<AbilityHitsContext> newHits = new ArrayList<>(List.of(hits.get(hitIndex)));
+            newContext.getAbility().setHits(newHits);
 
-        abilityPipeline.run(context);
-        return mapToResult(context);
+            prayerValidator.validatePrayers(newContext.getSelectedPrayers());
+
+            abilityPipeline.run(newContext);
+            return mapToResult(newContext);
+        } else {
+            prayerValidator.validatePrayers(context.getSelectedPrayers());
+
+            abilityPipeline.run(context);
+            return mapToResult(context);
+        }
     }
 
     public DamageResult mapToResult(CalculationContext context) {
@@ -51,7 +64,7 @@ public final class CalculationEngine {
                             h.getNonCritMin(),
                             h.getNonCritMax(),
                             h.getNonCritDamage(),
-                            i,
+                            h.getHitIndex(),
                             h.getHitTiming(),
                             h.getCritChanceModifier(),
                             h.getType(),

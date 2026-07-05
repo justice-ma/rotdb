@@ -1,5 +1,6 @@
 package com.rotdb.simulation.domain.resolvers.adrenaline;
 
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.ability.AbilityProvider;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
@@ -35,6 +36,10 @@ public class PostNaturalInstinctsAbilityPlacementResolver {
         if (buff.has(BuffId.ASYLUMSURGEONSRINGPROC) && ability.getAdrenaline() < 0
                 && eq.getRing().getEffect().contains(Effect.ASYLUMSURGEONSRING)) {
             adrenalineDelta += BuffProvider.get(BuffId.ASYLUMSURGEONSRINGPROC, BuffSource.PROC, simulationState).getActivationAdrenalineDelta();
+        }
+
+        if (buff.has(BuffId.PRIMORDIALICESTACKS) && buff.stacks(BuffId.PRIMORDIALICESTACKS) > 0 && abilityPlacement.getPlacedAbility() == AbilityId.ICYTEMPEST) {
+            adrenalineDelta += Math.min(30, buff.stacks(BuffId.PRIMORDIALICESTACKS) * 12);
         }
 
         return adrenalineDelta;

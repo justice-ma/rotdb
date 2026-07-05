@@ -6,6 +6,7 @@ import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.DamageCalculationTiming;
 
 import java.util.List;
 
@@ -168,7 +169,8 @@ public class RangedAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.RANGED,
-                RAPIDFIRE);
+                RAPIDFIRE,
+                DamageCalculationTiming.ON_HIT);
     }
 
     public static AbilityContext ricochet() {

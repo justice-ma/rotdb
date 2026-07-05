@@ -6,6 +6,7 @@ import com.rotdb.calculation.api.mapper.DamageRequestMapper;
 import com.rotdb.calculation.api.request.BatchDamageCalcRequest;
 import com.rotdb.calculation.application.service.DamageBatchService;
 import com.rotdb.calculation.domain.engine.CalculationEngine;
+import com.rotdb.calculation.domain.engine.CalculationMode;
 import com.rotdb.calculation.domain.model.DamageRequest;
 import com.rotdb.calculation.domain.model.DamageResult;
 import com.rotdb.shared.ability.AbilityId;
@@ -32,7 +33,7 @@ public class DamageController {
     @PostMapping("/calculate")
     public DamageResult calculate(@RequestBody DamageCalcRequestDto request) {
         DamageRequest internal = mapper.from(request);
-        return engine.calculateAbilityDamage(internal);
+        return engine.calculateAbilityDamage(internal, CalculationMode.ABILITY, null);
     }
 
     @PostMapping("/calculate/batch")

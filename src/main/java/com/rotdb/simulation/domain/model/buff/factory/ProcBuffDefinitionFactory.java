@@ -8,7 +8,7 @@ import com.rotdb.simulation.domain.model.buff.enums.BuffSource;
 
 public class ProcBuffDefinitionFactory {
     public static BuffDefinition frostblades() {
-        return create(BuffId.FROSTBLADES, BuffLifecycle.TIMED, BuffApplication.PLAYER_BUFF_SET, 15, 0, null);
+        return create(BuffId.FROSTBLADES, BuffLifecycle.TIMED, BuffApplication.PLAYER_BUFF_SET, 10, 0, null);
     }
 
     public static BuffDefinition primordialIceStacks() {
@@ -45,6 +45,10 @@ public class ProcBuffDefinitionFactory {
 
     public static BuffDefinition warpriestOfArmadylProc() {
         return create(BuffId.WARPRIESTOFARMADYLPROC, BuffLifecycle.INSTANT, BuffApplication.NONE, null, null, null);
+    }
+
+    public static BuffDefinition gravitateStacks() {
+        return create(BuffId.GRAVITATESTACKS, BuffLifecycle.STACK, BuffApplication.PLAYER_STACKS, null, null, null);
     }
 
     private static BuffDefinition create(BuffId id, BuffLifecycle lifecycle, BuffApplication application, Integer duration, Integer cooldown, Double adrenalineDelta) {

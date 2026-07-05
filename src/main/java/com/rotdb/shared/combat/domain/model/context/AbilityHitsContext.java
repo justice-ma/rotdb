@@ -5,13 +5,14 @@ import com.rotdb.shared.combat.domain.model.enums.HitType;
 
 public class AbilityHitsContext {
     private int parentIndex, critMin, critMax, critDamage, nonCritMin, nonCritMax, nonCritDamage, currentDamage,
-            currentMin, currentMax, bolgMin, bolgMax, bolgDamage, hitTiming;
+            currentMin, currentMax, bolgMin, bolgMax, bolgDamage, hitTiming, hitIndex = -1;
     private double min, max, critChanceModifier, critDamageModifier, minCritDamage, maxCritDamage, averageCritDamage;
     private boolean dot, needsRangeRecalc, rangeCalculated;
     private AbilityTier tier;
     private HitType type;
 
-    public AbilityHitsContext() {}
+    public AbilityHitsContext() {
+    }
 
     public AbilityHitsContext(double min, double max, boolean dot, AbilityTier tier, int hitTiming) {
         this.min = min;
@@ -33,7 +34,7 @@ public class AbilityHitsContext {
         this.parentIndex = parentIndex;
     }
 
-    public void calculateDamages (double mod) {
+    public void calculateDamages(double mod) {
         setCurrentMin((int) (getCurrentMin() * mod));
         setCurrentMax((int) (getCurrentMax() * mod));
         setCurrentDamage((getCurrentMin() + getCurrentMax()) / 2);
@@ -45,13 +46,13 @@ public class AbilityHitsContext {
         setNonCritDamage((getNonCritMin() + getNonCritMax()) / 2);
     }
 
-    public void setBolgDamages (int damage, int max, int min) {
+    public void setBolgDamages(int damage, int max, int min) {
         this.bolgDamage = damage;
         this.bolgMax = max;
         this.bolgMin = min;
     }
 
-    public void setCritAndNonDamages (double critChance, double minCritDamage, double maxCritDamage, double averageCritDamage) {
+    public void setCritAndNonDamages(double critChance, double minCritDamage, double maxCritDamage, double averageCritDamage) {
         this.critMax = (int) (getCurrentMax() * (1 + maxCritDamage));
         this.critMin = (int) (getCurrentMin() * (1 + minCritDamage));
         this.critDamage = (this.critMax + this.critMin) / 2;
@@ -296,5 +297,13 @@ public class AbilityHitsContext {
 
     public void setAverageCritDamage(double averageCritDamage) {
         this.averageCritDamage = averageCritDamage;
+    }
+
+    public int getHitIndex() {
+        return hitIndex;
+    }
+
+    public void setHitIndex(int hitIndex) {
+        this.hitIndex = hitIndex;
     }
 }

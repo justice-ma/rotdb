@@ -5,6 +5,7 @@ import com.rotdb.calculation.api.dto.DamageCalcRequestDto;
 import com.rotdb.calculation.api.mapper.DamageRequestMapper;
 import com.rotdb.calculation.api.request.BatchDamageCalcRequest;
 import com.rotdb.calculation.domain.engine.CalculationEngine;
+import com.rotdb.calculation.domain.engine.CalculationMode;
 import com.rotdb.calculation.domain.model.DamageRequest;
 import com.rotdb.calculation.domain.model.DamageResult;
 import com.rotdb.shared.ability.AbilityId;
@@ -33,7 +34,7 @@ public class DamageBatchService {
 
             DamageRequest internal = mapper.from(perAbility);
 
-            DamageResult result = engine.calculateAbilityDamage(internal);
+            DamageResult result = engine.calculateAbilityDamage(internal, CalculationMode.ABILITY, null);
 
             double min = result.getMinCoeff();
             double max = result.getMaxCoeff();

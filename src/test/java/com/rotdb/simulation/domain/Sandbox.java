@@ -26,24 +26,39 @@ public class Sandbox {
         List<AbilityPlacement> abilities = new ArrayList<>();
         AbilityPlacement placement = new AbilityPlacement();
         placement.setCastTick(3);
-        placement.setPlacedAbility(AbilityId.CORRUPTIONSHOT);
+        placement.setPlacedAbility(AbilityId.GREATERFLURRY);
         placement.setReleaseTick(0);
         abilities.add(placement);
         AbilityPlacement placement2 = new AbilityPlacement();
-        placement2.setCastTick(9);
+        placement2.setCastTick(13);
         placement2.setReleaseTick(0);
-        placement2.setPlacedAbility(AbilityId.GREATERFLURRY);
+        placement2.setPlacedAbility(AbilityId.ICYTEMPEST);
         abilities.add(placement2);
         AbilityPlacement placement3 = new AbilityPlacement();
-        placement3.setCastTick(18);
+        placement3.setCastTick(17);
         placement3.setReleaseTick(0);
-        placement3.setPlacedAbility(AbilityId.GREATERFLURRY);
+        placement3.setPlacedAbility(AbilityId.ICYTEMPEST);
         abilities.add(placement3);
+//        AbilityPlacement placement4 = new AbilityPlacement();
+//        placement4.setCastTick(12);
+//        placement4.setReleaseTick(14);
+//        placement4.setPlacedAbility(AbilityId.SNAPSHOT);
+//        abilities.add(placement4);
+//        AbilityPlacement placement5 = new AbilityPlacement();
+//        placement5.setCastTick(15);
+//        placement5.setReleaseTick(14);
+//        placement5.setPlacedAbility(AbilityId.GREATERRICOCHET);
+//        abilities.add(placement5);
+//        AbilityPlacement placement6 = new AbilityPlacement();
+//        placement6.setCastTick(18);
+//        placement6.setReleaseTick(14);
+//        placement6.setPlacedAbility(AbilityId.SNAPSHOT);
+//        abilities.add(placement6);
 
         List<BuffPlacement> buffs = new ArrayList<>();
         BuffPlacement buff = new BuffPlacement();
         buff.setPlacementTick(0);
-        buff.setBuffId(BuffId.IMBUESHADOWS);
+        buff.setBuffId(BuffId.GRAVITATEBUFF);
         buffs.add(buff);
 //        BuffPlacement buff2 = new BuffPlacement();
 //        buff2.setPlacementTick(0);
@@ -61,7 +76,7 @@ public class Sandbox {
         state.getBuffs().getBuffSet().add(BuffId.VULNED);
 
         SimulationConfig config = new SimulationConfig();
-        config.setProcMode(ProcMode.SEEDED_RANDOM);
+        config.setProcMode(ProcMode.FORCED);
         config.setRandomSeed(67L);
         CalculationEngine engine = new CalculationEngine();
         SimulationStateSnapshotCopier stateSnapshotCopier = new SimulationStateSnapshotCopier();
@@ -84,6 +99,7 @@ public class Sandbox {
                     + " -> " + tick.getEndingCombatState().getTarget().getDebuffs());
             System.out.println("  adren:     " + tick.getStartingAdrenaline() + " -> " + tick.getEndingAdrenaline());
             System.out.println("  hits:      " + tick.getLandedHits().size());
+            System.out.println("  damage:    " + cumulativeDamageForTick(tick));
             System.out.println("  cooldowns: " + tick.getEndingAbilityCooldownMap());
             System.out.println("             " + tick.getEndingBuffCooldownMap());
             System.out.println("  durations: " + formatDurations(tick.getEndingActiveBuffDurationMap()));
@@ -148,11 +164,19 @@ public class Sandbox {
         return names;
     }
 
+    private static int cumulativeDamageForTick(TickSnapshot tick) {
+        int damage = 0;
+        for (TimelineHit hit : tick.getLandedHits()) {
+            damage += hit.getHitAvgDamage();
+        }
+        return damage;
+    }
+
     private static RotationCombatState sampleRangedState() {
         EquipmentSlot mainhand = new EquipmentSlot();
-        mainhand.setTitle("Dark Shard of Leng");
-        mainhand.setClazz(CombatStyles.RANGED);
-        mainhand.setSlot(Slots.TWOHANDED);
+        mainhand.setTitle("Snadbox bow");
+        mainhand.setClazz(CombatStyles.MELEE);
+        mainhand.setSlot(Slots.MAINHAND);
         mainhand.setTier(90);
         mainhand.setDamageTier(90);
         mainhand.setAccuracyTier(90);
@@ -162,6 +186,10 @@ public class Sandbox {
         EquipmentSlot ammo = EquipmentSlot.emptySlot();
         ammo.setDamageTier(90);
         ammo.setEffect(EnumSet.of(Effect.WENARROWS));
+
+        EquipmentSlot offhand = EquipmentSlot.emptySlot();
+        offhand.setDamageTier(95);
+        offhand.setEffect(EnumSet.of(Effect.OFFHANDLENG));
 
         EquipmentSlot head = new EquipmentSlot();
         EquipmentSlot body = new EquipmentSlot();
@@ -177,6 +205,7 @@ public class Sandbox {
 
         EquipmentModel equipment = new EquipmentModel();
         equipment.setMainhand(mainhand);
+        equipment.setOffhand(offhand);
         equipment.setAmmo(ammo);
         equipment.setHead(head);
         equipment.setBody(body);

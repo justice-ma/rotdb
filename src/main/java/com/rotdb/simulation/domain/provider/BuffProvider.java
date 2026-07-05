@@ -72,7 +72,7 @@ public final class BuffProvider {
             case DEMONSLAYERSIGIL -> UserPlacedBuffDefinitionFactory.demonSlayerSigil();
             case RUNICCHARGE -> UserPlacedBuffDefinitionFactory.runicCharge();
             case DBA -> UserPlacedBuffDefinitionFactory.dba();
-            case GRAVITATE -> UserPlacedBuffDefinitionFactory.gravitate();
+            case GRAVITATEBUFF -> UserPlacedBuffDefinitionFactory.gravitateBuff();
             case HAUNTED -> UserPlacedBuffDefinitionFactory.haunted();
             case VULNED -> UserPlacedBuffDefinitionFactory.vulned();
             case CURSED -> UserPlacedBuffDefinitionFactory.cursed();
@@ -140,6 +140,7 @@ public final class BuffProvider {
             case ASYLUMSURGEONSRINGPROC -> ProcBuffDefinitionFactory.asylumSurgeonsRingProc();
             case RINGOFDEATHPROC -> ProcBuffDefinitionFactory.ringOfDeathProc();
             case WARPRIESTOFARMADYLPROC -> ProcBuffDefinitionFactory.warpriestOfArmadylProc();
+            case GRAVITATESTACKS -> ProcBuffDefinitionFactory.gravitateStacks();
 
             default -> throw new IllegalArgumentException("Unknown buff type: " + id);
         };

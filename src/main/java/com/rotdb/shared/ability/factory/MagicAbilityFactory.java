@@ -1,10 +1,12 @@
 package com.rotdb.shared.ability.factory;
 
+import com.rotdb.shared.ability.model.AbilityCooldownTiming;
 import com.rotdb.shared.ability.model.GeneratedBuffEffect;
 import com.rotdb.shared.ability.model.GeneratedBuffTiming;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.DamageCalculationTiming;
 
 import java.util.List;
 
@@ -31,7 +33,7 @@ public class MagicAbilityFactory {
     public static AbilityContext wildMagic() {
         return new AbilityContext(2,
                 List.of(new AbilityHitsContext(1.25, 1.55, false, ENHANCED, 2),
-                        new AbilityHitsContext(1.25, 1.55, false, ENHANCED, 3)),
+                        new AbilityHitsContext(1.25, 1.55, false, ENHANCED, 2)),
                 "Wild Magic",
                 -25,
                 9,
@@ -196,7 +198,8 @@ public class MagicAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MAGIC,
-                ASPHYXIATE);
+                ASPHYXIATE,
+                DamageCalculationTiming.ON_HIT);
     }
 
     public static AbilityContext asphyxiateTumekens() {
@@ -216,7 +219,8 @@ public class MagicAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MAGIC,
-                ASPHYXIATE);
+                ASPHYXIATE,
+                DamageCalculationTiming.ON_HIT);
     }
 
     public static AbilityContext concentratedBlast() {
@@ -237,7 +241,10 @@ public class MagicAbilityFactory {
                 SINGLE_TARGET,
                 MAGIC,
                 CONCENTRATEDBLAST,
-                generatedBuffEffects);
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_CAST,
+                true,
+                DamageCalculationTiming.ON_HIT);
     }
 
     public static AbilityContext greaterConcentratedBlast() {
@@ -258,7 +265,10 @@ public class MagicAbilityFactory {
                 SINGLE_TARGET,
                 MAGIC,
                 GREATERCONCENTRATEDBLAST,
-                generatedBuffEffects);
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_CAST,
+                true,
+                DamageCalculationTiming.ON_HIT);
     }
 
     public static AbilityContext magmaTempest() {
@@ -278,7 +288,8 @@ public class MagicAbilityFactory {
                 BOTH,
                 AREA_TARGET,
                 MAGIC,
-                MAGMATEMPEST);
+                MAGMATEMPEST,
+                DamageCalculationTiming.ON_HIT);
     }
 
     public static AbilityContext corruptionBlast() {
@@ -311,7 +322,8 @@ public class MagicAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MAGIC,
-                SMOKETENDRILS);
+                SMOKETENDRILS,
+                DamageCalculationTiming.ON_HIT);
     }
 
     public static AbilityContext tsunami() {

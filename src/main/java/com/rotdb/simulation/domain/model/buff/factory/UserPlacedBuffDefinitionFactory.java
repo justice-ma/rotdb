@@ -40,9 +40,10 @@ public class UserPlacedBuffDefinitionFactory {
         return create(BuffId.DBA, BuffLifecycle.TIMED, 100, null, true, -100.0, null);
     }
 
-    public static BuffDefinition gravitate() {
-        return create(BuffId.GRAVITATE, BuffLifecycle.TIMED, 50, null, true, -60.0, null);
+    public static BuffDefinition gravitateBuff() {
+        return create(BuffId.GRAVITATEBUFF, BuffLifecycle.TIMED, 50, null, true, -60.0, null);
     }
+
 
     public static BuffDefinition haunted() {
         return create(BuffId.HAUNTED, BuffLifecycle.TIMED, BuffApplication.TARGET_BUFF_SET, 70, null, true, null, null);

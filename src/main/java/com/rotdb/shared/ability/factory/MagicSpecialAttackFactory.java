@@ -6,6 +6,7 @@ import com.rotdb.shared.ability.model.GeneratedBuffTiming;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.DamageCalculationTiming;
 
 import java.util.List;
 
@@ -179,7 +180,8 @@ public class MagicSpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MAGIC,
-                TEMPESTOFARMADYL);
+                TEMPESTOFARMADYL,
+                DamageCalculationTiming.ON_HIT);
     }
 
     public static AbilityContext ibanBlast() {

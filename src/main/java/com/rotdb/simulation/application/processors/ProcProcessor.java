@@ -5,9 +5,11 @@ import com.rotdb.simulation.domain.model.config.ProcMode;
 import com.rotdb.simulation.domain.model.context.SimulationState;
 
 public class ProcProcessor {
-    public static boolean determineProc(ProcMode procMode, double procChance, SimulationState state, BuffId buff) {
+    public static boolean determineProc(ProcMode procMode, Double procChance, SimulationState state, BuffId buff) {
         double EPSILON = 1e-9;
-        if (procChance <= 0) {
+        if (procChance == null) {
+            return true;
+        } else if (procChance <= 0) {
             return false;
         }
         switch (procMode) {
