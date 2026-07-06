@@ -25,24 +25,24 @@ public class Sandbox {
         RotationCombatState state = sampleRangedState();
         List<AbilityPlacement> abilities = new ArrayList<>();
         AbilityPlacement placement = new AbilityPlacement();
-        placement.setCastTick(3);
-        placement.setPlacedAbility(AbilityId.GREATERFLURRY);
+        placement.setCastTick(0);
+        placement.setPlacedAbility(AbilityId.DRAGONBREATH);
         placement.setReleaseTick(0);
         abilities.add(placement);
         AbilityPlacement placement2 = new AbilityPlacement();
-        placement2.setCastTick(13);
+        placement2.setCastTick(3);
         placement2.setReleaseTick(0);
-        placement2.setPlacedAbility(AbilityId.ICYTEMPEST);
+        placement2.setPlacedAbility(AbilityId.ASPHYXIATE);
         abilities.add(placement2);
-        AbilityPlacement placement3 = new AbilityPlacement();
-        placement3.setCastTick(17);
-        placement3.setReleaseTick(0);
-        placement3.setPlacedAbility(AbilityId.ICYTEMPEST);
-        abilities.add(placement3);
+//        AbilityPlacement placement3 = new AbilityPlacement();
+//        placement3.setCastTick(6);
+//        placement3.setReleaseTick(0);
+//        placement3.setPlacedAbility(AbilityId.SHADOWFALL);
+//        abilities.add(placement3);
 //        AbilityPlacement placement4 = new AbilityPlacement();
 //        placement4.setCastTick(12);
 //        placement4.setReleaseTick(14);
-//        placement4.setPlacedAbility(AbilityId.SNAPSHOT);
+//        placement4.setPlacedAbility(AbilityId.RAPIDFIRE);
 //        abilities.add(placement4);
 //        AbilityPlacement placement5 = new AbilityPlacement();
 //        placement5.setCastTick(15);
@@ -57,9 +57,9 @@ public class Sandbox {
 
         List<BuffPlacement> buffs = new ArrayList<>();
         BuffPlacement buff = new BuffPlacement();
-        buff.setPlacementTick(0);
-        buff.setBuffId(BuffId.GRAVITATEBUFF);
-        buffs.add(buff);
+        buff.setPlacementTick(6);
+        buff.setBuffId(BuffId.DEATHSWIFTNESS);
+//        buffs.add(buff);
 //        BuffPlacement buff2 = new BuffPlacement();
 //        buff2.setPlacementTick(0);
 //        buff2.setBuffId(BuffId.SUPERADRENALINEPOTION);
@@ -174,8 +174,8 @@ public class Sandbox {
 
     private static RotationCombatState sampleRangedState() {
         EquipmentSlot mainhand = new EquipmentSlot();
-        mainhand.setTitle("Snadbox bow");
-        mainhand.setClazz(CombatStyles.MELEE);
+        mainhand.setTitle("Bow of the Last Guardian");
+        mainhand.setClazz(CombatStyles.MAGIC);
         mainhand.setSlot(Slots.MAINHAND);
         mainhand.setTier(90);
         mainhand.setDamageTier(90);
@@ -185,7 +185,7 @@ public class Sandbox {
 
         EquipmentSlot ammo = EquipmentSlot.emptySlot();
         ammo.setDamageTier(90);
-        ammo.setEffect(EnumSet.of(Effect.WENARROWS));
+        ammo.setEffect(EnumSet.of(Effect.DEATHSPOREARROWS));
 
         EquipmentSlot offhand = EquipmentSlot.emptySlot();
         offhand.setDamageTier(95);
@@ -242,7 +242,7 @@ public class Sandbox {
         prayer.setSelected(EnumSet.noneOf(Prayer.class));
 
         SpellContext spell = new SpellContext();
-        spell.setSpell(Spells.WINDRUSH);
+        spell.setSpell(Spells.EXSANGUINATE);
 
         TargetContext target = new TargetContext();
         target.setName("Sandbox target");

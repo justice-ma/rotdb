@@ -1,20 +1,20 @@
 package com.rotdb.simulation.application.processors;
 
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.ability.AbilityProvider;
 import com.rotdb.shared.ability.model.GeneratedBuffEffect;
 import com.rotdb.shared.ability.model.GeneratedBuffTiming;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.simulation.domain.model.buff.AppliedBuffResult;
 import com.rotdb.simulation.domain.model.buff.BuffCooldownKey;
 import com.rotdb.simulation.domain.model.buff.BuffDefinition;
 import com.rotdb.simulation.domain.model.buff.enums.BuffSource;
 import com.rotdb.simulation.domain.model.context.*;
 import com.rotdb.simulation.domain.provider.BuffProvider;
-import com.rotdb.simulation.domain.resolvers.buff.AbilityGeneratedBuffEffectResolver;
-import com.rotdb.simulation.domain.resolvers.buff.BuffCooldownKeyResolver;
-import com.rotdb.simulation.domain.resolvers.buff.BuffPlacementTriggeredEffectResolver;
-import com.rotdb.simulation.domain.resolvers.buff.StackResolver;
+import com.rotdb.simulation.domain.resolvers.buff.*;
 import com.rotdb.simulation.domain.resolvers.cooldown.AbilityCooldownKeyResolver;
 
 import java.util.ArrayList;
@@ -84,6 +84,9 @@ public class BuffProcessor {
                                                                                GeneratedBuffTiming timing, boolean vestmentsBleedActiveAtTickStart) {
         AbilityContext ability = AbilityProvider.get(abilityPlacement.getPlacedAbility(), state.getState().getEquipment());
         List<AppliedBuffResult> buffs = new ArrayList<>();
+        if (ability.getId() == AbilityId.BALANCEBYFORCE && state.getState().getBuffs().has(BuffId.BALANCEBYFORCE)) {
+            return buffs;
+        }
         for (GeneratedBuffEffect buff : ability.getGeneratedBuffEffects()) {
             if (buff.buffTiming() == timing) {
                 buffs.add(applyGeneratedBuff(buff, state));
@@ -93,6 +96,30 @@ public class BuffProcessor {
         for (GeneratedBuffEffect buff : AbilityGeneratedBuffEffectResolver.resolve(abilityPlacement, state, ability, timing, vestmentsBleedActiveAtTickStart)) {
             if (buff.buffTiming() == timing) {
                 buffs.add(applyGeneratedBuff(buff, state));
+            }
+        }
+        return buffs;
+    }
+
+    public static List<AppliedBuffResult> applyPreDamageReleaseBuffs(AbilityPlacement abilityPlacement, SimulationState state) {
+        AbilityContext ability = AbilityProvider.get(abilityPlacement.getPlacedAbility(), state.getState().getEquipment());
+        List<AppliedBuffResult> buffs = new ArrayList<>();
+        BuffDefinition buffDefinition = BuffProvider.get(BuffId.BALANCEBYFORCE, BuffSource.ABILITY_GENERATED, state);
+        if (ability.getId() == AbilityId.BALANCEBYFORCE) {
+            buffs.add(new AppliedBuffResult(
+                    buffDefinition,
+                    null
+            ));
+            processAdrenalineDelta(buffDefinition, state);
+            initializeCooldown(buffDefinition.getBuffId(), state, buffDefinition);
+            switch (buffDefinition.getLifecycle()) {
+                case TIMED -> {
+                    initializeBuffDuration(buffDefinition.getBuffId(), state, buffDefinition, null);
+                    addToBuffSet(state, buffDefinition);
+                }
+                case UNTIL_CONSUMED -> {
+                    addToBuffSet(state, buffDefinition);
+                }
             }
         }
         return buffs;
@@ -154,6 +181,24 @@ public class BuffProcessor {
         }
     }
 
+    public static void removeBuffsConsumedByAbilityPlacement(AbilityPlacement abilityPlacement,
+                                                             SimulationState simulationState) {
+        if (abilityPlacement != null && abilityPlacement.getPlacedAbility().getTier() != AbilityTier.BASIC &&
+                simulationState.getState().getBuffs().has(BuffId.FEASTINGSPORES) &&
+                abilityPlacement.getPlacedAbility().getStyle() == CombatStyles.RANGED) {
+            clearStaleBuffState(simulationState, BuffProvider.get(BuffId.FEASTINGSPORES, BuffSource.PROC,
+                    simulationState), BuffId.FEASTINGSPORES);
+        }
+    }
+
+    public static void removeBuffsConsumedByBuffPlacement(BuffPlacement buffPlacement,
+                                                          SimulationState simulationState) {
+        if (BuffConsumptionResolver.isFeastingSporesConsumedByBuffPlacement(buffPlacement.getBuffId(), simulationState)) {
+            clearStaleBuffState(simulationState, BuffProvider.get(BuffId.FEASTINGSPORES, BuffSource.PROC,
+                    simulationState), BuffId.FEASTINGSPORES);
+        }
+    }
+
     private static void addToBuffSet(SimulationState state, BuffDefinition buffDefinition) {
         switch (buffDefinition.getApplication()) {
             case PLAYER_BUFF_SET -> state.getState().getBuffs().getBuffSet().add(buffDefinition.getBuffId());
@@ -183,7 +228,9 @@ public class BuffProcessor {
 
     private static void processAdrenalineDelta(BuffDefinition buffDefinition, SimulationState state) {
         if (buffDefinition.getActivationAdrenalineDelta() != null) {
-            state.setAdrenaline(state.getAdrenaline() + buffDefinition.getActivationAdrenalineDelta());
+            if (!BuffConsumptionResolver.isFeastingSporesConsumedByBuffPlacement(buffDefinition.getBuffId(), state)) {
+                state.setAdrenaline(state.getAdrenaline() + buffDefinition.getActivationAdrenalineDelta());
+            }
         }
     }
 

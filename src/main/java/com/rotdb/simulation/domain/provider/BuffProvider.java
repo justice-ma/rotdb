@@ -5,10 +5,7 @@ import com.rotdb.simulation.domain.model.buff.BuffDefinition;
 import com.rotdb.simulation.domain.model.buff.enums.BuffApplication;
 import com.rotdb.simulation.domain.model.buff.enums.BuffLifecycle;
 import com.rotdb.simulation.domain.model.buff.enums.BuffSource;
-import com.rotdb.simulation.domain.model.buff.factory.AbilityGeneratedBuffDefinitionFactory;
-import com.rotdb.simulation.domain.model.buff.factory.InitialBuffDefinitionFactory;
-import com.rotdb.simulation.domain.model.buff.factory.ProcBuffDefinitionFactory;
-import com.rotdb.simulation.domain.model.buff.factory.UserPlacedBuffDefinitionFactory;
+import com.rotdb.simulation.domain.model.buff.factory.*;
 import com.rotdb.simulation.domain.model.context.SimulationState;
 
 public final class BuffProvider {
@@ -22,6 +19,7 @@ public final class BuffProvider {
             case ABILITY_GENERATED -> getAbilityGeneratedDefinition(id, state);
             case PROC -> getProcDefinition(id, state);
             case SYSTEM -> getSystemDefinition(id, state);
+            case STACK -> getStackDefinition(id, state);
         };
     }
 
@@ -131,16 +129,27 @@ public final class BuffProvider {
     private static BuffDefinition getProcDefinition(BuffId id, SimulationState state) {
         return switch (id) {
             case FROSTBLADES -> ProcBuffDefinitionFactory.frostblades();
-            case PRIMORDIALICESTACKS -> ProcBuffDefinitionFactory.primordialIceStacks();
             case RUBYAURORA -> ProcBuffDefinitionFactory.rubyAurora();
             case WENARROWPROC -> ProcBuffDefinitionFactory.wenArrowProc();
-            case WENARROWSTACKS -> ProcBuffDefinitionFactory.wenArrowStacks();
             case IMPATIENTPROC -> ProcBuffDefinitionFactory.impatientProc();
             case RELENTLESSPROC -> ProcBuffDefinitionFactory.relentlessProc();
             case ASYLUMSURGEONSRINGPROC -> ProcBuffDefinitionFactory.asylumSurgeonsRingProc();
             case RINGOFDEATHPROC -> ProcBuffDefinitionFactory.ringOfDeathProc();
             case WARPRIESTOFARMADYLPROC -> ProcBuffDefinitionFactory.warpriestOfArmadylProc();
-            case GRAVITATESTACKS -> ProcBuffDefinitionFactory.gravitateStacks();
+            case FEASTINGSPORES -> ProcBuffDefinitionFactory.feastingSpores();
+
+            default -> throw new IllegalArgumentException("Unknown buff type: " + id);
+        };
+    }
+
+    private static BuffDefinition getStackDefinition(BuffId id, SimulationState state) {
+        return switch (id) {
+            case WENARROWSTACKS -> StackBuffDefinitionFactory.wenArrowStacks();
+            case GRAVITATESTACKS -> StackBuffDefinitionFactory.gravitateStacks();
+            case PRIMORDIALICESTACKS -> StackBuffDefinitionFactory.primordialIceStacks();
+            case PERFECTEQUILIBRIUMSTACKS -> StackBuffDefinitionFactory.perfectEquilibriumStacks();
+            case DEATHSPORESTACKS -> StackBuffDefinitionFactory.deathsporeStacks();
+            case TITHESTACKS -> StackBuffDefinitionFactory.titheStacks();
 
             default -> throw new IllegalArgumentException("Unknown buff type: " + id);
         };

@@ -97,7 +97,7 @@ public class PerfectEquilibriumInjector implements Modifier {
                 AbilityHitsContext proc = new AbilityHitsContext();
                 proc.setType(PERFECTEQUILIBRIUM);
                 proc.setParentIndex(i);
-                proc.setHitTiming(parent.getHitTiming() + 1);
+                proc.setHitTiming(2);
                 proc.setDot(false);
                 proc.setTier(parent.getTier());
 

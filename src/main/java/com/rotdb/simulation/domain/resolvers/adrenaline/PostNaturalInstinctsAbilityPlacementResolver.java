@@ -39,7 +39,7 @@ public class PostNaturalInstinctsAbilityPlacementResolver {
         }
 
         if (buff.has(BuffId.PRIMORDIALICESTACKS) && buff.stacks(BuffId.PRIMORDIALICESTACKS) > 0 && abilityPlacement.getPlacedAbility() == AbilityId.ICYTEMPEST) {
-            adrenalineDelta += Math.min(30, buff.stacks(BuffId.PRIMORDIALICESTACKS) * 12);
+            adrenalineDelta += Math.min(30, Math.max(0, buff.stacks(BuffId.PRIMORDIALICESTACKS) * 12));
         }
 
         return adrenalineDelta;

@@ -7,6 +7,7 @@ public record ConsumableStackResult(
         AppliedBuffResult appliedBuffResult,
         BuffId consumedStackId,
         Integer consumedAmount,
+        Integer effectiveAmount,
         StackConsumptionTiming consumptionTiming
 ) {
 }

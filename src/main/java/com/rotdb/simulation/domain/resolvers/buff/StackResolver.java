@@ -1,17 +1,19 @@
 package com.rotdb.simulation.domain.resolvers.buff;
 
+import com.rotdb.calculation.domain.model.DamageResult;
+import com.rotdb.calculation.domain.model.HitResult;
 import com.rotdb.shared.ability.AbilityId;
+import com.rotdb.shared.ability.AbilityProvider;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
-import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
-import com.rotdb.shared.combat.domain.model.enums.BuffId;
-import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
-import com.rotdb.shared.combat.domain.model.enums.Effect;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.enums.*;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.simulation.domain.model.buff.AppliedBuffResult;
 import com.rotdb.simulation.domain.model.buff.BuffDefinition;
 import com.rotdb.simulation.domain.model.buff.ConsumableStackResult;
 import com.rotdb.simulation.domain.model.buff.StackEffect;
 import com.rotdb.simulation.domain.model.buff.enums.BuffSource;
+import com.rotdb.simulation.domain.model.buff.enums.StackClampingBehaviour;
 import com.rotdb.simulation.domain.model.buff.enums.StackConsumptionTiming;
 import com.rotdb.simulation.domain.model.context.AbilityPlacement;
 import com.rotdb.simulation.domain.model.context.SimulationState;
@@ -30,9 +32,50 @@ public class StackResolver {
             stackEffects.add(new StackEffect(
                     BuffId.WENARROWSTACKS,
                     abilityContext.getNumberOfHits(),
-                    BuffSource.PROC,
+                    BuffSource.STACK,
                     null,
-                    null
+                    null,
+                    null,
+                    StackClampingBehaviour.CLAMP
+            ));
+        }
+
+        if (eq.getMainhand().getTitle() != null && eq.getMainhand().getTitle().equalsIgnoreCase("bow of the last guardian") &&
+                abilityContext.getCombatStyle() == CombatStyles.RANGED && abilityContext.getDamageCalculationTiming() == DamageCalculationTiming.ON_RELEASE) {
+            if (abilityContext.getId() != AbilityId.BALANCEBYFORCE || state.getState().getBuffs().stacks(BuffId.PERFECTEQUILIBRIUMSTACKS) < 3) {
+                int hits = 0;
+                for (AbilityHitsContext hit : abilityContext.getHits()) {
+                    if (abilityContext.getId() == AbilityId.CRYSTALRAIN) {
+                        hits = 1;
+                        break;
+                    }
+                    if (!hit.isDot()) {
+                        hits++;
+                    }
+                }
+                stackEffects.add(new StackEffect(
+                        BuffId.PERFECTEQUILIBRIUMSTACKS,
+                        hits,
+                        BuffSource.STACK,
+                        null,
+                        null,
+                        state.getState().getBuffs().has(BuffId.BALANCEBYFORCE) ? 3 : null,
+                        StackClampingBehaviour.ROLL_OVER
+                ));
+            }
+        }
+
+        if (abilityContext.getCombatStyle() == CombatStyles.MAGIC &&
+                state.getState().getSpell().getSpell() == Spells.EXSANGUINATE &&
+                abilityContext.getDamageCalculationTiming() == DamageCalculationTiming.ON_RELEASE) {
+            stackEffects.add(new StackEffect(
+                    BuffId.TITHESTACKS,
+                    1,
+                    BuffSource.STACK,
+                    null,
+                    null,
+                    null,
+                    StackClampingBehaviour.CLAMP
             ));
         }
         return stackEffects;
@@ -53,9 +96,11 @@ public class StackResolver {
             stackEffects.add(new StackEffect(
                     BuffId.PRIMORDIALICESTACKS,
                     1,
-                    BuffSource.PROC,
+                    BuffSource.STACK,
                     procChance,
-                    null
+                    null,
+                    null,
+                    StackClampingBehaviour.CLAMP
             ));
         }
 
@@ -63,9 +108,106 @@ public class StackResolver {
             stackEffects.add(new StackEffect(
                     BuffId.GRAVITATESTACKS,
                     1,
-                    BuffSource.PROC,
+                    BuffSource.STACK,
                     null,
-                    null
+                    null,
+                    null,
+                    StackClampingBehaviour.CLAMP
+            ));
+        }
+
+        if (eq.getMainhand().getTitle() != null && eq.getMainhand().getTitle().equalsIgnoreCase("bow of the last guardian") &&
+                abilityContext.getCombatStyle() == CombatStyles.RANGED && abilityContext.getDamageCalculationTiming() == DamageCalculationTiming.ON_HIT &&
+                !hit.isDot() && hit.getHitType() != HitType.PERFECTEQUILIBRIUM) {
+            stackEffects.add(new StackEffect(
+                    BuffId.PERFECTEQUILIBRIUMSTACKS,
+                    1,
+                    BuffSource.STACK,
+                    null,
+                    null,
+                    state.getState().getBuffs().has(BuffId.BALANCEBYFORCE) ? 3 : null,
+                    StackClampingBehaviour.ROLL_OVER
+            ));
+        }
+
+        if (eq.getAmmo().getEffect().contains(Effect.DEATHSPOREARROWS) && abilityContext.getId().getStyle() == CombatStyles.RANGED &&
+                !state.getBuffCooldownMap().containsKey(BuffCooldownKeyResolver.resolve(BuffId.DEATHSPORESTACKS))) {
+            stackEffects.add(new StackEffect(
+                    BuffId.DEATHSPORESTACKS,
+                    1,
+                    BuffSource.STACK,
+                    null,
+                    null,
+                    null,
+                    StackClampingBehaviour.CLAMP
+            ));
+        }
+
+        if (abilityContext.getCombatStyle() == CombatStyles.MAGIC &&
+                state.getState().getSpell().getSpell() == Spells.EXSANGUINATE &&
+                abilityContext.getDamageCalculationTiming() == DamageCalculationTiming.ON_HIT) {
+            stackEffects.add(new StackEffect(
+                    BuffId.TITHESTACKS,
+                    1,
+                    BuffSource.STACK,
+                    null,
+                    null,
+                    null,
+                    StackClampingBehaviour.CLAMP
+            ));
+        }
+
+
+        return stackEffects;
+    }
+
+    public static List<StackEffect> resolveOnHit(SimulationState state, AbilityContext abilityContext,
+                                                 AbilityHitsContext hit) {
+        List<StackEffect> stackEffects = new ArrayList<>();
+        EquipmentModel eq = state.getState().getEquipment();
+        double procChance = 0.0;
+        if ((eq.getMainhand().getEffect().contains(Effect.PRIMORDIALICESTACKS) || eq.getOffhand().getEffect().contains(Effect.PRIMORDIALICESTACKS)) &&
+                abilityContext.getId().getStyle() == CombatStyles.MELEE && !hit.isDot()) {
+            procChance += eq.getMainhand().getTitle() != null && eq.getMainhand().getTitle().equalsIgnoreCase("dark shard of leng") &&
+                    eq.getMainhand().getEffect().contains(Effect.PRIMORDIALICESTACKS) ? 0.1 :
+                    eq.getMainhand().getTitle() != null && eq.getMainhand().getEffect().contains(Effect.PRIMORDIALICESTACKS) ? 0.05 : 0;
+            procChance += eq.getOffhand().getTitle() != null && eq.getOffhand().getTitle().equalsIgnoreCase("dark sliver of leng") &&
+                    eq.getOffhand().getEffect().contains(Effect.PRIMORDIALICESTACKS) ? 0.02 :
+                    eq.getOffhand().getTitle() != null && eq.getMainhand().getEffect().contains(Effect.PRIMORDIALICESTACKS) ? 0.01 : 0;
+            stackEffects.add(new StackEffect(
+                    BuffId.PRIMORDIALICESTACKS,
+                    1,
+                    BuffSource.STACK,
+                    procChance,
+                    null,
+                    null,
+                    StackClampingBehaviour.CLAMP
+            ));
+        }
+
+        return stackEffects;
+    }
+
+    public static List<StackEffect> resolveOnReleaseResolvedDamage(SimulationState state, DamageResult damageResult) {
+        List<StackEffect> stackEffects = new ArrayList<>();
+        EquipmentModel eq = state.getState().getEquipment();
+        AbilityContext abilityContext = AbilityProvider.get(damageResult.getHit().getFirst().getParentAbility(), eq);
+        if (eq.getAmmo().getEffect().contains(Effect.DEATHSPOREARROWS) && abilityContext.getId().getStyle() == CombatStyles.RANGED &&
+                !state.getBuffCooldownMap().containsKey(BuffCooldownKeyResolver.resolve(BuffId.DEATHSPORESTACKS))) {
+            int hits = 0;
+            for (HitResult hit : damageResult.getHit()) {
+                if (!hit.isDot()) {
+                    hits++;
+                }
+            }
+            stackEffects.add(new StackEffect(
+                    BuffId.DEATHSPORESTACKS,
+                    hits,
+                    BuffSource.STACK,
+                    null,
+                    null,
+                    null,
+                    StackClampingBehaviour.CLAMP
             ));
         }
         return stackEffects;
@@ -90,6 +232,7 @@ public class StackResolver {
                     appliedBuffResult,
                     BuffId.WENARROWSTACKS,
                     BuffId.WENARROWSTACKS.getMaximumStacks(),
+                    state.getState().getBuffs().stacks(BuffId.WENARROWSTACKS),
                     StackConsumptionTiming.PRE_DAMAGE
             ));
         }
@@ -98,7 +241,39 @@ public class StackResolver {
             buffResults.add(new ConsumableStackResult(
                     null,
                     BuffId.PRIMORDIALICESTACKS,
+                    BuffId.PRIMORDIALICESTACKS.getMaximumStacks(),
                     state.getState().getBuffs().stacks(BuffId.PRIMORDIALICESTACKS),
+                    StackConsumptionTiming.POST_DAMAGE
+            ));
+        }
+
+        if (abilityPlacement.getPlacedAbility() == AbilityId.BALANCEBYFORCE &&
+                state.getState().getBuffs().stacks(BuffId.PERFECTEQUILIBRIUMSTACKS) >= 3 &&
+                state.getState().getEquipment().getMainhand().getTitle() != null &&
+                state.getState().getEquipment().getMainhand().getTitle().equalsIgnoreCase("bow of the last guardian")) {
+            buffResults.add(new ConsumableStackResult(
+                    null,
+                    BuffId.PERFECTEQUILIBRIUMSTACKS,
+                    state.getState().getBuffs().stacks(BuffId.PERFECTEQUILIBRIUMSTACKS),
+                    state.getState().getBuffs().stacks(BuffId.PERFECTEQUILIBRIUMSTACKS),
+                    StackConsumptionTiming.POST_DAMAGE
+            ));
+        }
+        return buffResults;
+    }
+
+    public static List<ConsumableStackResult> resolveEndOfTickStackTriggers(SimulationState state) {
+        List<ConsumableStackResult> buffResults = new ArrayList<>();
+        if (state.getState().getBuffs().has(BuffId.DEATHSPORESTACKS) && state.getState().getBuffs().stacks(BuffId.DEATHSPORESTACKS) >= 12) {
+            AppliedBuffResult appliedBuffResult = new AppliedBuffResult(
+                    BuffProvider.get(BuffId.FEASTINGSPORES, BuffSource.PROC, state),
+                    BuffProvider.get(BuffId.FEASTINGSPORES, BuffSource.PROC, state).getDurationTicks()
+            );
+            buffResults.add(new ConsumableStackResult(
+                    appliedBuffResult,
+                    BuffId.DEATHSPORESTACKS,
+                    BuffId.DEATHSPORESTACKS.getMaximumStacks(),
+                    state.getState().getBuffs().stacks(BuffId.DEATHSPORESTACKS),
                     StackConsumptionTiming.POST_DAMAGE
             ));
         }

@@ -33,6 +33,10 @@ public class EquipmentAdrenalineAbilityPlacementResolver {
         if (buff.has(BuffId.FURYOFTHESMALL) && ability.getId().getTier() == AbilityTier.BASIC) {
             adrenalineDelta += 1;
         }
+
+        if (buff.has(BuffId.FEASTINGSPORES) && ability.getId().getStyle() == CombatStyles.RANGED && ability.getId().getTier() != AbilityTier.BASIC) {
+            adrenalineDelta -= ability.getAdrenaline();
+        }
         return adrenalineDelta;
     }
 }

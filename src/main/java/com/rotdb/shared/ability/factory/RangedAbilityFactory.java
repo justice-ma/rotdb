@@ -54,7 +54,8 @@ public class RangedAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.RANGED,
-                SNIPE);
+                SNIPE,
+                DamageCalculationTiming.ON_HIT);
     }
 
     public static AbilityContext piercingShot() {

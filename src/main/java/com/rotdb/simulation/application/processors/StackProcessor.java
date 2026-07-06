@@ -1,7 +1,9 @@
 package com.rotdb.simulation.application.processors;
 
+import com.rotdb.calculation.domain.model.DamageResult;
 import com.rotdb.shared.ability.AbilityProvider;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.simulation.domain.model.buff.*;
 import com.rotdb.simulation.domain.model.buff.enums.BuffSource;
@@ -14,7 +16,9 @@ import com.rotdb.simulation.domain.resolvers.buff.BuffCooldownKeyResolver;
 import com.rotdb.simulation.domain.resolvers.buff.StackResolver;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class StackProcessor {
     public static List<BuffDefinition> applyOnReleaseStacks(AbilityPlacement abilityPlacement, SimulationState state) {
@@ -22,6 +26,33 @@ public class StackProcessor {
         AbilityContext ability = AbilityProvider.get(abilityPlacement.getPlacedAbility(), state.getState().getEquipment());
         for (StackEffect stackEffect : StackResolver.resolveOnRelease(state, ability)) {
             if (ProcProcessor.determineProc(state.getSimulationConfig().getProcMode(), stackEffect.getProcChance(), state, stackEffect.getBuffId())) {
+                buffs.add(processProc(stackEffect, state));
+            }
+        }
+        return buffs;
+    }
+
+    public static List<BuffDefinition> applyOnReleaseResolvedHitStacks(AbilityPlacement abilityPlacement,
+                                                                       SimulationState state) {
+        List<BuffDefinition> buffs = new ArrayList<>();
+        AbilityContext ability = AbilityProvider.get(abilityPlacement.getPlacedAbility(), state.getState().getEquipment());
+        for (AbilityHitsContext hit : ability.getHits()) {
+            for (StackEffect stackEffect : StackResolver.resolveOnHit(state, ability, hit)) {
+                if (ProcProcessor.determineProc(state.getSimulationConfig().getProcMode(), stackEffect.getProcChance(),
+                        state, stackEffect.getBuffId())) {
+                    buffs.add(processProc(stackEffect, state));
+                }
+            }
+        }
+        return buffs;
+    }
+
+    public static List<BuffDefinition> applyOnReleaseResolvedDamageStacks(DamageResult damageResult,
+                                                                          SimulationState state) {
+        List<BuffDefinition> buffs = new ArrayList<>();
+        for (StackEffect stackEffect : StackResolver.resolveOnReleaseResolvedDamage(state, damageResult)) {
+            if (ProcProcessor.determineProc(state.getSimulationConfig().getProcMode(), stackEffect.getProcChance(),
+                    state, stackEffect.getBuffId())) {
                 buffs.add(processProc(stackEffect, state));
             }
         }
@@ -39,6 +70,7 @@ public class StackProcessor {
         }
         return buffs;
     }
+
 
     public static List<ConsumableStackResult> prepareConsumableStacksForDamage(AbilityPlacement abilityPlacement,
                                                                                SimulationState state) {
@@ -65,15 +97,46 @@ public class StackProcessor {
             state.getActiveBuffDurationMap().remove(consumableStackResult.consumedStackId());
             state.getState().getBuffs().getBuffStacks().remove(consumableStackResult.consumedStackId());
         }
+
+        BuffDefinition buffDefinition = BuffProvider.get(consumableStackResult.consumedStackId(), BuffSource.STACK,
+                state);
+        if (buffDefinition.getCooldownTicks() != null) {
+            initializeBuffCooldown(consumableStackResult.consumedStackId(), state, buffDefinition);
+        }
+    }
+
+    public static List<ConsumableStackResult> applyEndOfTickStackTriggers(SimulationState state) {
+        List<ConsumableStackResult> buffResults = new ArrayList<>();
+        for (ConsumableStackResult consumableStackResult : StackResolver.resolveEndOfTickStackTriggers(state)) {
+            if (consumableStackResult.appliedBuffResult() != null) {
+                initializeBuffDuration(consumableStackResult.appliedBuffResult().buffDefinition().getBuffId(), state,
+                        consumableStackResult.appliedBuffResult().buffDefinition(),
+                        consumableStackResult.appliedBuffResult().resolvedDurationTicks());
+                initializeBuffCooldown(consumableStackResult.appliedBuffResult().buffDefinition().getBuffId(), state,
+                        consumableStackResult.appliedBuffResult().buffDefinition());
+                addToBuffSet(state, consumableStackResult.appliedBuffResult().buffDefinition());
+            }
+            buffResults.add(consumableStackResult);
+        }
+        return buffResults;
+    }
+
+    public static void removeStaleStacks(SimulationState state) {
+        Iterator<Map.Entry<BuffId, Integer>> iterator = state.getState().getBuffs().getBuffStacks().entrySet().iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().getValue() <= 0) {
+                iterator.remove();
+            }
+        }
     }
 
     private static BuffDefinition processProc(StackEffect stackEffect, SimulationState state) {
         BuffDefinition buff = BuffProvider.get(stackEffect.getBuffId(), stackEffect.getBuffSource(), state);
-        applyStackDelta(stackEffect.getBuffId(), state, stackEffect.getStackDelta());
+        applyStackDelta(stackEffect.getBuffId(), state, stackEffect.getStackDelta(), stackEffect);
         initializeStackDuration(stackEffect.getBuffId(), state, buff, stackEffect.getDurationOverride());
         for (AppliedBuffResult appliedBuffResult : StackResolver.resolveStackTriggeredBuffs(stackEffect, state)) {
             initializeBuffDuration(appliedBuffResult.buffDefinition().getBuffId(), state,
-                    appliedBuffResult.buffDefinition(), null);
+                    appliedBuffResult.buffDefinition(), appliedBuffResult.resolvedDurationTicks());
             initializeBuffCooldown(appliedBuffResult.buffDefinition().getBuffId(), state,
                     appliedBuffResult.buffDefinition());
             addToBuffSet(state, appliedBuffResult.buffDefinition());
@@ -121,11 +184,28 @@ public class StackProcessor {
         }
     }
 
-    private static void applyStackDelta(BuffId buff, SimulationState state, Integer stackDelta) {
-        if (state.getState().getBuffs().has(buff)) {
-            state.getState().getBuffs().getBuffStacks().put(buff, Math.min(stackDelta + state.getState().getBuffs().getBuffStacks().get(buff), buff.getMaximumStacks()));
-        } else {
-            state.getState().getBuffs().getBuffStacks().put(buff, Math.min(stackDelta, buff.getMaximumStacks()));
+    private static void applyStackDelta(BuffId buff, SimulationState state, Integer stackDelta,
+                                        StackEffect stackEffect) {
+        if (stackEffect.getMaximumStacksOverride() == null) {
+            stackEffect.setMaximumStacksOverride(buff.getMaximumStacks());
+        }
+        switch (stackEffect.getStackClampingBehaviour()) {
+            case CLAMP -> {
+                if (state.getState().getBuffs().has(buff)) {
+                    state.getState().getBuffs().getBuffStacks().put(buff, Math.min(stackDelta + state.getState().getBuffs().getBuffStacks().get(buff), stackEffect.getMaximumStacksOverride()));
+                } else {
+                    state.getState().getBuffs().getBuffStacks().put(buff, Math.min(stackDelta, stackEffect.getMaximumStacksOverride()));
+                }
+            }
+            case ROLL_OVER -> {
+                if (state.getState().getBuffs().has(buff)) {
+                    state.getState().getBuffs().getBuffStacks().put(
+                            buff,
+                            (state.getState().getBuffs().stacks(buff) + stackDelta) % (stackEffect.getMaximumStacksOverride() + 1));
+                } else {
+                    state.getState().getBuffs().getBuffStacks().put(buff, stackDelta % (stackEffect.getMaximumStacksOverride() + 1));
+                }
+            }
         }
     }
 }

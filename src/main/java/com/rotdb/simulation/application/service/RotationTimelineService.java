@@ -1,22 +1,17 @@
 package com.rotdb.simulation.application.service;
 
 import com.rotdb.calculation.domain.engine.CalculationEngine;
-import com.rotdb.calculation.domain.engine.CalculationMode;
-import com.rotdb.calculation.domain.model.DamageResult;
-import com.rotdb.calculation.domain.model.HitResult;
-import com.rotdb.shared.ability.AbilityProvider;
-import com.rotdb.shared.ability.model.AbilityCooldownTiming;
 import com.rotdb.shared.ability.model.GeneratedBuffTiming;
-import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
-import com.rotdb.shared.combat.domain.model.enums.DamageCalculationTiming;
 import com.rotdb.simulation.application.processors.*;
+import com.rotdb.simulation.application.processors.result.AbilityCastResult;
+import com.rotdb.simulation.application.processors.result.AbilityReleaseResult;
+import com.rotdb.simulation.application.processors.result.HitLandingResult;
 import com.rotdb.simulation.application.snapshot.SimulationStateSnapshotCopier;
 import com.rotdb.simulation.domain.model.buff.AppliedBuffResult;
 import com.rotdb.simulation.domain.model.buff.BuffDefinition;
 import com.rotdb.simulation.domain.model.buff.ConsumableStackResult;
 import com.rotdb.simulation.domain.model.buff.enums.BuffSource;
-import com.rotdb.simulation.domain.model.buff.enums.StackConsumptionTiming;
 import com.rotdb.simulation.domain.model.config.SimulationConfig;
 import com.rotdb.simulation.domain.model.context.*;
 import com.rotdb.simulation.domain.provider.BuffProvider;
@@ -33,6 +28,30 @@ public class RotationTimelineService {
     }
 
     public RotationTimeline build(RotationCombatState state, List<AbilityPlacement> abilityPlacements, List<BuffPlacement> buffPlacements, SimulationConfig config) {
+
+        /*
+         * Tick flow:
+         * 1. Apply user-placed buffs for this tick.
+         * 2. Process ability casts.
+         * 3. Process ability releases.
+         * 4. Apply passive and pre-hit adrenaline changes.
+         * 5. Resolve landed hits.
+         * 6. Process ability completions.
+         * 7. Snapshot the tick, then decay cooldowns and buff durations.
+         *
+         * Hit damage lifecycle:
+         * - ON_RELEASE abilities calculate damage when the ability releases.
+         *   Their resolved TimelineHits are stored by landing tick and only applied later.
+         *
+         * - ON_HIT abilities schedule lightweight ScheduledHits when the ability releases.
+         *   Each hit calculates damage when it lands, using the combat state at that time.
+         *
+         * Stack timing:
+         * - PRE_DAMAGE consumptions happen before release-time damage calculation.
+         * - ON_RELEASE hit-generated stacks are generated during release before damage is calculated.
+         * - ON_HIT hit-generated stacks are generated when each hit lands.
+         */
+
         RotationTimeline timeline = new RotationTimeline();
         timeline.setTimeline(new ArrayList<>());
 
@@ -44,12 +63,12 @@ public class RotationTimelineService {
         Map<Integer, List<AbilityPlacement>> abilitiesByCastTick = PlacementProcessor.groupAbilitiesByCastTick(abilityPlacements);
         Map<Integer, List<AbilityPlacement>> abilitiesByReleaseTick = PlacementProcessor.groupAbilityByReleaseTick(abilityPlacements);
         Map<Integer, List<BuffPlacement>> buffs = PlacementProcessor.groupBuffsByTick(buffPlacements);
-        Map<Integer, List<ScheduledHit>> scheduledHitMap = new HashMap<>();
-        Map<Integer, List<TimelineHit>> resolvedHitMap = new HashMap<>();
+        Map<Integer, List<ScheduledHit>> scheduledHitsByLandingTick = new HashMap<>();
+        Map<Integer, List<TimelineHit>> resolvedHitsByLandingTick = new HashMap<>();
         Map<Integer, List<ConsumableStackResult>> postDamageConsumptionsByPlacementId = new HashMap<>();
         Map<Integer, Integer> remainingHitsByPlacementId = new HashMap<>();
         Map<Integer, AbilityPlacement> placementIdMap = new HashMap<>();
-        Map<Integer, List<AbilityPlacement>> completionMap = new HashMap<>();
+        Map<Integer, List<AbilityPlacement>> abilitiesByCompletionTick = new HashMap<>();
 
         int placementId = 0;
         for (AbilityPlacement abilityPlacement : abilityPlacements) {
@@ -84,6 +103,7 @@ public class RotationTimelineService {
             double adrenalineDelta = 0;
             boolean vestmentsBleedActiveAtTickStart = simulationState.getState().getBuffs().has(BuffId.VESTMENTSBLEED);
 
+            // User buff placements
             if (buffs.containsKey(tick)) {
                 newBuffs.addAll(buffs.get(tick));
                 for (BuffPlacement buffPlacement : newBuffs) {
@@ -92,194 +112,40 @@ public class RotationTimelineService {
                             endingTick = Math.max(endingTick, buff.resolvedDurationTicks() + tick);
                         }
                     }
+                    BuffProcessor.removeBuffsConsumedByBuffPlacement(buffPlacement, simulationState);
                 }
             }
 
-            if (abilitiesByCastTick.containsKey(tick)) {
+            // Ability casts
+            AbilityCastResult abilityCastResult = AbilityCastProcessor.processAbilityCast(abilitiesByCastTick, tick,
+                    castedAbilities, simulationState, tickSnapshot, vestmentsBleedActiveAtTickStart, endingTick,
+                    engine);
+            adrenalineDelta = abilityCastResult.adrenalineDelta();
+            endingTick = abilityCastResult.endingTick();
 
-                castedAbilities.addAll(abilitiesByCastTick.get(tick));
-                adrenalineDelta = 0;
+            // Ability releases
+            AbilityReleaseResult abilityReleaseResult = AbilityReleaseProcessor.processRelease(abilitiesByReleaseTick,
+                    resolvedHitsByLandingTick, scheduledHitsByLandingTick, postDamageConsumptionsByPlacementId, remainingHitsByPlacementId, tickSnapshot,
+                    vestmentsBleedActiveAtTickStart, abilitiesByCompletionTick, releasedAbilities, tick, simulationState, endingTick, engine);
+            endingTick = abilityReleaseResult.endingTick();
 
-                for (AbilityPlacement abilityPlacement : castedAbilities) {
-                    DamageResult damageResult =
-                            engine.calculateAbilityDamage(DamageRequestFactory.getDamageRequest(simulationState.getState(), abilityPlacement.getPlacedAbility()), CalculationMode.ABILITY, null);
-
-                    adrenalineDelta += AdrenalineProcessor.generateAbilityPlacementAdrenalineDelta(abilityPlacement, simulationState, damageResult);
-
-                    AbilityCooldownProcessor.generateGlobalCooldownWarnings(simulationState, abilityPlacement, tickSnapshot);
-                    AbilityCooldownProcessor.initializeGlobalCooldown(simulationState, abilityPlacement);
-
-                    if (AbilityProvider.get(abilityPlacement.getPlacedAbility(), simulationState.getState().getEquipment()).getAbilityCooldownTiming() == AbilityCooldownTiming.ON_CAST) {
-                        AbilityCooldownProcessor.generateAbilityCooldownWarnings(simulationState, abilityPlacement, tickSnapshot);
-                        AbilityCooldownProcessor.initializeCooldown(simulationState, abilityPlacement);
-                        AbilityCooldownProcessor.applyPlacementCooldownEffects(simulationState, abilityPlacement, damageResult);
-                    }
-                    for (AppliedBuffResult buff : BuffProcessor.applyAbilityGeneratedBuffsWithTiming(abilityPlacement, simulationState, GeneratedBuffTiming.ON_CAST, vestmentsBleedActiveAtTickStart)) {
-                        if (buff.resolvedDurationTicks() != null) {
-                            endingTick = Math.max(buff.resolvedDurationTicks() + tick, endingTick);
-                        }
-                    }
-                }
-            }
-
-            if (abilitiesByReleaseTick.containsKey(tick)) {
-                for (AbilityPlacement abilityPlacement : abilitiesByReleaseTick.get(tick)) {
-                    List<ConsumableStackResult> consumableStackResults = new ArrayList<>();
-                    for (ConsumableStackResult buff : StackProcessor.prepareConsumableStacksForDamage(abilityPlacement,
-                            simulationState)) {
-                        if (buff.appliedBuffResult() != null && buff.appliedBuffResult().resolvedDurationTicks() != null) {
-                            endingTick = Math.max(buff.appliedBuffResult().resolvedDurationTicks() + tick, endingTick);
-                        }
-                        if (buff.consumptionTiming() == StackConsumptionTiming.PRE_DAMAGE) {
-                            StackProcessor.consumeStacks(simulationState, buff);
-                        }
-                        if (buff.consumptionTiming() == StackConsumptionTiming.POST_DAMAGE) {
-                            consumableStackResults.add(buff);
-                        }
-                    }
-                    DamageResult damageResult =
-                            engine.calculateAbilityDamage(DamageRequestFactory.getDamageRequest(simulationState.getState(), abilityPlacement.getPlacedAbility()), CalculationMode.ABILITY, null);
-                    AbilityContext abilityContext = AbilityProvider.get(abilityPlacement.getPlacedAbility(), simulationState.getState().getEquipment());
-
-                    if (abilityContext.getDamageCalculationTiming() == DamageCalculationTiming.ON_RELEASE) {
-                        List<TimelineHit> hits = HitsScheduler.schedule(damageResult, abilityPlacement,
-                                simulationState.getState().getEquipment());
-                        HitsPlacementProcessor.addTimelineHits(resolvedHitMap, hits);
-                        for (ConsumableStackResult consumableStackResult : consumableStackResults) {
-                            StackProcessor.consumeStacks(simulationState, consumableStackResult);
-                        }
-                        for (TimelineHit hit : hits) {
-                            endingTick = Math.max(hit.getLandingTick(), endingTick);
-                        }
-                    }
-
-                    List<ScheduledHit> scheduledHits = new ArrayList<>();
-                    if (abilityContext.getDamageCalculationTiming() == DamageCalculationTiming.ON_HIT) {
-                        scheduledHits = HitsScheduler.schedule(abilityContext, abilityPlacement);
-                        HitsPlacementProcessor.addScheduledHits(scheduledHitMap, scheduledHits);
-
-                        List<ConsumableStackResult> filteredConsumableStackResults = new ArrayList<>();
-                        for (ConsumableStackResult csr : consumableStackResults) {
-                            if (csr.consumptionTiming() == StackConsumptionTiming.POST_DAMAGE) {
-                                filteredConsumableStackResults.add(csr);
-                            }
-                        }
-
-                        if (!filteredConsumableStackResults.isEmpty()) {
-                            postDamageConsumptionsByPlacementId.put(
-                                    abilityPlacement.getPlacementId(),
-                                    filteredConsumableStackResults
-                            );
-                        }
-
-                        remainingHitsByPlacementId.put(
-                                abilityPlacement.getPlacementId(),
-                                scheduledHits.size()
-                        );
-                    }
-
-                    StackProcessor.applyOnReleaseStacks(abilityPlacement, simulationState);
-
-                    for (ScheduledHit timelineHit : scheduledHits) {
-                        int landingTick = timelineHit.landingTick();
-                        endingTick = Math.max(endingTick, landingTick);
-                    }
-
-                    if (abilityContext.getAbilityCooldownTiming() == AbilityCooldownTiming.ON_RELEASE) {
-                        AbilityCooldownProcessor.generateAbilityCooldownWarnings(simulationState, abilityPlacement, tickSnapshot);
-                        AbilityCooldownProcessor.initializeCooldown(simulationState, abilityPlacement);
-                        AbilityCooldownProcessor.applyPlacementCooldownEffects(simulationState, abilityPlacement, damageResult);
-                    }
-                    for (AppliedBuffResult buff : BuffProcessor.applyAbilityGeneratedBuffsWithTiming(abilityPlacement, simulationState, GeneratedBuffTiming.ON_RELEASE, vestmentsBleedActiveAtTickStart)) {
-                        if (buff.resolvedDurationTicks() != null) {
-                            endingTick = Math.max(buff.resolvedDurationTicks() + tick, endingTick);
-                        }
-                    }
-
-                    if (completionMap.get(abilityPlacement.getCompletionTick()) == null) {
-                        List<AbilityPlacement> abilityCompletions = new ArrayList<>();
-                        abilityCompletions.add(abilityPlacement);
-                        completionMap.put(abilityPlacement.getCompletionTick(), abilityCompletions);
-                    } else {
-                        completionMap.get(abilityPlacement.getCompletionTick()).add(abilityPlacement);
-                    }
-                }
-                releasedAbilities.addAll(abilitiesByReleaseTick.get(tick));
-            }
-
+            // Passive and pre-hit adrenaline
             adrenalineDelta += AdrenalineProcessor.generateCurrentTickAdrenalineDelta(simulationState);
-            adrenalineDelta += AdrenalineProcessor.generatePreHitTickAdrenalineDelta(simulationState, scheduledHitMap.get(tick + 1));
+            adrenalineDelta += AdrenalineProcessor.generatePreHitTickAdrenalineDelta(simulationState, scheduledHitsByLandingTick.get(tick + 1));
             AdrenalineProcessor.applyAdrenalineDelta(simulationState, adrenalineDelta);
             AdrenalineProcessor.generateWarnings(simulationState, tickSnapshot, newBuffs, castedAbilities);
             AdrenalineProcessor.clampAdrenaline(simulationState);
 
-            if (resolvedHitMap.get(tick) != null) {
-                for (TimelineHit timelineHit : resolvedHitMap.get(tick)) {
-                    newTimelineHits.add(timelineHit);
-                    StackProcessor.applyOnHitStacks(placementIdMap.get(timelineHit.getPlacementId()), simulationState,
-                            timelineHit);
-                    BuffProcessor.applyAbilityGeneratedBuffsWithTiming(placementIdMap.get(timelineHit.getPlacementId()),
-                            simulationState, GeneratedBuffTiming.ON_HIT, vestmentsBleedActiveAtTickStart);
-                }
-            }
+            // Landed hits
+            HitLandingResult hitLandingResult = HitLandingProcessor.processHitLanding(resolvedHitsByLandingTick, tick,
+                    newTimelineHits, placementIdMap, vestmentsBleedActiveAtTickStart, simulationState,
+                    scheduledHitsByLandingTick, engine, remainingHitsByPlacementId, postDamageConsumptionsByPlacementId, state,
+                    endingTick);
+            endingTick = hitLandingResult.endingTick();
 
-            if (scheduledHitMap.get(tick) != null && scheduledHitMap.containsKey(tick)) {
-                for (ScheduledHit scheduledHit : scheduledHitMap.get(tick)) {
-                    DamageResult result =
-                            engine.calculateAbilityDamage(DamageRequestFactory.getDamageRequest(simulationState.getState(),
-                                    scheduledHit.parentAbility()), CalculationMode.HIT, scheduledHit.hitIndex());
-                    HitResult hitResult = result.getHit().getFirst();
-                    TimelineHit timelineHit = new TimelineHit(
-                            hitResult.getHitMinDamage(),
-                            hitResult.getHitMaxDamage(),
-                            hitResult.getHitAvgDamage(),
-                            hitResult.getHitMinCrit(),
-                            hitResult.getHitMaxCrit(),
-                            hitResult.getHitAvgCrit(),
-                            hitResult.getHitMinNonCrit(),
-                            hitResult.getHitMaxNonCrit(),
-                            hitResult.getHitAvgNonCrit(),
-                            hitResult.getHitIndex(),
-                            hitResult.getHitTiming(),
-                            tick,
-                            hitResult.getCritChance(),
-                            hitResult.getHitType(),
-                            hitResult.getParentAbility(),
-                            scheduledHit.placementId(),
-                            hitResult.isDot(),
-                            AbilityProvider.get(hitResult.getParentAbility(), state.getEquipment()).isChannel()
-                    );
-                    newTimelineHits.add(timelineHit);
-
-                    int landedPlacementId = scheduledHit.placementId();
-                    remainingHitsByPlacementId.merge(landedPlacementId, -1, Integer::sum);
-
-                    if (remainingHitsByPlacementId.get(landedPlacementId) == 0) {
-                        List<ConsumableStackResult> postDamageList =
-                                postDamageConsumptionsByPlacementId.get(landedPlacementId);
-                        if (postDamageList != null) {
-                            for (ConsumableStackResult stackResult : postDamageList) {
-                                StackProcessor.consumeStacks(simulationState, stackResult);
-                            }
-                        }
-                        postDamageConsumptionsByPlacementId.remove(landedPlacementId);
-                        remainingHitsByPlacementId.remove(landedPlacementId);
-                    }
-
-                    List<AppliedBuffResult> appliedBuffResults = new ArrayList<>();
-                    appliedBuffResults.addAll(BuffProcessor.applyAbilityGeneratedBuffsWithTiming(placementIdMap.get(timelineHit.getPlacementId()), simulationState, GeneratedBuffTiming.ON_HIT, vestmentsBleedActiveAtTickStart));
-                    StackProcessor.applyOnHitStacks(placementIdMap.get(timelineHit.getPlacementId()), simulationState, timelineHit);
-
-                    for (AppliedBuffResult buff : appliedBuffResults) {
-                        if (buff.resolvedDurationTicks() != null) {
-                            endingTick = Math.max(endingTick, buff.resolvedDurationTicks() + tick);
-                        }
-                    }
-                }
-            }
-
-            if (completionMap.containsKey(tick)) {
-                for (AbilityPlacement abilityPlacement : completionMap.get(tick)) {
+            // Ability completions
+            if (abilitiesByCompletionTick.containsKey(tick)) {
+                for (AbilityPlacement abilityPlacement : abilitiesByCompletionTick.get(tick)) {
                     for (AppliedBuffResult buff : BuffProcessor.applyAbilityGeneratedBuffsWithTiming(abilityPlacement, simulationState, GeneratedBuffTiming.ON_COMPLETION, vestmentsBleedActiveAtTickStart)) {
                         if (buff.resolvedDurationTicks() != null) {
                             endingTick = Math.max(buff.resolvedDurationTicks() + tick, endingTick);
@@ -288,6 +154,17 @@ public class RotationTimelineService {
                 }
             }
 
+            for (ConsumableStackResult consumableStackResult :
+                    StackProcessor.applyEndOfTickStackTriggers(simulationState)) {
+                StackProcessor.consumeStacks(simulationState, consumableStackResult);
+                if (consumableStackResult.appliedBuffResult() != null && consumableStackResult.appliedBuffResult().resolvedDurationTicks() != null) {
+                    endingTick = Math.max(endingTick,
+                            consumableStackResult.appliedBuffResult().resolvedDurationTicks() + tick);
+                }
+            }
+
+            // Snapshot and decay
+            StackProcessor.removeStaleStacks(simulationState);
             SimulationState endingStateSnapshot = snapshotCopier.copySimulationState(simulationState);
             finalizeTickSnapshot(tickSnapshot, castedAbilities, releasedAbilities, newBuffs, newTimelineHits, endingStateSnapshot);
             timeline.getTimeline().add(tickSnapshot);
@@ -296,7 +173,7 @@ public class RotationTimelineService {
             BuffProcessor.decayCooldown(simulationState);
             BuffProcessor.decayBuffDuration(simulationState);
 
-            Iterator<Map.Entry<Integer, List<ScheduledHit>>> timelineHitsIterator = scheduledHitMap.entrySet().iterator();
+            Iterator<Map.Entry<Integer, List<ScheduledHit>>> timelineHitsIterator = scheduledHitsByLandingTick.entrySet().iterator();
             while (timelineHitsIterator.hasNext()) {
                 if (timelineHitsIterator.next().getKey() < tick) {
                     timelineHitsIterator.remove();

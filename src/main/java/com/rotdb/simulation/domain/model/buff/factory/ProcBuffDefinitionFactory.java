@@ -11,20 +11,12 @@ public class ProcBuffDefinitionFactory {
         return create(BuffId.FROSTBLADES, BuffLifecycle.TIMED, BuffApplication.PLAYER_BUFF_SET, 10, 0, null);
     }
 
-    public static BuffDefinition primordialIceStacks() {
-        return create(BuffId.PRIMORDIALICESTACKS, BuffLifecycle.UNTIL_CONSUMED, BuffApplication.PLAYER_STACKS, null, null, null);
-    }
-
     public static BuffDefinition rubyAurora() {
         return create(BuffId.RUBYAURORA, BuffLifecycle.TIMED, BuffApplication.PLAYER_BUFF_SET, 40, null, null);
     }
 
     public static BuffDefinition wenArrowProc() {
         return create(BuffId.WENARROWPROC, BuffLifecycle.TIMED, BuffApplication.PLAYER_BUFF_SET, 15, null, null);
-    }
-
-    public static BuffDefinition wenArrowStacks() {
-        return create(BuffId.WENARROWSTACKS, BuffLifecycle.TIMED, BuffApplication.PLAYER_STACKS, 50, null, null);
     }
 
     public static BuffDefinition impatientProc() {
@@ -47,8 +39,8 @@ public class ProcBuffDefinitionFactory {
         return create(BuffId.WARPRIESTOFARMADYLPROC, BuffLifecycle.INSTANT, BuffApplication.NONE, null, null, null);
     }
 
-    public static BuffDefinition gravitateStacks() {
-        return create(BuffId.GRAVITATESTACKS, BuffLifecycle.STACK, BuffApplication.PLAYER_STACKS, null, null, null);
+    public static BuffDefinition feastingSpores() {
+        return create(BuffId.FEASTINGSPORES, BuffLifecycle.TIMED, BuffApplication.PLAYER_BUFF_SET, 17, null, null);
     }
 
     private static BuffDefinition create(BuffId id, BuffLifecycle lifecycle, BuffApplication application, Integer duration, Integer cooldown, Double adrenalineDelta) {

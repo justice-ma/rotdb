@@ -5,5 +5,6 @@ public enum BuffSource {
     USER_PLACED,
     ABILITY_GENERATED,
     PROC,
-    SYSTEM
+    SYSTEM,
+    STACK
 }

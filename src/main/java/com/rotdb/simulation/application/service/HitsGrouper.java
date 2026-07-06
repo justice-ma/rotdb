@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ScheduledHitsGrouper {
+public class HitsGrouper {
     public static Map<Integer, List<ScheduledHit>> groupScheduledHits(List<ScheduledHit> hits) {
         Map<Integer, List<ScheduledHit>> scheduledHitsPerTick = new HashMap<>();
         for (ScheduledHit hit : hits) {

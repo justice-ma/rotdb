@@ -111,7 +111,9 @@ public enum BuffId {
     SUNFALLSLAM(0, 0, false, "Sunfall Slam"),
     COMMANDSKELETONWARRIOR(0, 0, false, "Commands Skeleton Warrior"),
     SOULREAVE(0, 0, false, "Soul Reave"),
-    DEATHESSENCE(0, 0, false, "Death Essence");
+    DEATHESSENCE(0, 0, false, "Death Essence"),
+    DEATHSPORESTACKS(0, 12, true, "Deathspore Stacks"),
+    FEASTINGSPORES(0, 0, false, "Deathspore Proc");
 
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;
