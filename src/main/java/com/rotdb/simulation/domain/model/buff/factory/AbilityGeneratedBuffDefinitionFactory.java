@@ -91,8 +91,8 @@ public class AbilityGeneratedBuffDefinitionFactory {
         return create(BuffId.SUNFALLSLAM, BuffLifecycle.TIMED, 50, 100, BuffApplication.PLAYER_BUFF_SET);
     }
 
-    public static BuffDefinition soulReave() {
-        return create(BuffId.SOULREAVE, BuffLifecycle.TIMED, 50, 100, BuffApplication.PLAYER_BUFF_SET);
+    public static BuffDefinition soulCrush() {
+        return create(BuffId.SOULCRUSH, BuffLifecycle.TIMED, 50, 100, BuffApplication.PLAYER_BUFF_SET);
     }
 
     public static BuffDefinition deathEssence() {

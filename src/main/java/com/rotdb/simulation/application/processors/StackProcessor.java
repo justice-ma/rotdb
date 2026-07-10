@@ -7,10 +7,7 @@ import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.simulation.domain.model.buff.*;
 import com.rotdb.simulation.domain.model.buff.enums.BuffSource;
-import com.rotdb.simulation.domain.model.context.AbilityPlacement;
-import com.rotdb.simulation.domain.model.context.ActiveBuffState;
-import com.rotdb.simulation.domain.model.context.SimulationState;
-import com.rotdb.simulation.domain.model.context.TimelineHit;
+import com.rotdb.simulation.domain.model.context.*;
 import com.rotdb.simulation.domain.provider.BuffProvider;
 import com.rotdb.simulation.domain.resolvers.buff.BuffCooldownKeyResolver;
 import com.rotdb.simulation.domain.resolvers.buff.StackResolver;
@@ -79,11 +76,21 @@ public class StackProcessor {
                 state)) {
             if (stackResult.appliedBuffResult() != null) {
                 BuffId appliedBuff = stackResult.appliedBuffResult().buffDefinition().getBuffId();
-                initializeBuffDuration(appliedBuff, state, BuffProvider.get(appliedBuff,
-                        BuffSource.PROC,
-                        state), null);
-                initializeBuffCooldown(appliedBuff, state, BuffProvider.get(appliedBuff, BuffSource.PROC, state));
-                addToBuffSet(state, BuffProvider.get(appliedBuff, BuffSource.PROC, state));
+                if (stackResult.appliedBuffResult().stackDelta() == null) {
+                    initializeBuffDuration(appliedBuff, state, BuffProvider.get(appliedBuff,
+                            BuffSource.PROC,
+                            state), null);
+                    initializeBuffCooldown(appliedBuff, state, BuffProvider.get(appliedBuff, BuffSource.PROC, state));
+                    addToBuffSet(state, BuffProvider.get(appliedBuff, BuffSource.PROC, state));
+                } else if (stackResult.appliedBuffResult().stackDelta() > 0) {
+                    if (stackResult.appliedBuffResult().buffDefinition().getDurationTicks() != null) {
+                        initializeBuffDuration(appliedBuff, state, BuffProvider.get(appliedBuff,
+                                BuffSource.STACK,
+                                state), null);
+                    }
+                    initializeBuffCooldown(appliedBuff, state, BuffProvider.get(appliedBuff, BuffSource.STACK, state));
+                    addToBuffStacks(state, BuffProvider.get(appliedBuff, BuffSource.STACK, state), stackResult.appliedBuffResult());
+                }
             }
             buffResults.add(stackResult);
         }
@@ -130,6 +137,20 @@ public class StackProcessor {
         }
     }
 
+    public static List<TriggeredHitResult> prepareStackGeneratedAbilities(SimulationState state, AbilityPlacement parentAbility) {
+        List<TriggeredHitResult> triggeredHitResults = new ArrayList<>();
+        triggeredHitResults.addAll(StackResolver.resolveStackGeneratedAbilities(state, parentAbility, null));
+        return triggeredHitResults;
+    }
+
+    public static List<TriggeredHitResult> prepareStackGeneratedAbilities(SimulationState state,
+                                                                          AbilityPlacement parentAbility,
+                                                                          Integer triggerTick) {
+        List<TriggeredHitResult> triggeredHitResults = new ArrayList<>();
+        triggeredHitResults.addAll(StackResolver.resolveStackGeneratedAbilities(state, parentAbility, triggerTick));
+        return triggeredHitResults;
+    }
+
     private static BuffDefinition processProc(StackEffect stackEffect, SimulationState state) {
         BuffDefinition buff = BuffProvider.get(stackEffect.getBuffId(), stackEffect.getBuffSource(), state);
         applyStackDelta(stackEffect.getBuffId(), state, stackEffect.getStackDelta(), stackEffect);
@@ -169,6 +190,12 @@ public class StackProcessor {
         switch (buffDefinition.getApplication()) {
             case PLAYER_BUFF_SET -> state.getState().getBuffs().getBuffSet().add(buffDefinition.getBuffId());
             case TARGET_BUFF_SET -> state.getState().getTarget().getDebuffs().add(buffDefinition.getBuffId());
+        }
+    }
+
+    private static void addToBuffStacks(SimulationState state, BuffDefinition buffDefinition, AppliedBuffResult appliedBuffResult) {
+        switch (buffDefinition.getApplication()) {
+            case PLAYER_STACKS -> state.getState().getBuffs().getBuffStacks().merge(buffDefinition.getBuffId(), +appliedBuffResult.stackDelta(), Integer::sum);
         }
     }
 

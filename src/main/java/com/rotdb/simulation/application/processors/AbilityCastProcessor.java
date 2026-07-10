@@ -33,6 +33,7 @@ public class AbilityCastProcessor {
                 adrenalineDelta += AdrenalineProcessor.generateAbilityPlacementAdrenalineDelta(abilityPlacement, simulationState, damageResult);
                 BuffProcessor.removeBuffsConsumedByAbilityPlacement(abilityPlacement, simulationState);
 
+                AbilityRequirementProcessor.generateAbilityRequirementWarnings(tickSnapshot, simulationState, abilityPlacement);
                 AbilityCooldownProcessor.generateGlobalCooldownWarnings(simulationState, abilityPlacement, tickSnapshot);
                 AbilityCooldownProcessor.initializeGlobalCooldown(simulationState, abilityPlacement);
 

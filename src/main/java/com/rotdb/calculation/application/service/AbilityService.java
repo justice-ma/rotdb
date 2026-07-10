@@ -14,7 +14,7 @@ public class AbilityService {
         List<AbilityDto> out = new ArrayList<>();
 
         for (AbilityId a : AbilityId.values()) {
-            if (a.getStyle() == style) {
+            if (a.getStyle() == style && !a.isInternal()) {
                 out.add(new AbilityDto(a, a.getName(), a.getTier(), a.getIconPath(), a.isCommon()));
             }
         }

@@ -18,7 +18,9 @@ import com.rotdb.simulation.domain.model.buff.enums.StackConsumptionTiming;
 import com.rotdb.simulation.domain.model.context.AbilityPlacement;
 import com.rotdb.simulation.domain.model.context.SimulationState;
 import com.rotdb.simulation.domain.model.context.TimelineHit;
+import com.rotdb.simulation.domain.model.context.TriggeredHitResult;
 import com.rotdb.simulation.domain.provider.BuffProvider;
+import com.rotdb.simulation.domain.resolvers.cooldown.AbilityCooldownKeyResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +80,101 @@ public class StackResolver {
                     StackClampingBehaviour.CLAMP
             ));
         }
+
+        if (abilityContext.getCombatStyle() == CombatStyles.MAGIC &&
+                state.getState().getSpell().getSpell() == Spells.INCITEFEAR &&
+                abilityContext.getDamageCalculationTiming() == DamageCalculationTiming.ON_RELEASE) {
+            stackEffects.add(new StackEffect(
+                    BuffId.INCITEFEARSTACKS,
+                    1,
+                    BuffSource.STACK,
+                    null,
+                    null,
+                    null,
+                    StackClampingBehaviour.CLAMP
+            ));
+        }
+
+        if (abilityContext.getId() == AbilityId.SOULSAP) {
+            stackEffects.add(new StackEffect(
+                    BuffId.SOULSTACKS,
+                    1,
+                    BuffSource.STACK,
+                    null,
+                    null,
+                    state.getState().getEquipment().getOffhand().getEffect().contains(Effect.SOULBOUNDLANTERN) ? 5 :
+                            null,
+                    StackClampingBehaviour.CLAMP
+            ));
+        }
+
+        if (state.getState().getEquipment().getMainhand().getEffect().contains(Effect.DEVOURERSGUARD) && (
+                abilityContext.getId() == AbilityId.NECROMANCYAUTO ||
+                (abilityContext.getId() == AbilityId.SOULCRUSH ||
+                (state.getState().getBuffs().has(BuffId.SOULCRUSH) &&
+                (abilityContext.getId() == AbilityId.SOULSAP ||
+                abilityContext.getId() == AbilityId.SOULSTRIKE ||
+                abilityContext.getId() == AbilityId.VOLLEYOFSOULS ||
+                abilityContext.getId() == AbilityId.SPECTRALSCYTHE ||
+                abilityContext.getId() == AbilityId.SPECTRALHURRICANE ||
+                abilityContext.getId() == AbilityId.SPECTRALMETEORSTRIKE))))) {
+            int stackDelta = abilityContext.getId() == AbilityId.NECROMANCYAUTO ? 1 : BuffId.SOULREAVE.getMaximumStacks();
+            stackEffects.add(new StackEffect(
+                BuffId.SOULREAVE,
+                    stackDelta,
+                    BuffSource.STACK,
+                    null,
+                    null,
+                    null,
+                    StackClampingBehaviour.CLAMP
+            ));
+        }
+
+        if (state.getState().getEquipment().getMainhand().getEffect().contains(Effect.OMNIGUARD) && (
+                abilityContext.getId() == AbilityId.NECROMANCYAUTO ||
+                (abilityContext.getId() == AbilityId.DEATHESSENCE ||
+                (state.getState().getBuffs().has(BuffId.DEATHESSENCE) &&
+                (abilityContext.getId() == AbilityId.TOUCHOFDEATH ||
+                abilityContext.getId() == AbilityId.DEATHSKULLS ||
+                abilityContext.getId() == AbilityId.DEATHSKULLSIGNEOUS ||
+                abilityContext.getId() == AbilityId.FINGEROFDEATH))))) {
+            int stackDelta = abilityContext.getId() == AbilityId.NECROMANCYAUTO ? 1 : BuffId.DEATHSPARK.getMaximumStacks();
+            stackEffects.add(new StackEffect(
+                    BuffId.DEATHSPARK,
+                    stackDelta,
+                    BuffSource.STACK,
+                    null,
+                    null,
+                    null,
+                    StackClampingBehaviour.CLAMP
+            ));
+        }
+
+        if (abilityContext.getId() == AbilityId.TOUCHOFDEATH || (abilityContext.getId() == AbilityId.NECROMANCYAUTO && state.getState().getBuffs().has(BuffId.LIVINGDEATH))) {
+            int stackDelta = abilityContext.getId() == AbilityId.TOUCHOFDEATH ? 4 : 2;
+            stackEffects.add(new StackEffect(
+                    BuffId.NECROSIS,
+                    stackDelta,
+                    BuffSource.STACK,
+                    null,
+                    null,
+                    null,
+                    StackClampingBehaviour.CLAMP
+            ));
+        }
+
+        if (abilityContext.getId() == AbilityId.COMMANDSKELETONWARRIOR || abilityContext.getId() == AbilityId.CONJURESKELETONWARRIOR) {
+            stackEffects.add(new StackEffect(
+                    BuffId.RAGE,
+                    1,
+                    BuffSource.STACK,
+                    null,
+                    null,
+                    null,
+                    StackClampingBehaviour.CLAMP
+            ));
+        }
+
         return stackEffects;
     }
 
@@ -157,6 +254,31 @@ public class StackResolver {
             ));
         }
 
+        if (abilityContext.getCombatStyle() == CombatStyles.MAGIC &&
+                state.getState().getSpell().getSpell() == Spells.INCITEFEAR &&
+                abilityContext.getDamageCalculationTiming() == DamageCalculationTiming.ON_HIT) {
+            stackEffects.add(new StackEffect(
+                    BuffId.INCITEFEARSTACKS,
+                    1,
+                    BuffSource.STACK,
+                    null,
+                    null,
+                    null,
+                    StackClampingBehaviour.CLAMP
+            ));
+        }
+
+        if ((eq.getMainhand().getEffect().contains(Effect.SONGOFDESTRUCTION) || eq.getOffhand().getEffect().contains(Effect.SONGOFDESTRUCTION)) && hit.isDot()) {
+            stackEffects.add(new StackEffect(
+                    BuffId.ESSENCECORRUPTIONSTACKS,
+                    1,
+                    BuffSource.STACK,
+                    null,
+                    null,
+                    null,
+                    StackClampingBehaviour.CLAMP
+            ));
+        }
 
         return stackEffects;
     }
@@ -165,9 +287,9 @@ public class StackResolver {
                                                  AbilityHitsContext hit) {
         List<StackEffect> stackEffects = new ArrayList<>();
         EquipmentModel eq = state.getState().getEquipment();
-        double procChance = 0.0;
         if ((eq.getMainhand().getEffect().contains(Effect.PRIMORDIALICESTACKS) || eq.getOffhand().getEffect().contains(Effect.PRIMORDIALICESTACKS)) &&
                 abilityContext.getId().getStyle() == CombatStyles.MELEE && !hit.isDot()) {
+            double procChance = 0.0;
             procChance += eq.getMainhand().getTitle() != null && eq.getMainhand().getTitle().equalsIgnoreCase("dark shard of leng") &&
                     eq.getMainhand().getEffect().contains(Effect.PRIMORDIALICESTACKS) ? 0.1 :
                     eq.getMainhand().getTitle() != null && eq.getMainhand().getEffect().contains(Effect.PRIMORDIALICESTACKS) ? 0.05 : 0;
@@ -226,7 +348,8 @@ public class StackResolver {
                 state.getState().getEquipment().getAmmo().getEffect().contains(Effect.WENARROWS)) {
             AppliedBuffResult appliedBuffResult = new AppliedBuffResult(
                     BuffProvider.get(BuffId.WENARROWPROC, BuffSource.PROC, state),
-                    BuffProvider.get(BuffId.WENARROWPROC, BuffSource.PROC, state).getDurationTicks()
+                    BuffProvider.get(BuffId.WENARROWPROC, BuffSource.PROC, state).getDurationTicks(),
+                    null
             );
             buffResults.add(new ConsumableStackResult(
                     appliedBuffResult,
@@ -259,6 +382,64 @@ public class StackResolver {
                     StackConsumptionTiming.POST_DAMAGE
             ));
         }
+
+        if ((abilityPlacement.getPlacedAbility() == AbilityId.VOLLEYOFSOULS ||
+                abilityPlacement.getPlacedAbility() == AbilityId.SOULCRUSH ||
+                abilityPlacement.getPlacedAbility() == AbilityId.SOULSTRIKE) &&
+                state.getState().getBuffs().has(BuffId.SOULSTACKS)) {
+            int consumedAmount = abilityPlacement.getPlacedAbility() == AbilityId.SOULSTRIKE ? 1 :
+                    state.getState().getBuffs().stacks(BuffId.SOULSTACKS);
+            buffResults.add(new ConsumableStackResult(
+                    null,
+                    BuffId.SOULSTACKS,
+                    consumedAmount,
+                    consumedAmount,
+                    StackConsumptionTiming.POST_DAMAGE
+            ));
+        }
+
+        if (abilityPlacement.getPlacedAbility() == AbilityId.NECROMANCYAUTO &&
+            state.getState().getBuffs().has(BuffId.SOULREAVE) && state.getState().getBuffs().stacks(BuffId.SOULREAVE) == 4) {
+            AppliedBuffResult appliedBuffResult = new AppliedBuffResult(
+                    BuffProvider.get(BuffId.SOULSTACKS, BuffSource.STACK, state),
+                    null,
+                    1
+            );
+            buffResults.add(new ConsumableStackResult(
+                    appliedBuffResult,
+                    BuffId.SOULREAVE,
+                    state.getState().getBuffs().stacks(BuffId.SOULREAVE),
+                    state.getState().getBuffs().stacks(BuffId.SOULREAVE),
+                    StackConsumptionTiming.POST_DAMAGE
+            ));
+        }
+
+        if (abilityPlacement.getPlacedAbility() == AbilityId.NECROMANCYAUTO &&
+            state.getState().getBuffs().has(BuffId.DEATHSPARK) && state.getState().getBuffs().stacks(BuffId.DEATHSPARK) == 5) {
+            buffResults.add(new ConsumableStackResult(
+                    null,
+                    BuffId.DEATHSPARK,
+                    state.getState().getBuffs().stacks(BuffId.DEATHSPARK),
+                    state.getState().getBuffs().stacks(BuffId.DEATHSPARK),
+                    StackConsumptionTiming.POST_DAMAGE
+            ));
+        }
+
+        if ((abilityPlacement.getPlacedAbility() == AbilityId.FINGEROFDEATH ||
+                abilityPlacement.getPlacedAbility() == AbilityId.DEATHGRASP) &&
+                state.getState().getBuffs().has(BuffId.NECROSIS)) {
+            int consumedStacks = abilityPlacement.getPlacedAbility() == AbilityId.DEATHGRASP ?
+                    state.getState().getBuffs().stacks(BuffId.NECROSIS) :
+                    Math.min(6, state.getState().getBuffs().stacks(BuffId.NECROSIS));
+            buffResults.add(new ConsumableStackResult(
+                    null,
+                    BuffId.NECROSIS,
+                    consumedStacks,
+                    consumedStacks,
+                    StackConsumptionTiming.POST_DAMAGE
+            ));
+        }
+
         return buffResults;
     }
 
@@ -267,7 +448,8 @@ public class StackResolver {
         if (state.getState().getBuffs().has(BuffId.DEATHSPORESTACKS) && state.getState().getBuffs().stacks(BuffId.DEATHSPORESTACKS) >= 12) {
             AppliedBuffResult appliedBuffResult = new AppliedBuffResult(
                     BuffProvider.get(BuffId.FEASTINGSPORES, BuffSource.PROC, state),
-                    BuffProvider.get(BuffId.FEASTINGSPORES, BuffSource.PROC, state).getDurationTicks()
+                    BuffProvider.get(BuffId.FEASTINGSPORES, BuffSource.PROC, state).getDurationTicks(),
+                    null
             );
             buffResults.add(new ConsumableStackResult(
                     appliedBuffResult,
@@ -296,9 +478,31 @@ public class StackResolver {
             AppliedBuffResult buffResult = new AppliedBuffResult(
                     buffDefinition,
                     state.getState().getEquipment().getOffhand().getTitle().equalsIgnoreCase("dark sliver of leng") ?
-                            15 : buffDefinition.getDurationTicks());
+                            15 : buffDefinition.getDurationTicks(),
+                    null
+            );
             buffIds.add(buffResult);
         }
         return buffIds;
+    }
+
+    public static List<TriggeredHitResult> resolveStackGeneratedAbilities(SimulationState state,
+                                                                          AbilityPlacement parentAbility,
+                                                                          Integer triggerTick) {
+        List<TriggeredHitResult> triggeredHitResults = new ArrayList<>();
+        if (triggerTick == null) {
+            triggerTick = parentAbility.getReleaseTick();
+        }
+        if (state.getState().getBuffs().has(BuffId.INCITEFEARSTACKS) && state.getState().getBuffs().stacks(BuffId.INCITEFEARSTACKS) >= 5 &&
+                !state.getAbilityCooldownMap().containsKey(AbilityCooldownKeyResolver.resolve(AbilityId.INCITEFEARPROC))) {
+            triggeredHitResults.add(new TriggeredHitResult(
+                    AbilityId.INCITEFEARPROC,
+                    triggerTick,
+                    parentAbility.getPlacementId(),
+                    parentAbility.getPlacedAbility(),
+                    3
+            ));
+        }
+        return triggeredHitResults;
     }
 }

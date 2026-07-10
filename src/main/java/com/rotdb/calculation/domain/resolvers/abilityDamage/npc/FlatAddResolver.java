@@ -12,7 +12,7 @@ import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.MAGIC;
 
 public class FlatAddResolver {
-    public static double resolve(CalculationContext context, AbilityHitsContext hit) {
+    public static int resolve(CalculationContext context, AbilityHitsContext hit) {
         EquipmentSlot mainhand = context.getEquipment().getMainhand();
         EquipmentSlot offhand = context.getEquipment().getOffhand();
         CombatStyles style = context.getEquipment().getCombatStyle();
@@ -20,10 +20,10 @@ public class FlatAddResolver {
         BuffContext buff = context.getBuffs();
 
         int add = 0;
-        if (style == MAGIC) {
+        if (style == MAGIC && hit.isDot() && buff.has(BuffId.ESSENCECORRUPTIONSTACKS) && buff.stacks(BuffId.ESSENCECORRUPTIONSTACKS) >= 10) {
             int corr = buff.has(BuffId.ESSENCECORRUPTIONSTACKS) ? buff.stacks(BuffId.ESSENCECORRUPTIONSTACKS) : 0;
             int magic = skills.getBoostedMagic();
-            if (offhand.getEffect().contains(Effect.SONGOFDESTRUCTION) && mainhand.getEffect().contains(Effect.SONGOFDESTRUCTION)) {
+            if (offhand.getEffect().contains(Effect.SONGOFDESTRUCTION) || mainhand.getEffect().contains(Effect.SONGOFDESTRUCTION)) {
                 add += corr * 3 + magic;
             }
         }

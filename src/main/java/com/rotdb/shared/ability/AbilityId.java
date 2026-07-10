@@ -154,7 +154,9 @@ public enum AbilityId {
 
     DEATHGRASP(NECROMANCY, SPECIAL, "Death Grasp", "special_attack_weapon_icons/death-guard.png", true),
     SOULCRUSH(NECROMANCY, SPECIAL, "Soul Crush", "special_attack_weapon_icons/devourer-s-guard.png", true),
-    DEATHESSENCE(NECROMANCY, SPECIAL, "Death Essence", "special_attack_weapon_icons/omni-guard.png", true);
+    DEATHESSENCE(NECROMANCY, SPECIAL, "Death Essence", "special_attack_weapon_icons/omni-guard.png", true),
+
+    INCITEFEARPROC(MAGIC, BASIC, "Incite Fear Proc", null, false, null, false, true);
 
     private final CombatStyles style;
     private final AbilityTier tier;
@@ -163,24 +165,25 @@ public enum AbilityId {
     private final AbilityCooldownGroup abilityCooldownGroup;
     private final boolean common;
     private final boolean consumesGlobalCooldown;
+    private final boolean internal;
 
     AbilityId(CombatStyles style, AbilityTier tier, String name, String iconPath) {
-        this(style, tier, name, iconPath, false, null, true);
+        this(style, tier, name, iconPath, false, null, true, false);
     }
 
     AbilityId(CombatStyles style, AbilityTier tier, String name, String iconPath, AbilityCooldownGroup abilityCooldownGroup) {
-        this(style, tier, name, iconPath, false, abilityCooldownGroup, true);
+        this(style, tier, name, iconPath, false, abilityCooldownGroup, true, false);
     }
 
     AbilityId(CombatStyles style, AbilityTier tier, String name, String iconPath, boolean common) {
-        this(style, tier, name, iconPath, common, null, true);
+        this(style, tier, name, iconPath, common, null, true, false);
     }
 
     AbilityId(CombatStyles style, AbilityTier tier, String name, String iconPath, boolean common, boolean consumesGlobalCooldown) {
-        this(style, tier, name, iconPath, common, null, consumesGlobalCooldown);
+        this(style, tier, name, iconPath, common, null, consumesGlobalCooldown, false);
     }
 
-    AbilityId(CombatStyles style, AbilityTier tier, String name, String iconPath, boolean common, AbilityCooldownGroup abilityCooldownGroup, boolean consumesGlobalCooldown) {
+    AbilityId(CombatStyles style, AbilityTier tier, String name, String iconPath, boolean common, AbilityCooldownGroup abilityCooldownGroup, boolean consumesGlobalCooldown, boolean internal) {
         this.style = style;
         this.tier = tier;
         this.name = name;
@@ -188,6 +191,7 @@ public enum AbilityId {
         this.common = common;
         this.abilityCooldownGroup = abilityCooldownGroup;
         this.consumesGlobalCooldown = consumesGlobalCooldown;
+        this.internal = internal;
     }
 
     public CombatStyles getStyle() {
@@ -216,5 +220,9 @@ public enum AbilityId {
 
     public boolean isConsumesGlobalCooldown() {
         return consumesGlobalCooldown;
+    }
+
+    public boolean isInternal() {
+        return internal;
     }
 }

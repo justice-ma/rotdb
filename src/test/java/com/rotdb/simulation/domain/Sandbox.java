@@ -26,34 +26,34 @@ public class Sandbox {
         List<AbilityPlacement> abilities = new ArrayList<>();
         AbilityPlacement placement = new AbilityPlacement();
         placement.setCastTick(0);
-        placement.setPlacedAbility(AbilityId.DRAGONBREATH);
+        placement.setPlacedAbility(AbilityId.CONJURESKELETONWARRIOR);
         placement.setReleaseTick(0);
         abilities.add(placement);
-        AbilityPlacement placement2 = new AbilityPlacement();
-        placement2.setCastTick(3);
-        placement2.setReleaseTick(0);
-        placement2.setPlacedAbility(AbilityId.ASPHYXIATE);
-        abilities.add(placement2);
+//        AbilityPlacement placement2 = new AbilityPlacement();
+//        placement2.setCastTick(3);
+//        placement2.setReleaseTick(0);
+//        placement2.setPlacedAbility(AbilityId.TOUCHOFDEATH);
+//        abilities.add(placement2);
 //        AbilityPlacement placement3 = new AbilityPlacement();
 //        placement3.setCastTick(6);
 //        placement3.setReleaseTick(0);
-//        placement3.setPlacedAbility(AbilityId.SHADOWFALL);
+//        placement3.setPlacedAbility(AbilityId.DEATHESSENCE);
 //        abilities.add(placement3);
 //        AbilityPlacement placement4 = new AbilityPlacement();
-//        placement4.setCastTick(12);
-//        placement4.setReleaseTick(14);
-//        placement4.setPlacedAbility(AbilityId.RAPIDFIRE);
+//        placement4.setCastTick(9);
+//        placement4.setReleaseTick(9);
+//        placement4.setPlacedAbility(AbilityId.NECROMANCYAUTO);
 //        abilities.add(placement4);
 //        AbilityPlacement placement5 = new AbilityPlacement();
-//        placement5.setCastTick(15);
-//        placement5.setReleaseTick(14);
-//        placement5.setPlacedAbility(AbilityId.GREATERRICOCHET);
+//        placement5.setCastTick(12);
+//        placement5.setReleaseTick(12);
+//        placement5.setPlacedAbility(AbilityId.FINGEROFDEATH);
 //        abilities.add(placement5);
-//        AbilityPlacement placement6 = new AbilityPlacement();
-//        placement6.setCastTick(18);
-//        placement6.setReleaseTick(14);
-//        placement6.setPlacedAbility(AbilityId.SNAPSHOT);
-//        abilities.add(placement6);
+        AbilityPlacement placement6 = new AbilityPlacement();
+        placement6.setCastTick(18);
+        placement6.setReleaseTick(14);
+        placement6.setPlacedAbility(AbilityId.SNAPSHOT);
+        abilities.add(placement6);
 
         List<BuffPlacement> buffs = new ArrayList<>();
         BuffPlacement buff = new BuffPlacement();
@@ -181,7 +181,7 @@ public class Sandbox {
         mainhand.setDamageTier(90);
         mainhand.setAccuracyTier(90);
         mainhand.setRanged(0);
-        mainhand.setEffect(EnumSet.of(Effect.PRIMORDIALICESTACKS));
+        mainhand.setEffect(EnumSet.of(Effect.SONGOFDESTRUCTION, Effect.OMNIGUARD));
 
         EquipmentSlot ammo = EquipmentSlot.emptySlot();
         ammo.setDamageTier(90);
@@ -189,7 +189,7 @@ public class Sandbox {
 
         EquipmentSlot offhand = EquipmentSlot.emptySlot();
         offhand.setDamageTier(95);
-        offhand.setEffect(EnumSet.of(Effect.OFFHANDLENG));
+        offhand.setEffect(EnumSet.of(Effect.SOULBOUNDLANTERN));
 
         EquipmentSlot head = new EquipmentSlot();
         EquipmentSlot body = new EquipmentSlot();
@@ -213,6 +213,7 @@ public class Sandbox {
         equipment.setBoots(boots);
         equipment.setGloves(gloves);
         equipment.fillMissingWithEmpty();
+        equipment.setCombatStyle(CombatStyles.MAGIC);
 
         SkillsContext skills = new SkillsContext();
         skills.setBaseRanged(120);
@@ -242,7 +243,7 @@ public class Sandbox {
         prayer.setSelected(EnumSet.noneOf(Prayer.class));
 
         SpellContext spell = new SpellContext();
-        spell.setSpell(Spells.EXSANGUINATE);
+        spell.setSpell(Spells.INCITEFEAR);
 
         TargetContext target = new TargetContext();
         target.setName("Sandbox target");

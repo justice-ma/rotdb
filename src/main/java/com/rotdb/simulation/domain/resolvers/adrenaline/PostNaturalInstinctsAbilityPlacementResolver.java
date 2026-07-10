@@ -42,6 +42,14 @@ public class PostNaturalInstinctsAbilityPlacementResolver {
             adrenalineDelta += Math.min(30, Math.max(0, buff.stacks(BuffId.PRIMORDIALICESTACKS) * 12));
         }
 
+        if (buff.has(BuffId.INCITEFEARSTACKS) && buff.stacks(BuffId.INCITEFEARSTACKS) > 0 && abilityPlacement.getPlacedAbility() == AbilityId.TSUNAMI) {
+            adrenalineDelta += 12 * buff.stacks(BuffId.INCITEFEARSTACKS);
+        }
+
+        if (buff.has(BuffId.NECROSIS) && buff.stacks(BuffId.NECROSIS) > 0 && abilityPlacement.getPlacedAbility() == AbilityId.FINGEROFDEATH) {
+            adrenalineDelta += Math.min(60, 10 * buff.stacks(BuffId.NECROSIS));
+        }
+
         return adrenalineDelta;
     }
 }

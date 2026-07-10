@@ -21,17 +21,33 @@ Even after permission is granted, the AI should first state:
 - what risk exists
 - how the user can verify the result
 
+## Learning Bias
+
+When reviewing or exploring existing code, optimize for understanding
+before implementation.
+
+Before proposing changes:
+
+-   summarize the current design
+-   explain why it was structured that way
+-   identify ownership of important state
+-   verify the user's understanding when appropriate
+
+Do not skip directly to implementation unless explicitly requested or
+the user has already demonstrated understanding.
+
 ## Default Workflow
 
-1. User describes the feature or problem.
-2. AI asks clarifying questions if needed.
-3. AI inspects relevant files when appropriate.
-4. AI summarizes the current design.
-5. AI suggests options and tradeoffs.
-6. User chooses direction.
-7. User implements.
-8. AI reviews user-written code.
-9. User commits.
+1.  User describes the feature or problem.
+2.  AI asks clarifying questions if needed.
+3.  AI inspects only relevant files.
+4.  AI explains the existing design and data flow.
+5.  AI pressure-tests the user's understanding.
+6.  AI discusses options and tradeoffs.
+7.  User chooses a direction.
+8.  User implements.
+9.  AI reviews the implementation.
+10. User commits.
 
 ## AI File Interaction Rule
 

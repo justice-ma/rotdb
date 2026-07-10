@@ -11,10 +11,12 @@ import com.rotdb.shared.combat.domain.model.enums.DamageCalculationTiming;
 import com.rotdb.simulation.application.processors.result.AbilityReleaseResult;
 import com.rotdb.simulation.application.service.DamageRequestFactory;
 import com.rotdb.simulation.application.service.HitsScheduler;
+import com.rotdb.simulation.application.snapshot.SimulationStateSnapshotCopier;
 import com.rotdb.simulation.domain.model.buff.AppliedBuffResult;
 import com.rotdb.simulation.domain.model.buff.ConsumableStackResult;
 import com.rotdb.simulation.domain.model.buff.enums.StackConsumptionTiming;
 import com.rotdb.simulation.domain.model.context.*;
+import com.rotdb.simulation.domain.resolvers.buff.HitRecalculationPolicyResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +31,10 @@ public class AbilityReleaseProcessor {
                                                       boolean vestmentsBleedActiveAtTickStart,
                                                       Map<Integer, List<AbilityPlacement>> completionMap,
                                                       List<AbilityPlacement> releasedAbilities,
-                                                      int tick,
-                                                      SimulationState simulationState, int endingTick, CalculationEngine engine) {
+                                                      int tick, SimulationState simulationState, int endingTick,
+                                                      CalculationEngine engine,
+                                                      Map<Integer, RotationCombatState> releaseStateByPlacementId,
+                                                      SimulationStateSnapshotCopier copier) {
         if (abilitiesByReleaseTick.containsKey(tick)) {
             for (AbilityPlacement abilityPlacement : abilitiesByReleaseTick.get(tick)) {
                 DamageResult damageResult = null;
@@ -49,8 +53,10 @@ public class AbilityReleaseProcessor {
                 }
 
                 AbilityContext abilityContext = AbilityProvider.get(abilityPlacement.getPlacedAbility(), simulationState.getState().getEquipment());
+                boolean requiresRecalculation = HitRecalculationPolicyResolver.requiresRecalculation(abilityContext,
+                        simulationState);
 
-                if (abilityContext.getDamageCalculationTiming() == DamageCalculationTiming.ON_RELEASE) {
+                if (abilityContext.getDamageCalculationTiming() == DamageCalculationTiming.ON_RELEASE && !requiresRecalculation) {
                     StackProcessor.applyOnReleaseResolvedHitStacks(abilityPlacement, simulationState);
                     for (AppliedBuffResult appliedBuffresult : BuffProcessor.applyPreDamageReleaseBuffs(abilityPlacement, simulationState)) {
                         if (appliedBuffresult.resolvedDurationTicks() != null) {
@@ -64,6 +70,11 @@ public class AbilityReleaseProcessor {
                     for (TimelineHit hit : hits) {
                         endingTick = Math.max(hit.getLandingTick(), endingTick);
                     }
+                } else if (abilityContext.getDamageCalculationTiming() == DamageCalculationTiming.ON_RELEASE) {
+                    endingTick = (HitRecalculationProcessor.applyRecalculationPolicy(abilityPlacement, simulationState,
+                            scheduledHitMap, remainingHitsByPlacementId, tick, endingTick)).endingTick();
+                    releaseStateByPlacementId.put(abilityPlacement.getPlacementId(),
+                            copier.copyCombatState(simulationState.getState()));
                 }
 
                 List<ScheduledHit> scheduledHits;
@@ -100,7 +111,28 @@ public class AbilityReleaseProcessor {
 
                 if (abilityContext.getDamageCalculationTiming() == DamageCalculationTiming.ON_RELEASE) {
                     StackProcessor.applyOnReleaseStacks(abilityPlacement, simulationState);
-                    StackProcessor.applyOnReleaseResolvedDamageStacks(damageResult, simulationState);
+
+                    if (!requiresRecalculation) {
+                        StackProcessor.applyOnReleaseResolvedDamageStacks(damageResult, simulationState);
+                    }
+
+                    for (TriggeredHitResult triggeredHitResult :
+                            StackProcessor.prepareStackGeneratedAbilities(simulationState, abilityPlacement)) {
+                        DamageResult procDamageResult =
+                                engine.calculateAbilityDamage(DamageRequestFactory.getDamageRequest(simulationState.getState(),
+                                        triggeredHitResult.abilityId()), CalculationMode.ABILITY, null);
+                        AbilityPlacement triggeredAbilityPlacement = new AbilityPlacement();
+                        triggeredAbilityPlacement.setCastTick(triggeredHitResult.triggerTick());
+                        triggeredAbilityPlacement.setPlacedAbility(triggeredHitResult.abilityId());
+                        triggeredAbilityPlacement.setReleaseTick(abilityPlacement.getReleaseTick());
+                        List<TimelineHit> procHits = HitsScheduler.schedule(procDamageResult, triggeredAbilityPlacement,
+                                simulationState.getState().getEquipment());
+                        HitsPlacementProcessor.addTimelineHits(resolvedHitMap, procHits);
+                        AbilityCooldownProcessor.generateAbilityCooldownWarnings(simulationState, triggeredAbilityPlacement, tickSnapshot);
+                        AbilityCooldownProcessor.initializeCooldown(simulationState, triggeredAbilityPlacement);
+                        endingTick = Math.max(endingTick, triggeredHitResult.triggerTick() + triggeredHitResult.delay());
+                    }
+
                     for (ConsumableStackResult consumableStackResult : consumableStackResults) {
                         StackProcessor.consumeStacks(simulationState, consumableStackResult);
                     }
@@ -109,7 +141,10 @@ public class AbilityReleaseProcessor {
                 if (abilityContext.getAbilityCooldownTiming() == AbilityCooldownTiming.ON_RELEASE) {
                     AbilityCooldownProcessor.generateAbilityCooldownWarnings(simulationState, abilityPlacement, tickSnapshot);
                     AbilityCooldownProcessor.initializeCooldown(simulationState, abilityPlacement);
-                    AbilityCooldownProcessor.applyPlacementCooldownEffects(simulationState, abilityPlacement, damageResult);
+
+                    if (!requiresRecalculation) {
+                        AbilityCooldownProcessor.applyPlacementCooldownEffects(simulationState, abilityPlacement, damageResult);
+                    }
                 }
                 for (AppliedBuffResult buff : BuffProcessor.applyAbilityGeneratedBuffsWithTiming(abilityPlacement, simulationState, GeneratedBuffTiming.ON_RELEASE, vestmentsBleedActiveAtTickStart)) {
                     if (buff.resolvedDurationTicks() != null) {

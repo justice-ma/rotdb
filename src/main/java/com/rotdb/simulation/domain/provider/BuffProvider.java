@@ -56,7 +56,7 @@ public final class BuffProvider {
             case CURSED -> InitialBuffDefinitionFactory.cursed();
             case SMOKECLOUDED -> InitialBuffDefinitionFactory.smokeClouded();
 
-            default -> throw new IllegalArgumentException("Unknown buff type: " + id);
+            default -> throw new IllegalArgumentException("Unknown " + BuffSource.INITIAL + " buff type: " + id);
         };
     }
 
@@ -84,7 +84,7 @@ public final class BuffProvider {
             case SPLITSOUL -> UserPlacedBuffDefinitionFactory.splitSoul();
             case COMMANDSKELETONWARRIOR -> UserPlacedBuffDefinitionFactory.commandSkeletonWarrior();
 
-            default -> throw new IllegalArgumentException("Unknown buff type: " + id);
+            default -> throw new IllegalArgumentException("Unknown " + BuffSource.USER_PLACED + " buff type: " + id);
         };
     }
 
@@ -119,10 +119,10 @@ public final class BuffProvider {
             case GREATERSONICWAVE -> AbilityGeneratedBuffDefinitionFactory.greaterSonicWave();
             case GREATERBARGE -> AbilityGeneratedBuffDefinitionFactory.greaterBarge();
             case SUNFALLSLAM -> AbilityGeneratedBuffDefinitionFactory.sunfallSlam();
-            case SOULREAVE -> AbilityGeneratedBuffDefinitionFactory.soulReave();
+            case SOULCRUSH -> AbilityGeneratedBuffDefinitionFactory.soulCrush();
             case DEATHESSENCE -> AbilityGeneratedBuffDefinitionFactory.deathEssence();
 
-            default -> throw new IllegalArgumentException("Unknown buff type: " + id);
+            default -> throw new IllegalArgumentException("Unknown " + BuffSource.ABILITY_GENERATED + " buff type: " + id);
         };
     }
 
@@ -138,7 +138,7 @@ public final class BuffProvider {
             case WARPRIESTOFARMADYLPROC -> ProcBuffDefinitionFactory.warpriestOfArmadylProc();
             case FEASTINGSPORES -> ProcBuffDefinitionFactory.feastingSpores();
 
-            default -> throw new IllegalArgumentException("Unknown buff type: " + id);
+            default -> throw new IllegalArgumentException("Unknown " + BuffSource.PROC + " buff type: " + id);
         };
     }
 
@@ -150,8 +150,15 @@ public final class BuffProvider {
             case PERFECTEQUILIBRIUMSTACKS -> StackBuffDefinitionFactory.perfectEquilibriumStacks();
             case DEATHSPORESTACKS -> StackBuffDefinitionFactory.deathsporeStacks();
             case TITHESTACKS -> StackBuffDefinitionFactory.titheStacks();
+            case INCITEFEARSTACKS -> StackBuffDefinitionFactory.inciteFearStacks();
+            case ESSENCECORRUPTIONSTACKS -> StackBuffDefinitionFactory.essenceCorruptionStacks();
+            case SOULSTACKS -> StackBuffDefinitionFactory.soulStacks();
+            case SOULREAVE -> StackBuffDefinitionFactory.soulReave();
+            case DEATHSPARK -> StackBuffDefinitionFactory.deathSpark();
+            case NECROSIS -> StackBuffDefinitionFactory.necrosis();
+            case RAGE -> StackBuffDefinitionFactory.rage();
 
-            default -> throw new IllegalArgumentException("Unknown buff type: " + id);
+            default -> throw new IllegalArgumentException("Unknown " + BuffSource.STACK + " buff type: " + id);
         };
     }
 
@@ -169,7 +176,7 @@ public final class BuffProvider {
                     null,
                     null
             );
-            default -> throw new IllegalArgumentException("Unknown buff type: " + id);
+            default -> throw new IllegalArgumentException("Unknown " + BuffSource.SYSTEM + " buff type: " + id);
         };
     }
 }

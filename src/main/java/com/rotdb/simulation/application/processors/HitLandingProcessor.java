@@ -10,6 +10,7 @@ import com.rotdb.shared.ability.model.GeneratedBuffTiming;
 import com.rotdb.shared.combat.domain.model.enums.HitType;
 import com.rotdb.simulation.application.processors.result.HitLandingResult;
 import com.rotdb.simulation.application.service.DamageRequestFactory;
+import com.rotdb.simulation.application.service.HitsScheduler;
 import com.rotdb.simulation.domain.model.buff.AppliedBuffResult;
 import com.rotdb.simulation.domain.model.buff.ConsumableStackResult;
 import com.rotdb.simulation.domain.model.context.*;
@@ -25,11 +26,12 @@ public class HitLandingProcessor {
                                                      Map<Integer, List<ScheduledHit>> scheduledHitMap, CalculationEngine engine,
                                                      Map<Integer, Integer> remainingHitsByPlacementId,
                                                      Map<Integer, List<ConsumableStackResult>> postDamageConsumptionsByPlacementId,
-                                                     RotationCombatState state, int endingTick) {
+                                                     RotationCombatState state, int endingTick, TickSnapshot tickSnapshot,
+                                                     Map<Integer, RotationCombatState> releaseStateByPlacementId) {
         if (resolvedHitMap.get(tick) != null) {
             for (TimelineHit timelineHit : resolvedHitMap.get(tick)) {
                 newTimelineHits.add(timelineHit);
-                if (timelineHit.getHitType() != HitType.PERFECTEQUILIBRIUM) {
+                if (timelineHit.getHitType() != HitType.PERFECTEQUILIBRIUM && !timelineHit.getParentAbility().isInternal()) {
                     BuffProcessor.applyAbilityGeneratedBuffsWithTiming(placementIdMap.get(timelineHit.getPlacementId()),
                             simulationState, GeneratedBuffTiming.ON_HIT, vestmentsBleedActiveAtTickStart);
                 }
@@ -38,9 +40,16 @@ public class HitLandingProcessor {
 
         if (scheduledHitMap.get(tick) != null && scheduledHitMap.containsKey(tick)) {
             for (ScheduledHit scheduledHit : scheduledHitMap.get(tick)) {
-                DamageResult result =
-                        engine.calculateAbilityDamage(DamageRequestFactory.getDamageRequest(simulationState.getState(),
-                                scheduledHit.parentAbility()), CalculationMode.HIT, scheduledHit.hitIndex());
+                DamageResult result = null;
+                if (releaseStateByPlacementId.containsKey(scheduledHit.placementId())) {
+                    RotationCombatState combatState = releaseStateByPlacementId.get(scheduledHit.placementId());
+                    HitRecalculationProcessor.applyBuffStateOverlay(scheduledHit.parentAbility(), simulationState.getState(), combatState);
+                    result = engine.calculateAbilityDamage(DamageRequestFactory.getDamageRequest(combatState,
+                            scheduledHit.parentAbility()), CalculationMode.HIT, scheduledHit.hitIndex());
+                } else {
+                    result = engine.calculateAbilityDamage(DamageRequestFactory.getDamageRequest(simulationState.getState(),
+                            scheduledHit.parentAbility()), CalculationMode.HIT, scheduledHit.hitIndex());
+                }
                 TimelineHit baseTimelineHit = null;
                 for (HitResult hitResult : result.getHit()) {
                     int landingTick = tick;
@@ -68,7 +77,7 @@ public class HitLandingProcessor {
                             AbilityProvider.get(hitResult.getParentAbility(), state.getEquipment()).isChannel()
                     );
 
-                    if (timelineHit.getHitType() != HitType.PERFECTEQUILIBRIUM) {
+                    if (timelineHit.getHitType() != HitType.PERFECTEQUILIBRIUM && !timelineHit.getParentAbility().isInternal()) {
                         baseTimelineHit = timelineHit;
                     }
 
@@ -100,12 +109,32 @@ public class HitLandingProcessor {
                         }
                         postDamageConsumptionsByPlacementId.remove(landedPlacementId);
                         remainingHitsByPlacementId.remove(landedPlacementId);
+                        releaseStateByPlacementId.remove(landedPlacementId);
                     }
 
                     List<AppliedBuffResult> appliedBuffResults = new ArrayList<>();
 
                     appliedBuffResults.addAll(BuffProcessor.applyAbilityGeneratedBuffsWithTiming(placementIdMap.get(baseTimelineHit.getPlacementId()), simulationState, GeneratedBuffTiming.ON_HIT, vestmentsBleedActiveAtTickStart));
                     StackProcessor.applyOnHitStacks(placementIdMap.get(baseTimelineHit.getPlacementId()), simulationState, baseTimelineHit);
+
+                    for (TriggeredHitResult triggeredHitResult :
+                            StackProcessor.prepareStackGeneratedAbilities(simulationState, placementIdMap.get(baseTimelineHit.getPlacementId()), tick)) {
+                        DamageResult procDamageResult = engine.calculateAbilityDamage(DamageRequestFactory.getDamageRequest(simulationState.getState(), triggeredHitResult.abilityId()), CalculationMode.ABILITY, null);
+
+                        AbilityPlacement triggeredAbilityPlacement = new AbilityPlacement();
+                        triggeredAbilityPlacement.setCastTick(triggeredHitResult.triggerTick());
+                        triggeredAbilityPlacement.setPlacedAbility(triggeredHitResult.abilityId());
+                        triggeredAbilityPlacement.setReleaseTick(placementIdMap.get(baseTimelineHit.getPlacementId()).getReleaseTick());
+
+                        List<TimelineHit> procHits = HitsScheduler.schedule(procDamageResult, triggeredAbilityPlacement, simulationState.getState().getEquipment());
+
+                        HitsPlacementProcessor.addTimelineHits(resolvedHitMap, procHits);
+
+                        AbilityCooldownProcessor.generateAbilityCooldownWarnings(simulationState, triggeredAbilityPlacement, tickSnapshot);
+                        AbilityCooldownProcessor.initializeCooldown(simulationState, triggeredAbilityPlacement);
+
+                        endingTick = Math.max(endingTick, triggeredHitResult.triggerTick() + triggeredHitResult.delay());
+                    }
 
                     for (AppliedBuffResult buff : appliedBuffResults) {
                         if (buff.resolvedDurationTicks() != null) {

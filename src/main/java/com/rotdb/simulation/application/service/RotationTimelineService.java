@@ -69,6 +69,7 @@ public class RotationTimelineService {
         Map<Integer, Integer> remainingHitsByPlacementId = new HashMap<>();
         Map<Integer, AbilityPlacement> placementIdMap = new HashMap<>();
         Map<Integer, List<AbilityPlacement>> abilitiesByCompletionTick = new HashMap<>();
+        Map<Integer, RotationCombatState> releaseStateByPlacementId = new HashMap<>();
 
         int placementId = 0;
         for (AbilityPlacement abilityPlacement : abilityPlacements) {
@@ -126,7 +127,8 @@ public class RotationTimelineService {
             // Ability releases
             AbilityReleaseResult abilityReleaseResult = AbilityReleaseProcessor.processRelease(abilitiesByReleaseTick,
                     resolvedHitsByLandingTick, scheduledHitsByLandingTick, postDamageConsumptionsByPlacementId, remainingHitsByPlacementId, tickSnapshot,
-                    vestmentsBleedActiveAtTickStart, abilitiesByCompletionTick, releasedAbilities, tick, simulationState, endingTick, engine);
+                    vestmentsBleedActiveAtTickStart, abilitiesByCompletionTick, releasedAbilities, tick,
+                    simulationState, endingTick, engine, releaseStateByPlacementId, snapshotCopier);
             endingTick = abilityReleaseResult.endingTick();
 
             // Passive and pre-hit adrenaline
@@ -140,7 +142,7 @@ public class RotationTimelineService {
             HitLandingResult hitLandingResult = HitLandingProcessor.processHitLanding(resolvedHitsByLandingTick, tick,
                     newTimelineHits, placementIdMap, vestmentsBleedActiveAtTickStart, simulationState,
                     scheduledHitsByLandingTick, engine, remainingHitsByPlacementId, postDamageConsumptionsByPlacementId, state,
-                    endingTick);
+                    endingTick, tickSnapshot, releaseStateByPlacementId);
             endingTick = hitLandingResult.endingTick();
 
             // Ability completions

@@ -28,7 +28,8 @@ public class BuffProcessor {
         List<AppliedBuffResult> appliedBuffResults = new ArrayList<>();
         appliedBuffResults.add(new AppliedBuffResult(
                 buffDefinition,
-                buffDefinition.getDurationTicks()
+                buffDefinition.getDurationTicks(),
+                null
         ));
 
         processAdrenalineDelta(buffDefinition, state);
@@ -64,7 +65,9 @@ public class BuffProcessor {
         BuffDefinition buffDefinition = BuffProvider.get(buffEffect.buffId(), BuffSource.ABILITY_GENERATED, state);
         AppliedBuffResult appliedBuffResult = new AppliedBuffResult(
                 buffDefinition,
-                buffEffect.durationOverrideTicks() == null ? buffDefinition.getDurationTicks() : buffEffect.durationOverrideTicks()
+                buffEffect.durationOverrideTicks() == null ? buffDefinition.getDurationTicks() :
+                        buffEffect.durationOverrideTicks(),
+                null
         );
         processAdrenalineDelta(buffDefinition, state);
         initializeCooldown(buffDefinition.getBuffId(), state, buffDefinition);
@@ -108,6 +111,7 @@ public class BuffProcessor {
         if (ability.getId() == AbilityId.BALANCEBYFORCE) {
             buffs.add(new AppliedBuffResult(
                     buffDefinition,
+                    null,
                     null
             ));
             processAdrenalineDelta(buffDefinition, state);

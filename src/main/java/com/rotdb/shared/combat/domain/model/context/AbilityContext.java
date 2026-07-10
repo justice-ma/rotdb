@@ -31,7 +31,7 @@ public class AbilityContext {
                           List<GeneratedBuffEffect> generatedBuffEffects, AbilityCooldownTiming abilityCooldownTiming,
                           boolean stallable, DamageCalculationTiming damageCalculationTiming) {
         this.numberOfHits = numberOfHits;
-        this.hits = hits;
+        this.hits = new ArrayList<>(hits);
         this.name = name;
         this.adrenaline = adrenaline;
         this.cooldownTicks = cooldownTicks;
@@ -53,7 +53,7 @@ public class AbilityContext {
                           List<GeneratedBuffEffect> generatedBuffEffects, AbilityCooldownTiming abilityCooldownTiming,
                           boolean stallable) {
         this.numberOfHits = numberOfHits;
-        this.hits = hits;
+        this.hits = new ArrayList<>(hits);
         this.name = name;
         this.adrenaline = adrenaline;
         this.cooldownTicks = cooldownTicks;

@@ -287,7 +287,7 @@ public class NecromancyAbilityFactory {
     }
 
     public static AbilityContext volleyOfSouls() {
-        return new AbilityContext(5,
+        return new AbilityContext(2,
                 List.of(new AbilityHitsContext(1.35, 1.65, false, ENHANCED, 2),
                         new AbilityHitsContext(1.35, 1.65, false, ENHANCED, 2)),
                 "Volley of Souls",

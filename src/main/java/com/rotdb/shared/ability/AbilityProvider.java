@@ -173,6 +173,9 @@ public final class AbilityProvider {
             case DEATHGRASP -> NecromancySpecialAttackFactory.deathGrasp();
             case SOULCRUSH -> NecromancySpecialAttackFactory.soulCrush();
             case DEATHESSENCE -> NecromancySpecialAttackFactory.deathEssence();
+
+            // Internal Abilities
+            case INCITEFEARPROC -> InternalAbilityFactory.inciteFearProc();
         };
     }
 

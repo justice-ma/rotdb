@@ -17,6 +17,7 @@ import com.rotdb.simulation.application.snapshot.SimulationStateSnapshotCopier;
 import com.rotdb.simulation.domain.model.config.ProcMode;
 import com.rotdb.simulation.domain.model.config.SimulationConfig;
 import com.rotdb.simulation.domain.model.context.*;
+import com.rotdb.simulation.domain.resolvers.cooldown.AbilityCooldownKeyResolver;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -1606,10 +1607,10 @@ public class RotationTimelineServiceTest {
         List<AbilityPlacement> abilities = new ArrayList<>();
         List<BuffPlacement> buffs = new ArrayList<>();
 
-        AbilityPlacement combust = new AbilityPlacement();
-        combust.setCastTick(0);
-        combust.setPlacedAbility(AbilityId.INSTABILITY);
-        abilities.add(combust);
+        AbilityPlacement instability = new AbilityPlacement();
+        instability.setCastTick(0);
+        instability.setPlacedAbility(AbilityId.INSTABILITY);
+        abilities.add(instability);
 
         RotationTimeline timeline = new RotationTimelineService(engine, copier)
                 .build(rotationCombatState, abilities, buffs);
@@ -1633,7 +1634,976 @@ public class RotationTimelineServiceTest {
                 }
             }
         }
-
         assertEquals(0, damage);
+    }
+
+    @Test
+    void inciteFearProc_is_scheduled_and_lands_on_appropriate_tick_at_5_stacks_with_ON_RELEASE_ability() {
+        RotationCombatState rotationCombatState = sampleMagicState();
+        rotationCombatState.getSpell().setSpell(Spells.INCITEFEAR);
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.INCITEFEARSTACKS, 4);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement dragonBreath = new AbilityPlacement();
+        dragonBreath.setCastTick(0);
+        dragonBreath.setPlacedAbility(AbilityId.DRAGONBREATH);
+        abilities.add(dragonBreath);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(1, timeline.getTimeline().get(3).getLandedHits().size());
+        assertEquals(AbilityId.INCITEFEARPROC, timeline.getTimeline().get(3).getLandedHits().getFirst().getParentAbility());
+    }
+
+    @Test
+    void inciteFearProc_is_scheduled_and_lands_on_appropriate_tick_at_5_stacks_with_ON_HIT_ability() {
+        RotationCombatState rotationCombatState = sampleMagicState();
+        rotationCombatState.getSpell().setSpell(Spells.INCITEFEAR);
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.INCITEFEARSTACKS, 1);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement asphyxiate = new AbilityPlacement();
+        asphyxiate.setCastTick(0);
+        asphyxiate.setPlacedAbility(AbilityId.ASPHYXIATE);
+        abilities.add(asphyxiate);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(1, timeline.getTimeline().get(10).getLandedHits().size());
+        assertEquals(AbilityId.INCITEFEARPROC, timeline.getTimeline().get(10).getLandedHits().getFirst().getParentAbility());
+    }
+
+    @Test
+    void inciteFearProc_does_not_exist_while_on_cooldown() {
+        RotationCombatState rotationCombatState = sampleMagicState();
+        rotationCombatState.getSpell().setSpell(Spells.INCITEFEAR);
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.INCITEFEARSTACKS, 4);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement dragonBreath = new AbilityPlacement();
+        dragonBreath.setCastTick(0);
+        dragonBreath.setPlacedAbility(AbilityId.DRAGONBREATH);
+        abilities.add(dragonBreath);
+        AbilityPlacement dragonBreath2 = new AbilityPlacement();
+        dragonBreath2.setCastTick(3);
+        dragonBreath2.setPlacedAbility(AbilityId.DRAGONBREATH);
+        abilities.add(dragonBreath2);
+        AbilityPlacement meleeAuto = new AbilityPlacement();
+        meleeAuto.setCastTick(12);
+        meleeAuto.setPlacedAbility(AbilityId.MELEEAUTO);
+        abilities.add(meleeAuto);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        int landedInciteFearProcs = 0;
+        for (TickSnapshot tick : timeline.getTimeline()) {
+            for (TimelineHit hit : tick.getLandedHits()) {
+                if (hit.getParentAbility() == AbilityId.INCITEFEARPROC) {
+                    landedInciteFearProcs++;
+                }
+            }
+        }
+
+        assertEquals(1, landedInciteFearProcs);
+    }
+
+    @Test
+    void inciteFearStacks_decays_duration_until_removal() {
+        RotationCombatState rotationCombatState = sampleMagicState();
+        rotationCombatState.getSpell().setSpell(Spells.INCITEFEAR);
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.INCITEFEARSTACKS, 4);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement dragonBreath = new AbilityPlacement();
+        dragonBreath.setCastTick(0);
+        dragonBreath.setPlacedAbility(AbilityId.DRAGONBREATH);
+        abilities.add(dragonBreath);
+        AbilityPlacement dragonBreath2 = new AbilityPlacement();
+        dragonBreath2.setCastTick(3);
+        dragonBreath2.setPlacedAbility(AbilityId.DRAGONBREATH);
+        abilities.add(dragonBreath2);
+        AbilityPlacement meleeAuto = new AbilityPlacement();
+        meleeAuto.setCastTick(40);
+        meleeAuto.setPlacedAbility(AbilityId.MELEEAUTO);
+        abilities.add(meleeAuto);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertTrue(timeline.getTimeline().get(15).getEndingCombatState().getBuffs().has(BuffId.INCITEFEARSTACKS));
+        assertFalse(timeline.getTimeline().get(37).getEndingCombatState().getBuffs().has(BuffId.INCITEFEARSTACKS));
+    }
+
+    @Test
+    void inciteFearProc_procs_again_after_cooldown() {
+        RotationCombatState rotationCombatState = sampleMagicState();
+        rotationCombatState.getSpell().setSpell(Spells.INCITEFEAR);
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.INCITEFEARSTACKS, 4);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement dragonBreath = new AbilityPlacement();
+        dragonBreath.setCastTick(0);
+        dragonBreath.setPlacedAbility(AbilityId.DRAGONBREATH);
+        abilities.add(dragonBreath);
+        AbilityPlacement dragonBreath2 = new AbilityPlacement();
+        dragonBreath2.setCastTick(23);
+        dragonBreath2.setPlacedAbility(AbilityId.DRAGONBREATH);
+        abilities.add(dragonBreath2);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(1, timeline.getTimeline().get(3).getLandedHits().size());
+        assertEquals(1, timeline.getTimeline().get(26).getLandedHits().size());
+    }
+
+    @Test
+    void inciteFearProc_placed_on_cooldown_with_proccing_ability_for_ON_RELEASE() {
+        RotationCombatState rotationCombatState = sampleMagicState();
+        rotationCombatState.getSpell().setSpell(Spells.INCITEFEAR);
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.INCITEFEARSTACKS, 4);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement dragonBreath = new AbilityPlacement();
+        dragonBreath.setCastTick(0);
+        dragonBreath.setPlacedAbility(AbilityId.DRAGONBREATH);
+        abilities.add(dragonBreath);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertTrue(timeline.getTimeline().getFirst().getEndingAbilityCooldownMap().containsKey(AbilityCooldownKeyResolver.resolve(AbilityId.INCITEFEARPROC)));
+    }
+
+    @Test
+    void inciteFearProc_placed_on_cooldown_with_proccing_hit_for_ON_HIT() {
+        RotationCombatState rotationCombatState = sampleMagicState();
+        rotationCombatState.getSpell().setSpell(Spells.INCITEFEAR);
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.INCITEFEARSTACKS, 3);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement asphyxiate = new AbilityPlacement();
+        asphyxiate.setCastTick(0);
+        asphyxiate.setPlacedAbility(AbilityId.ASPHYXIATE);
+        abilities.add(asphyxiate);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertTrue(timeline.getTimeline().get(3).getEndingAbilityCooldownMap().containsKey(AbilityCooldownKeyResolver.resolve(AbilityId.INCITEFEARPROC)));
+    }
+
+    @Test
+    void inciteFearStacks_reduce_tsunami_cost_by_12_per_stack() {
+        RotationCombatState rotationCombatState = sampleMagicState();
+        rotationCombatState.getSpell().setSpell(Spells.INCITEFEAR);
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.INCITEFEARSTACKS, 3);
+
+        RotationCombatState rotationCombatState2 = sampleMagicState();
+        rotationCombatState2.getSpell().setSpell(Spells.INCITEFEAR);
+        rotationCombatState2.getBuffs().getBuffStacks().put(BuffId.INCITEFEARSTACKS, 2);
+
+        RotationCombatState rotationCombatState3 = sampleMagicState();
+        rotationCombatState3.getSpell().setSpell(Spells.INCITEFEAR);
+        rotationCombatState3.getBuffs().getBuffStacks().put(BuffId.INCITEFEARSTACKS, 1);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement tsunami = new AbilityPlacement();
+        tsunami.setCastTick(0);
+        tsunami.setPlacedAbility(AbilityId.TSUNAMI);
+        abilities.add(tsunami);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+        RotationTimeline timeline2 = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState2, abilities, buffs);
+        RotationTimeline timeline3 = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState3, abilities, buffs);
+
+        assertEquals(36, timeline.getTimeline().getFirst().getEndingAdrenaline());
+        assertEquals(24, timeline2.getTimeline().getFirst().getEndingAdrenaline());
+        assertEquals(12, timeline3.getTimeline().getFirst().getEndingAdrenaline());
+    }
+
+    @Test
+    void inciteFearProc_does_not_exist_below_threshold() {
+        RotationCombatState rotationCombatState = sampleMagicState();
+        rotationCombatState.getSpell().setSpell(Spells.INCITEFEAR);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement asphyxiate = new AbilityPlacement();
+        asphyxiate.setCastTick(0);
+        asphyxiate.setPlacedAbility(AbilityId.ASPHYXIATE);
+        abilities.add(asphyxiate);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        boolean inciteFearProc = false;
+
+        for (TickSnapshot tick : timeline.getTimeline()) {
+            for (TimelineHit hit : tick.getLandedHits()) {
+                if (hit.getParentAbility() == AbilityId.INCITEFEARPROC) {
+                    inciteFearProc = true;
+                }
+            }
+        }
+
+        assertFalse(inciteFearProc);
+    }
+
+    @Test
+    void essenceCorruption_stacks_generated_per_hit_of_combust() {
+        RotationCombatState rotationCombatState = sampleMagicState();
+        rotationCombatState.getEquipment().getMainhand().setEffect(EnumSet.of(Effect.SONGOFDESTRUCTION));
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement combust = new AbilityPlacement();
+        combust.setCastTick(0);
+        combust.setPlacedAbility(AbilityId.COMBUST);
+        abilities.add(combust);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(0, timeline.getTimeline().getFirst().getEndingCombatState().getBuffs().stacks(BuffId.ESSENCECORRUPTIONSTACKS));
+        assertEquals(1, timeline.getTimeline().get(3).getEndingCombatState().getBuffs().stacks(BuffId.ESSENCECORRUPTIONSTACKS));
+    }
+
+    @Test
+    void combust_damage_increases_with_essenceCorruption_stacks() {
+        RotationCombatState rotationCombatState = sampleMagicState();
+        rotationCombatState.getEquipment().getMainhand().setEffect(EnumSet.of(Effect.SONGOFDESTRUCTION));
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.ESSENCECORRUPTIONSTACKS, 10);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement combust = new AbilityPlacement();
+        combust.setCastTick(0);
+        combust.setPlacedAbility(AbilityId.COMBUST);
+        abilities.add(combust);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertTrue(timeline.getTimeline().get(3).getLandedHits().getFirst().getHitAvgDamage() < timeline.getTimeline().get(6).getLandedHits().getFirst().getHitAvgDamage());
+        assertTrue(timeline.getTimeline().get(3).getEndingCombatState().getBuffs().stacks(BuffId.ESSENCECORRUPTIONSTACKS) < timeline.getTimeline().get(6).getEndingCombatState().getBuffs().stacks(BuffId.ESSENCECORRUPTIONSTACKS));
+    }
+
+    @Test
+    void essenceCorruption_stacks_do_not_generate_without_songOfDestruction() {
+        RotationCombatState rotationCombatState = sampleMagicState();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement combust = new AbilityPlacement();
+        combust.setCastTick(0);
+        combust.setPlacedAbility(AbilityId.COMBUST);
+        abilities.add(combust);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertFalse(timeline.getTimeline().get(12).getEndingCombatState().getBuffs().has(BuffId.ESSENCECORRUPTIONSTACKS));
+    }
+
+    @Test
+    void essenceCorruption_stacks_do_not_add_damage_without_songOfDestruction() {
+        RotationCombatState rotationCombatState = sampleMagicState();
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.ESSENCECORRUPTIONSTACKS, 30);
+
+        RotationCombatState rotationCombatState1 = sampleMagicState();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement combust = new AbilityPlacement();
+        combust.setCastTick(0);
+        combust.setPlacedAbility(AbilityId.COMBUST);
+        abilities.add(combust);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        RotationTimeline timeline1 = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState1, abilities, buffs);
+
+        assertEquals(timeline.getTimeline().get(3).getLandedHits().getFirst().getHitAvgDamage(),
+                timeline1.getTimeline().get(3).getLandedHits().getFirst().getHitAvgDamage());
+    }
+
+    @Test
+    void essenceCorruption_stacks_do_not_add_damage_to_non_dots() {
+        RotationCombatState rotationCombatState = sampleMagicState();
+        rotationCombatState.getEquipment().getMainhand().setEffect(EnumSet.of(Effect.SONGOFDESTRUCTION));
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.ESSENCECORRUPTIONSTACKS, 30);
+
+        RotationCombatState rotationCombatState1 = sampleMagicState();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement dragonbreath = new AbilityPlacement();
+        dragonbreath.setCastTick(0);
+        dragonbreath.setPlacedAbility(AbilityId.DRAGONBREATH);
+        abilities.add(dragonbreath);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        RotationTimeline timeline1 = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState1, abilities, buffs);
+
+        assertEquals(timeline.getTimeline().get(1).getLandedHits().getFirst().getHitAvgDamage(),
+                timeline1.getTimeline().get(1).getLandedHits().getFirst().getHitAvgDamage());
+    }
+
+    @Test
+    void corruptionBlast_damage_increases_with_essenceCorruption_stacks() {
+        RotationCombatState rotationCombatState = sampleMagicState();
+        rotationCombatState.getEquipment().getMainhand().setEffect(EnumSet.of(Effect.SONGOFDESTRUCTION));
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.ESSENCECORRUPTIONSTACKS, 10);
+        RotationCombatState rotationCombatState1 = sampleMagicState();
+
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement corruptionBlast = new AbilityPlacement();
+        corruptionBlast.setCastTick(0);
+        corruptionBlast.setPlacedAbility(AbilityId.CORRUPTIONBLAST);
+        abilities.add(corruptionBlast);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        RotationTimeline timeline1 = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState1, abilities, buffs);
+
+        assertTrue(timeline.getTimeline().get(4).getLandedHits().getFirst().getHitAvgDamage() > timeline1.getTimeline().get(4).getLandedHits().getFirst().getHitAvgDamage());
+        assertTrue(timeline.getTimeline().get(2).getEndingCombatState().getBuffs().stacks(BuffId.ESSENCECORRUPTIONSTACKS) < timeline.getTimeline().get(4).getEndingCombatState().getBuffs().stacks(BuffId.ESSENCECORRUPTIONSTACKS));
+    }
+
+    @Test
+    void multiple_hits_on_same_tick_only_boost_dot_damage_with_essenceCorruption_stacks() {
+        RotationCombatState rotationCombatState = sampleMagicState();
+        rotationCombatState.getEquipment().getMainhand().setEffect(EnumSet.of(Effect.SONGOFDESTRUCTION));
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.ESSENCECORRUPTIONSTACKS, 30);
+
+        RotationCombatState rotationCombatState1 = sampleMagicState();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement dragonbreath = new AbilityPlacement();
+        dragonbreath.setCastTick(2);
+        dragonbreath.setPlacedAbility(AbilityId.DRAGONBREATH);
+        abilities.add(dragonbreath);
+
+        AbilityPlacement combust = new AbilityPlacement();
+        combust.setCastTick(0);
+        combust.setPlacedAbility(AbilityId.COMBUST);
+        abilities.add(combust);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        RotationTimeline timeline1 = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState1, abilities, buffs);
+
+        int combustDiff = 0;
+        int dbreathDiff = 0;
+
+        for (TimelineHit hit : timeline.getTimeline().get(3).getLandedHits()) {
+            if (hit.getParentAbility() == AbilityId.DRAGONBREATH) dbreathDiff += hit.getHitAvgDamage();
+            if (hit.getParentAbility() == AbilityId.COMBUST) combustDiff += hit.getHitAvgDamage();
+        }
+
+        for (TimelineHit hit : timeline1.getTimeline().get(3).getLandedHits()) {
+            if (hit.getParentAbility() == AbilityId.DRAGONBREATH) dbreathDiff -= hit.getHitAvgDamage();
+            if (hit.getParentAbility() == AbilityId.COMBUST) combustDiff -= hit.getHitAvgDamage();
+        }
+
+        assertEquals(0, dbreathDiff);
+        assertNotEquals(0, combustDiff);
+    }
+
+    @Test
+    void essenceCorruption_does_not_add_damage_below_10_stacks_to_combust() {
+        RotationCombatState rotationCombatState = sampleMagicState();
+        rotationCombatState.getEquipment().getMainhand().setEffect(EnumSet.of(Effect.SONGOFDESTRUCTION));
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement combust = new AbilityPlacement();
+        combust.setCastTick(0);
+        combust.setPlacedAbility(AbilityId.COMBUST);
+        abilities.add(combust);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(timeline.getTimeline().get(3).getLandedHits().getFirst().getHitAvgDamage(),
+                timeline.getTimeline().get(6).getLandedHits().getFirst().getHitAvgDamage());
+    }
+
+    @Test
+    void soulSap_generates_one_soul_stack() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement soulsap = new AbilityPlacement();
+        soulsap.setCastTick(0);
+        soulsap.setPlacedAbility(AbilityId.SOULSAP);
+        abilities.add(soulsap);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(1, timeline.getTimeline().getFirst().getEndingCombatState().getBuffs().stacks(BuffId.SOULSTACKS));
+    }
+
+    @Test
+    void soulStacks_cap_at_3_without_soulboundLantern() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.SOULSTACKS, 2);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement soulsap = new AbilityPlacement();
+        soulsap.setCastTick(0);
+        soulsap.setPlacedAbility(AbilityId.SOULSAP);
+        abilities.add(soulsap);
+        abilities.add(soulsap);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(3, timeline.getTimeline().getFirst().getEndingCombatState().getBuffs().stacks(BuffId.SOULSTACKS));
+    }
+
+    @Test
+    void soulStacks_cap_at_5_with_soulboundLantern() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.SOULSTACKS, 4);
+        rotationCombatState.getEquipment().getOffhand().setEffect(EnumSet.of(Effect.SOULBOUNDLANTERN));
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement soulsap = new AbilityPlacement();
+        soulsap.setCastTick(0);
+        soulsap.setPlacedAbility(AbilityId.SOULSAP);
+        abilities.add(soulsap);
+        abilities.add(soulsap);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(5, timeline.getTimeline().getFirst().getEndingCombatState().getBuffs().stacks(BuffId.SOULSTACKS));
+    }
+
+    @Test
+    void soulStrike_consumes_one_soulStack() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.SOULSTACKS, 4);
+        rotationCombatState.getEquipment().getOffhand().setEffect(EnumSet.of(Effect.SOULBOUNDLANTERN));
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement soulStrike = new AbilityPlacement();
+        soulStrike.setCastTick(0);
+        soulStrike.setPlacedAbility(AbilityId.SOULSTRIKE);
+        abilities.add(soulStrike);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(3, timeline.getTimeline().getFirst().getEndingCombatState().getBuffs().stacks(BuffId.SOULSTACKS));
+    }
+
+    @Test
+    void volleyOfSouls_consumes_all_soulStacks() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.SOULSTACKS, 4);
+        rotationCombatState.getEquipment().getOffhand().setEffect(EnumSet.of(Effect.SOULBOUNDLANTERN));
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement volleyOfSouls = new AbilityPlacement();
+        volleyOfSouls.setCastTick(0);
+        volleyOfSouls.setPlacedAbility(AbilityId.VOLLEYOFSOULS);
+        abilities.add(volleyOfSouls);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertFalse(timeline.getTimeline().getFirst().getEndingCombatState().getBuffs().has(BuffId.SOULSTACKS));
+    }
+
+    @Test
+    void soulCrush_consumes_all_soulStacks() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.SOULSTACKS, 4);
+        rotationCombatState.getEquipment().getOffhand().setEffect(EnumSet.of(Effect.SOULBOUNDLANTERN));
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement soulCrush = new AbilityPlacement();
+        soulCrush.setCastTick(0);
+        soulCrush.setPlacedAbility(AbilityId.SOULCRUSH);
+        abilities.add(soulCrush);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertFalse(timeline.getTimeline().getFirst().getEndingCombatState().getBuffs().has(BuffId.SOULSTACKS));
+    }
+
+    @Test
+    void soulCrush_readies_soulReave() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.SOULSTACKS, 4);
+        rotationCombatState.getEquipment().getOffhand().setEffect(EnumSet.of(Effect.SOULBOUNDLANTERN));
+        rotationCombatState.getEquipment().getMainhand().setEffect(EnumSet.of(Effect.DEVOURERSGUARD));
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement soulCrush = new AbilityPlacement();
+        soulCrush.setCastTick(0);
+        soulCrush.setPlacedAbility(AbilityId.SOULCRUSH);
+        abilities.add(soulCrush);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(4, timeline.getTimeline().getFirst().getEndingCombatState().getBuffs().stacks(BuffId.SOULREAVE));
+    }
+
+    @Test
+    void necromancyAuto_consumes_soulReave_and_generates_one_soulStack() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.SOULSTACKS, 4);
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.SOULREAVE, 4);
+        rotationCombatState.getEquipment().getOffhand().setEffect(EnumSet.of(Effect.SOULBOUNDLANTERN));
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement necromancyAuto = new AbilityPlacement();
+        necromancyAuto.setCastTick(0);
+        necromancyAuto.setPlacedAbility(AbilityId.NECROMANCYAUTO);
+        abilities.add(necromancyAuto);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(5, timeline.getTimeline().getFirst().getEndingCombatState().getBuffs().stacks(BuffId.SOULSTACKS));
+        assertFalse(timeline.getTimeline().getFirst().getEndingCombatState().getBuffs().has(BuffId.SOULREAVE));
+    }
+
+    @Test
+    void volleyOfSouls_readies_soulReave_while_soulCrush_is_active() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.SOULSTACKS, 4);
+        rotationCombatState.getBuffs().getBuffSet().add(BuffId.SOULCRUSH);
+        rotationCombatState.getEquipment().getOffhand().setEffect(EnumSet.of(Effect.SOULBOUNDLANTERN));
+        rotationCombatState.getEquipment().getMainhand().setEffect(EnumSet.of(Effect.DEVOURERSGUARD));
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement volleyOfSouls = new AbilityPlacement();
+        volleyOfSouls.setCastTick(0);
+        volleyOfSouls.setPlacedAbility(AbilityId.VOLLEYOFSOULS);
+        abilities.add(volleyOfSouls);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(4, timeline.getTimeline().getFirst().getEndingCombatState().getBuffs().stacks(BuffId.SOULREAVE));
+    }
+
+    @Test
+    void soulCrush_damage_scales_with_soulStacks_consumed() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.SOULSTACKS, 4);
+        rotationCombatState.getBuffs().getBuffSet().add(BuffId.SOULCRUSH);
+        rotationCombatState.getEquipment().getOffhand().setEffect(EnumSet.of(Effect.SOULBOUNDLANTERN));
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement soulCrush = new AbilityPlacement();
+        soulCrush.setCastTick(0);
+        soulCrush.setPlacedAbility(AbilityId.SOULCRUSH);
+        abilities.add(soulCrush);
+
+        AbilityPlacement soulCrush1 = new AbilityPlacement();
+        soulCrush1.setCastTick(3);
+        soulCrush1.setPlacedAbility(AbilityId.SOULCRUSH);
+        abilities.add(soulCrush1);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertTrue(timeline.getTimeline().get(2).getLandedHits().getFirst().getHitAvgDamage() >
+                timeline.getTimeline().get(5).getLandedHits().getFirst().getHitAvgDamage());
+    }
+
+    @Test
+    void volleyOfSouls_under_2_soulStacks_generates_warning() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.SOULSTACKS, 1);
+        rotationCombatState.getEquipment().getOffhand().setEffect(EnumSet.of(Effect.SOULBOUNDLANTERN));
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement volleyOfSouls = new AbilityPlacement();
+        volleyOfSouls.setCastTick(0);
+        volleyOfSouls.setPlacedAbility(AbilityId.VOLLEYOFSOULS);
+        abilities.add(volleyOfSouls);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertFalse(timeline.getTimeline().getFirst().getWarnings().isEmpty());
+        assertEquals("Insufficient amount of: Soul Stacks", timeline.getTimeline().getFirst().getWarnings().getFirst());
+    }
+
+    @Test
+    void volleyOfSouls_at_2_soulStacks_does_not_generate_warning() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.SOULSTACKS, 2);
+        rotationCombatState.getEquipment().getOffhand().setEffect(EnumSet.of(Effect.SOULBOUNDLANTERN));
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement volleyOfSouls = new AbilityPlacement();
+        volleyOfSouls.setCastTick(0);
+        volleyOfSouls.setPlacedAbility(AbilityId.VOLLEYOFSOULS);
+        abilities.add(volleyOfSouls);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertTrue(timeline.getTimeline().getFirst().getWarnings().isEmpty());
+    }
+
+    @Test
+    void necromancyAuto_generates_1_deathSpark_stack() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getEquipment().getMainhand().setEffect(EnumSet.of(Effect.OMNIGUARD));
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement necromancyAuto = new AbilityPlacement();
+        necromancyAuto.setCastTick(0);
+        necromancyAuto.setPlacedAbility(AbilityId.NECROMANCYAUTO);
+        abilities.add(necromancyAuto);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(1, timeline.getTimeline().getFirst().getEndingCombatState().getBuffs().stacks(BuffId.DEATHSPARK));
+    }
+
+    @Test
+    void deathSpark_stacks_not_generated_without_omniGuard() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement necromancyAuto = new AbilityPlacement();
+        necromancyAuto.setCastTick(0);
+        necromancyAuto.setPlacedAbility(AbilityId.NECROMANCYAUTO);
+        abilities.add(necromancyAuto);
+
+        AbilityPlacement deathEssence = new AbilityPlacement();
+        deathEssence.setCastTick(3);
+        deathEssence.setPlacedAbility(AbilityId.DEATHESSENCE);
+        abilities.add(deathEssence);
+
+        AbilityPlacement touchOfDeath = new AbilityPlacement();
+        touchOfDeath.setCastTick(6);
+        touchOfDeath.setPlacedAbility(AbilityId.TOUCHOFDEATH);
+        abilities.add(touchOfDeath);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertFalse(timeline.getTimeline().get(9).getEndingCombatState().getBuffs().has(BuffId.DEATHSPARK));
+    }
+
+    @Test
+    void deathEssence_ability_immediately_readies_deathSpark() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getEquipment().getMainhand().setEffect(EnumSet.of(Effect.OMNIGUARD));
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement deathEssence = new AbilityPlacement();
+        deathEssence.setCastTick(0);
+        deathEssence.setPlacedAbility(AbilityId.DEATHESSENCE);
+        abilities.add(deathEssence);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(5, timeline.getTimeline().getFirst().getEndingCombatState().getBuffs().stacks(BuffId.DEATHSPARK));
+    }
+
+    // TODO: Need to adjust hit timing of enhanced necromancy autos to be t2.
+    @Test
+    void necromancyAuto_consumes_deathSpark_at_5_and_increases_damage() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getEquipment().getMainhand().setEffect(EnumSet.of(Effect.OMNIGUARD));
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.DEATHSPARK, 4);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement necromancyAuto = new AbilityPlacement();
+        necromancyAuto.setCastTick(0);
+        necromancyAuto.setPlacedAbility(AbilityId.NECROMANCYAUTO);
+        abilities.add(necromancyAuto);
+
+        AbilityPlacement necromancyAuto1 = new AbilityPlacement();
+        necromancyAuto1.setCastTick(3);
+        necromancyAuto1.setPlacedAbility(AbilityId.NECROMANCYAUTO);
+        abilities.add(necromancyAuto1);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertFalse(timeline.getTimeline().get(3).getEndingCombatState().getBuffs().has(BuffId.DEATHSPARK));
+        assertTrue(timeline.getTimeline().get(1).getLandedHits().getFirst().getHitAvgDamage() <
+                timeline.getTimeline().get(4).getLandedHits().getFirst().getHitAvgDamage());
+    }
+
+    @Test
+    void touchOfDeath_immediately_readies_deathSpark_if_deathEssence_buff_is_active() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getEquipment().getMainhand().setEffect(EnumSet.of(Effect.OMNIGUARD));
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement deathEssence = new AbilityPlacement();
+        deathEssence.setCastTick(0);
+        deathEssence.setPlacedAbility(AbilityId.DEATHESSENCE);
+        abilities.add(deathEssence);
+
+        AbilityPlacement necromancyAuto = new AbilityPlacement();
+        necromancyAuto.setCastTick(3);
+        necromancyAuto.setPlacedAbility(AbilityId.NECROMANCYAUTO);
+        abilities.add(necromancyAuto);
+
+        AbilityPlacement touchOfDeath = new AbilityPlacement();
+        touchOfDeath.setCastTick(6);
+        touchOfDeath.setPlacedAbility(AbilityId.TOUCHOFDEATH);
+        abilities.add(touchOfDeath);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(5, timeline.getTimeline().get(6).getEndingCombatState().getBuffs().stacks(BuffId.DEATHSPARK));
+    }
+
+    @Test
+    void touchOfDeath_generates_4_necrosis_stacks() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement touchOfDeath = new AbilityPlacement();
+        touchOfDeath.setCastTick(0);
+        touchOfDeath.setPlacedAbility(AbilityId.TOUCHOFDEATH);
+        abilities.add(touchOfDeath);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(4, timeline.getTimeline().getFirst().getEndingCombatState().getBuffs().stacks(BuffId.NECROSIS));
+    }
+
+    @Test
+    void necromancyAuto_does_not_generate_necrosis_stacks_outside_of_livingDeath() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement necromancyAuto = new AbilityPlacement();
+        necromancyAuto.setCastTick(0);
+        necromancyAuto.setPlacedAbility(AbilityId.NECROMANCYAUTO);
+        abilities.add(necromancyAuto);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertFalse(timeline.getTimeline().getFirst().getEndingCombatState().getBuffs().has(BuffId.NECROSIS));
+    }
+
+    @Test
+    void necromancyAuto_generates_2_necrosis_inside_livingDeath() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        BuffPlacement livingDeath = new BuffPlacement();
+        livingDeath.setBuffId(BuffId.LIVINGDEATH);
+        livingDeath.setPlacementTick(0);
+        buffs.add(livingDeath);
+
+        AbilityPlacement necromancyAuto = new AbilityPlacement();
+        necromancyAuto.setCastTick(3);
+        necromancyAuto.setPlacedAbility(AbilityId.NECROMANCYAUTO);
+        abilities.add(necromancyAuto);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(2, timeline.getTimeline().get(3).getEndingCombatState().getBuffs().stacks(BuffId.NECROSIS));
+    }
+
+    @Test
+    void fingerOfDeath_consumes_up_to_6_necrosis() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.NECROSIS, 8);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement fingerOfDeath = new AbilityPlacement();
+        fingerOfDeath.setCastTick(0);
+        fingerOfDeath.setPlacedAbility(AbilityId.FINGEROFDEATH);
+        abilities.add(fingerOfDeath);
+
+        AbilityPlacement fingerOfDeath2 = new AbilityPlacement();
+        fingerOfDeath2.setCastTick(3);
+        fingerOfDeath2.setPlacedAbility(AbilityId.FINGEROFDEATH);
+        abilities.add(fingerOfDeath2);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(2, timeline.getTimeline().getFirst().getEndingCombatState().getBuffs().stacks(BuffId.NECROSIS));
+        assertEquals(0, timeline.getTimeline().get(3).getEndingCombatState().getBuffs().stacks(BuffId.NECROSIS));
+    }
+
+    @Test
+    void deathGrasp_consumes_all_necrosis_stacks() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.NECROSIS, 12);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement deathGrasp = new AbilityPlacement();
+        deathGrasp.setCastTick(0);
+        deathGrasp.setPlacedAbility(AbilityId.DEATHGRASP);
+        abilities.add(deathGrasp);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertFalse(timeline.getTimeline().getFirst().getEndingCombatState().getBuffs().has(BuffId.NECROSIS));
+    }
+
+    @Test
+    void necrosis_reduces_adrenaline_cost_of_fingerOfDeath() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.NECROSIS, 8);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement fingerOfDeath = new AbilityPlacement();
+        fingerOfDeath.setCastTick(0);
+        fingerOfDeath.setPlacedAbility(AbilityId.FINGEROFDEATH);
+        abilities.add(fingerOfDeath);
+
+        AbilityPlacement fingerOfDeath2 = new AbilityPlacement();
+        fingerOfDeath2.setCastTick(3);
+        fingerOfDeath2.setPlacedAbility(AbilityId.FINGEROFDEATH);
+        abilities.add(fingerOfDeath2);
+
+        AbilityPlacement fingerOfDeath3 = new AbilityPlacement();
+        fingerOfDeath3.setCastTick(6);
+        fingerOfDeath3.setPlacedAbility(AbilityId.FINGEROFDEATH);
+        abilities.add(fingerOfDeath3);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(100, timeline.getTimeline().getFirst().getEndingAdrenaline());
+        assertEquals(60, timeline.getTimeline().get(3).getEndingAdrenaline());
+        assertEquals(0, timeline.getTimeline().get(6).getEndingAdrenaline());
+    }
+
+    @Test
+    void necrosis_stacks_increase_deathGrasp_damage() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.NECROSIS, 12);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement deathGrasp = new AbilityPlacement();
+        deathGrasp.setCastTick(0);
+        deathGrasp.setPlacedAbility(AbilityId.DEATHGRASP);
+        abilities.add(deathGrasp);
+
+        AbilityPlacement deathGrasp2 = new AbilityPlacement();
+        deathGrasp2.setCastTick(3);
+        deathGrasp2.setPlacedAbility(AbilityId.DEATHGRASP);
+        abilities.add(deathGrasp2);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertTrue(timeline.getTimeline().get(1).getLandedHits().getFirst().getHitAvgDamage() >
+                timeline.getTimeline().get(4).getLandedHits().getFirst().getHitAvgDamage());
     }
 }

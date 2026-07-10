@@ -32,7 +32,7 @@ public class NecromancySpecialAttackFactory {
 
     public static AbilityContext soulCrush() {
         GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
-                BuffId.SOULREAVE,
+                BuffId.SOULCRUSH,
                 GeneratedBuffTiming.ON_RELEASE
         );
         List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);

@@ -39,7 +39,7 @@ public class SimulationStateSnapshotCopier {
         return copy;
     }
 
-    private RotationCombatState copyCombatState(RotationCombatState source) {
+    public RotationCombatState copyCombatState(RotationCombatState source) {
         RotationCombatState copy = new RotationCombatState();
         copy.setBuffs(copyBuffContext(source));
         copy.setEquipment(copyEquipment(source));

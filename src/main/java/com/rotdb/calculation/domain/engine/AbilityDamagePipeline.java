@@ -36,6 +36,7 @@ public final class AbilityDamagePipeline {
                 new AdditiveModifier(),
                 new MultiplicativeModifier(),
                 new CoreModifier(),
+                new FlatHitDamageModifier(),
                 new PerfectEquilibriumInjector(),
                 new CritDamageModifier(),
                 new CrystalRainArrowsModifier(),
