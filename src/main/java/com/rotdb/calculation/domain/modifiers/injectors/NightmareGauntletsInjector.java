@@ -1,5 +1,6 @@
 package com.rotdb.calculation.domain.modifiers.injectors;
 
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.shared.ability.AbilityId;
@@ -12,7 +13,9 @@ import com.rotdb.shared.combat.domain.model.enums.Effect;
 import java.util.List;
 
 public class NightmareGauntletsInjector implements Modifier {
-    public void apply(CalculationContext context) {
+    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
+        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
+
         if (context.getEquipment().getMainhand().getClazz() != CombatStyles.RANGED) {
             return;
         }

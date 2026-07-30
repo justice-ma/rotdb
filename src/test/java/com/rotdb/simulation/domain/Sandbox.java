@@ -25,19 +25,19 @@ public class Sandbox {
         RotationCombatState state = sampleRangedState();
         List<AbilityPlacement> abilities = new ArrayList<>();
         AbilityPlacement placement = new AbilityPlacement();
-        placement.setCastTick(0);
+        placement.setCastTick(6);
         placement.setPlacedAbility(AbilityId.CONJURESKELETONWARRIOR);
         placement.setReleaseTick(0);
         abilities.add(placement);
 //        AbilityPlacement placement2 = new AbilityPlacement();
-//        placement2.setCastTick(3);
+//        placement2.setCastTick(4);
 //        placement2.setReleaseTick(0);
-//        placement2.setPlacedAbility(AbilityId.TOUCHOFDEATH);
+//        placement2.setPlacedAbility(AbilityId.SOULSAP);
 //        abilities.add(placement2);
 //        AbilityPlacement placement3 = new AbilityPlacement();
-//        placement3.setCastTick(6);
+//        placement3.setCastTick(18);
 //        placement3.setReleaseTick(0);
-//        placement3.setPlacedAbility(AbilityId.DEATHESSENCE);
+//        placement3.setPlacedAbility(AbilityId.COMMANDSKELETONWARRIOR);
 //        abilities.add(placement3);
 //        AbilityPlacement placement4 = new AbilityPlacement();
 //        placement4.setCastTick(9);
@@ -49,17 +49,17 @@ public class Sandbox {
 //        placement5.setReleaseTick(12);
 //        placement5.setPlacedAbility(AbilityId.FINGEROFDEATH);
 //        abilities.add(placement5);
-        AbilityPlacement placement6 = new AbilityPlacement();
-        placement6.setCastTick(18);
-        placement6.setReleaseTick(14);
-        placement6.setPlacedAbility(AbilityId.SNAPSHOT);
-        abilities.add(placement6);
+//        AbilityPlacement placement6 = new AbilityPlacement();
+//        placement6.setCastTick(90);
+//        placement6.setReleaseTick(14);
+//        placement6.setPlacedAbility(AbilityId.SNAPSHOT);
+//        abilities.add(placement6);
 
         List<BuffPlacement> buffs = new ArrayList<>();
         BuffPlacement buff = new BuffPlacement();
         buff.setPlacementTick(6);
-        buff.setBuffId(BuffId.DEATHSWIFTNESS);
-//        buffs.add(buff);
+        buff.setBuffId(BuffId.HAUNTED);
+        buffs.add(buff);
 //        BuffPlacement buff2 = new BuffPlacement();
 //        buff2.setPlacementTick(0);
 //        buff2.setBuffId(BuffId.SUPERADRENALINEPOTION);
@@ -73,7 +73,7 @@ public class Sandbox {
 //        buff4.setBuffId(BuffId.SMOKECLOUDED);
 //        buffs.add(buff4);
 
-        state.getBuffs().getBuffSet().add(BuffId.VULNED);
+        state.getBuffs().getBuffSet().add(BuffId.REAPERSCREW);
 
         SimulationConfig config = new SimulationConfig();
         config.setProcMode(ProcMode.FORCED);
@@ -167,7 +167,7 @@ public class Sandbox {
     private static int cumulativeDamageForTick(TickSnapshot tick) {
         int damage = 0;
         for (TimelineHit hit : tick.getLandedHits()) {
-            damage += hit.getHitAvgDamage();
+            damage += hit.getHitMinNonCrit();
         }
         return damage;
     }
@@ -177,8 +177,8 @@ public class Sandbox {
         mainhand.setTitle("Bow of the Last Guardian");
         mainhand.setClazz(CombatStyles.MAGIC);
         mainhand.setSlot(Slots.MAINHAND);
-        mainhand.setTier(90);
-        mainhand.setDamageTier(90);
+        mainhand.setTier(100);
+        mainhand.setDamageTier(100);
         mainhand.setAccuracyTier(90);
         mainhand.setRanged(0);
         mainhand.setEffect(EnumSet.of(Effect.SONGOFDESTRUCTION, Effect.OMNIGUARD));
@@ -188,8 +188,8 @@ public class Sandbox {
         ammo.setEffect(EnumSet.of(Effect.DEATHSPOREARROWS));
 
         EquipmentSlot offhand = EquipmentSlot.emptySlot();
-        offhand.setDamageTier(95);
-        offhand.setEffect(EnumSet.of(Effect.SOULBOUNDLANTERN));
+        offhand.setDamageTier(100);
+        offhand.setEffect(EnumSet.of(Effect.SOULBOUNDLANTERN, Effect.SONGOFDESTRUCTION));
 
         EquipmentSlot head = new EquipmentSlot();
         EquipmentSlot body = new EquipmentSlot();
@@ -238,6 +238,8 @@ public class Sandbox {
         perks.setPerk(new HashMap<>());
         perks.setGenocidalRank(0.0);
         perks.setEquipmentLevel20(false);
+        perks.getPerk().put(Perks.ERUPTIVE, 2);
+        perks.getPerk().put(Perks.LUNGING, 4);
 
         PrayerContext prayer = new PrayerContext();
         prayer.setSelected(EnumSet.noneOf(Prayer.class));
@@ -254,6 +256,8 @@ public class Sandbox {
         target.setDefence(1);
         target.setAffinity(100);
         target.setTags(EnumSet.noneOf(TargetTags.class));
+        target.setDebuffs(new HashSet<BuffId>());
+        target.getDebuffs().add(BuffId.HAUNTED);
 
         RotationCombatState state = new RotationCombatState();
         state.setEquipment(equipment);

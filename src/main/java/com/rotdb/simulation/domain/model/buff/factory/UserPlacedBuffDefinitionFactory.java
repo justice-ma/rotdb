@@ -46,7 +46,7 @@ public class UserPlacedBuffDefinitionFactory {
 
 
     public static BuffDefinition haunted() {
-        return create(BuffId.HAUNTED, BuffLifecycle.TIMED, BuffApplication.TARGET_BUFF_SET, 70, null, true, null, null);
+        return create(BuffId.HAUNTED, BuffLifecycle.PASSIVE, BuffApplication.TARGET_BUFF_SET, null, null, true, null, null);
     }
 
     public static BuffDefinition vulned() {

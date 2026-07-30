@@ -1,5 +1,6 @@
 package com.rotdb.calculation.domain.modifiers.abilityDamage;
 
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.enums.HitType;
@@ -8,7 +9,8 @@ import com.rotdb.calculation.domain.modifiers.Modifier;
 
 public class AggregationModifier implements Modifier {
     @Override
-    public void apply(CalculationContext context) {
+    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
+        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
 
         int min = 0;
         int max = 0;

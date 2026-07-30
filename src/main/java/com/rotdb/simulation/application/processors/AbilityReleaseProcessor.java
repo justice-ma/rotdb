@@ -9,6 +9,7 @@ import com.rotdb.shared.ability.model.GeneratedBuffTiming;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.enums.DamageCalculationTiming;
 import com.rotdb.simulation.application.processors.result.AbilityReleaseResult;
+import com.rotdb.simulation.application.processors.result.ConjureSchedulingResult;
 import com.rotdb.simulation.application.service.DamageRequestFactory;
 import com.rotdb.simulation.application.service.HitsScheduler;
 import com.rotdb.simulation.application.snapshot.SimulationStateSnapshotCopier;
@@ -16,6 +17,7 @@ import com.rotdb.simulation.domain.model.buff.AppliedBuffResult;
 import com.rotdb.simulation.domain.model.buff.ConsumableStackResult;
 import com.rotdb.simulation.domain.model.buff.enums.StackConsumptionTiming;
 import com.rotdb.simulation.domain.model.context.*;
+import com.rotdb.simulation.domain.resolvers.buff.ConjureResolver;
 import com.rotdb.simulation.domain.resolvers.buff.HitRecalculationPolicyResolver;
 
 import java.util.ArrayList;
@@ -37,6 +39,15 @@ public class AbilityReleaseProcessor {
                                                       SimulationStateSnapshotCopier copier) {
         if (abilitiesByReleaseTick.containsKey(tick)) {
             for (AbilityPlacement abilityPlacement : abilitiesByReleaseTick.get(tick)) {
+                boolean damageHandledByConjureScheduler = ConjureResolver.usesScheduledDamage(abilityPlacement);
+                ConjureSchedulingResult conjureSchedulingResult = ConjureProcessor.applyConjureHits(abilityPlacement,
+                        simulationState, scheduledHitMap, remainingHitsByPlacementId, releaseStateByPlacementId,
+                        copier, endingTick);
+
+                if (conjureSchedulingResult != null) {
+                    endingTick = conjureSchedulingResult.endingTick();
+                }
+
                 DamageResult damageResult = null;
                 List<ConsumableStackResult> consumableStackResults = new ArrayList<>();
                 for (ConsumableStackResult buff : StackProcessor.prepareConsumableStacksForDamage(abilityPlacement,
@@ -56,7 +67,8 @@ public class AbilityReleaseProcessor {
                 boolean requiresRecalculation = HitRecalculationPolicyResolver.requiresRecalculation(abilityContext,
                         simulationState);
 
-                if (abilityContext.getDamageCalculationTiming() == DamageCalculationTiming.ON_RELEASE && !requiresRecalculation) {
+                if (abilityContext.getDamageCalculationTiming() == DamageCalculationTiming.ON_RELEASE && !requiresRecalculation
+                    && !damageHandledByConjureScheduler) {
                     StackProcessor.applyOnReleaseResolvedHitStacks(abilityPlacement, simulationState);
                     for (AppliedBuffResult appliedBuffresult : BuffProcessor.applyPreDamageReleaseBuffs(abilityPlacement, simulationState)) {
                         if (appliedBuffresult.resolvedDurationTicks() != null) {
@@ -112,7 +124,7 @@ public class AbilityReleaseProcessor {
                 if (abilityContext.getDamageCalculationTiming() == DamageCalculationTiming.ON_RELEASE) {
                     StackProcessor.applyOnReleaseStacks(abilityPlacement, simulationState);
 
-                    if (!requiresRecalculation) {
+                    if (!requiresRecalculation && !damageHandledByConjureScheduler) {
                         StackProcessor.applyOnReleaseResolvedDamageStacks(damageResult, simulationState);
                     }
 
@@ -142,7 +154,7 @@ public class AbilityReleaseProcessor {
                     AbilityCooldownProcessor.generateAbilityCooldownWarnings(simulationState, abilityPlacement, tickSnapshot);
                     AbilityCooldownProcessor.initializeCooldown(simulationState, abilityPlacement);
 
-                    if (!requiresRecalculation) {
+                    if (!requiresRecalculation && !damageHandledByConjureScheduler) {
                         AbilityCooldownProcessor.applyPlacementCooldownEffects(simulationState, abilityPlacement, damageResult);
                     }
                 }

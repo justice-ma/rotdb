@@ -5,5 +5,6 @@ public enum AbilityCooldownGroup {
     OVERPOWER,
     OMNIPOWER,
     DEATH_SKULLS,
-    CORRUPTION
+    CORRUPTION,
+    SKELETON_WARRIOR
 }

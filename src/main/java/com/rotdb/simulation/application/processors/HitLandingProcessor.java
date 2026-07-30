@@ -14,6 +14,7 @@ import com.rotdb.simulation.application.service.HitsScheduler;
 import com.rotdb.simulation.domain.model.buff.AppliedBuffResult;
 import com.rotdb.simulation.domain.model.buff.ConsumableStackResult;
 import com.rotdb.simulation.domain.model.context.*;
+import com.rotdb.simulation.domain.resolvers.buff.ConjureResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,18 +35,24 @@ public class HitLandingProcessor {
                 if (timelineHit.getHitType() != HitType.PERFECTEQUILIBRIUM && !timelineHit.getParentAbility().isInternal()) {
                     BuffProcessor.applyAbilityGeneratedBuffsWithTiming(placementIdMap.get(timelineHit.getPlacementId()),
                             simulationState, GeneratedBuffTiming.ON_HIT, vestmentsBleedActiveAtTickStart);
+                    StackProcessor.applyResolvedHitLandingStacks(placementIdMap.get(timelineHit.getPlacementId()), simulationState
+                            , timelineHit);
                 }
             }
         }
 
         if (scheduledHitMap.get(tick) != null && scheduledHitMap.containsKey(tick)) {
             for (ScheduledHit scheduledHit : scheduledHitMap.get(tick)) {
+                if (ConjureProcessor.shouldSuppressScheduledConjureHit(scheduledHit, simulationState)) {
+                    continue;
+                }
                 DamageResult result = null;
                 if (releaseStateByPlacementId.containsKey(scheduledHit.placementId())) {
                     RotationCombatState combatState = releaseStateByPlacementId.get(scheduledHit.placementId());
-                    HitRecalculationProcessor.applyBuffStateOverlay(scheduledHit.parentAbility(), simulationState.getState(), combatState);
-                    result = engine.calculateAbilityDamage(DamageRequestFactory.getDamageRequest(combatState,
-                            scheduledHit.parentAbility()), CalculationMode.HIT, scheduledHit.hitIndex());
+                    result = engine.calculateAbilityDamage(
+                            DamageRequestFactory.getDamageRequest(combatState, scheduledHit.parentAbility()),
+                            DamageRequestFactory.getDamageRequest(simulationState.getState(), scheduledHit.parentAbility()),
+                            CalculationMode.HIT, scheduledHit.hitIndex());
                 } else {
                     result = engine.calculateAbilityDamage(DamageRequestFactory.getDamageRequest(simulationState.getState(),
                             scheduledHit.parentAbility()), CalculationMode.HIT, scheduledHit.hitIndex());
@@ -77,7 +84,8 @@ public class HitLandingProcessor {
                             AbilityProvider.get(hitResult.getParentAbility(), state.getEquipment()).isChannel()
                     );
 
-                    if (timelineHit.getHitType() != HitType.PERFECTEQUILIBRIUM && !timelineHit.getParentAbility().isInternal()) {
+                    if (timelineHit.getHitType() != HitType.PERFECTEQUILIBRIUM &&
+                            (!timelineHit.getParentAbility().isInternal() || ConjureResolver.isConjureDamageHit(timelineHit.getParentAbility()))) {
                         baseTimelineHit = timelineHit;
                     }
 

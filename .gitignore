@@ -1,9 +1,23 @@
 HELP.md
-AGENTS.md
 target/
-.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+
+# Local agent/tool state
+.codex
+.agents
+
+# Accidental local scratch files
+/main
+tmp/
+
+# Database dump/export artifacts. Keep Flyway migrations under src/main/resources/db/migration tracked.
+*.dump
+*.backup
+*.bak
+database/*.sql
+frontend/*.sql
+
 .env
 .env.*
 .env.local

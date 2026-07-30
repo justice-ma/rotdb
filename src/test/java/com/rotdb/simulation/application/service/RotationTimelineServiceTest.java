@@ -2606,4 +2606,479 @@ public class RotationTimelineServiceTest {
         assertTrue(timeline.getTimeline().get(1).getLandedHits().getFirst().getHitAvgDamage() >
                 timeline.getTimeline().get(4).getLandedHits().getFirst().getHitAvgDamage());
     }
+
+    @Test
+    void conjureSkeletonWarrior_does_not_generate_rage_on_release() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement conjureSkeletonWarrior = new AbilityPlacement();
+        conjureSkeletonWarrior.setCastTick(0);
+        conjureSkeletonWarrior.setPlacedAbility(AbilityId.CONJURESKELETONWARRIOR);
+        abilities.add(conjureSkeletonWarrior);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertFalse(timeline.getTimeline().get(4).getEndingCombatState().getBuffs().has(BuffId.RAGE));
+    }
+
+    @Test
+    void conjureSkeletonWarrior_generates_rage_when_initial_hit_lands() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getEquipment().getOffhand().getEffect().add(Effect.NECROMANCY_CONDUIT);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement conjureSkeletonWarrior = new AbilityPlacement();
+        conjureSkeletonWarrior.setCastTick(0);
+        conjureSkeletonWarrior.setPlacedAbility(AbilityId.CONJURESKELETONWARRIOR);
+        abilities.add(conjureSkeletonWarrior);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(1, timeline.getTimeline().get(5).getEndingCombatState().getBuffs().stacks(BuffId.RAGE));
+    }
+
+    @Test
+    void conjureSkeletonWarrior_generates_rage_for_followup_hits() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getEquipment().getOffhand().getEffect().add(Effect.NECROMANCY_CONDUIT);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement conjureSkeletonWarrior = new AbilityPlacement();
+        conjureSkeletonWarrior.setCastTick(0);
+        conjureSkeletonWarrior.setPlacedAbility(AbilityId.CONJURESKELETONWARRIOR);
+        abilities.add(conjureSkeletonWarrior);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(2, timeline.getTimeline().get(10).getEndingCombatState().getBuffs().stacks(BuffId.RAGE));
+        assertEquals(3, timeline.getTimeline().get(15).getEndingCombatState().getBuffs().stacks(BuffId.RAGE));
+        assertEquals(4, timeline.getTimeline().get(20).getEndingCombatState().getBuffs().stacks(BuffId.RAGE));
+    }
+
+    @Test
+    void conjureSkeletonWarrior_rage_stacks_cap_at_25() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getEquipment().getOffhand().getEffect().add(Effect.NECROMANCY_CONDUIT);
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.RAGE, 22);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement conjureSkeletonWarrior = new AbilityPlacement();
+        conjureSkeletonWarrior.setCastTick(0);
+        conjureSkeletonWarrior.setPlacedAbility(AbilityId.CONJURESKELETONWARRIOR);
+        abilities.add(conjureSkeletonWarrior);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(24, timeline.getTimeline().get(10).getEndingCombatState().getBuffs().stacks(BuffId.RAGE));
+        assertEquals(25, timeline.getTimeline().get(15).getEndingCombatState().getBuffs().stacks(BuffId.RAGE));
+        assertEquals(25, timeline.getTimeline().get(20).getEndingCombatState().getBuffs().stacks(BuffId.RAGE));
+    }
+
+    @Test
+    void conjureSkeletonWarrior_followup_hits_stop_after_duration() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.RAGE, 22);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement conjureSkeletonWarrior = new AbilityPlacement();
+        conjureSkeletonWarrior.setCastTick(0);
+        conjureSkeletonWarrior.setPlacedAbility(AbilityId.CONJURESKELETONWARRIOR);
+        abilities.add(conjureSkeletonWarrior);
+
+        AbilityPlacement necromancyAuto = new AbilityPlacement();
+        necromancyAuto.setCastTick(75);
+        necromancyAuto.setPlacedAbility(AbilityId.NECROMANCYAUTO);
+        abilities.add(necromancyAuto);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        boolean success = true;
+        for (int i = 71; i < timeline.getTimeline().size(); i++) {
+            for (TimelineHit hit : timeline.getTimeline().get(i).getLandedHits()) {
+                if (hit.getParentAbility() == AbilityId.CONJURESKELETONWARRIOR) {
+                    success = false;
+                    break;
+                }
+            }
+        }
+
+        assertTrue(success);
+    }
+
+    @Test
+    void commandSkeleton_produces_10_landed_commandSkeletonWarriorHit_hits() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement commandSkeletonWarrior = new AbilityPlacement();
+        commandSkeletonWarrior.setCastTick(0);
+        commandSkeletonWarrior.setPlacedAbility(AbilityId.COMMANDSKELETONWARRIOR);
+        abilities.add(commandSkeletonWarrior);
+
+        AbilityPlacement necromancyAuto = new AbilityPlacement();
+        necromancyAuto.setCastTick(12);
+        necromancyAuto.setPlacedAbility(AbilityId.NECROMANCYAUTO);
+        abilities.add(necromancyAuto);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        int hits = 0;
+
+        for (TickSnapshot tick : timeline.getTimeline()) {
+            for (TimelineHit hit : tick.getLandedHits()) {
+                if (hit.getParentAbility() == AbilityId.COMMANDSKELETONWARRIORHIT) {
+                    hits++;
+                }
+            }
+        }
+
+        assertEquals(10, hits);
+    }
+
+    @Test
+    void commandSkeleton_initial_hit_lands_t1() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement commandSkeletonWarrior = new AbilityPlacement();
+        commandSkeletonWarrior.setCastTick(0);
+        commandSkeletonWarrior.setPlacedAbility(AbilityId.COMMANDSKELETONWARRIOR);
+        abilities.add(commandSkeletonWarrior);
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(1, timeline.getTimeline().get(1).getLandedHits().size());
+        assertEquals(AbilityId.COMMANDSKELETONWARRIORHIT, timeline.getTimeline().get(1).getLandedHits().getFirst().getParentAbility());
+    }
+
+    @Test
+    void commandSkeleton_generates_rage_each_landing_tick() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getEquipment().getOffhand().getEffect().add(Effect.NECROMANCY_CONDUIT);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement conjureSkeleton = new AbilityPlacement();
+        conjureSkeleton.setCastTick(0);
+        conjureSkeleton.setPlacedAbility(AbilityId.CONJURESKELETONWARRIOR);
+        abilities.add(conjureSkeleton);
+
+        AbilityPlacement commandSkeletonWarrior = new AbilityPlacement();
+        commandSkeletonWarrior.setCastTick(5);
+        commandSkeletonWarrior.setPlacedAbility(AbilityId.COMMANDSKELETONWARRIOR);
+        abilities.add(commandSkeletonWarrior);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(2, timeline.getTimeline().get(6).getEndingCombatState().getBuffs().stacks(BuffId.RAGE));
+        assertEquals(3, timeline.getTimeline().get(7).getEndingCombatState().getBuffs().stacks(BuffId.RAGE));
+        assertEquals(4, timeline.getTimeline().get(8).getEndingCombatState().getBuffs().stacks(BuffId.RAGE));
+        assertEquals(5, timeline.getTimeline().get(9).getEndingCombatState().getBuffs().stacks(BuffId.RAGE));
+        assertEquals(6, timeline.getTimeline().get(10).getEndingCombatState().getBuffs().stacks(BuffId.RAGE));
+        assertEquals(7, timeline.getTimeline().get(11).getEndingCombatState().getBuffs().stacks(BuffId.RAGE));
+        assertEquals(8, timeline.getTimeline().get(12).getEndingCombatState().getBuffs().stacks(BuffId.RAGE));
+        assertEquals(9, timeline.getTimeline().get(13).getEndingCombatState().getBuffs().stacks(BuffId.RAGE));
+        assertEquals(10, timeline.getTimeline().get(14).getEndingCombatState().getBuffs().stacks(BuffId.RAGE));
+    }
+
+    @Test
+    void commandSkeleton_suppresses_conjureSkeleton_hits() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement conjureSkeletonWarrior = new AbilityPlacement();
+        conjureSkeletonWarrior.setCastTick(0);
+        conjureSkeletonWarrior.setPlacedAbility(AbilityId.CONJURESKELETONWARRIOR);
+        abilities.add(conjureSkeletonWarrior);
+
+        AbilityPlacement commandSkeletonWarrior = new AbilityPlacement();
+        commandSkeletonWarrior.setCastTick(6);
+        commandSkeletonWarrior.setPlacedAbility(AbilityId.COMMANDSKELETONWARRIOR);
+        abilities.add(commandSkeletonWarrior);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        boolean success = true;
+        for (TickSnapshot tick : timeline.getTimeline()) {
+            for (TimelineHit hit : tick.getLandedHits()) {
+                if (hit.getParentAbility() == AbilityId.CONJURESKELETONWARRIOR && tick.getStartingCombatState().getBuffs().has(BuffId.COMMANDSKELETONWARRIOR)) {
+                    success = false;
+                }
+            }
+        }
+
+        assertTrue(success);
+    }
+
+    @Test
+    void conjureSkeleton_hits_resume_after_commandSkeleton_expiry() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement conjureSkeletonWarrior = new AbilityPlacement();
+        conjureSkeletonWarrior.setCastTick(0);
+        conjureSkeletonWarrior.setPlacedAbility(AbilityId.CONJURESKELETONWARRIOR);
+        abilities.add(conjureSkeletonWarrior);
+
+        AbilityPlacement commandSkeletonWarrior = new AbilityPlacement();
+        commandSkeletonWarrior.setCastTick(3);
+        commandSkeletonWarrior.setPlacedAbility(AbilityId.COMMANDSKELETONWARRIOR);
+        abilities.add(commandSkeletonWarrior);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        int conjureSkeletonWarriorHits = 0;
+        for (int i = 0; i < timeline.getTimeline().size(); i++) {
+            for(TimelineHit hit : timeline.getTimeline().get(i).getLandedHits()) {
+                if (hit.getParentAbility() == AbilityId.CONJURESKELETONWARRIOR) {
+                    conjureSkeletonWarriorHits++;
+                }
+            }
+        }
+
+        assertTrue(conjureSkeletonWarriorHits > 0);
+    }
+
+    @Test
+    void rage_stacks_cap_at_25_from_commandSkeletonHits() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getEquipment().getOffhand().getEffect().add(Effect.NECROMANCY_CONDUIT);
+        rotationCombatState.getBuffs().getBuffStacks().put(BuffId.RAGE, 22);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement conjureSkeletonWarrior = new AbilityPlacement();
+        conjureSkeletonWarrior.setCastTick(0);
+        conjureSkeletonWarrior.setPlacedAbility(AbilityId.CONJURESKELETONWARRIOR);
+        abilities.add(conjureSkeletonWarrior);
+
+        AbilityPlacement commandSkeletonWarrior = new AbilityPlacement();
+        commandSkeletonWarrior.setCastTick(3);
+        commandSkeletonWarrior.setPlacedAbility(AbilityId.COMMANDSKELETONWARRIOR);
+        abilities.add(commandSkeletonWarrior);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(25, timeline.getTimeline().get(10).getEndingCombatState().getBuffs().stacks(BuffId.RAGE));
+    }
+
+    @Test
+    void conjurePutridZombie_schedules_both_internal_hit_sources() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getEquipment().getOffhand().getEffect().add(Effect.NECROMANCY_CONDUIT);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement conjurePutridZombie = new AbilityPlacement();
+        conjurePutridZombie.setCastTick(0);
+        conjurePutridZombie.setPlacedAbility(AbilityId.CONJUREPUTRIDZOMBIE);
+        abilities.add(conjurePutridZombie);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(AbilityId.PUTRIDZOMBIEPOISON, timeline.getTimeline().get(3).getLandedHits().getFirst().getParentAbility());
+        assertEquals(AbilityId.PUTRIDZOMBIEPOISON, timeline.getTimeline().get(6).getLandedHits().get(1).getParentAbility());
+        assertEquals(AbilityId.PUTRIDZOMBIEHIT, timeline.getTimeline().get(6).getLandedHits().getFirst().getParentAbility());
+    }
+
+    @Test
+    void putridZombiePoison_starts_at_tick_3() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getEquipment().getOffhand().getEffect().add(Effect.NECROMANCY_CONDUIT);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement conjurePutridZombie = new AbilityPlacement();
+        conjurePutridZombie.setCastTick(0);
+        conjurePutridZombie.setPlacedAbility(AbilityId.CONJUREPUTRIDZOMBIE);
+        abilities.add(conjurePutridZombie);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(AbilityId.PUTRIDZOMBIEPOISON, timeline.getTimeline().get(3).getLandedHits().getFirst().getParentAbility());
+    }
+
+    @Test
+    void putridZombieHit_starts_at_tick_6() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getEquipment().getOffhand().getEffect().add(Effect.NECROMANCY_CONDUIT);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement conjurePutridZombie = new AbilityPlacement();
+        conjurePutridZombie.setCastTick(0);
+        conjurePutridZombie.setPlacedAbility(AbilityId.CONJUREPUTRIDZOMBIE);
+        abilities.add(conjurePutridZombie);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(AbilityId.PUTRIDZOMBIEHIT, timeline.getTimeline().get(6).getLandedHits().getFirst().getParentAbility());
+    }
+
+    @Test
+    void putridZombie_damage_recurs_until_expiry() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement conjurePutridZombie = new AbilityPlacement();
+        conjurePutridZombie.setCastTick(0);
+        conjurePutridZombie.setPlacedAbility(AbilityId.CONJUREPUTRIDZOMBIE);
+        abilities.add(conjurePutridZombie);
+
+        AbilityPlacement necromancyAuto = new AbilityPlacement();
+        necromancyAuto.setCastTick(100);
+        necromancyAuto.setPlacedAbility(AbilityId.NECROMANCYAUTO);
+        abilities.add(necromancyAuto);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        boolean success = true;
+        for (int i = 71; i < timeline.getTimeline().size(); i++) {
+            for (TimelineHit hit : timeline.getTimeline().get(i).getLandedHits()) {
+                if (hit.getParentAbility() == AbilityId.PUTRIDZOMBIEHIT || hit.getParentAbility() == AbilityId.PUTRIDZOMBIEPOISON) {
+                    success = false;
+                    break;
+                }
+            }
+        }
+
+        assertTrue(success);
+    }
+
+    @Test
+    void putridZombie_release_damage_not_double_counted() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getEquipment().getOffhand().getEffect().add(Effect.NECROMANCY_CONDUIT);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement conjurePutridZombie = new AbilityPlacement();
+        conjurePutridZombie.setCastTick(0);
+        conjurePutridZombie.setPlacedAbility(AbilityId.CONJUREPUTRIDZOMBIE);
+        abilities.add(conjurePutridZombie);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(1, timeline.getTimeline().get(3).getLandedHits().size());
+        assertEquals(2, timeline.getTimeline().get(6).getLandedHits().size());
+    }
+
+    @Test
+    void vengefulGhost_creates_recurring_hits() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+        rotationCombatState.getEquipment().getOffhand().getEffect().add(Effect.NECROMANCY_CONDUIT);
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement conjureVengefulGhost = new AbilityPlacement();
+        conjureVengefulGhost.setCastTick(0);
+        conjureVengefulGhost.setPlacedAbility(AbilityId.CONJUREVENGEFULGHOST);
+        abilities.add(conjureVengefulGhost);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        int vengefulGhostHits = 0;
+        for (TickSnapshot tick : timeline.getTimeline()) {
+            for (TimelineHit hit : tick.getLandedHits()) {
+                if (hit.getParentAbility() == AbilityId.CONJUREVENGEFULGHOST) vengefulGhostHits++;
+            }
+        }
+
+        assertTrue(vengefulGhostHits > 2);
+    }
+
+    @Test
+    void vengefulGhost_first_hit_timing_is_t7() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement conjureVengefulGhost = new AbilityPlacement();
+        conjureVengefulGhost.setCastTick(0);
+        conjureVengefulGhost.setPlacedAbility(AbilityId.CONJUREVENGEFULGHOST);
+        abilities.add(conjureVengefulGhost);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        assertEquals(AbilityId.CONJUREVENGEFULGHOST, timeline.getTimeline().get(7).getLandedHits().getFirst().getParentAbility());
+    }
+
+    @Test
+    void vengefulGhost_hits_stop_after_expiry() {
+        RotationCombatState rotationCombatState = sampleNecromancyState();
+
+        List<AbilityPlacement> abilities = new ArrayList<>();
+        List<BuffPlacement> buffs = new ArrayList<>();
+
+        AbilityPlacement conjureVengefulGhost = new AbilityPlacement();
+        conjureVengefulGhost.setCastTick(0);
+        conjureVengefulGhost.setPlacedAbility(AbilityId.CONJUREVENGEFULGHOST);
+        abilities.add(conjureVengefulGhost);
+
+        AbilityPlacement necromancyAuto = new AbilityPlacement();
+        necromancyAuto.setCastTick(100);
+        necromancyAuto.setPlacedAbility(AbilityId.NECROMANCYAUTO);
+        abilities.add(necromancyAuto);
+
+        RotationTimeline timeline = new RotationTimelineService(engine, copier)
+                .build(rotationCombatState, abilities, buffs);
+
+        boolean success = true;
+        for (int i = 71; i < timeline.getTimeline().size(); i++) {
+            for (TimelineHit hit : timeline.getTimeline().get(i).getLandedHits()) {
+                if (hit.getParentAbility() == AbilityId.CONJUREVENGEFULGHOST) {
+                    success = false;
+                    break;
+                }
+            }
+        }
+
+        assertTrue(success);
+    }
 }

@@ -1,5 +1,6 @@
 package com.rotdb.calculation.domain.modifiers.injectors;
 
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.shared.ability.AbilityId;
@@ -10,7 +11,9 @@ import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import java.util.List;
 
 public class SoulInjector implements Modifier {
-    public void apply(CalculationContext context) {
+    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
+        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
+
         if (context.getAbility().getId() == AbilityId.VOLLEYOFSOULS) {
             List<AbilityHitsContext> hits = context.getAbility().getHits();
             if (context.getBuffs().has(BuffId.SOULSTACKS) && context.getBuffs().stacks(BuffId.SOULSTACKS) >= 2) {

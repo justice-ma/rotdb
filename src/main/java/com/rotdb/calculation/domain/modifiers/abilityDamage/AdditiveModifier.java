@@ -1,5 +1,6 @@
 package com.rotdb.calculation.domain.modifiers.abilityDamage;
 
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.resolvers.Debug;
@@ -7,7 +8,8 @@ import com.rotdb.calculation.domain.resolvers.abilityDamage.additive.AdditiveRes
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 
 public class AdditiveModifier implements Modifier {
-    public void apply(CalculationContext context) {
+    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
+        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
 
         int hits = context.getAbility().getHits().size();
         if (context.debug) Debug.stageHeader(context, "Additive Modifier");

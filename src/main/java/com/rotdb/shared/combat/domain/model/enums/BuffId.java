@@ -115,7 +115,10 @@ public enum BuffId {
     DEATHESSENCE(0, 0, false, "Death Essence"),
     DEATHSPORESTACKS(0, 12, true, "Deathspore Stacks"),
     FEASTINGSPORES(0, 0, false, "Deathspore Proc"),
-    INCITEFEARSTACKS(0, 5, true, "Incite Fear Stacks");
+    INCITEFEARSTACKS(0, 5, true, "Incite Fear Stacks"),
+    SKELETONWARRIORDURATION(0, 0, false, "Skeleton Warrior Duration"),
+    PUTRIDZOMBIEDURATION(0, 0, false, "Putrid Zombie Duration"),
+    VENGEFULGHOSTDURATION(0, 0, false, "Vengeful Ghost Duration");
 
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;

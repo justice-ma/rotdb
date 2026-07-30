@@ -1,5 +1,6 @@
 package com.rotdb.calculation.domain.modifiers.baseDamage;
 
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.resolvers.baseAbilityDamage.MagicBaseDamageResolver;
@@ -13,7 +14,9 @@ import com.rotdb.shared.combat.domain.model.enums.Perks;
 
 public final class BaseAbilityDamageModifier implements Modifier {
     @Override
-    public void apply(CalculationContext context) {
+    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
+        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
+
         var equipment = context.getEquipment();
         if (equipment.getMainhand() == null) {
             throw new IllegalStateException("Mainhand is required for ability damage");

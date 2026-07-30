@@ -6,6 +6,7 @@ import com.rotdb.calculation.application.validation.PrayerRequestValidator;
 import com.rotdb.calculation.domain.model.DamageRequest;
 import com.rotdb.calculation.domain.model.DamageResult;
 import com.rotdb.calculation.domain.model.HitResult;
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.model.context.ContextBuilder;
 import com.rotdb.calculation.domain.model.context.DamageContext;
@@ -23,28 +24,55 @@ public final class CalculationEngine {
     private final DamageRequestValidator validator = new DamageRequestValidator();
     private final PrayerRequestValidator prayerValidator = new PrayerRequestValidator();
 
-    public DamageResult calculateAbilityDamage(DamageRequest request, CalculationMode mode, Integer hitIndex) {
-        validator.validate(request);
-        request = normalizer.normalize(request);
+    public DamageResult calculateAbilityDamage(DamageRequest snapshotRequest,
+                                               DamageRequest liveRequest, CalculationMode mode,
+                                               Integer hitIndex) {
+        validator.validate(snapshotRequest);
+        snapshotRequest = normalizer.normalize(snapshotRequest);
 
-        CalculationContext context = ContextBuilder.build(request);
+        if (liveRequest == null) {
+            liveRequest = normalizer.normalize(snapshotRequest);
+        } else {
+            liveRequest = normalizer.normalize(liveRequest);
+        }
+
+        CalculationContext snapshotContext = ContextBuilder.build(snapshotRequest);
+        CalculationContext liveContext = ContextBuilder.build(liveRequest);
 
         if (mode == CalculationMode.HIT) {
-            CalculationContext newContext = ContextBuilder.build(request);
-            List<AbilityHitsContext> hits = newContext.getAbility().getHits();
+            CalculationContext newSnapshotContext = ContextBuilder.build(snapshotRequest);
+            List<AbilityHitsContext> hits = newSnapshotContext.getAbility().getHits();
             List<AbilityHitsContext> newHits = new ArrayList<>(List.of(hits.get(hitIndex)));
-            newContext.getAbility().setHits(newHits);
+            newSnapshotContext.getAbility().setHits(newHits);
 
-            prayerValidator.validatePrayers(newContext.getSelectedPrayers());
+            CalculationContext newLiveContext = ContextBuilder.build(liveRequest);
+            List<AbilityHitsContext> liveHits = newLiveContext.getAbility().getHits();
+            List<AbilityHitsContext> newLiveHits = new ArrayList<>(List.of(liveHits.get(hitIndex)));
+            newLiveContext.getAbility().setHits(newLiveHits);
 
-            abilityPipeline.run(newContext);
-            return mapToResult(newContext);
+            AggregatedCalculationContext hitModeAggregatedCalculationContext = new AggregatedCalculationContext(
+                    newSnapshotContext,
+                    newLiveContext
+            );
+
+            prayerValidator.validatePrayers(newSnapshotContext.getSelectedPrayers());
+
+            abilityPipeline.run(hitModeAggregatedCalculationContext);
+            return mapToResult(newSnapshotContext);
         } else {
-            prayerValidator.validatePrayers(context.getSelectedPrayers());
+            AggregatedCalculationContext aggregatedCalculationContext = new AggregatedCalculationContext(
+                    snapshotContext,
+                    liveContext
+            );
+            prayerValidator.validatePrayers(snapshotContext.getSelectedPrayers());
 
-            abilityPipeline.run(context);
-            return mapToResult(context);
+            abilityPipeline.run(aggregatedCalculationContext);
+            return mapToResult(snapshotContext);
         }
+    }
+
+    public DamageResult calculateAbilityDamage(DamageRequest snapshotRequest, CalculationMode mode, Integer hitIndex) {
+        return calculateAbilityDamage(snapshotRequest, null, mode, hitIndex);
     }
 
     public DamageResult mapToResult(CalculationContext context) {

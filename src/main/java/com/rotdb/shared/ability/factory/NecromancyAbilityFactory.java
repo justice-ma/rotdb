@@ -7,6 +7,7 @@ import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.DamageCalculationTiming;
 
 import java.util.List;
 
@@ -32,17 +33,25 @@ public class NecromancyAbilityFactory {
     }
 
     public static AbilityContext conjureSkeletonWarrior() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.SKELETONWARRIORDURATION,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(0.22, 0.28, false, CONJURE, 4)),
+                List.of(new AbilityHitsContext(0.22, 0.28, false, CONJURE, 5)),
                 "Conjure Skeleton Warrior",
                 0,
-                0,
+                6,
                 false,
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.NECROMANCY,
                 CONJURESKELETONWARRIOR,
-                false);
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_CAST,
+                false,
+                DamageCalculationTiming.ON_RELEASE);
     }
 
     public static AbilityContext commandSkeletonWarrior() {
@@ -160,6 +169,11 @@ public class NecromancyAbilityFactory {
     }
 
     public static AbilityContext conjurePutridZombie() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.PUTRIDZOMBIEDURATION,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(2,
                 List.of(new AbilityHitsContext(0.18, 0.22, false, CONJURE, 6),
                         new AbilityHitsContext(0.08, 0.12, false, CONJURE, 3)),
@@ -171,6 +185,8 @@ public class NecromancyAbilityFactory {
                 SINGLE_TARGET,
                 CombatStyles.NECROMANCY,
                 CONJUREPUTRIDZOMBIE,
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_RELEASE,
                 false);
     }
 
@@ -189,6 +205,11 @@ public class NecromancyAbilityFactory {
     }
 
     public static AbilityContext conjureVengefulGhost() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.VENGEFULGHOSTDURATION,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(0.18, 0.22, false, CONJURE, 7)),
                 "Conjure Vengeful Ghost",
@@ -199,6 +220,8 @@ public class NecromancyAbilityFactory {
                 SINGLE_TARGET,
                 CombatStyles.NECROMANCY,
                 CONJUREVENGEFULGHOST,
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_RELEASE,
                 false);
     }
 

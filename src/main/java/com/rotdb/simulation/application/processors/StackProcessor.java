@@ -59,8 +59,20 @@ public class StackProcessor {
     public static List<BuffDefinition> applyOnHitStacks(AbilityPlacement abilityPlacement, SimulationState state,
                                                         TimelineHit hit) {
         List<BuffDefinition> buffs = new ArrayList<>();
-        AbilityContext ability = AbilityProvider.get(abilityPlacement.getPlacedAbility(), state.getState().getEquipment());
+        AbilityContext ability = AbilityProvider.get(hit.getParentAbility(), state.getState().getEquipment());
         for (StackEffect stackEffect : StackResolver.resolveOnHit(state, ability, hit)) {
+            if (ProcProcessor.determineProc(state.getSimulationConfig().getProcMode(), stackEffect.getProcChance(), state, stackEffect.getBuffId())) {
+                buffs.add(processProc(stackEffect, state));
+            }
+        }
+        return buffs;
+    }
+
+    public static List<BuffDefinition> applyResolvedHitLandingStacks(AbilityPlacement abilityPlacement, SimulationState state,
+                                                                     TimelineHit hit) {
+        List<BuffDefinition> buffs = new ArrayList<>();
+        AbilityContext ability = AbilityProvider.get(abilityPlacement.getPlacedAbility(), state.getState().getEquipment());
+        for (StackEffect stackEffect : StackResolver.resolveResolvedHitLanding(state, ability, hit)) {
             if (ProcProcessor.determineProc(state.getSimulationConfig().getProcMode(), stackEffect.getProcChance(), state, stackEffect.getBuffId())) {
                 buffs.add(processProc(stackEffect, state));
             }

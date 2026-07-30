@@ -1,5 +1,6 @@
 package com.rotdb.calculation.domain.modifiers.stats;
 
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
@@ -7,7 +8,9 @@ import com.rotdb.shared.combat.domain.model.player.BuffContext;
 import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 
 public class DbaStatBoostModifier implements Modifier {
-    public void apply(CalculationContext context) {
+    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
+        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
+
         BuffContext buffs = context.getBuffs();
         SkillsContext skill = context.getSkills();
         if (buffs.has(BuffId.DBA)) {

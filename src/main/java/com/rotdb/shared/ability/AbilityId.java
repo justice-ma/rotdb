@@ -67,8 +67,8 @@ public enum AbilityId {
     SHADOWTENDRILS(RANGED, ENHANCED, "Shadow Tendrils", "/ability_icons/shadow-tendrils.png"),
 
     NECROMANCYAUTO(NECROMANCY, BASIC, "Necromancy", "/ability_icons/necromancy.png"),
-    CONJURESKELETONWARRIOR(NECROMANCY, CONJURE, "Conjure Skeleton Warrior", "/ability_icons/conjure-skeleton-warrior.png"),
-    COMMANDSKELETONWARRIOR(NECROMANCY, CONJURE, "Command Skeleton Warrior", "/ability_icons/command-skeleton-warrior.png"),
+    CONJURESKELETONWARRIOR(NECROMANCY, CONJURE, "Conjure Skeleton Warrior", "/ability_icons/conjure-skeleton-warrior.png", AbilityCooldownGroup.SKELETON_WARRIOR),
+    COMMANDSKELETONWARRIOR(NECROMANCY, CONJURE, "Command Skeleton Warrior", "/ability_icons/command-skeleton-warrior.png", AbilityCooldownGroup.SKELETON_WARRIOR),
     FINGEROFDEATH(NECROMANCY, ENHANCED, "Finger of Death", "/ability_icons/finger-of-death.png"),
     TOUCHOFDEATH(NECROMANCY, BASIC, "Touch of Death", "/ability_icons/touch-of-death.png"),
     DEATHSKULLS(NECROMANCY, ULTIMATE, "Death Skulls", "/ability_icons/death-skulls.png", AbilityCooldownGroup.DEATH_SKULLS),
@@ -156,7 +156,10 @@ public enum AbilityId {
     SOULCRUSH(NECROMANCY, SPECIAL, "Soul Crush", "special_attack_weapon_icons/devourer-s-guard.png", true),
     DEATHESSENCE(NECROMANCY, SPECIAL, "Death Essence", "special_attack_weapon_icons/omni-guard.png", true),
 
-    INCITEFEARPROC(MAGIC, BASIC, "Incite Fear Proc", null, false, null, false, true);
+    INCITEFEARPROC(MAGIC, BASIC, "Incite Fear Proc", null, false, null, false, true),
+    COMMANDSKELETONWARRIORHIT(NECROMANCY, CONJURE, "Command Skeleton Warrior Hit", null, false, null, false, true),
+    PUTRIDZOMBIEHIT(NECROMANCY, CONJURE, "Putrid Zombie Hit", null, false, null, false, true),
+    PUTRIDZOMBIEPOISON(NECROMANCY, CONJURE, "Putrid Zombie Poison", null, false, null, false, true);
 
     private final CombatStyles style;
     private final AbilityTier tier;

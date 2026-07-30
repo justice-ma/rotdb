@@ -1,5 +1,6 @@
 package com.rotdb.calculation.domain.modifiers.injectors;
 
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.modifiers.abilityDamage.*;
@@ -34,7 +35,9 @@ public class PerfectEquilibriumInjector implements Modifier {
     );
 
     @Override
-    public void apply(CalculationContext context) {
+    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
+        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
+
         if (context.getAbility().getCombatStyle() != CombatStyles.RANGED) return;
 
         EquipmentSlot mh = context.getEquipment().getMainhand();
@@ -83,9 +86,9 @@ public class PerfectEquilibriumInjector implements Modifier {
                     continue;
                 }
 
-                int[] worldMin = runProcPreCrit(context, baseDamage, triggerMin);
+                int[] worldMin = runProcPreCrit(aggregatedCalculationContext, baseDamage, triggerMin);
 
-                int[] worldMax = runProcPreCrit(context, baseDamage, triggerMax);
+                int[] worldMax = runProcPreCrit(aggregatedCalculationContext, baseDamage, triggerMax);
 
                 int procMin = worldMin[0];
                 int procMax = worldMax[1];
@@ -136,7 +139,9 @@ public class PerfectEquilibriumInjector implements Modifier {
         }
     }
 
-    private int[] runProcPreCrit(CalculationContext context, int baseDamage, int triggerX) {
+    private int[] runProcPreCrit(AggregatedCalculationContext aggregatedCalculationContext, int baseDamage, int triggerX) {
+        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
+
         // Build proc multipliers for THIS world (trigger fixed to X)
         double procMinMult = (((double) triggerX / baseDamage) * 0.33) + 0.12;
         double procMaxMult = (((double) triggerX / baseDamage) * 0.37) + 0.16;
@@ -154,7 +159,7 @@ public class PerfectEquilibriumInjector implements Modifier {
             context.setAbility(tmpAbility);
 
             for (Modifier m : PRE_CRIT_PIPELINE) {
-                m.apply(context);
+                m.apply(aggregatedCalculationContext);
             }
 
             // After pre-crit pipeline, these should be populated

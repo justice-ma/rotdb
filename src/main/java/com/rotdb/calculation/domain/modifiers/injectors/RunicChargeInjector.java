@@ -1,5 +1,6 @@
 package com.rotdb.calculation.domain.modifiers.injectors;
 
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.shared.ability.AbilityId;
@@ -9,7 +10,8 @@ import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import java.util.List;
 
 public class RunicChargeInjector implements Modifier {
-    public void apply(CalculationContext context) {
+    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
+        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
         if (context.getBuffs().has(BuffId.RUNICCHARGE) && context.getAbility().getId() == AbilityId.DRAGONBREATH) {
             List<AbilityHitsContext> hits = context.getAbility().getHits();
             hits.getFirst().setMin(2.6);

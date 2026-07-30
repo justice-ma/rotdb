@@ -1,5 +1,6 @@
 package com.rotdb.calculation.domain.modifiers.abilityDamage;
 
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.resolvers.Debug;
@@ -8,10 +9,12 @@ import com.rotdb.calculation.domain.resolvers.abilityDamage.abilityRange.Ability
 import com.rotdb.calculation.domain.resolvers.abilityDamage.abilityRange.AbilityRangeBonusResolver;
 
 public class AbilityRangeModifier implements Modifier {
-    public void apply(CalculationContext context) {
-        if (context.debug) Debug.stageHeader(context, "Ability Range Modifier");
-        AbilityRangeBonus bonus = AbilityRangeBonusResolver.resolve(context);
-        var hits = context.getAbility().getHits();
+    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
+        CalculationContext snapshotContext = aggregatedCalculationContext.getSnapshotContext();
+        CalculationContext liveContext = aggregatedCalculationContext.getLiveOrSnapshotContext();
+        if (snapshotContext.debug) Debug.stageHeader(snapshotContext, "Ability Range Modifier");
+        AbilityRangeBonus bonus = AbilityRangeBonusResolver.resolve(snapshotContext, liveContext);
+        var hits = snapshotContext.getAbility().getHits();
 
         for (int i = 0; i < hits.size(); i++) {
             AbilityHitsContext hit = hits.get(i);
@@ -23,16 +26,16 @@ public class AbilityRangeModifier implements Modifier {
             }
 
             if (!hit.isRangeCalculated() || hit.isNeedsRangeRecalc()) {
-                hit.setCurrentMin((int) (context.getDamage().getBaseDamage() * hit.getMin()));
-                hit.setCurrentMax((int) (context.getDamage().getBaseDamage() * hit.getMax()));
+                hit.setCurrentMin((int) (snapshotContext.getDamage().getBaseDamage() * hit.getMin()));
+                hit.setCurrentMax((int) (snapshotContext.getDamage().getBaseDamage() * hit.getMax()));
                 hit.setCurrentDamage((hit.getCurrentMin() + hit.getCurrentMax()) / 2);
 
                 hit.setRangeCalculated(true);
                 hit.setNeedsRangeRecalc(false);
             }
 
-            if (context.debug) Debug.stageRow(context, i, hit);
+            if (snapshotContext.debug) Debug.stageRow(snapshotContext, i, hit);
         }
-        if (context.debug) Debug.stageFooter(context);
+        if (snapshotContext.debug) Debug.stageFooter(snapshotContext);
     }
 }

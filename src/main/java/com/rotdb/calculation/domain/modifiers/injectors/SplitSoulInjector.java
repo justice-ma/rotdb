@@ -1,6 +1,7 @@
 package com.rotdb.calculation.domain.modifiers.injectors;
 
 import com.rotdb.calculation.calculator.SoulSplitCalculator;
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.resolvers.Debug;
@@ -17,7 +18,9 @@ import static com.rotdb.shared.combat.domain.model.enums.HitType.SPLITSOUL;
 
 public class SplitSoulInjector implements Modifier {
     @Override
-    public void apply(CalculationContext context) {
+    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
+        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
+
         if (!context.getBuffs().has(BuffId.SPLITSOUL)) return;
 
         CombatStyles style = context.getAbility().getCombatStyle();

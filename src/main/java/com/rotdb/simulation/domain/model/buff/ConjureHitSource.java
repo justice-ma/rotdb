@@ -1,4 +1,4 @@
-package com.rotdb.simulation.domain.resolvers.buff;
+package com.rotdb.simulation.domain.model.buff;
 
 import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;

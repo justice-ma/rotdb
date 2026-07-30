@@ -84,6 +84,7 @@ public final class BuffProvider {
             case SPLITSOUL -> UserPlacedBuffDefinitionFactory.splitSoul();
             case COMMANDSKELETONWARRIOR -> UserPlacedBuffDefinitionFactory.commandSkeletonWarrior();
 
+
             default -> throw new IllegalArgumentException("Unknown " + BuffSource.USER_PLACED + " buff type: " + id);
         };
     }
@@ -121,6 +122,10 @@ public final class BuffProvider {
             case SUNFALLSLAM -> AbilityGeneratedBuffDefinitionFactory.sunfallSlam();
             case SOULCRUSH -> AbilityGeneratedBuffDefinitionFactory.soulCrush();
             case DEATHESSENCE -> AbilityGeneratedBuffDefinitionFactory.deathEssence();
+            case SKELETONWARRIORDURATION -> AbilityGeneratedBuffDefinitionFactory.skeletonWarriorDuration();
+            case COMMANDSKELETONWARRIOR -> AbilityGeneratedBuffDefinitionFactory.commandSkeletonWarrior();
+            case VENGEFULGHOSTDURATION -> AbilityGeneratedBuffDefinitionFactory.vengefulGhostDuration();
+            case PUTRIDZOMBIEDURATION -> AbilityGeneratedBuffDefinitionFactory.putridZombieDuration();
 
             default -> throw new IllegalArgumentException("Unknown " + BuffSource.ABILITY_GENERATED + " buff type: " + id);
         };

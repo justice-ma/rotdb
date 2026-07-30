@@ -1,5 +1,6 @@
 package com.rotdb.calculation.domain.modifiers.injectors;
 
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike.CritDamageRangeResolver;
@@ -14,7 +15,9 @@ import java.util.List;
 import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.MAGIC;
 
 public class InstabilityInjector implements Modifier {
-    public void apply(CalculationContext context) {
+    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
+        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
+
         if (!context.getBuffs().has(BuffId.INSTABILITY)) return;
         if (context.getAbility().getCombatStyle() != MAGIC) return;
 

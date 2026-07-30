@@ -41,7 +41,7 @@ public class BuffProcessor {
                 initializeBuffDuration(buffDefinition.getBuffId(), state, buffDefinition, null);
                 addToBuffSet(state, buffDefinition);
             }
-            case UNTIL_CONSUMED -> {
+            case UNTIL_CONSUMED, PASSIVE -> {
                 addToBuffSet(state, buffDefinition);
             }
         }
@@ -175,6 +175,10 @@ public class BuffProcessor {
                 iterator.remove();
                 BuffDefinition buffDefinition = BuffProvider.get(entry.getKey(), entry.getValue().getSource(), state);
                 clearStaleBuffState(state, buffDefinition, entry.getKey());
+                BuffDefinition conjureStaleBuff = ConjureResolver.resolveBuffsRemovedWithExpiredConjure(buffDefinition.getBuffId(), state);
+                if (conjureStaleBuff != null) {
+                    clearStaleBuffState(state, conjureStaleBuff, conjureStaleBuff.getBuffId());
+                }
                 for (BuffId expiredStack : StackResolver.resolveStacksRemovedWithExpiredBuff(entry.getKey())) {
                     if (expiredStack != null) {
                         state.getState().getBuffs().getBuffStacks().remove(expiredStack);

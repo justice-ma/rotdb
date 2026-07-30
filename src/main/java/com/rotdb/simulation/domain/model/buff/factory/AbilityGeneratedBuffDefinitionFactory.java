@@ -153,6 +153,22 @@ public class AbilityGeneratedBuffDefinitionFactory {
         return create(BuffId.GALES, BuffLifecycle.TIMED, 10, 34);
     }
 
+    public static BuffDefinition skeletonWarriorDuration() {
+        return create(BuffId.SKELETONWARRIORDURATION, BuffLifecycle.TIMED, 70, null);
+    }
+
+    public static BuffDefinition commandSkeletonWarrior() {
+        return create(BuffId.COMMANDSKELETONWARRIOR, BuffLifecycle.TIMED, 10, 25);
+    }
+
+    public static BuffDefinition putridZombieDuration() {
+        return create(BuffId.PUTRIDZOMBIEDURATION, BuffLifecycle.TIMED, 70, null);
+    }
+
+    public static BuffDefinition vengefulGhostDuration() {
+        return create(BuffId.VENGEFULGHOSTDURATION, BuffLifecycle.TIMED, 70, null);
+    }
+
     private static BuffDefinition create(BuffId id, BuffLifecycle lifecycle, Integer duration, Integer cooldown) {
         return new BuffDefinition(
                 id,

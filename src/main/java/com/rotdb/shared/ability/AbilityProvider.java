@@ -176,6 +176,9 @@ public final class AbilityProvider {
 
             // Internal Abilities
             case INCITEFEARPROC -> InternalAbilityFactory.inciteFearProc();
+            case COMMANDSKELETONWARRIORHIT -> InternalAbilityFactory.commandSkeletonWarriorHit();
+            case PUTRIDZOMBIEHIT -> InternalAbilityFactory.putridZombieHit();
+            case PUTRIDZOMBIEPOISON -> InternalAbilityFactory.putridZombiePoison();
         };
     }
 

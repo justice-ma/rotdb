@@ -70,6 +70,7 @@ public class RotationTimelineService {
         Map<Integer, AbilityPlacement> placementIdMap = new HashMap<>();
         Map<Integer, List<AbilityPlacement>> abilitiesByCompletionTick = new HashMap<>();
         Map<Integer, RotationCombatState> releaseStateByPlacementId = new HashMap<>();
+        boolean initialBuffStateContainsHaunted = simulationState.getState().getTarget().getDebuffs().contains(BuffId.HAUNTED);
 
         int placementId = 0;
         for (AbilityPlacement abilityPlacement : abilityPlacements) {
@@ -103,6 +104,13 @@ public class RotationTimelineService {
             TickSnapshot tickSnapshot = initializeTickSnapshot(startingStateSnapshot, tick);
             double adrenalineDelta = 0;
             boolean vestmentsBleedActiveAtTickStart = simulationState.getState().getBuffs().has(BuffId.VESTMENTSBLEED);
+
+            if (ConjureProcessor.processConjureRemoval(simulationState, scheduledHitsByLandingTick,
+                    remainingHitsByPlacementId, releaseStateByPlacementId, postDamageConsumptionsByPlacementId,
+                    initialBuffStateContainsHaunted).isRemoved()) {
+                endingTick = recalculateEndingTick(abilitiesByReleaseTick, abilitiesByCompletionTick, buffs,
+                        scheduledHitsByLandingTick, resolvedHitsByLandingTick, simulationState, tick);
+            }
 
             // User buff placements
             if (buffs.containsKey(tick)) {
@@ -229,5 +237,39 @@ public class RotationTimelineService {
         tickSnapshot.setEndingBuffCooldownMap(new HashMap<>(simulationState.getBuffCooldownMap()));
         tickSnapshot.setEndingActiveBuffDurationMap(new HashMap<>(simulationState.getActiveBuffDurationMap()));
         tickSnapshot.setEndingAdrenaline(simulationState.getAdrenaline());
+    }
+
+    private static int recalculateEndingTick(Map<Integer, List<AbilityPlacement>> abilitiesByReleaseTick,
+                                              Map<Integer, List<AbilityPlacement>> abilitiesByCompletionTick,
+                                              Map<Integer, List<BuffPlacement>> buffs,
+                                              Map<Integer, List<ScheduledHit>> scheduledHitsByLandingTick,
+                                              Map<Integer, List<TimelineHit>> resolvedHitsByLandingTick,
+                                              SimulationState simulationState, int tick) {
+        int endingTick = 0;
+        for (Map.Entry<Integer, List<AbilityPlacement>> entry : abilitiesByReleaseTick.entrySet()) {
+            endingTick = Math.max(endingTick, entry.getKey());
+        }
+
+        for (Map.Entry<Integer, List<AbilityPlacement>> entry : abilitiesByCompletionTick.entrySet()) {
+            endingTick = Math.max(endingTick, entry.getKey());
+        }
+
+        for (Map.Entry<Integer, List<BuffPlacement>> entry : buffs.entrySet()) {
+            endingTick = Math.max(endingTick, entry.getKey());
+        }
+
+        for (Map.Entry<Integer, List<ScheduledHit>> entry : scheduledHitsByLandingTick.entrySet()) {
+            endingTick = Math.max(endingTick, entry.getKey());
+        }
+
+        for (Map.Entry<Integer, List<TimelineHit>> entry : resolvedHitsByLandingTick.entrySet()) {
+            endingTick = Math.max(endingTick, entry.getKey());
+        }
+
+        for (Map.Entry<BuffId, ActiveBuffState> entry : simulationState.getActiveBuffDurationMap().entrySet()) {
+            endingTick = Math.max(endingTick, entry.getValue().getDuration() + tick);
+        }
+
+        return endingTick;
     }
 }

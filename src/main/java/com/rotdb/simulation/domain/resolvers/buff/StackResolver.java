@@ -163,18 +163,6 @@ public class StackResolver {
             ));
         }
 
-        if (abilityContext.getId() == AbilityId.COMMANDSKELETONWARRIOR || abilityContext.getId() == AbilityId.CONJURESKELETONWARRIOR) {
-            stackEffects.add(new StackEffect(
-                    BuffId.RAGE,
-                    1,
-                    BuffSource.STACK,
-                    null,
-                    null,
-                    null,
-                    StackClampingBehaviour.CLAMP
-            ));
-        }
-
         return stackEffects;
     }
 
@@ -280,6 +268,36 @@ public class StackResolver {
             ));
         }
 
+        if ((abilityContext.getId() == AbilityId.COMMANDSKELETONWARRIORHIT || abilityContext.getId() == AbilityId.CONJURESKELETONWARRIOR)
+                && state.getState().getBuffs().has(BuffId.SKELETONWARRIORDURATION)) {
+            stackEffects.add(new StackEffect(
+                    BuffId.RAGE,
+                    1,
+                    BuffSource.STACK,
+                    null,
+                    null,
+                    null,
+                    StackClampingBehaviour.CLAMP
+            ));
+        }
+
+        return stackEffects;
+    }
+
+    public static List<StackEffect> resolveResolvedHitLanding(SimulationState state, AbilityContext abilityContext, TimelineHit hit) {
+        List<StackEffect> stackEffects = new ArrayList<>();
+        if ((abilityContext.getId() == AbilityId.COMMANDSKELETONWARRIORHIT || abilityContext.getId() == AbilityId.CONJURESKELETONWARRIOR)
+                && state.getState().getBuffs().has(BuffId.SKELETONWARRIORDURATION)) {
+            stackEffects.add(new StackEffect(
+                    BuffId.RAGE,
+                    1,
+                    BuffSource.STACK,
+                    null,
+                    null,
+                    null,
+                    StackClampingBehaviour.CLAMP
+            ));
+        }
         return stackEffects;
     }
 
