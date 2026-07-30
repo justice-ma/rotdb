@@ -1,0 +1,3 @@
+UPDATE equipment
+SET effects = ARRAY_APPEND(effects, 'NECROMANCY_SHIELD')
+WHERE id IN(2991, 5095, 7840);
