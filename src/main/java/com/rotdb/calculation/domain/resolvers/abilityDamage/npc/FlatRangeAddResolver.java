@@ -2,19 +2,22 @@ package com.rotdb.calculation.domain.resolvers.abilityDamage.npc;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.ability.AbilityId;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.enums.EquipmentType;
+import com.rotdb.shared.combat.domain.model.enums.HitType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FlatRangeAddResolver {
-    public static List<Integer> resolve(CalculationContext context) {
+    public static List<Integer> resolve(CalculationContext context, AbilityHitsContext hit) {
         int min = 0;
         int max = 0;
 
-        if (context.getBuffs().has(BuffId.STEADFAST_WILL)
+        if (hit.getType() == HitType.BASE
+                && context.getBuffs().has(BuffId.STEADFAST_WILL)
                 && (context.getEquipment().getOffhand().getType() == EquipmentType.SHIELD
                 || context.getEquipment().getOffhand().getEffect().contains(Effect.DEFENDER))
                 && (context.getAbility().getId() == AbilityId.BASH_MAGIC

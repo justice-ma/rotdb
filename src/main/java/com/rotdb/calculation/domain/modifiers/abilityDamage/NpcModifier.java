@@ -30,7 +30,7 @@ public class NpcModifier implements Modifier {
             int flatAdd = FlatAddResolver.resolve(context, hit);
             if (flatAdd != 0) applyFlatAdd(hit, flatAdd);
 
-            List<Integer> minMax = FlatRangeAddResolver.resolve(context);
+            List<Integer> minMax = FlatRangeAddResolver.resolve(context, hit);
             applyFlatRangeAdd(hit, minMax.getFirst(), minMax.get(1));
             hit.calculateDamages(mod);
 

@@ -35,7 +35,8 @@ public class FlatAddResolver {
             add += (int) (context.getEquipment().getTotalArmour() * 2.5);
         }
 
-        if ((context.getEquipment().getOffhand().getType() == EquipmentType.SHIELD
+        if (hit.getType() == HitType.BASE
+                && (context.getEquipment().getOffhand().getType() == EquipmentType.SHIELD
                 || context.getEquipment().getOffhand().getEffect().contains(Effect.DEFENDER))
                 && (context.getAbility().getId() == AbilityId.BASH_MAGIC
                 || context.getAbility().getId() == AbilityId.BASH_MELEE
