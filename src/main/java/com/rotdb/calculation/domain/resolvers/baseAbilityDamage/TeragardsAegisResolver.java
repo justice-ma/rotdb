@@ -10,7 +10,7 @@ public class TeragardsAegisResolver {
 
         if (context.getEquipment().getOffhand().getEffect().contains(Effect.DEFENDER)) {
             delta *= 2;
-        } else if (context.getEquipment().getOffhand().getType() == EquipmentType.SHIELD) {
+        } else if (context.getEquipment().getOffhand().getType() == EquipmentType.SHIELD || context.getEquipment().getMainhand().getType() == EquipmentType.SHIELDBOW) {
             delta *= 3;
         }
 
