@@ -1,0 +1,7 @@
+BEGIN;
+
+UPDATE equipment
+SET effects = array_replace(effects, 'BERSERKSERNECKLACE', 'BERSERKERNECKLACE')
+WHERE effects @> ARRAY['BERSERKSERNECKLACE'];
+
+COMMIT;

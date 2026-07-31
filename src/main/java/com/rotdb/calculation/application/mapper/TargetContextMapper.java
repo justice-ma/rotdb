@@ -98,7 +98,7 @@ public class TargetContextMapper {
         target.setArmour(1);
         target.setDefence(1);
         target.setAffinity(90);
-        target.setTags(EnumSet.noneOf(TargetTags.class));
+        target.setTags(EnumSet.allOf(TargetTags.class));
         target.setSize(clampSize(resolvedSize));
     }
 
