@@ -22,7 +22,8 @@ public record DamageCalcRequestDto(
         Set<Prayer> selectedPrayers,
         Boolean berserkersFury,
         Familiars selectedFamiliar,
-        PerkSelection perks
+        PerkSelection perks,
+        HitCapMode hitCapMode
 ) {
     public record Skills(Integer strength, Integer magic,Integer ranged, Integer necromancy, Integer attack, Integer maxHp, Integer currentHp) {}
     public record EquipmentIds(Long mainhandId, Long offhandId, Long headId, Long bodyId,

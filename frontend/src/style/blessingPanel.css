@@ -1,0 +1,74 @@
+.blessing-tier-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.blessing-tier-row {
+  display: grid;
+  grid-template-columns: 56px repeat(3, 72px);
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.blessing {
+  width: 72px;
+  height: 72px;
+  border-radius: 8px;
+  padding: 6px;
+}
+
+.blessing-tier-label {
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: right;
+}
+
+.blessing-tier-grid {
+  display: contents;
+}
+
+.blessing img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.blessing {
+  opacity: 0.48;
+  filter: grayscale(0.35);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  transition:
+    opacity 0.15s ease,
+    filter 0.15s ease,
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.blessing.selected {
+  opacity: 1;
+  filter: none;
+  border-color: var(--text-accent);
+  background: var(--bg-accent);
+  box-shadow:
+    0 0 0 2px rgba(63, 185, 233, 0.2),
+    0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.blessing:disabled {
+  cursor: default;
+}
+
+.blessing:not(:disabled):hover {
+  opacity: 1;
+  filter: none;
+  transform: translateY(-1px);
+  border-color: var(--border-accent);
+  cursor: pointer;
+}

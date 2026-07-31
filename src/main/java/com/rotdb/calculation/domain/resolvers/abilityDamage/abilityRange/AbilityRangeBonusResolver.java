@@ -46,6 +46,13 @@ public class AbilityRangeBonusResolver {
             max += context.getAbility().getHits().getFirst().getMax() * (0.1 + 0.03 * context.getPerks().rank(Perks.LUNGING));
         }
 
+        if ((context.getAbility().getId() == AbilityId.NECROMANCYAUTO || context.getAbility().getId() == AbilityId.RANGEDAUTO ||
+                context.getAbility().getId() == AbilityId.MELEEAUTO || context.getAbility().getId() == AbilityId.MAGICAUTO)
+                && context.getBuffs().has(BuffId.STRIKING_LIGHT)) {
+            min += 0.4;
+            max += 0.4;
+        }
+
         return new AbilityRangeBonus(min, max);
     }
 }

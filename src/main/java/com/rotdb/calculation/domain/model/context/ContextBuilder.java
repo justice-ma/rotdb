@@ -4,6 +4,7 @@ import com.rotdb.shared.ability.AbilityProvider;
 import com.rotdb.calculation.domain.model.DamageRequest;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
+import com.rotdb.shared.combat.domain.model.enums.HitCapMode;
 import com.rotdb.shared.combat.domain.model.enums.Prayer;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.shared.combat.domain.model.equipment.FamiliarContext;
@@ -27,6 +28,7 @@ public class ContextBuilder {
     private SpellContext spell;
     private EnumSet<Prayer> selectedPrayers;
     private boolean zealotsEquipped;
+    private HitCapMode hitCapMode;
 
     public ContextBuilder equipment(EquipmentModel e) {
         this.equipment = e;
@@ -78,6 +80,11 @@ public class ContextBuilder {
         return this;
     }
 
+    public ContextBuilder hitCapMode(HitCapMode h) {
+        this.hitCapMode = h;
+        return this;
+    }
+
     public static CalculationContext build(DamageRequest request) {
         CalculationContext context = new CalculationContext();
         context.setEquipment(request.getEquipment());
@@ -93,6 +100,7 @@ public class ContextBuilder {
         context.setZealotsEquipped(request.getEquipment().getNeck().getEffect().contains(Effect.ZEALOTS));
 
         context.setPrayer(PrayerResolver.resolve(context));
+        context.setHitCapMode(request.getHitCapMode());
         return context;
     }
 }

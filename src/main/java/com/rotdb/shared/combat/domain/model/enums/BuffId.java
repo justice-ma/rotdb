@@ -44,7 +44,7 @@ public enum BuffId {
     RUBYAURORA(0, 3, true, "Ruby Aurora"),
     GRAVITATE(0, 20, true, "Gravitate"),
     WENSTACKS(0, 10, true, "Wen Stacks"),
-    REVENGESTACKS(0, 10, true, "Revenge Stacks"),
+    REVENGESTACKS(0, 20, true, "Revenge Stacks"),
     RUTHELESSSTACKS(0, 5, true, "Ruthless Stacks"),
     GUARDHOUSE(0, 3, true, "Guardhouse Tier"),
     TITHESTACKS(0, 12, true, "Tithe Stacks"),
@@ -99,18 +99,43 @@ public enum BuffId {
     NATURALINSTINCT(0, 0, false, "Natural Instinct"),
     RELENTLESSPROC(0, 0, false, "Relentless Proc"),
     CONSERVATIONOFENERGY(0, 0, false, "Conservation Of Energy"),
-    RINGOFVIGOUR(0, 0, false, "Ring of Vigour");
+    RINGOFVIGOUR(0, 0, false, "Ring of Vigour"),
+    KWUARM(0, 4, true, "Kwuarm Sticks"),
+    BIK_ARROWS(0, 150, true, "Bik Arrows"),
+    STRIKING_LIGHT(0, 0, false, "Striking Light", "blessings/Striking_Light.png"),
+    TERAGARDS_AEGIS(0, 0, false, "Teragard's Aegis", "blessings/Teragard's_Aegis.png"),
+    STEADFAST_WILL(0, 0, false, "Steadfast Will", "blessings/Steadfast_Will.png"),
+    BIG_BONED(0, 0, false, "Big Boned", "blessings/Big_Boned.png"),
+    BARKSCALES(0, 0, false, "Barkscales", "blessings/Barkscales.png"),
+    SPLASH_ZONE(0, 0, false, "Splash Zone", "blessings/Splash_Zone.png"),
+    ABYSSAL_CINDERS(0, 0, false, "Abyssal Cinders", "blessings/Abyssal_Cinders.png"),
+    ADRENALINE_JUNKIE(0, 0, false, "Adrenaline Junkie", "blessings/Adrenaline_Junkie.png"),
+    AVERNIC_RAMPAGE(0, 0, false, "Avernic Rampage", "blessings/Avernic_Rampage.png"),
+    DEMONS_MARK(0, 0, false, "Demon's Mark", "blessings/Demon's_Mark.png"),
+    ETERNAL_SUSTENANCE(0, 0, false, "Eternal Sustenance", "blessings/Eternal_Sustenance.png"),
+    SACRED_FERVOR(0, 0, false, "Sacred Fervor", "blessings/Sacred_Fervor.png");
 
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;
     private final String label;
+    private final String iconPath;
 
     BuffId(int minimumStacks, int maximumStacks, boolean stackable, String label) {
         this.minimumStacks = minimumStacks;
         this.maximumStacks = maximumStacks;
         this.stackable = stackable;
         this.label = label;
+        this.iconPath = null;
     }
+
+    BuffId(int minimumStacks, int maximumStacks, boolean stackable, String label, String iconPath) {
+        this.minimumStacks = minimumStacks;
+        this.maximumStacks = maximumStacks;
+        this.stackable = stackable;
+        this.label = label;
+        this.iconPath = iconPath;
+    }
+
 
     public int getMinimumStacks() {
         return minimumStacks;
@@ -126,5 +151,9 @@ public enum BuffId {
 
     public String getLabel() {
         return label;
+    }
+
+    public String getIconPath() {
+        return iconPath;
     }
 }

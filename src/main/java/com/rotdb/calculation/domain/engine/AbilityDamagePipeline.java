@@ -27,6 +27,7 @@ public final class AbilityDamagePipeline {
                 new BaseAbilityDamageModifier(),
                 new CriticalStrikeModifier(),
                 new InstabilityInjector(),
+                new InfernoOfZamorakInjector(),
                 new AbilityRangeModifier(),
                 new HitChanceModifier(),
                 new InvisibleAbilityModifier(),
@@ -42,6 +43,7 @@ public final class AbilityDamagePipeline {
                 new BloatInjector(),
                 new SplitSoulInjector(),
                 new NpcModifier(),
+                new PoisonDamageModifier(),
                 new HitCapModifier(),
                 new AggregationModifier()
         );

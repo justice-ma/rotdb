@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-RS Wiki Equipment scraper -> generates INSERT SQL for equipment missing from DB.
+RS Wiki Equipment scraper -> generates reviewable SQL from wiki equipment data.
 
 Behavior:
 - queries only Category:Equipment
@@ -77,6 +77,15 @@ def should_skip_title(title: str) -> bool:
 
     return False
 
+
+def normalize_key(raw: Any) -> str:
+    """Normalize wiki infobox keys before all lookups.
+
+    Older data can contain keys such as "armour\n"; wiki templates may also use
+    underscores. Keep this centralized so extraction and lookup agree.
+    """
+    return re.sub(r"\s+", " ", str(raw).strip().lower().replace("_", " "))
+
 def should_skip_slot(slot: Optional[str]) -> bool:
     if not slot:
         return False
@@ -93,8 +102,9 @@ def should_skip_slot(slot: Optional[str]) -> bool:
 
 def first_present(params: Dict[str, str], *keys: str) -> Optional[str]:
     for k in keys:
-        if k in params:
-            v = params.get(k)
+        normalized = normalize_key(k)
+        if normalized in params:
+            v = params.get(normalized)
             if v is not None:
                 v = str(v).strip()
                 if v != "":
@@ -231,6 +241,28 @@ def normalize_weapon_style(raw_type: Optional[str], raw_style: Optional[str], ra
     return "NONE"
 
 
+def normalize_equipment_type(raw_type: Optional[str]) -> Optional[str]:
+    s = clean_text(raw_type)
+    if not s:
+        return None
+
+    s = s.lower().replace("-", " ")
+    s = re.sub(r"\s+", " ", s).strip()
+
+    mapping = {
+        "tank": "tank",
+        "power": "power",
+        "hybrid": "hybrid",
+        "all": "all",
+        "shield": "shield",
+        "defender": "defender",
+        "rebounder": "rebounder",
+        "repriser": "repriser",
+    }
+
+    return mapping.get(s, s)
+
+
 def extract_infobox_params(wikitext: str, template_name: str) -> Optional[Dict[str, str]]:
     if not wikitext:
         return None
@@ -243,7 +275,7 @@ def extract_infobox_params(wikitext: str, template_name: str) -> Optional[Dict[s
         if name.lower() == template_name.lower():
             params: Dict[str, str] = {}
             for p in tpl.params:
-                k = str(p.name).strip()
+                k = normalize_key(p.name)
                 v = str(p.value).strip()
                 if k:
                     params[k] = v
@@ -350,47 +382,52 @@ def parse_strength_requirement(requirements_raw: Optional[str]) -> Optional[int]
 
 
 def normalize_equipment_row(title: str, params: Dict[str, str]) -> Optional[Dict[str, Any]]:
-    raw_infobox = {k.strip().lower(): str(v).strip() for k, v in params.items() if k and v is not None}
+    normalized_params = {
+        normalize_key(k): str(v).strip()
+        for k, v in params.items()
+        if k and v is not None
+    }
+    raw_infobox = normalized_params
 
-    name = clean_text(first_present(params, "name")) or title
+    name = clean_text(first_present(normalized_params, "name")) or title
 
-    raw_class = clean_text(first_present(params, "class", "clazz", "combat style", "combatstyle"))
-    raw_slot = clean_text(first_present(params, "slot", "equipment slot", "equip slot"))
-    raw_style = clean_text(first_present(params, "style", "attack style", "weaponstyle"))
-    raw_type = clean_text(first_present(params, "type", "weapon type"))
+    raw_class = clean_text(first_present(normalized_params, "class", "clazz", "combat style", "combatstyle"))
+    raw_slot = clean_text(first_present(normalized_params, "slot", "equipment slot", "equip slot"))
+    raw_style = clean_text(first_present(normalized_params, "style", "attack style", "weaponstyle"))
+    raw_type = clean_text(first_present(normalized_params, "type", "weapon type"))
 
-    tier = to_int(first_present(params, "tier", "weapontier", "weapon tier"))
+    tier = to_int(first_present(normalized_params, "tier", "weapontier", "weapon tier"))
 
-    damage_tier_legacy = to_int(first_present(params, "damageTier", "damagetier", "damage tier"))
-    accuracy_tier_legacy = to_int(first_present(params, "accuracyTier", "accuracytier", "accuracy tier"))
+    damage_tier_legacy = to_int(first_present(normalized_params, "damageTier", "damagetier", "damage tier"))
+    accuracy_tier_legacy = to_int(first_present(normalized_params, "accuracyTier", "accuracytier", "accuracy tier"))
 
-    strength = to_float(first_present(params, "strength", "str"))
-    ranged = to_float(first_present(params, "ranged"))
-    magic = to_float(first_present(params, "magic"))
-    necromancy = to_float(first_present(params, "necromancy"))
-    prayer = to_float(first_present(params, "prayer"))
+    strength = to_float(first_present(normalized_params, "strength", "str"))
+    ranged = to_float(first_present(normalized_params, "ranged"))
+    magic = to_float(first_present(normalized_params, "magic"))
+    necromancy = to_float(first_present(normalized_params, "necromancy"))
+    prayer = to_float(first_present(normalized_params, "prayer"))
 
-    requirements_raw = clean_text(first_present(params, "requirements", "requirement", "reqs"))
+    requirements_raw = clean_text(first_present(normalized_params, "requirements", "requirement", "reqs"))
     req_strength = parse_strength_requirement(requirements_raw)
 
-    accuracy = to_float(first_present(params, "accuracy"))
-    armour = to_float(first_present(params, "armour", "armor"))
-    attack_range = to_float(first_present(params, "attack range", "range"))
-    damage = to_float(first_present(params, "damage"))
-    damage_bonus = to_float(first_present(params, "damage bonus"))
-    defensive_bonus = to_float(first_present(params, "defensive bonus"))
-    life = to_float(first_present(params, "life"))
-    pvm_reduction = to_float(first_present(params, "pvm reduction"))
-    pvp_reduction = to_float(first_present(params, "pvp reduction"))
-    speed = to_float(first_present(params, "speed"))
+    accuracy = to_float(first_present(normalized_params, "accuracy"))
+    armour = to_float(first_present(normalized_params, "armour", "armor"))
+    attack_range = to_float(first_present(normalized_params, "attack range", "range"))
+    damage = to_float(first_present(normalized_params, "damage"))
+    damage_bonus = to_float(first_present(normalized_params, "damage bonus"))
+    defensive_bonus = to_float(first_present(normalized_params, "defensive bonus"))
+    life = to_float(first_present(normalized_params, "life"))
+    pvm_reduction = to_float(first_present(normalized_params, "pvm reduction"))
+    pvp_reduction = to_float(first_present(normalized_params, "pvp reduction"))
+    speed = to_float(first_present(normalized_params, "speed"))
 
-    accuracy_tier = to_int(first_present(params, "accuracy tier", "accuracytier", "accuracyTier"))
-    armour_damage_tier = to_int(first_present(params, "armour damage tier", "armor damage tier"))
-    armour_tier = to_int(first_present(params, "armour tier", "armor tier"))
-    damage_tier = to_int(first_present(params, "damage tier", "damagetier", "damageTier"))
-    invtier = to_int(first_present(params, "invention tier", "invtier"))
+    accuracy_tier = to_int(first_present(normalized_params, "accuracy tier", "accuracytier", "accuracyTier"))
+    armour_damage_tier = to_int(first_present(normalized_params, "armour damage tier", "armor damage tier"))
+    armour_tier = to_int(first_present(normalized_params, "armour tier", "armor tier"))
+    damage_tier = to_int(first_present(normalized_params, "damage tier", "damagetier", "damageTier"))
+    invtier = to_int(first_present(normalized_params, "invention tier", "invtier"))
 
-    members_raw = clean_text(first_present(params, "members"))
+    members_raw = clean_text(first_present(normalized_params, "members"))
     members = None
     if members_raw:
         m = members_raw.lower()
@@ -411,8 +448,8 @@ def normalize_equipment_row(title: str, params: Dict[str, str]) -> Optional[Dict
         "class": raw_class,
         "slot": normalize_slot(raw_slot),
         "tier": tier,
-        "style": normalize_combat_style(raw_style),
-        "type": normalize_weapon_style(raw_type, raw_style, title),
+        "style": normalize_weapon_style(raw_type, raw_style, title),
+        "type": normalize_equipment_type(raw_type),
 
         "damagetier": damage_tier_legacy,
         "accuracytier": accuracy_tier_legacy,
@@ -439,17 +476,17 @@ def normalize_equipment_row(title: str, params: Dict[str, str]) -> Optional[Dict
         "damage_tier": damage_tier,
         "defensive_bonus": defensive_bonus,
         "equippable": True,
-        "ids": clean_text(first_present(params, "id", "ids")),
-        "images": clean_text(first_present(params, "image", "image1", "images")),
+        "ids": clean_text(first_present(normalized_params, "id", "ids")),
+        "images": clean_text(first_present(normalized_params, "image", "image1", "images")),
         "invtier": invtier,
-        "level_requirement": clean_text(first_present(params, "level requirement")),
+        "level_requirement": clean_text(first_present(normalized_params, "level requirement")),
         "life": life,
         "members": members,
         "pvm_reduction": pvm_reduction,
         "pvp_reduction": pvp_reduction,
         "requirements": requirements_raw,
         "speed": speed,
-        "versions": clean_text(first_present(params, "version", "versions")),
+        "versions": clean_text(first_present(normalized_params, "version", "versions")),
     }
 
     return row
@@ -539,6 +576,87 @@ def build_insert_sql(row: Dict[str, Any]) -> str:
     )
 
 
+UPDATE_COLS = [
+    "name",
+    "class",
+    "slot",
+    "tier",
+    "style",
+    "type",
+    "damagetier",
+    "accuracytier",
+    "strength",
+    "ranged",
+    "magic",
+    "necromancy",
+    "prayer",
+    "requirements_raw",
+    "req_strength",
+    "raw_infobox",
+    "accuracy",
+    "accuracy_tier",
+    "armour",
+    "armour_damage_tier",
+    "armour_tier",
+    "attack_range",
+    "damage",
+    "damage_bonus",
+    "damage_tier",
+    "defensive_bonus",
+    "equippable",
+    "ids",
+    "images",
+    "invtier",
+    "level_requirement",
+    "life",
+    "members",
+    "pvm_reduction",
+    "pvp_reduction",
+    "requirements",
+    "speed",
+    "versions",
+]
+
+
+def sql_value_for_col(row: Dict[str, Any], col: str) -> str:
+    if col == "raw_infobox":
+        return json_literal(row.get(col))
+    return sql_literal(row.get(col))
+
+
+def build_update_sql(row: Dict[str, Any], only_missing: bool, update_cols: List[str]) -> Optional[str]:
+    assignments = []
+    missing_checks = []
+
+    for col in update_cols:
+        value = row.get(col)
+
+        # Keep existing values when the wiki does not provide a value. This
+        # avoids turning previously curated data into NULL during broad refreshes.
+        if value is None:
+            continue
+
+        assignments.append(f"    {col} = {sql_value_for_col(row, col)}")
+        if col != "raw_infobox":
+            missing_checks.append(f"{col} IS NULL")
+
+    if not assignments:
+        return None
+
+    title_literal = sql_literal(row.get("title"))
+    sql = (
+        "UPDATE equipment\n"
+        "SET\n"
+        f"{',\n'.join(assignments)}\n"
+        f"WHERE lower(trim(title)) = lower(trim({title_literal}))"
+    )
+
+    if only_missing and missing_checks:
+        sql += "\n  AND (" + " OR ".join(missing_checks) + ")"
+
+    return sql + ";"
+
+
 def load_existing_titles(db_url: str) -> Set[str]:
     import psycopg2
 
@@ -569,6 +687,10 @@ def main():
     ap.add_argument("--batch", type=int, default=50, help="How many pages per wikitext request")
     ap.add_argument("--sleep", type=float, default=0.2, help="Sleep between API calls")
     ap.add_argument("--user-agent", default="rotdb-weekly-scraper/1.0 (https://github.com/wxrl/rotdb)", help="User-Agent header")
+    ap.add_argument("--update-existing", action="store_true", help="Generate UPDATE statements for existing equipment titles")
+    ap.add_argument("--only-missing", action="store_true", help="With --update-existing, update only rows where at least one generated column is NULL")
+    ap.add_argument("--update-col", action="append", choices=UPDATE_COLS, help="With --update-existing, limit UPDATE statements to this column. Can be passed multiple times.")
+    ap.add_argument("--title", action="append", help="Scrape one exact wiki title. Can be passed multiple times. Bypasses category enumeration.")
     args = ap.parse_args()
 
     if not args.db_url:
@@ -578,11 +700,16 @@ def main():
     existing_titles = load_existing_titles(args.db_url)
     print(f"Loaded {len(existing_titles)} existing DB titles", flush=True)
 
-    titles = category_members(args.api, args.category, args.user_agent, args.sleep, args.max_pages)
-    print(f"Found {len(titles)} filtered titles in {args.category}", flush=True)
+    if args.title:
+        titles = [title for title in args.title if not should_skip_title(title)]
+        print(f"Using {len(titles)} explicit title(s)", flush=True)
+    else:
+        titles = category_members(args.api, args.category, args.user_agent, args.sleep, args.max_pages)
+        print(f"Found {len(titles)} filtered titles in {args.category}", flush=True)
 
     total = 0
     inserts = []
+    updates = []
     misses = []
 
     for i in range(0, len(titles), args.batch):
@@ -594,7 +721,8 @@ def main():
             total += 1
 
             normalized_title = title.lower().strip()
-            if normalized_title in existing_titles:
+            is_existing = normalized_title in existing_titles
+            if is_existing and not args.update_existing:
                 continue
 
             params = extract_infobox_params(wikitext, args.template)
@@ -605,6 +733,14 @@ def main():
             row = normalize_equipment_row(title, params)
             if row is None:
                 print(f"  skip slot filtered: {title}", flush=True)
+                continue
+
+            if is_existing:
+                update_cols = args.update_col if args.update_col else UPDATE_COLS
+                update = build_update_sql(row, args.only_missing, update_cols)
+                if update:
+                    updates.append(update)
+                    print(f"  UPDATE -> {title}", flush=True)
                 continue
 
             inserts.append(build_insert_sql(row))
@@ -618,6 +754,9 @@ def main():
 
     with open(args.out, "w", encoding="utf-8") as f:
         f.write("BEGIN;\n\n")
+        for stmt in updates:
+            f.write(stmt)
+            f.write("\n\n")
         for stmt in inserts:
             f.write(stmt)
             f.write("\n\n")
@@ -634,6 +773,7 @@ def main():
         "filtered_wiki_titles": len(titles),
         "processed_missing_title_candidates": total,
         "insert_statements": len(inserts),
+        "update_statements": len(updates),
         "misses": len(misses),
         "output_sql": args.out,
         "misses_log": args.misses,
@@ -643,8 +783,9 @@ def main():
         json.dump(summary, f, indent=2, sort_keys=True)
         f.write("\n")
 
+    print(f"Generated {len(updates)} UPDATE statements", flush=True)
     print(f"Generated {len(inserts)} INSERT statements", flush=True)
-    print(f"Processed {total} missing-title candidates", flush=True)
+    print(f"Processed {total} title candidates", flush=True)
     print(f"Wrote SQL to {args.out}", flush=True)
     print(f"Wrote misses to {args.misses}", flush=True)
     print(f"Wrote summary to {args.summary}", flush=True)

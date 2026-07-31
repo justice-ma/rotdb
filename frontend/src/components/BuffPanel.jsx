@@ -351,6 +351,14 @@ const BUFF_UI_META = {
     category: BUFF_CATEGORY.PASSIVE_BUFFS,
     styles: [STYLE.MELEE],
   },
+  BIK_ARROWS: {
+    category: BUFF_CATEGORY.STACKS,
+    styles: [STYLE.RANGED],
+  },
+  KWUARM: {
+    category: BUFF_CATEGORY.STACKS,
+    styles: [STYLE.MELEE, STYLE.MAGIC, STYLE.RANGED, STYLE.NECROMANCY],
+  },
 };
 
 const CATEGORY_ORDER = [

@@ -3,6 +3,9 @@ package com.rotdb.shared.combat.domain.model.equipment;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EquipmentModel {
     private EquipmentSlot head, body, legs, boots, gloves, cape, pocket, neck, ring, ammo, mainhand, offhand, quiver;
     private CombatStyles combatStyle;
@@ -122,6 +125,46 @@ public class EquipmentModel {
         pieces += getBoots().getEffect().contains(Effect.ELITEDRACOLICH) ? 1 : 0;
 
         return pieces;
+    }
+
+    public double getTotalArmour() {
+        List<EquipmentSlot> equipmentSlots = new ArrayList<>(List.of(
+                getOffhand(),
+                getHead(),
+                getCape(),
+                getNeck(),
+                getBody(),
+                getLegs(),
+                getGloves(),
+                getBoots(),
+                getRing(),
+                getQuiver(),
+                getPocket()));
+        double armour = 0;
+        for (EquipmentSlot equipmentSlot : equipmentSlots) {
+            armour += equipmentSlot.getArmour();
+        }
+        return armour;
+    }
+
+    public double getTotalLife() {
+        List<EquipmentSlot> equipmentSlots = new ArrayList<>(List.of(
+                getOffhand(),
+                getHead(),
+                getCape(),
+                getNeck(),
+                getBody(),
+                getLegs(),
+                getGloves(),
+                getBoots(),
+                getRing(),
+                getQuiver(),
+                getPocket()));
+        double life = 0;
+        for (EquipmentSlot equipmentSlot : equipmentSlots) {
+            life += equipmentSlot.getLife();
+        }
+        return life;
     }
 
     public EquipmentSlot getOffhand() {

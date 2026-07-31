@@ -152,7 +152,27 @@ public enum AbilityId {
 
     DEATHGRASP(NECROMANCY, SPECIAL,"Death Grasp", "special_attack_weapon_icons/death-guard.png", true),
     SOULCRUSH(NECROMANCY, SPECIAL,"Soul Crush", "special_attack_weapon_icons/devourer-s-guard.png", true),
-    DEATHESSENCE(NECROMANCY, SPECIAL,"Death Essence", "special_attack_weapon_icons/omni-guard.png", true);
+    DEATHESSENCE(NECROMANCY, SPECIAL,"Death Essence", "special_attack_weapon_icons/omni-guard.png", true),
+
+    LIGHT_OF_SARADOMIN_MAGIC(MAGIC, BLESSING, "Light of Saradomin", "blessings/Striking_Light.png"),
+    LIGHT_OF_SARADOMIN_MELEE(MELEE, BLESSING, "Light of Saradomin", "blessings/Striking_Light.png"),
+    LIGHT_OF_SARADOMIN_RANGED(RANGED, BLESSING, "Light of Saradomin", "blessings/Striking_Light.png"),
+    LIGHT_OF_SARADOMIN_NECROMANCY(NECROMANCY, BLESSING, "Light of Saradomin", "blessings/Striking_Light.png"),
+
+    BASH_MAGIC(MAGIC, BLESSING, "Bash", "blessings/Steadfast_Will.png"),
+    BASH_MELEE(MELEE, BLESSING, "Bash", "blessings/Steadfast_Will.png"),
+    BASH_RANGED(RANGED, BLESSING, "Bash", "blessings/Steadfast_Will.png"),
+    BASH_NECROMANCY(NECROMANCY, BLESSING, "Bash", "blessings/Steadfast_Will.png"),
+
+    BARKSCALES_MAGIC(MAGIC, BLESSING, "Barkscales", "blessings/Barkscales.png"),
+    BARKSCALES_MELEE(MELEE, BLESSING, "Barkscales", "blessings/Barkscales.png"),
+    BARKSCALES_RANGED(RANGED, BLESSING, "Barkscales", "blessings/Barkscales.png"),
+    BARKSCALES_NECROMANCY(NECROMANCY, BLESSING, "Barkscales", "blessings/Barkscales.png"),
+
+    INFERNO_OF_ZAMORAK_MAGIC(MAGIC, BLESSING, "Inferno of Zamorak", "blessings/Abyssal_Cinders.png"),
+    INFERNO_OF_ZAMORAK_MELEE(MELEE, BLESSING, "Inferno of Zamorak", "blessings/Abyssal_Cinders.png"),
+    INFERNO_OF_ZAMORAK_RANGED(RANGED, BLESSING, "Inferno of Zamorak", "blessings/Abyssal_Cinders.png"),
+    INFERNO_OF_ZAMORAK_NECROMANCY(NECROMANCY, BLESSING, "Inferno of Zamorak", "blessings/Abyssal_Cinders.png");
 
     private final CombatStyles style;
     private final AbilityTier tier;

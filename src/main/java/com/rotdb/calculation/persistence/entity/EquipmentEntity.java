@@ -1,9 +1,6 @@
 package com.rotdb.calculation.persistence.entity;
 
-import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
-import com.rotdb.shared.combat.domain.model.enums.Effect;
-import com.rotdb.shared.combat.domain.model.enums.Slots;
-import com.rotdb.shared.combat.domain.model.enums.WeaponStyle;
+import com.rotdb.shared.combat.domain.model.enums.*;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -46,8 +43,12 @@ public class EquipmentEntity {
     private Double magic;
     private Double necromancy;
     private Double prayer;
+    private Double armour;
+    private Double life;
 
-    private String type;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private EquipmentType type;
 
     @Column(name="req_strength")
     private Integer reqStrength;
@@ -194,11 +195,11 @@ public class EquipmentEntity {
         this.prayer = prayer;
     }
 
-    public String getType() {
+    public EquipmentType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(EquipmentType type) {
         this.type = type;
     }
 
@@ -224,5 +225,21 @@ public class EquipmentEntity {
 
     public void setEffects(String[] effects) {
         this.effects = effects;
+    }
+
+    public Double getArmour() {
+        return armour;
+    }
+
+    public void setArmour(Double armour) {
+        this.armour = armour;
+    }
+
+    public Double getLife() {
+        return life;
+    }
+
+    public void setLife(Double life) {
+        this.life = life;
     }
 }

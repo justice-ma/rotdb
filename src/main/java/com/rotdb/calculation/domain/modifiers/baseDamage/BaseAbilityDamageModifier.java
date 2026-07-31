@@ -1,15 +1,9 @@
 package com.rotdb.calculation.domain.modifiers.baseDamage;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.shared.combat.domain.model.enums.BuffId;
-import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
-import com.rotdb.shared.combat.domain.model.enums.Effect;
-import com.rotdb.shared.combat.domain.model.enums.Perks;
+import com.rotdb.calculation.domain.resolvers.baseAbilityDamage.*;
+import com.rotdb.shared.combat.domain.model.enums.*;
 import com.rotdb.calculation.domain.modifiers.Modifier;
-import com.rotdb.calculation.domain.resolvers.baseAbilityDamage.MagicBaseDamageResolver;
-import com.rotdb.calculation.domain.resolvers.baseAbilityDamage.MeleeBaseDamageResolver;
-import com.rotdb.calculation.domain.resolvers.baseAbilityDamage.NecromancyBaseDamageResolver;
-import com.rotdb.calculation.domain.resolvers.baseAbilityDamage.RangedBaseDamageResolver;
 
 public final class BaseAbilityDamageModifier implements Modifier{
     @Override
@@ -24,7 +18,8 @@ public final class BaseAbilityDamageModifier implements Modifier{
         var buffs  = context.getBuffs();
 
         CombatStyles style = equipment.getMainhand().getClazz();
-        boolean dw = (equipment.getOffhand().getId() != null);
+        boolean dw = (equipment.getOffhand().getId() != null && equipment.getOffhand().getType() != EquipmentType.SHIELD);
+        boolean twoHanded = equipment.getMainhand().getSlot() == Slots.TWOHANDED;
 
         int s = switch (style) {
             case MELEE -> skills.getBoostedStrength();
@@ -59,30 +54,38 @@ public final class BaseAbilityDamageModifier implements Modifier{
             ohTier += 5;
         }
 
-        int base = resolveBase(style, dw, s, bonus, mhTier, ohTier, er, ammoTier, eq);
+        int base = resolveBase(style, dw, twoHanded, s, bonus, mhTier, ohTier, er, ammoTier, eq);
+
+        if (context.getBuffs().has(BuffId.TERAGARDS_AEGIS)) {
+            base += TeragardsAegisResolver.resolve(context);
+        }
 
         context.getDamage().setBaseDamage(base);
         context.getEquipment().setCombatStyle(style);
     }
 
-    private int resolveBase(CombatStyles style, boolean dw,
+    private int resolveBase(CombatStyles style, boolean dw, boolean twoHanded,
                             int s, double bonus, int mhTier, int ohTier,
                             int er, int ammoTier, int eq) {
         return switch (style) {
             case MELEE -> dw
                     ? MeleeBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, eq)
-                    : MeleeBaseDamageResolver.twoHand(s, bonus, mhTier, er, eq);
+                    : twoHanded ? MeleeBaseDamageResolver.twoHand(s, bonus, mhTier, er, eq)
+                    : MeleeBaseDamageResolver.mainhandOnly(s, bonus, mhTier, er, eq);
 
             case MAGIC -> dw
                     ? MagicBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, ammoTier, eq)
-                    : MagicBaseDamageResolver.twoHand(s, bonus, mhTier, er, ammoTier, eq);
+                    : twoHanded ? MagicBaseDamageResolver.twoHand(s, bonus, mhTier, er, ammoTier, eq)
+                    : MagicBaseDamageResolver.mainhandOnly(s, bonus, mhTier, er, ammoTier, eq);
 
             case RANGED -> dw
                     ? RangedBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, ammoTier, eq)
-                    : RangedBaseDamageResolver.twoHand(s, bonus, mhTier, er, ammoTier, eq);
+                    : twoHanded ? RangedBaseDamageResolver.twoHand(s, bonus, mhTier, er, ammoTier, eq)
+                    : RangedBaseDamageResolver.mainhandOnly(s, bonus, mhTier, er, ammoTier, eq);
 
             case NECROMANCY ->
-                    NecromancyBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, eq);
+                    dw ? NecromancyBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, eq) :
+                    NecromancyBaseDamageResolver.mainhandOnly(s, bonus, mhTier, er, eq);
 
             case ALL ->
                     throw new IllegalStateException("Combat style ALL is not valid for base damage");

@@ -11,4 +11,11 @@ public class NecromancyBaseDamageResolver {
         double base = EquilibriumCalc.Calc(oh + mh, eq);
         return (int) EruptiveCalc.Calc(base, er);
     }
+
+    public static int mainhandOnly(int n, double b, int mt, int er, int eq) {
+        double d = 145 * 2.5 * (Math.log(1 + (0.6 * (n / 145.0))) / Math.log(1.6));
+        double mh = (d + 9.6 * mt + b);
+        double base = EquilibriumCalc.Calc(mh, eq);
+        return (int) EruptiveCalc.Calc(base, er);
+    }
 }

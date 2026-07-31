@@ -8,6 +8,8 @@ export default function Abilities({
   selectedAbility,
   onSelectedAbility,
   weaponStyle,
+  hitCapMode,
+  setHitCapMode,
 }) {
   const [specialFilter, setSpecialFilter] = useState("COMMON");
 
@@ -23,6 +25,12 @@ export default function Abilities({
     const ay = typeOrder.indexOf(y);
     return (ax === -1 ? 999 : ax) - (ay === -1 ? 999 : ay);
   });
+
+  const hitCapLabel = {
+    CAP_30000: "30,000",
+    CAP_32500: "32,500",
+    UNCAPPED: "Uncapped",
+  }[hitCapMode];
 
   const isUsableWithWeapon = (ability) => {
     if (!weaponStyle) return true;
@@ -63,6 +71,22 @@ export default function Abilities({
           <section key={type} className="ability-section">
             <div className="ability-section-header">
               <h3 className="ability-section-title">{type}</h3>
+              {type === "BASIC" ? (
+                <div className="hit-cap-container">
+                  <span>Hit Cap: {hitCapLabel}</span>
+
+                  <select
+                    className="hit-cap-select"
+                    aria-label="Hit cap mode"
+                    value={hitCapMode}
+                    onChange={(e) => setHitCapMode(e.target.value)}
+                  >
+                    <option value="CAP_30000">30,000</option>
+                    <option value="CAP_32500">32,500</option>
+                    <option value="UNCAPPED">Uncapped</option>
+                  </select>
+                </div>
+              ) : null}
 
               {type === "SPECIAL" ? (
                 <div className="special-filter">

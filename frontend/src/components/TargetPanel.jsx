@@ -166,7 +166,7 @@ export default function TargetPanel({
                 id="target-size"
                 type="number"
                 min="1"
-                max="5"
+                max="10"
                 value={targetSize}
                 onChange={(e) => {
                   let value = e.target.value;
@@ -179,7 +179,7 @@ export default function TargetPanel({
                   let num = Number(value);
 
                   if (num < 1) num = 1;
-                  if (num > 5) num = 5;
+                  if (num > 10) num = 10;
 
                   setTargetSize(String(num));
                 }}

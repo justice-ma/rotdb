@@ -2,9 +2,13 @@ package com.rotdb.calculation.domain.model.context;
 
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
-import com.rotdb.shared.combat.domain.model.enums.Prayer;
 import com.rotdb.shared.combat.domain.model.context.TargetContext;
-import com.rotdb.shared.combat.domain.model.equipment.*;
+import com.rotdb.shared.combat.domain.model.enums.HitCapMode;
+import com.rotdb.shared.combat.domain.model.enums.Prayer;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
+import com.rotdb.shared.combat.domain.model.equipment.FamiliarContext;
+import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
 import com.rotdb.shared.combat.domain.model.player.PrayerContext;
 import com.rotdb.shared.combat.domain.model.player.SkillsContext;
@@ -29,6 +33,7 @@ public class CalculationContext {
     private boolean zealotsEquipped;
     private boolean perfectEquilibriumSecondPass;
     private double hitChance;
+    private HitCapMode hitCapMode;
 
     public boolean debug = false;
     public boolean finalPrint = false;
@@ -159,5 +164,13 @@ public class CalculationContext {
 
     public void setSpellContext(SpellContext spellContext) {
         this.spellContext = spellContext;
+    }
+
+    public HitCapMode getHitCapMode() {
+        return hitCapMode;
+    }
+
+    public void setHitCapMode(HitCapMode hitCapMode) {
+        this.hitCapMode = hitCapMode;
     }
 }

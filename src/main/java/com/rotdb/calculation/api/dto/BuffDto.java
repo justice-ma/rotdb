@@ -5,5 +5,6 @@ public record BuffDto (
    String label,
    boolean stackable,
    int min,
-   int max
+   int max,
+   String iconPath
 ) {}

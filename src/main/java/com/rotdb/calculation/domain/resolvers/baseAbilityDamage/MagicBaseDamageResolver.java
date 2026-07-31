@@ -18,4 +18,11 @@ public class MagicBaseDamageResolver {
         double base = EquilibriumCalc.Calc(mh + oh, eq);
         return (int) EruptiveCalc.Calc(base, er);
     }
+
+    public static int mainhandOnly(int m, double b, int mt, int er, int sp, int eq) {
+        double d = 145 * 2.5 * (Math.log(1 + (0.6 * (m / 145.0))) / Math.log(1.6));
+        double mh = (d + Math.floor(9.6 * Math.min(mt, sp) + b));
+        double base = EquilibriumCalc.Calc(mh, eq);
+        return (int) EruptiveCalc.Calc(base, er);
+    }
 }

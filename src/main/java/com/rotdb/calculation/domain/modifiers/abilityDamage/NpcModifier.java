@@ -1,10 +1,12 @@
 package com.rotdb.calculation.domain.modifiers.abilityDamage;
 
-import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.resolvers.Debug;
 import com.rotdb.calculation.domain.resolvers.abilityDamage.npc.*;
-import com.rotdb.calculation.domain.modifiers.Modifier;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+
+import java.util.List;
 
 public class NpcModifier implements Modifier {
     public void apply(CalculationContext context) {
@@ -24,7 +26,14 @@ public class NpcModifier implements Modifier {
             if (!b.isZero()) applyHauntedBonus(hit, b);
             mod *= PostHauntedMultiplierResolver.resolve(context);
             mod *= AbilityMultiplierResolver.resolve(context);
+
+            int flatAdd = FlatAddResolver.resolve(context, hit);
+            if (flatAdd != 0) applyFlatAdd(hit, flatAdd);
+
+            List<Integer> minMax = FlatRangeAddResolver.resolve(context);
+            applyFlatRangeAdd(hit, minMax.getFirst(), minMax.get(1));
             hit.calculateDamages(mod);
+
             Debug.stageRow(context, i, hit);
         }
         Debug.stageFooter(context);
@@ -42,5 +51,33 @@ public class NpcModifier implements Modifier {
         hit.setCurrentMin(hit.getCurrentMin() + b.getMinAvg());
         hit.setCurrentMax(hit.getCurrentMax() + b.getMaxAvg());
         hit.setCurrentDamage((hit.getCurrentMin() + hit.getCurrentMax()) / 2);
+    }
+
+    private void applyFlatAdd(AbilityHitsContext hit, int add) {
+        hit.setCurrentMin(hit.getCurrentMin() + add);
+        hit.setCurrentMax(hit.getCurrentMax() + add);
+        hit.setCurrentDamage((hit.getCurrentMin() + hit.getCurrentMax()) / 2);
+
+        hit.setCritMin(hit.getCritMin() + add);
+        hit.setCritMax(hit.getCritMax() + add);
+        hit.setCritDamage((hit.getCritMin() + hit.getCritMax()) / 2);
+
+        hit.setNonCritMin(hit.getNonCritMin() + add);
+        hit.setNonCritMax(hit.getNonCritMax() + add);
+        hit.setNonCritDamage((hit.getNonCritMin() + hit.getNonCritMax()) / 2);
+    }
+
+    private void applyFlatRangeAdd(AbilityHitsContext hit, int minAdd, int maxAdd) {
+        hit.setCurrentMin(hit.getCurrentMin() + minAdd);
+        hit.setCurrentMax(hit.getCurrentMax() + maxAdd);
+        hit.setCurrentDamage((hit.getCurrentMin() + hit.getCurrentMax()) / 2);
+
+        hit.setCritMin(hit.getCritMin() + minAdd);
+        hit.setCritMax(hit.getCritMax() + maxAdd);
+        hit.setCritDamage((hit.getCritMin() + hit.getCritMax()) / 2);
+
+        hit.setNonCritMin(hit.getNonCritMin() + minAdd);
+        hit.setNonCritMax(hit.getNonCritMax() + maxAdd);
+        hit.setNonCritDamage((hit.getNonCritMin() + hit.getNonCritMax()) / 2);
     }
 }

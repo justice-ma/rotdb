@@ -378,6 +378,8 @@ export default function AbilityCalculation() {
     { pot: "NONE", stat: "ALL" },
   ]);
 
+  const [hitCapMode, setHitCapMode] = useState("CAP_30000");
+
   useEffect(() => {
     (async () => {
       try {
@@ -471,13 +473,14 @@ export default function AbilityCalculation() {
         itemLevel20,
         genocidalRank,
       },
-      targetTitle: target?.title ?? "Training dummy",
+      targetTitle: target?.title ?? null,
       targetCurrentHp: targetCurrentHp === "" ? null : Number(targetCurrentHp),
       targetMaxHp: targetMaxHp === "" ? null : Number(targetMaxHp),
       targetSize: target ? null : targetSize === "" ? null : Number(targetSize),
       spell: spell?.id ?? null,
       relic: null,
       selectedFamiliar: familiar?.id ?? null,
+      hitCapMode,
     };
   }, [
     style,
@@ -495,6 +498,7 @@ export default function AbilityCalculation() {
     selectedPotions,
     itemLevel20,
     targetSize,
+    hitCapMode,
   ]);
 
   const needsMainhand = !equipmentIds.MAINHAND;
@@ -945,6 +949,8 @@ export default function AbilityCalculation() {
             selectedAbility={selectedAbility}
             onSelectedAbility={setSelectedAbility}
             weaponStyle={mainhand?.clazz}
+            hitCapMode={hitCapMode}
+            setHitCapMode={setHitCapMode}
           />
         )}
       </div>

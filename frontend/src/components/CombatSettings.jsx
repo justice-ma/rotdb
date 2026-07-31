@@ -9,6 +9,7 @@ import TargetPanel from "./TargetPanel";
 import FamiliarPanel from "./FamiliarPanel";
 import PresetSelector from "./PresetSelector";
 import PotionsPanel from "./PotionPanel";
+import BlessingPanel from "./BlessingPanel";
 
 const SLOTS = [
   "MAINHAND",
@@ -750,6 +751,18 @@ export default function CombatSettings({
         <summary className="cs-summary">Buffs</summary>
         <div className="cs-body">
           <BuffPanel
+            style={style}
+            buffs={buffs}
+            setBuffs={setBuffs}
+            allBuffs={allBuffs}
+          />
+        </div>
+      </details>
+
+      <details className="cs-section">
+        <summary className="cs-summary">Blessings</summary>
+        <div className="cs-body">
+          <BlessingPanel
             style={style}
             buffs={buffs}
             setBuffs={setBuffs}

@@ -45,14 +45,9 @@ public class TargetContextMapper {
         target.setArmour(entity.getArmour1());
         target.setDefence(entity.getDefence1());
 
-        if (target.getSize() < 1) target.setSize(1);
-        if (target.getSize() > 5) target.setSize(5);
+        int resolvedSize = targetSize != null ? targetSize : (entity.getSize() != null ? entity.getSize() : 5);
 
-        target.setSize(
-                targetSize != null
-                        ? targetSize
-                        : (entity.getSize() != null ? entity.getSize() : 5)
-        );
+        target.setSize(clampSize(resolvedSize));
 
         if (style == CombatStyles.MAGIC) {
             target.setAffinity(entity.getAffMagic() == null ? 90 : entity.getAffMagic());
@@ -99,5 +94,17 @@ public class TargetContextMapper {
         target.setCurrentHp(resolvedCurrentHp);
         target.setSize(resolvedSize);
         target.normalizeHp();
+        target.setName("Training Dummy");
+        target.setArmour(1);
+        target.setDefence(1);
+        target.setAffinity(90);
+        target.setTags(EnumSet.noneOf(TargetTags.class));
+        target.setSize(clampSize(resolvedSize));
+    }
+
+    private int clampSize(int size) {
+        if (size < 1) return 1;
+        if (size > 10) return 10;
+        return size;
     }
 }

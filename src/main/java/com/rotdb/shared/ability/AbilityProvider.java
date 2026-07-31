@@ -2,7 +2,6 @@ package com.rotdb.shared.ability;
 
 import com.rotdb.shared.ability.factory.*;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
-import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.enums.Slots;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
@@ -174,6 +173,27 @@ public final class AbilityProvider {
             case DEATHGRASP -> NecromancySpecialAttackFactory.deathGrasp();
             case SOULCRUSH -> NecromancySpecialAttackFactory.soulCrush();
             case DEATHESSENCE -> NecromancySpecialAttackFactory.deathEssence();
+
+            // Blessings
+            case LIGHT_OF_SARADOMIN_NECROMANCY -> BlessingFactory.lightOfSaradomin(AbilityId.LIGHT_OF_SARADOMIN_NECROMANCY);
+            case LIGHT_OF_SARADOMIN_RANGED -> BlessingFactory.lightOfSaradomin(AbilityId.LIGHT_OF_SARADOMIN_RANGED);
+            case LIGHT_OF_SARADOMIN_MAGIC -> BlessingFactory.lightOfSaradomin(AbilityId.LIGHT_OF_SARADOMIN_MAGIC);
+            case LIGHT_OF_SARADOMIN_MELEE -> BlessingFactory.lightOfSaradomin(AbilityId.LIGHT_OF_SARADOMIN_MELEE);
+
+            case BASH_MAGIC -> BlessingFactory.bash(AbilityId.BASH_MAGIC);
+            case BASH_RANGED -> BlessingFactory.bash(AbilityId.BASH_RANGED);
+            case BASH_MELEE -> BlessingFactory.bash(AbilityId.BASH_MELEE);
+            case BASH_NECROMANCY -> BlessingFactory.bash(AbilityId.BASH_NECROMANCY);
+
+            case BARKSCALES_MAGIC -> BlessingFactory.barkscales(AbilityId.BARKSCALES_MAGIC);
+            case BARKSCALES_RANGED -> BlessingFactory.barkscales(AbilityId.BARKSCALES_RANGED);
+            case BARKSCALES_MELEE -> BlessingFactory.barkscales(AbilityId.BARKSCALES_MELEE);
+            case BARKSCALES_NECROMANCY -> BlessingFactory.barkscales(AbilityId.BARKSCALES_NECROMANCY);
+
+            case INFERNO_OF_ZAMORAK_MAGIC -> BlessingFactory.infernoOfZamorak(AbilityId.INFERNO_OF_ZAMORAK_MAGIC);
+            case INFERNO_OF_ZAMORAK_RANGED -> BlessingFactory.infernoOfZamorak(AbilityId.INFERNO_OF_ZAMORAK_RANGED);
+            case INFERNO_OF_ZAMORAK_MELEE -> BlessingFactory.infernoOfZamorak(AbilityId.INFERNO_OF_ZAMORAK_MELEE);
+            case INFERNO_OF_ZAMORAK_NECROMANCY -> BlessingFactory.infernoOfZamorak(AbilityId.INFERNO_OF_ZAMORAK_NECROMANCY);
         };
     }
     private static boolean hasAtLeastTumekensPieces(EquipmentModel equipment, int required) {

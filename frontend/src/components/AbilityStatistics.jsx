@@ -66,7 +66,8 @@ function isProcHit(hitType) {
   return (
     hitType === "PERFECTEQUILIBRIUM" ||
     hitType === "SPLITSOUL" ||
-    hitType === "INSTABILITY"
+    hitType === "INSTABILITY" ||
+    hitType == "INFERNO_OF_ZAMORAK"
   );
 }
 
@@ -88,6 +89,7 @@ function buildStackedGroups(hits, metric, critMode) {
         bolg: 0,
         splitSoul: 0,
         instability: 0,
+        infernoOfZamorak: 0,
         sourceHits: [hit],
       });
       continue;
@@ -102,6 +104,7 @@ function buildStackedGroups(hits, metric, critMode) {
         bolg: type === "PERFECTEQUILIBRIUM" ? value : 0,
         splitSoul: type === "SPLITSOUL" ? value : 0,
         instability: type === "INSTABILITY" ? value : 0,
+        infernoOfZamorak: type === "INFERNO_OF_ZAMORAK" ? value : 0,
         sourceHits: [hit],
       });
       continue;
@@ -113,6 +116,8 @@ function buildStackedGroups(hits, metric, critMode) {
       currentGroup.splitSoul += value;
     } else if (type === "INSTABILITY") {
       currentGroup.instability += value;
+    } else if (type === "INFERNO_OF_ZAMORAK") {
+      currentGroup.infernoOfZamorak += value;
     }
 
     currentGroup.sourceHits.push(hit);
@@ -191,6 +196,16 @@ export default function AbilityStatistics({
         borderWidth: 1,
         backgroundColor: "rgba(244, 114, 182, 0.35)",
         borderColor: "rgba(244, 114, 182, 0.95)",
+        borderRadius: 4,
+        maxBarThickness: 28,
+        stack: "damage",
+      },
+      {
+        label: "Inferno of Zamorak",
+        data: groupedHits.map((group) => group.infernoOfZamorak),
+        borderWidth: 1,
+        backgroundColor: "rgba(197, 59, 59, 0.35)",
+        borderColor: "rgba(197, 59, 59, 0.95)",
         borderRadius: 4,
         maxBarThickness: 28,
         stack: "damage",
