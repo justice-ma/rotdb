@@ -11,7 +11,7 @@ public class SplashZoneResolver {
         if (context.getBuffs().has(BuffId.SPLASH_ZONE) && hit.getType() != HitType.INFERNO_OF_ZAMORAK &&
             (context.getAbility().getTargetting() == Targetting.MULTI_TARGET ||
             context.getAbility().getTargetting() == Targetting.AREA_TARGET)){
-            return 1.3 + (0.05 * Math.pow(context.getTarget().getSize(), 2));
+            return 1.3 + (0.05 * context.getTarget().getSize());
         }
         return 1;
     }
