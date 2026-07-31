@@ -1,0 +1,12 @@
+{
+  "category": "Category:Equipment",
+  "existing_db_titles": 8232,
+  "filtered_wiki_titles": 8294,
+  "insert_statements": 0,
+  "misses": 130,
+  "misses_log": "tmp/equipment_type_backfill_misses.txt",
+  "output_sql": "tmp/equipment_type_backfill_full.sql",
+  "processed_missing_title_candidates": 8294,
+  "template": "Infobox Bonuses",
+  "update_statements": 2646
+}

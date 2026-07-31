@@ -1,11 +1,12 @@
 {
   "category": "Category:Equipment",
-  "existing_db_titles": 8066,
-  "filtered_wiki_titles": 8266,
-  "insert_statements": 123,
-  "misses": 130,
+  "existing_db_titles": 8232,
+  "filtered_wiki_titles": 1,
+  "insert_statements": 0,
+  "misses": 0,
   "misses_log": "new_equipment_misses.txt",
-  "output_sql": "insert_new_equipment.sql",
-  "processed_missing_title_candidates": 8266,
-  "template": "Infobox Bonuses"
+  "output_sql": "tmp/equipment_type_test.sql",
+  "processed_missing_title_candidates": 1,
+  "template": "Infobox Bonuses",
+  "update_statements": 1
 }

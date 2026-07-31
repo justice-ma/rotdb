@@ -20,6 +20,28 @@ import "../style/abilityPage.css";
 const STORAGE_KEY = "rs3-presets";
 const DELETED_DEFAULT_PRESET_IDS_KEY = "rs3-deleted-default-preset-ids";
 
+const BLESSING_ABILITY_REQUIREMENTS = {
+  LIGHT_OF_SARADOMIN_MAGIC: "STRIKING_LIGHT",
+  LIGHT_OF_SARADOMIN_MELEE: "STRIKING_LIGHT",
+  LIGHT_OF_SARADOMIN_RANGED: "STRIKING_LIGHT",
+  LIGHT_OF_SARADOMIN_NECROMANCY: "STRIKING_LIGHT",
+
+  BASH_MAGIC: "STEADFAST_WILL",
+  BASH_MELEE: "STEADFAST_WILL",
+  BASH_RANGED: "STEADFAST_WILL",
+  BASH_NECROMANCY: "STEADFAST_WILL",
+
+  BARKSCALES_MAGIC: "BARKSCALES",
+  BARKSCALES_MELEE: "BARKSCALES",
+  BARKSCALES_RANGED: "BARKSCALES",
+  BARKSCALES_NECROMANCY: "BARKSCALES",
+
+  INFERNO_OF_ZAMORAK_MAGIC: "ABYSSAL_CINDERS",
+  INFERNO_OF_ZAMORAK_MELEE: "ABYSSAL_CINDERS",
+  INFERNO_OF_ZAMORAK_RANGED: "ABYSSAL_CINDERS",
+  INFERNO_OF_ZAMORAK_NECROMANCY: "ABYSSAL_CINDERS",
+};
+
 const DEFAULT_SKILLS = {
   necromancy: 120,
   constitution: 99,
@@ -503,6 +525,31 @@ export default function AbilityCalculation() {
 
   const needsMainhand = !equipmentIds.MAINHAND;
 
+  const visibleAbilities = useMemo(() => {
+    const enabledBuffs = new Set(buffs?.enabledBuffs ?? []);
+
+    return abilities.filter((ability) => {
+      const requiredBuff = BLESSING_ABILITY_REQUIREMENTS[ability.ability];
+
+      if (!requiredBuff) return true;
+
+      return enabledBuffs.has(requiredBuff);
+    });
+  }, [abilities, buffs]);
+
+  useEffect(() => {
+    if (!selectedAbility) return;
+
+    const stillVisible = visibleAbilities.some(
+      (ability) => ability.ability === selectedAbility.ability,
+    );
+
+    if (!stillVisible) {
+      setSelectedAbility(null);
+      setDetailedResults({});
+    }
+  }, [selectedAbility, visibleAbilities]);
+
   function persistPresets(updatedPresets) {
     setPresets(updatedPresets);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedPresets));
@@ -726,13 +773,13 @@ export default function AbilityCalculation() {
 
   useEffect(() => {
     if (!base) return;
-    if (!abilities.length) return;
+    if (!visibleAbilities.length) return;
 
     (async () => {
       try {
         const batchPayload = {
           base,
-          abilityIds: abilities.map((a) => a.ability),
+          abilityIds: visibleAbilities.map((a) => a.ability),
         };
         const batchResults = await fetchBatchCalculation(batchPayload);
         setResults(batchResults);
@@ -741,7 +788,7 @@ export default function AbilityCalculation() {
         setError(e?.message ?? "Batch calculation failed");
       }
     })();
-  }, [base, abilities]);
+  }, [base, visibleAbilities]);
 
   useEffect(() => {
     if (!base) return;
@@ -943,7 +990,7 @@ export default function AbilityCalculation() {
           </div>
         ) : (
           <Abilities
-            abilities={abilities}
+            abilities={visibleAbilities}
             results={results}
             error={error}
             selectedAbility={selectedAbility}

@@ -45,6 +45,8 @@ public final class BaseAbilityDamageModifier implements Modifier{
         int ohTier = dw ? equipment.getOffhand().getDamageTier() : 0;
         int ammoTier = style == CombatStyles.MAGIC ? context.getSpellContext().getSpell().getDamageTier() :
                 context.getEquipment().getAmmo().getDamageTier();
+        ammoTier = effectiveAmmoTier(style, equipment.getMainhand().getStyle(), equipment.getMainhand().getType(),
+                mhTier, ohTier, ammoTier);
 
         if (equipment.getMainhand().getEffect().contains(Effect.SHARDABLE) && buffs.getBuffSet().contains(BuffId.SHARDOFGENESIS)) {
             mhTier += 5;
@@ -90,5 +92,18 @@ public final class BaseAbilityDamageModifier implements Modifier{
             case ALL ->
                     throw new IllegalStateException("Combat style ALL is not valid for base damage");
         };
+    }
+
+    private int effectiveAmmoTier(CombatStyles style, WeaponStyle weaponStyle, EquipmentType weaponType,
+                                  int mhTier, int ohTier, int ammoTier) {
+        if (style != CombatStyles.RANGED || ammoTier > 0) {
+            return ammoTier;
+        }
+
+        if (weaponStyle == WeaponStyle.THROWN || weaponType == EquipmentType.CHARGEBOW) {
+            return Math.max(mhTier, ohTier);
+        }
+
+        return ammoTier;
     }
 }

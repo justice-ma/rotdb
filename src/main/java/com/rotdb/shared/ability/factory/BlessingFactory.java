@@ -47,7 +47,7 @@ public class BlessingFactory {
                 25,
                 false,
                 Handedness.BOTH,
-                Targetting.SINGLE_TARGET,
+                Targetting.MULTI_TARGET,
                 id.getStyle(),
                 id
         );
