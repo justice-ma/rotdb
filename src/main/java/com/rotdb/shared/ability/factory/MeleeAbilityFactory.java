@@ -68,7 +68,7 @@ public class MeleeAbilityFactory {
                 9,
                 false,
                 TWO_HANDED,
-                SINGLE_TARGET,
+                MULTI_TARGET,
                 CombatStyles.MELEE,
                 ADAPTIVESTRIKE);
     }
