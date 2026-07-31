@@ -97,7 +97,7 @@ function SpellSearch({
   error,
   selected,
   onPick,
-  onClear,
+  onBeginEdit,
 }) {
   return (
     <div className="slot-block">
@@ -106,7 +106,7 @@ function SpellSearch({
           className="slot-input"
           value={query}
           onChange={(e) => {
-            if (selected) onClear();
+            if (selected) onBeginEdit();
             setQuery(e.target.value);
           }}
           placeholder="Spell…"
@@ -200,6 +200,7 @@ export default function CombatSettings({
   const [spellResults, setSpellResults] = useState([]);
   const [spellLoading, setSpellLoading] = useState(false);
   const [spellError, setSpellError] = useState("");
+  const [editingSpell, setEditingSpell] = useState(false);
 
   const isTwoHandedMainhand =
     selectedEquipmentBySlot?.MAINHAND?.slot === "TWOHANDED";
@@ -402,15 +403,16 @@ export default function CombatSettings({
   }
 
   function onPickSpell(item) {
+    setEditingSpell(false);
     setSpell(item);
     setSpellQuery(item.name);
     setSpellResults([]);
     setSpellError("");
   }
 
-  function onClearSpell() {
+  function onBeginEditSpell() {
+    setEditingSpell(true);
     setSpell(null);
-    setSpellQuery("");
     setSpellResults([]);
     setSpellError("");
     setSpellLoading(false);
@@ -504,12 +506,13 @@ export default function CombatSettings({
 
   useEffect(() => {
     if (!spell) {
-      setSpellQuery("");
+      if (!editingSpell) setSpellQuery("");
       return;
     }
 
+    setEditingSpell(false);
     setSpellQuery(spell.name ?? "");
-  }, [spell]);
+  }, [spell, editingSpell]);
 
   useEffect(() => {
     if (pocketSupportsBookUptime) return;
@@ -684,7 +687,7 @@ export default function CombatSettings({
                 error={spellError}
                 selected={spell}
                 onPick={onPickSpell}
-                onClear={onClearSpell}
+                onBeginEdit={onBeginEditSpell}
               />
             ) : null}
 

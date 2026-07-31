@@ -1,11 +1,13 @@
 package com.rotdb.calculation.domain.model.context;
 
 import com.rotdb.shared.ability.AbilityProvider;
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.calculation.domain.model.DamageRequest;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.enums.HitCapMode;
 import com.rotdb.shared.combat.domain.model.enums.Prayer;
+import com.rotdb.shared.combat.domain.model.enums.Targetting;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.shared.combat.domain.model.equipment.FamiliarContext;
 import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
@@ -95,6 +97,7 @@ public class ContextBuilder {
         context.setPerks(request.getPerks());
         context.setFamiliar(request.getFamiliar());
         context.setSpellContext(request.getSpell());
+        applySpellTargetting(context);
 
         context.setSelectedPrayers(request.getSelectedPrayers().getSelected());
         context.setZealotsEquipped(request.getEquipment().getNeck().getEffect().contains(Effect.ZEALOTS));
@@ -102,5 +105,19 @@ public class ContextBuilder {
         context.setPrayer(PrayerResolver.resolve(context));
         context.setHitCapMode(request.getHitCapMode());
         return context;
+    }
+
+    private static void applySpellTargetting(CalculationContext context) {
+        AbilityContext ability = context.getAbility();
+        SpellContext spell = context.getSpellContext();
+
+        if (ability == null || ability.getId() != AbilityId.MAGICAUTO || spell == null || spell.getSpell() == null) {
+            return;
+        }
+
+        Targetting spellTargetting = spell.getSpell().getTargetting();
+        if (spellTargetting != Targetting.SINGLE_TARGET) {
+            ability.setTargetting(spellTargetting);
+        }
     }
 }
