@@ -45,14 +45,6 @@ public class FlatAddResolver {
             add += (int) (context.getEquipment().getTotalArmour() * 0.1 + context.getSkills().getBoostedDefence());
         }
 
-        if (context.getBuffs().has(BuffId.BIG_BONED)) {
-            int effectiveMaxHp =(int) ((context.getSkills().getMaxHp() * 1.5) + context.getEquipment().getTotalLife());
-            add += (int) (effectiveMaxHp * 0.05);
-        }
-
-        if (context.getBuffs().has(BuffId.ABYSSAL_CINDERS) && hit.getType() == HitType.BASE) {
-            add += (int) (context.getDamage().getBaseDamage() * 0.15);
-        }
         return add;
     }
 }

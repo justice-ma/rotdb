@@ -4,6 +4,7 @@ import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.resolvers.Debug;
 import com.rotdb.calculation.domain.modifiers.Modifier;
+import com.rotdb.calculation.domain.resolvers.abilityDamage.core.AbyssalCindersCoreAddResolver;
 import com.rotdb.calculation.domain.resolvers.abilityDamage.core.BerserkersFuryMultiplierResolver;
 import com.rotdb.calculation.domain.resolvers.abilityDamage.core.CoreFlatAddResolver;
 import com.rotdb.calculation.domain.resolvers.abilityDamage.core.CorePerkAddResolver;
@@ -15,7 +16,7 @@ public class CoreModifier implements Modifier {
         int hits = context.getAbility().getHits().size();
         Debug.stageHeader(context, "Core Modifier");
 
-        int add = CoreFlatAddResolver.resolve(context) +
+        int baseAdd = CoreFlatAddResolver.resolve(context) +
                 CorePerkAddResolver.resolve(context) +
                 CorePreviousAbilityAddResolver.resolve(context);
         double bf = BerserkersFuryMultiplierResolver.resolve(context);
@@ -23,6 +24,7 @@ public class CoreModifier implements Modifier {
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
             if (hit.isDot()) continue;
+            int add = baseAdd + AbyssalCindersCoreAddResolver.resolve(context, hit);
             hit.setCurrentMin(hit.getCurrentMin() + add);
             hit.setCurrentMax(hit.getCurrentMax() + add);
             hit.setCurrentDamage((hit.getCurrentMin() + hit.getCurrentMax()) / 2);

@@ -17,15 +17,17 @@ public class NpcModifier implements Modifier {
         for (int i = 0; i < hits; i++) {
             double mod = 1;
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
-            HauntedBonus b = HauntedBonusResolver.resolve(context, hit);
+            HauntedBonus hauntedBonus = HauntedBonusResolver.resolve(context, hit);
+            HauntedBonus bigBonedBonus = BigBonedBonusResolver.resolve(context);
             mod *= BuffMultiplierResolver.resolve(context, hit);
             mod *= PerkMultiplierResolver.resolve(context);
             mod *= ScrimshawMultiplierResolver.resolve(context);
             mod *= TargetStatusMultiplierResolver.resolve(context);
             mod *= SigilMultiplierResolver.resolve(context);
-            if (!b.isZero()) applyHauntedBonus(hit, b);
+            if (!hauntedBonus.isZero()) applyHauntedBonus(hit, hauntedBonus);
+            if (!bigBonedBonus.isZero()) applyHauntedBonus(hit, bigBonedBonus);
             mod *= PostHauntedMultiplierResolver.resolve(context);
-            mod *= AbilityMultiplierResolver.resolve(context);
+            mod *= AbilityMultiplierResolver.resolve(context, hit);
 
             int flatAdd = FlatAddResolver.resolve(context, hit);
             if (flatAdd != 0) applyFlatAdd(hit, flatAdd);
