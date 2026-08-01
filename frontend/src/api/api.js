@@ -102,3 +102,21 @@ export async function fetchTargetByTitle(title) {
 
   return handleResponse(res);
 }
+
+export async function recordHeartbeat(clientId, sessionId) {
+  const res = await fetch(`${BASE}/analytics/heartbeat`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      clientId,
+      sessionId,
+    }),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || "Request failed.");
+  }
+  return;
+}
