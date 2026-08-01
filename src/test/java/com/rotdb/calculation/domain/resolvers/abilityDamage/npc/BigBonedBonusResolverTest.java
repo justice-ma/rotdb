@@ -2,7 +2,10 @@ package com.rotdb.calculation.domain.resolvers.abilityDamage.npc;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.model.context.DamageContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.HitType;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
@@ -17,22 +20,29 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BigBonedBonusResolverTest {
 
     @Test
-    void bigBonedAddsFivePercentEffectiveMaxHpWhenUnderHauntedCap() {
-        HauntedBonus bonus = BigBonedBonusResolver.resolve(context(3000, 1000, 0, true));
+    void bigBonedAddsFivePercentEffectiveMaxHpToBaseHits() {
+        HauntedBonus bonus = BigBonedBonusResolver.resolve(context(3000, 1000, 0, true), hit(HitType.BASE));
 
         assertBonus(bonus, 75);
     }
 
     @Test
     void bigBonedIsNotCappedByBaseDamage() {
-        HauntedBonus bonus = BigBonedBonusResolver.resolve(context(3000, 32000, 0, true));
+        HauntedBonus bonus = BigBonedBonusResolver.resolve(context(3000, 32000, 0, true), hit(HitType.BASE));
 
         assertBonus(bonus, 2400);
     }
 
     @Test
     void bigBonedReturnsZeroWhenBuffIsMissing() {
-        HauntedBonus bonus = BigBonedBonusResolver.resolve(context(3000, 1000, 0, false));
+        HauntedBonus bonus = BigBonedBonusResolver.resolve(context(3000, 1000, 0, false), hit(HitType.BASE));
+
+        assertThat(bonus.isZero()).isTrue();
+    }
+
+    @Test
+    void bigBonedReturnsZeroForInjectedHits() {
+        HauntedBonus bonus = BigBonedBonusResolver.resolve(context(3000, 32000, 0, true), hit(HitType.INFERNO_OF_ZAMORAK));
 
         assertThat(bonus.isZero()).isTrue();
     }
@@ -61,6 +71,10 @@ class BigBonedBonusResolverTest {
         context.setSkills(skills);
         context.setEquipment(equipment);
         return context;
+    }
+
+    private AbilityHitsContext hit(HitType type) {
+        return new AbilityHitsContext(0, 0, false, AbilityTier.BASIC, 0, type, -1);
     }
 
     private void assertBonus(HauntedBonus bonus, int expected) {

@@ -8,7 +8,7 @@ import com.rotdb.shared.combat.domain.model.enums.Targetting;
 
 public class SplashZoneResolver {
     public static double resolve(CalculationContext context, AbilityHitsContext hit) {
-        if (context.getBuffs().has(BuffId.SPLASH_ZONE) && hit.getType() != HitType.INFERNO_OF_ZAMORAK &&
+        if (context.getBuffs().has(BuffId.SPLASH_ZONE) && hit.getType() == HitType.BASE &&
             (context.getAbility().getTargetting() == Targetting.MULTI_TARGET ||
             context.getAbility().getTargetting() == Targetting.AREA_TARGET)){
             return 1.3 + (0.05 * context.getTarget().getSize());
