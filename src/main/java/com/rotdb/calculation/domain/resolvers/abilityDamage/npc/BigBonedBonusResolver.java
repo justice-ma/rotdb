@@ -3,11 +3,10 @@ package com.rotdb.calculation.domain.resolvers.abilityDamage.npc;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
-import com.rotdb.shared.combat.domain.model.enums.HitType;
 
 public class BigBonedBonusResolver {
     public static HauntedBonus resolve(CalculationContext context, AbilityHitsContext hit) {
-        if (!context.getBuffs().has(BuffId.BIG_BONED) || hit.getType() != HitType.BASE) {
+        if (!context.getBuffs().has(BuffId.BIG_BONED)) {
             return zero();
         }
 

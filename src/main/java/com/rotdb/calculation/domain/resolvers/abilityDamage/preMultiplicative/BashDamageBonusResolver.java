@@ -36,6 +36,7 @@ public class BashDamageBonusResolver {
 
     private static boolean hasShieldOrDefender(CalculationContext context) {
         return context.getEquipment().getOffhand().getType() == EquipmentType.SHIELD
-                || context.getEquipment().getOffhand().getEffect().contains(Effect.DEFENDER);
+                || context.getEquipment().getOffhand().getEffect().contains(Effect.DEFENDER)
+                || context.getEquipment().getMainhand().getType() == EquipmentType.SHIELDBOW;
     }
 }

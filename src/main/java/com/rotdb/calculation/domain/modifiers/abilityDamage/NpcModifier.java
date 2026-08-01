@@ -5,6 +5,7 @@ import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.resolvers.Debug;
 import com.rotdb.calculation.domain.resolvers.abilityDamage.npc.*;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.enums.HitType;
 
 import java.util.List;
 
@@ -17,24 +18,32 @@ public class NpcModifier implements Modifier {
         for (int i = 0; i < hits; i++) {
             double mod = 1;
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
-            HauntedBonus hauntedBonus = HauntedBonusResolver.resolve(context, hit);
-            HauntedBonus bigBonedBonus = BigBonedBonusResolver.resolve(context, hit);
-            mod *= BuffMultiplierResolver.resolve(context, hit);
-            mod *= PerkMultiplierResolver.resolve(context);
-            mod *= ScrimshawMultiplierResolver.resolve(context);
-            mod *= TargetStatusMultiplierResolver.resolve(context);
-            mod *= SigilMultiplierResolver.resolve(context);
-            if (!hauntedBonus.isZero()) applyHauntedBonus(hit, hauntedBonus);
-            if (!bigBonedBonus.isZero()) applyHauntedBonus(hit, bigBonedBonus);
-            mod *= PostHauntedMultiplierResolver.resolve(context);
-            mod *= AbilityMultiplierResolver.resolve(context, hit);
 
-            int flatAdd = FlatAddResolver.resolve(context);
-            if (flatAdd != 0) applyFlatAdd(hit, flatAdd);
+            if (hit.getType() != HitType.SPLITSOUL) {
+                HauntedBonus hauntedBonus = HauntedBonusResolver.resolve(context, hit);
+                HauntedBonus bigBonedBonus = BigBonedBonusResolver.resolve(context, hit);
+                mod *= BuffMultiplierResolver.resolve(context, hit);
+                mod *= PerkMultiplierResolver.resolve(context);
+                mod *= ScrimshawMultiplierResolver.resolve(context);
+                mod *= TargetStatusMultiplierResolver.resolve(context);
+                mod *= SigilMultiplierResolver.resolve(context);
 
-            List<Integer> minMax = FlatRangeAddResolver.resolve(context, hit);
-            applyFlatRangeAdd(hit, minMax.getFirst(), minMax.get(1));
-            hit.calculateDamages(mod);
+                hit.calculateDamages(mod);
+
+                if (!hauntedBonus.isZero()) applyHauntedBonus(hit, hauntedBonus);
+                if (!bigBonedBonus.isZero()) applyHauntedBonus(hit, bigBonedBonus);
+
+                double postStoredMod = 1;
+                postStoredMod *= PostHauntedMultiplierResolver.resolve(context);
+                postStoredMod *= AbilityMultiplierResolver.resolve(context, hit);
+
+                int flatAdd = FlatAddResolver.resolve(context);
+                if (flatAdd != 0) applyFlatAdd(hit, flatAdd);
+
+                List<Integer> minMax = FlatRangeAddResolver.resolve(context, hit);
+                applyFlatRangeAdd(hit, minMax.getFirst(), minMax.get(1));
+                hit.calculateDamages(postStoredMod);
+            }
 
             Debug.stageRow(context, i, hit);
         }

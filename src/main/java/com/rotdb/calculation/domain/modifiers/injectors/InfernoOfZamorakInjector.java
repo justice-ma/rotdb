@@ -25,6 +25,7 @@ public class InfernoOfZamorakInjector implements Modifier {
 
             if (parent.isDot()) continue;
             if (parent.getType() != HitType.BASE) continue;
+            if (parent.getTier() == AbilityTier.CONJURE) continue;
 
             AbilityHitsContext proc = new AbilityHitsContext(
                     1.15 / 19, 2.15 / 19,
