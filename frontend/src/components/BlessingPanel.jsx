@@ -109,6 +109,11 @@ export default function BlessingPanel({ style, buffs, setBuffs, allBuffs }) {
 
   return (
     <div className="blessing-tier-list">
+      <div className="blessing-notice" role="note">
+        Blessing damage is estimated from pre-release information. Exact behavior
+        may differ on launch.
+      </div>
+
       {BLESSING_TIERS.map((tier) => (
         <div key={tier.label} className="blessing-tier-row">
           <div className="blessing-tier-label">{tier.label}</div>
