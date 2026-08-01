@@ -2,7 +2,6 @@ package com.rotdb.calculation.domain.resolvers.abilityDamage.npc;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.ability.AbilityId;
-import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.*;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
@@ -11,7 +10,7 @@ import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.MAGIC;
 
 public class FlatAddResolver {
-    public static int resolve(CalculationContext context, AbilityHitsContext hit) {
+    public static int resolve(CalculationContext context) {
         EquipmentSlot mainhand = context.getEquipment().getMainhand();
         EquipmentSlot offhand = context.getEquipment().getOffhand();
         CombatStyles style = context.getEquipment().getCombatStyle();
@@ -33,16 +32,6 @@ public class FlatAddResolver {
                 context.getAbility().getId() == AbilityId.LIGHT_OF_SARADOMIN_RANGED ||
                 context.getAbility().getId() == AbilityId.LIGHT_OF_SARADOMIN_NECROMANCY)) {
             add += (int) (context.getEquipment().getTotalArmour() * 2.5);
-        }
-
-        if (hit.getType() == HitType.BASE
-                && (context.getEquipment().getOffhand().getType() == EquipmentType.SHIELD
-                || context.getEquipment().getOffhand().getEffect().contains(Effect.DEFENDER))
-                && (context.getAbility().getId() == AbilityId.BASH_MAGIC
-                || context.getAbility().getId() == AbilityId.BASH_MELEE
-                || context.getAbility().getId() == AbilityId.BASH_RANGED
-                || context.getAbility().getId() == AbilityId.BASH_NECROMANCY)) {
-            add += (int) (context.getEquipment().getTotalArmour() * 0.1 + context.getSkills().getBoostedDefence());
         }
 
         return add;
