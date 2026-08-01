@@ -1,7 +1,6 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.npc;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.combat.domain.model.enums.*;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
@@ -24,14 +23,6 @@ public class FlatAddResolver {
             if (offhand.getEffect().contains(Effect.SONGOFDESTRUCTION) && mainhand.getEffect().contains(Effect.SONGOFDESTRUCTION)) {
                 add += corr * 3 + magic;
             }
-        }
-
-        if (context.getBuffs().has(BuffId.STRIKING_LIGHT) &&
-                (context.getAbility().getId() == AbilityId.LIGHT_OF_SARADOMIN_MAGIC ||
-                context.getAbility().getId() == AbilityId.LIGHT_OF_SARADOMIN_MELEE ||
-                context.getAbility().getId() == AbilityId.LIGHT_OF_SARADOMIN_RANGED ||
-                context.getAbility().getId() == AbilityId.LIGHT_OF_SARADOMIN_NECROMANCY)) {
-            add += (int) (context.getEquipment().getTotalArmour() * 2.5);
         }
 
         return add;

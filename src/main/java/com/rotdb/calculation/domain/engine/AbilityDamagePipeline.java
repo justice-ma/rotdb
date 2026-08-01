@@ -30,6 +30,7 @@ public final class AbilityDamagePipeline {
                 new InfernoOfZamorakInjector(),
                 new AbilityRangeModifier(),
                 new BashDamageModifier(),
+                new LightOfSaradominDamageModifier(),
                 new HitChanceModifier(),
                 new InvisibleAbilityModifier(),
                 new AbilitySpecificModifier(),
