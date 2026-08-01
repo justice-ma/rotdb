@@ -153,6 +153,7 @@ export default function CombatSettings({
   allBuffs,
   skills,
   setSkills,
+  derivedStats,
   selectedPrayers,
   setSelectedPrayers,
   selectedPerks,
@@ -722,7 +723,11 @@ export default function CombatSettings({
       <details className="cs-section">
         <summary className="cs-summary">Stats</summary>
         <div className="cs-body">
-          <StatPanel skills={skills} setSkills={setSkills} />
+          <StatPanel
+            skills={skills}
+            setSkills={setSkills}
+            derivedStats={derivedStats}
+          />
         </div>
       </details>
 

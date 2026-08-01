@@ -7,6 +7,7 @@ import CombatSettings from "../components/CombatSettings";
 import {
   fetchAbilities,
   fetchBatchCalculation,
+  fetchDerivedStats,
   fetchDetailedAbilityCalculation,
   fetchBuffs,
   fetchEquipmentByIds,
@@ -365,6 +366,7 @@ export default function AbilityCalculation() {
   const [abilities, setAbilities] = useState([]);
   const [results, setResults] = useState({});
   const [detailedResults, setDetailedResults] = useState({});
+  const [derivedStats, setDerivedStats] = useState(null);
   const [error, setError] = useState("");
 
   const [mainhand, setMainhand] = useState(null);
@@ -520,6 +522,50 @@ export default function AbilityCalculation() {
     selectedPotions,
     itemLevel20,
     targetSize,
+    hitCapMode,
+  ]);
+
+  const derivedStatsPayload = useMemo(() => {
+    return {
+      skills,
+      equipment: {
+        mainhandId: equipmentIds.MAINHAND ?? null,
+        offhandId: equipmentIds.OFFHAND ?? null,
+        headId: equipmentIds.HEAD ?? null,
+        bodyId: equipmentIds.BODY ?? null,
+        legsId: equipmentIds.LEGS ?? null,
+        bootsId: equipmentIds.BOOTS ?? null,
+        glovesId: equipmentIds.GLOVES ?? null,
+        neckId: equipmentIds.NECK ?? null,
+        ringId: equipmentIds.RING ?? null,
+        capeId: equipmentIds.CAPE ?? null,
+        pocketId: equipmentIds.POCKET ?? null,
+        ammoId: equipmentIds.AMMO ?? null,
+        quiverId: equipmentIds.QUIVER ?? null,
+      },
+      buffs,
+      potions: selectedPotions,
+      selectedPrayers,
+      perks: {
+        selectedPerks,
+        itemLevel20,
+        genocidalRank,
+      },
+      spell: spell?.id ?? null,
+      selectedFamiliar: familiar?.id ?? null,
+      hitCapMode,
+    };
+  }, [
+    skills,
+    equipmentIds,
+    buffs,
+    selectedPotions,
+    selectedPrayers,
+    selectedPerks,
+    itemLevel20,
+    genocidalRank,
+    spell,
+    familiar,
     hitCapMode,
   ]);
 
@@ -791,6 +837,24 @@ export default function AbilityCalculation() {
   }, [base, visibleAbilities]);
 
   useEffect(() => {
+    let ignore = false;
+
+    (async () => {
+      try {
+        const stats = await fetchDerivedStats(derivedStatsPayload);
+        if (!ignore) setDerivedStats(stats);
+      } catch (e) {
+        console.error("Derived stats calculation failed", e);
+        if (!ignore) setDerivedStats(null);
+      }
+    })();
+
+    return () => {
+      ignore = true;
+    };
+  }, [derivedStatsPayload]);
+
+  useEffect(() => {
     if (!base) return;
     if (!selectedAbility) return;
 
@@ -852,6 +916,7 @@ export default function AbilityCalculation() {
           allBuffs={allBuffs}
           skills={skills}
           setSkills={setSkills}
+          derivedStats={derivedStats}
           selectedPrayers={selectedPrayers}
           setSelectedPrayers={setSelectedPrayers}
           selectedPerks={selectedPerks}

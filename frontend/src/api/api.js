@@ -35,6 +35,17 @@ export async function fetchDetailedAbilityCalculation(payload) {
   return handleResponse(res);
 }
 
+export async function fetchDerivedStats(payload) {
+  const res = await fetch(`${BASE}/damage/derived-stats`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  return handleResponse(res);
+}
+
 export async function fetchEquipmentBySlot(slot, query) {
   const res = await fetch(
     `${BASE}/equipment/search?q=${encodeURIComponent(query)}&slot=${slot}`,

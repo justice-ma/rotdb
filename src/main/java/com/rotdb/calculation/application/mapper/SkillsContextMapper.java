@@ -14,6 +14,7 @@ public class SkillsContextMapper {
         if (request.ranged() != null) skills.setBaseRanged(request.ranged());
         if (request.magic() != null) skills.setBaseMagic(request.magic());
         if (request.attack() != null) skills.setBaseAttack(request.attack());
+        if (request.defence() != null) skills.setBaseDefence(request.defence());
         if (request.currentHp() != null) skills.setCurrentHp(request.currentHp());
         if (request.maxHp() != null) skills.setMaxHp(request.maxHp());
 

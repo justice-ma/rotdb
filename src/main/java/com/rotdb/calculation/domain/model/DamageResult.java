@@ -6,9 +6,10 @@ public class DamageResult {
     private final int totalMinDamage, totalMaxDamage, totalAvgDamage, totalMinCrit,
             totalMaxCrit, totalAvgCrit, totalMinNonCrit, totalMaxNonCrit, totalAvgNonCrit, minCoeff, maxCoeff;
     private final List<HitResult> hit;
+    private final DerivedStatsResult derivedStats;
     public DamageResult(int totalMinDamage, int totalMaxDamage, int totalAvgDamage, int totalMinCrit, int totalMaxCrit,
                         int totalAvgCrit, int totalMinNonCrit, int totalMaxNonCrit, int totalAvgNonCrit, int minCoeff,
-                        int maxCoeff, List<HitResult> hit) {
+                        int maxCoeff, List<HitResult> hit, DerivedStatsResult derivedStats) {
         this.totalMinDamage = totalMinDamage;
         this.totalMaxDamage = totalMaxDamage;
         this.totalAvgDamage = totalAvgDamage;
@@ -21,6 +22,7 @@ public class DamageResult {
         this.minCoeff = minCoeff;
         this.maxCoeff = maxCoeff;
         this.hit = hit;
+        this.derivedStats = derivedStats;
     }
 
     public int getTotalMinDamage() {
@@ -69,5 +71,9 @@ public class DamageResult {
 
     public List<HitResult> getHit() {
         return hit;
+    }
+
+    public DerivedStatsResult getDerivedStats() {
+        return derivedStats;
     }
 }

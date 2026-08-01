@@ -8,6 +8,7 @@ import com.rotdb.calculation.api.request.BatchDamageCalcRequest;
 import com.rotdb.calculation.domain.engine.CalculationEngine;
 import com.rotdb.calculation.domain.model.DamageRequest;
 import com.rotdb.calculation.domain.model.DamageResult;
+import com.rotdb.calculation.domain.model.DerivedStatsResult;
 import com.rotdb.calculation.application.service.DamageBatchService;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,12 @@ public class DamageController {
     public DamageResult calculate(@RequestBody DamageCalcRequestDto request) {
         DamageRequest internal = mapper.from(request);
         return engine.calculateAbilityDamage(internal);
+    }
+
+    @PostMapping("/derived-stats")
+    public DerivedStatsResult calculateDerivedStats(@RequestBody DamageCalcRequestDto request) {
+        DamageRequest internal = mapper.from(request);
+        return engine.calculateDerivedStats(internal);
     }
 
     @PostMapping("/calculate/batch")

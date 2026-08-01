@@ -18,9 +18,19 @@
   cursor: pointer;
 }
 
+.hp-row {
+  align-items: center;
+}
+
 .stat-label {
   color: var(--text);
   cursor: pointer;
+}
+
+.hp-label-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .stat-input {
@@ -35,6 +45,23 @@
 
   padding: 8px 10px;
   outline: none;
+}
+
+.hp-input-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hp-divider {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.hp-effective {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.2;
 }
 
 .stat-row:focus-within {

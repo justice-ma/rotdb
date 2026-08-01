@@ -6,10 +6,15 @@ import com.rotdb.calculation.application.validation.PrayerRequestValidator;
 import com.rotdb.calculation.domain.model.HitResult;
 import com.rotdb.calculation.domain.model.DamageRequest;
 import com.rotdb.calculation.domain.model.DamageResult;
+import com.rotdb.calculation.domain.model.DerivedStatsResult;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.model.context.ContextBuilder;
 import com.rotdb.calculation.domain.model.context.DamageContext;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,6 +36,11 @@ public final class CalculationEngine {
 
         abilityPipeline.run(context);
         return mapToResult(context);
+    }
+
+    public DerivedStatsResult calculateDerivedStats(DamageRequest request) {
+        request = normalizer.normalize(request);
+        return mapDerivedStats(request.getSkills(), request.getEquipment(), request.getBuffs());
     }
 
     public DamageResult mapToResult(CalculationContext context) {
@@ -68,6 +78,21 @@ public final class CalculationEngine {
                 damage.getNonCritDamage(),
                 (int) (damage.getMinPercent()),
                 (int) (damage.getMaxPercent()),
-                hits);
+                hits,
+                mapDerivedStats(context.getSkills(), context.getEquipment(), context.getBuffs()));
+    }
+
+    private DerivedStatsResult mapDerivedStats(SkillsContext skills, EquipmentModel equipment, BuffContext buffs) {
+        int baseMaxHp = skills.getMaxHp();
+        int equipmentLifeBonus = (int) equipment.getTotalLife();
+        int effectiveBaseHp = buffs.has(BuffId.BIG_BONED)
+                ? (int) (baseMaxHp * 1.5)
+                : baseMaxHp;
+
+        return new DerivedStatsResult(
+                baseMaxHp,
+                equipmentLifeBonus,
+                effectiveBaseHp + equipmentLifeBonus
+        );
     }
 }

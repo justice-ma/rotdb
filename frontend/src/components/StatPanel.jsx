@@ -3,6 +3,7 @@ import "../style/statPanel.css";
 
 const SKILL_FIELDS = [
   { key: "attack", label: "Attack" },
+  { key: "defence", label: "Defence" },
   { key: "strength", label: "Strength" },
   { key: "magic", label: "Magic" },
   { key: "ranged", label: "Ranged" },
@@ -11,7 +12,7 @@ const SKILL_FIELDS = [
   { key: "maxHp", label: "Maximum HP" },
 ];
 
-export default function StatsPanel({ skills, setSkills }) {
+export default function StatsPanel({ skills, setSkills, derivedStats }) {
   const inputRefs = useRef({});
 
   function handleSkillChange(skillKey, value) {
@@ -34,7 +35,12 @@ export default function StatsPanel({ skills, setSkills }) {
         if (skill.key === "currentHp") {
           return (
             <div key="hp-row" className="stat-row hp-row">
-              <label className="stat-label">Health Points</label>
+              <div className="hp-label-group">
+                <label className="stat-label">Lifepoints</label>
+                <div className="hp-effective">
+                  Effective: {derivedStats?.effectiveMaxHp ?? skills.maxHp ?? ""}
+                </div>
+              </div>
 
               <div className="hp-input-group">
                 <input
