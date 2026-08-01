@@ -23,6 +23,7 @@ import com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike.CritD
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.rotdb.shared.combat.domain.model.enums.HitType.INFERNO_OF_ZAMORAK;
 import static com.rotdb.shared.combat.domain.model.enums.HitType.PERFECTEQUILIBRIUM;
 
 public class PerfectEquilibriumInjector implements Modifier {
@@ -72,6 +73,7 @@ public class PerfectEquilibriumInjector implements Modifier {
             // No stacks from DoTs, and never stack/proc off the proc
             if (parent.isDot()) continue;
             if (parent.getType() == PERFECTEQUILIBRIUM) continue;
+            if (parent.getType() == INFERNO_OF_ZAMORAK) continue;
             stacks++;
 
             if (isCrystalRain) {
