@@ -24,10 +24,10 @@ class BigBonedBonusResolverTest {
     }
 
     @Test
-    void bigBonedIsCappedAtTwentyPercentBaseDamage() {
+    void bigBonedIsNotCappedByBaseDamage() {
         HauntedBonus bonus = BigBonedBonusResolver.resolve(context(3000, 32000, 0, true));
 
-        assertBonus(bonus, 600);
+        assertBonus(bonus, 2400);
     }
 
     @Test
