@@ -14,6 +14,16 @@
   padding: 9px 10px;
 }
 
+.blessing-warning {
+  border: 1px solid color-mix(in hsl, #ef4444 54%, var(--border));
+  border-radius: 8px;
+  background: color-mix(in hsl, #ef4444 12%, var(--bg));
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 9px 10px;
+}
+
 .blessing-tier-row {
   display: grid;
   grid-template-columns: 56px repeat(3, 72px);

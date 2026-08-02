@@ -5,6 +5,7 @@ const BLESSING_TIERS = [
   {
     label: "Tier 1",
     selectable: true,
+    deriviationGroup: "LEAGUES_T1_TO_T4",
     blessings: [
       { id: "ADRENALINE_JUNKIE", god: "ZAMORAK" },
       { id: "BIG_BONED", god: "GUTHIX" },
@@ -14,6 +15,7 @@ const BLESSING_TIERS = [
   {
     label: "Tier 2",
     selectable: true,
+    deriviationGroup: "LEAGUES_T1_TO_T4",
     blessings: [
       { id: "ABYSSAL_CINDERS", god: "ZAMORAK" },
       { id: "BARKSCALES", god: "GUTHIX" },
@@ -23,6 +25,7 @@ const BLESSING_TIERS = [
   {
     label: "Tier 3",
     selectable: true,
+    deriviationGroup: "LEAGUES_T1_TO_T4",
     blessings: [
       { id: "AVERNIC_RAMPAGE", god: "ZAMORAK" },
       { id: "ETERNAL_SUSTENANCE", god: "GUTHIX" },
@@ -32,6 +35,7 @@ const BLESSING_TIERS = [
   {
     label: "Tier 4",
     selectable: false,
+    deriviationGroup: "LEAGUES_T1_TO_T4",
     blessings: [
       { id: "DEMONS_MARK", god: "ZAMORAK" },
       { id: "SPLASH_ZONE", god: "GUTHIX" },
@@ -41,11 +45,12 @@ const BLESSING_TIERS = [
   {
     label: "Relics",
     selectable: true,
-    blessings: [{ id: "ICYENIC_FAITH", god: null }],
+    deriviationGroup: "LEAGUES_RELICS",
+    blessings: [{ id: "ICYENIC_FAITH", god: "RELIC" }],
   },
 ];
 
-const SELECTABLE_TIERS = BLESSING_TIERS.filter((tier) => tier.selectable);
+const TIER_FOUR_SOURCE_TIERS = BLESSING_TIERS.slice(0, 3);
 const TIER_FOUR = BLESSING_TIERS.find((tier) => !tier.selectable);
 const BLESSING_IDS = BLESSING_TIERS.flatMap((tier) =>
   tier.blessings.map((blessing) => blessing.id),
@@ -53,7 +58,7 @@ const BLESSING_IDS = BLESSING_TIERS.flatMap((tier) =>
 const TIER_FOUR_IDS = TIER_FOUR.blessings.map((blessing) => blessing.id);
 
 function deriveTier4God(selectedGods) {
-  if (selectedGods.length !== SELECTABLE_TIERS.length) return null;
+  if (selectedGods.length !== TIER_FOUR_SOURCE_TIERS.length) return null;
 
   const counts = selectedGods.reduce((acc, god) => {
     acc[god] = (acc[god] ?? 0) + 1;
@@ -69,8 +74,18 @@ function deriveTier4Id(selectedGods) {
   return TIER_FOUR.blessings.find((blessing) => blessing.god === god)?.id;
 }
 
-export default function BlessingPanel({ style, buffs, setBuffs, allBuffs }) {
+export default function BlessingPanel({
+  style,
+  buffs,
+  setBuffs,
+  allBuffs,
+  selectedPocket,
+}) {
   const buffsById = new Map((allBuffs ?? []).map((buff) => [buff.id, buff]));
+  const enabledBuffs = buffs?.enabledBuffs ?? [];
+  const icyenicFaithSelected = enabledBuffs.includes("ICYENIC_FAITH");
+  const selectedPocketName = selectedPocket?.name?.toLowerCase?.() ?? "";
+  const tomeEquipped = selectedPocketName.includes("tome of the icyene");
 
   function selectBlessing(tier, entry) {
     if (!tier.selectable) return;
@@ -88,7 +103,7 @@ export default function BlessingPanel({ style, buffs, setBuffs, allBuffs }) {
         nextEnabled = [...nextEnabled, entry.id];
       }
 
-      const selectedGods = SELECTABLE_TIERS.map((selectableTier) => {
+      const selectedGods = TIER_FOUR_SOURCE_TIERS.map((selectableTier) => {
         const selectedId = nextEnabled.find((id) =>
           selectableTier.blessings.some((blessing) => blessing.id === id),
         );
@@ -118,6 +133,12 @@ export default function BlessingPanel({ style, buffs, setBuffs, allBuffs }) {
         Blessing damage is estimated from pre-release information. Exact
         behavior may differ on launch.
       </div>
+
+      {icyenicFaithSelected && !tomeEquipped ? (
+        <div className="blessing-warning" role="alert">
+          Icyenic Faith requires Tome of the Icyene in the pocket slot.
+        </div>
+      ) : null}
 
       {BLESSING_TIERS.map((tier) => (
         <div key={tier.label} className="blessing-tier-row">

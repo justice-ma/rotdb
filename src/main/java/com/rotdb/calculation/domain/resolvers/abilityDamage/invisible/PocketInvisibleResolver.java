@@ -12,7 +12,6 @@ public class PocketInvisibleResolver {
 
         if (context.getEquipment().getPocket().getEffect().contains(Effect.TOME_OF_THE_ICYENE)
                 && context.getBuffs().has(BuffId.ICYENIC_FAITH)) {
-            System.out.println("Prayer: " + context.getEquipment().getTotalPrayer());
             return 1 + 0.002 * context.getEquipment().getTotalPrayer();
         }
         return 1;

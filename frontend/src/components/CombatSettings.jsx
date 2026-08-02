@@ -775,6 +775,7 @@ export default function CombatSettings({
             buffs={buffs}
             setBuffs={setBuffs}
             allBuffs={allBuffs}
+            selectedPocket={selectedPocket}
           />
         </div>
       </details>
