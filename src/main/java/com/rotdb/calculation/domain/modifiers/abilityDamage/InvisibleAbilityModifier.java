@@ -16,6 +16,7 @@ public class InvisibleAbilityModifier implements Modifier {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
             if (context.isPerfectEquilibriumSecondPass() && hit.getType() != HitType.PERFECTEQUILIBRIUM) continue;
             if (!context.isPerfectEquilibriumSecondPass() && hit.getType() == HitType.PERFECTEQUILIBRIUM) continue;
+            if (hit.getType() == HitType.POISON) continue;
 
             hit.calculateDamages(InvisibleAggregator.resolve(context, hit, i));
 

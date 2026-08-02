@@ -6,6 +6,7 @@ import com.rotdb.calculation.domain.resolvers.Debug;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.resolvers.abilityDamage.styleSpecific.RangedStyleEffects;
 import com.rotdb.calculation.domain.resolvers.abilityDamage.styleSpecific.StyleSpecificAggregator;
+import com.rotdb.shared.combat.domain.model.enums.HitType;
 
 
 public class StyleSpecificModifier implements Modifier {
@@ -15,6 +16,7 @@ public class StyleSpecificModifier implements Modifier {
 
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
+            if (hit.getType() == HitType.POISON) continue;
 
             if (!hit.isDot()) {
                 double mod = StyleSpecificAggregator.resolve(context);

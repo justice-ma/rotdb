@@ -1,18 +1,19 @@
 package com.rotdb.calculation.domain.modifiers.injectors;
 
 import com.rotdb.calculation.calculator.SoulSplitCalculator;
-import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.calculation.domain.modifiers.Modifier;
+import com.rotdb.calculation.domain.resolvers.Debug;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
-import com.rotdb.calculation.domain.resolvers.Debug;
-import com.rotdb.calculation.domain.modifiers.Modifier;
 
 import java.util.List;
 
 import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.NECROMANCY;
 import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.RANGED;
+import static com.rotdb.shared.combat.domain.model.enums.HitType.POISON;
 import static com.rotdb.shared.combat.domain.model.enums.HitType.SPLITSOUL;
 
 public class SplitSoulInjector implements Modifier {
@@ -37,6 +38,10 @@ public class SplitSoulInjector implements Modifier {
         for (int i = 0; i < baseCount; i++) {
             if (hits.get(i).getTier() == AbilityTier.CONJURE) {
                 return;
+            }
+
+            if (hits.get(i).getType() == POISON) {
+                continue;
             }
             AbilityHitsContext parent = hits.get(i);
 

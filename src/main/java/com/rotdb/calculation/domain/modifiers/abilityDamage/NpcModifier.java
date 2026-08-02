@@ -19,7 +19,7 @@ public class NpcModifier implements Modifier {
             double mod = 1;
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
 
-            if (hit.getType() != HitType.SPLITSOUL) {
+            if (hit.getType() != HitType.SPLITSOUL && hit.getType() != HitType.POISON) {
                 HauntedBonus hauntedBonus = HauntedBonusResolver.resolve(context, hit);
                 HauntedBonus bigBonedBonus = BigBonedBonusResolver.resolve(context, hit);
                 mod *= BuffMultiplierResolver.resolve(context, hit);

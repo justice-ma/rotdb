@@ -5,6 +5,7 @@ import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.resolvers.Debug;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.resolvers.abilityDamage.abilitySpecific.AbilitySpecificResolver;
+import com.rotdb.shared.combat.domain.model.enums.HitType;
 
 public class AbilitySpecificModifier implements Modifier {
     public void apply(CalculationContext context) {
@@ -13,6 +14,7 @@ public class AbilitySpecificModifier implements Modifier {
         if (context.debug) Debug.stageHeader(context, "Ability Specific Modifier");
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
+            if (hit.getType() == HitType.POISON) continue;
 
             double mult = AbilitySpecificResolver.resolve(context, hit, i);
 

@@ -5,6 +5,7 @@ import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.resolvers.Debug;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.resolvers.abilityDamage.multiplicative.MultiplicativeResolver;
+import com.rotdb.shared.combat.domain.model.enums.HitType;
 
 public class MultiplicativeModifier implements Modifier {
     public void apply(CalculationContext context) {
@@ -13,6 +14,7 @@ public class MultiplicativeModifier implements Modifier {
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
             if (!hit.isDot()) {
+                if (hit.getType() == HitType.POISON) continue;
                 double mod = MultiplicativeResolver.resolve(context, hit);
                 hit.calculateDamages(mod);
             }

@@ -1,14 +1,11 @@
 package com.rotdb.calculation.domain.modifiers.abilityDamage;
 
-import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.resolvers.Debug;
 import com.rotdb.calculation.domain.modifiers.Modifier;
-import com.rotdb.calculation.domain.resolvers.abilityDamage.core.AbyssalCindersCoreAddResolver;
-import com.rotdb.calculation.domain.resolvers.abilityDamage.core.BerserkersFuryMultiplierResolver;
-import com.rotdb.calculation.domain.resolvers.abilityDamage.core.CoreFlatAddResolver;
-import com.rotdb.calculation.domain.resolvers.abilityDamage.core.CorePerkAddResolver;
-import com.rotdb.calculation.domain.resolvers.abilityDamage.core.CorePreviousAbilityAddResolver;
+import com.rotdb.calculation.domain.resolvers.Debug;
+import com.rotdb.calculation.domain.resolvers.abilityDamage.core.*;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.enums.HitType;
 
 public class CoreModifier implements Modifier {
     public void apply(CalculationContext context) {
@@ -23,6 +20,7 @@ public class CoreModifier implements Modifier {
 
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
+            if (hit.getType() == HitType.POISON) continue;
             if (hit.isDot()) continue;
             int add = baseAdd + AbyssalCindersCoreAddResolver.resolve(context, hit);
             hit.setCurrentMin(hit.getCurrentMin() + add);
