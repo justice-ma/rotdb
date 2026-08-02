@@ -167,6 +167,27 @@ public class EquipmentModel {
         return life;
     }
 
+    public double getTotalPrayer() {
+        List<EquipmentSlot> equipmentSlots = new ArrayList<>(List.of(
+                getMainhand(),
+                getOffhand(),
+                getHead(),
+                getCape(),
+                getNeck(),
+                getBody(),
+                getLegs(),
+                getGloves(),
+                getBoots(),
+                getRing(),
+                getQuiver(),
+                getPocket()));
+        double prayer = 0;
+        for (EquipmentSlot equipmentSlot : equipmentSlots) {
+            prayer += equipmentSlot.getPrayer();
+        }
+        return prayer;
+    }
+
     public EquipmentSlot getOffhand() {
         return offhand == null ? EquipmentSlot.emptySlot() : offhand;
     }

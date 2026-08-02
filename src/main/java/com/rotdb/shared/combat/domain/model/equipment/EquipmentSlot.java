@@ -10,7 +10,7 @@ import static com.rotdb.shared.combat.domain.model.enums.WeaponStyle.NONE;
 public class EquipmentSlot {
     private Long id;
     private int tier, damageTier, accuracyTier, armourTier, attackRange;
-    private double strength, ranged, magic, necromancy, armour, life;
+    private double strength, ranged, magic, necromancy, armour, life, prayer;
     private String title, requiredSkill, requiredLevel;
     private boolean members;
     private CombatStyles clazz;
@@ -220,5 +220,13 @@ public class EquipmentSlot {
 
     public void setType(EquipmentType type) {
         this.type = type;
+    }
+
+    public double getPrayer() {
+        return prayer;
+    }
+
+    public void setPrayer(double prayer) {
+        this.prayer = prayer;
     }
 }

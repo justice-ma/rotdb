@@ -113,7 +113,8 @@ public enum BuffId {
     AVERNIC_RAMPAGE(0, 0, false, "Avernic Rampage", "blessings/Avernic_Rampage.png"),
     DEMONS_MARK(0, 0, false, "Demon's Mark", "blessings/Demon's_Mark.png"),
     ETERNAL_SUSTENANCE(0, 0, false, "Eternal Sustenance", "blessings/Eternal_Sustenance.png"),
-    SACRED_FERVOR(0, 0, false, "Sacred Fervor", "blessings/Sacred_Fervor.png");
+    SACRED_FERVOR(0, 0, false, "Sacred Fervor", "blessings/Sacred_Fervor.png"),
+    ICYENIC_FAITH(0, 0, false, "Icyenic Faith", "blessings/Icyenic_Faith.png");
 
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;

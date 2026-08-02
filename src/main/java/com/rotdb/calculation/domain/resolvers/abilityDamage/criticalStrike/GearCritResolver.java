@@ -63,6 +63,11 @@ public class GearCritResolver {
             criticalStrikeChance += 0.03;
         }
 
+        if (pocket.getEffect().contains(Effect.TOME_OF_THE_ICYENE) && buff.has(BuffId.ICYENIC_FAITH)) {
+            criticalStrikeChance += context.getEquipment().getTotalPrayer() * 0.002;
+            System.out.println("Crit: " + context.getEquipment().getTotalPrayer() * 0.002);
+        }
+
         return new CritBonus(criticalStrikeChance, criticalStrikeDamage);
     }
 }

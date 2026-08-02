@@ -768,7 +768,7 @@ export default function CombatSettings({
       </details>
 
       <details className="cs-section">
-        <summary className="cs-summary">Blessings</summary>
+        <summary className="cs-summary">Leagues</summary>
         <div className="cs-body">
           <BlessingPanel
             style={style}

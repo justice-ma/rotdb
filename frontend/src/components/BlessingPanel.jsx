@@ -38,6 +38,11 @@ const BLESSING_TIERS = [
       { id: "SACRED_FERVOR", god: "SARADOMIN" },
     ],
   },
+  {
+    label: "Relics",
+    selectable: true,
+    blessings: [{ id: "ICYENIC_FAITH", god: null }],
+  },
 ];
 
 const SELECTABLE_TIERS = BLESSING_TIERS.filter((tier) => tier.selectable);
@@ -110,8 +115,8 @@ export default function BlessingPanel({ style, buffs, setBuffs, allBuffs }) {
   return (
     <div className="blessing-tier-list">
       <div className="blessing-notice" role="note">
-        Blessing damage is estimated from pre-release information. Exact behavior
-        may differ on launch.
+        Blessing damage is estimated from pre-release information. Exact
+        behavior may differ on launch.
       </div>
 
       {BLESSING_TIERS.map((tier) => (
