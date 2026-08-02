@@ -62,7 +62,9 @@ public class DamageBatchService {
                 base.berserkersFury(),
                 base.selectedFamiliar(),
                 base.perks(),
-                base.hitCapMode()
+                base.hitCapMode(),
+                base.clientId(),
+                base.sessionId()
         );
     }
 }

@@ -360,7 +360,7 @@ const DEFAULT_PRESETS = [
   },
 ];
 
-export default function AbilityCalculation() {
+export default function AbilityCalculation({ clientId, sessionId }) {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   const [abilities, setAbilities] = useState([]);
@@ -827,14 +827,18 @@ export default function AbilityCalculation() {
           base,
           abilityIds: visibleAbilities.map((a) => a.ability),
         };
-        const batchResults = await fetchBatchCalculation(batchPayload);
+        const batchResults = await fetchBatchCalculation(
+          batchPayload,
+          clientId,
+          sessionId,
+        );
         setResults(batchResults);
         setError("");
       } catch (e) {
         setError(e?.message ?? "Batch calculation failed");
       }
     })();
-  }, [base, visibleAbilities]);
+  }, [base, visibleAbilities, clientId, sessionId]);
 
   useEffect(() => {
     let ignore = false;
@@ -864,14 +868,18 @@ export default function AbilityCalculation() {
           ...base,
           abilityId: selectedAbility.ability,
         };
-        const res = await fetchDetailedAbilityCalculation(detailedPayload);
+        const res = await fetchDetailedAbilityCalculation(
+          detailedPayload,
+          clientId,
+          sessionId,
+        );
         setDetailedResults(res);
         setError("");
       } catch (e) {
         setError(e?.message ?? "Detailed calculation failed");
       }
     })();
-  }, [base, selectedAbility]);
+  }, [base, selectedAbility, clientId, sessionId]);
 
   return (
     <div className="ability-page">

@@ -23,7 +23,9 @@ public record DamageCalcRequestDto(
         Boolean berserkersFury,
         Familiars selectedFamiliar,
         PerkSelection perks,
-        HitCapMode hitCapMode
+        HitCapMode hitCapMode,
+        String clientId,
+        String sessionId
 ) {
     public record Skills(Integer strength, Integer magic, Integer ranged, Integer necromancy, Integer attack,
                          Integer defence, Integer maxHp, Integer currentHp) {}

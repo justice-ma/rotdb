@@ -7,6 +7,7 @@ public class ClientActivity {
     private String sessionId;
     private Instant firstVisit;
     private Instant lastActive;
+    private Instant lastCalculated;
 
     public String getClientId() {
         return clientId;
@@ -38,5 +39,13 @@ public class ClientActivity {
 
     public void setLastActive(Instant lastActive) {
         this.lastActive = lastActive;
+    }
+
+    public Instant getLastCalculated() {
+        return lastCalculated;
+    }
+
+    public void setLastCalculated(Instant lastCalculated) {
+        this.lastCalculated = lastCalculated;
     }
 }

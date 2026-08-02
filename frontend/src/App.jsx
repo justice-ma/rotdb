@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import AbilityCalculation from "./pages/AbilityCalculation";
 import Header from "./components/Header";
 import { recordHeartbeat } from "./api/api";
@@ -19,10 +19,17 @@ function getOrCreateStorageId(storage, key) {
 }
 
 function App() {
-  useEffect(() => {
-    const clientId = getOrCreateStorageId(localStorage, CLIENT_ID_KEY);
-    const sessionId = getOrCreateStorageId(sessionStorage, SESSION_ID_KEY);
+  const clientId = useMemo(
+    () => getOrCreateStorageId(localStorage, CLIENT_ID_KEY),
+    [],
+  );
 
+  const sessionId = useMemo(
+    () => getOrCreateStorageId(sessionStorage, SESSION_ID_KEY),
+    [],
+  );
+
+  useEffect(() => {
     function sendHeartbeat() {
       recordHeartbeat(clientId, sessionId).catch(() => {});
     }
@@ -39,7 +46,7 @@ function App() {
   return (
     <>
       <Header />
-      <AbilityCalculation />
+      <AbilityCalculation clientId={clientId} sessionId={sessionId} />
     </>
   );
 }

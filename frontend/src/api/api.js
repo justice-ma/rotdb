@@ -13,24 +13,39 @@ export async function fetchAbilities(style) {
   return handleResponse(res);
 }
 
-export async function fetchBatchCalculation(payload) {
+export async function fetchBatchCalculation(payload, clientId, sessionId) {
   const res = await fetch(`${BASE}/damage/calculate/batch`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      ...payload,
+      base: {
+        ...payload.base,
+        clientId,
+        sessionId,
+      },
+    }),
   });
   return handleResponse(res);
 }
 
-export async function fetchDetailedAbilityCalculation(payload) {
+export async function fetchDetailedAbilityCalculation(
+  payload,
+  clientId,
+  sessionId,
+) {
   const res = await fetch(`${BASE}/damage/calculate`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      ...payload,
+      clientId,
+      sessionId,
+    }),
   });
   return handleResponse(res);
 }
