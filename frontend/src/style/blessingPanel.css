@@ -58,6 +58,7 @@
 }
 
 .blessing {
+  position: relative;
   opacity: 0.48;
   filter: grayscale(0.35);
   border: 1px solid var(--border);
@@ -87,4 +88,26 @@
   filter: none;
   border-color: var(--border-accent);
   cursor: pointer;
+}
+
+.blessing:hover::after,
+.blessing:focus-visible::after {
+  content: attr(data-label);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  z-index: 20;
+
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-elevated, var(--bg));
+  color: var(--text);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+
+  font-size: 12px;
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
 }

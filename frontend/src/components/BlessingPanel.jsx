@@ -50,7 +50,7 @@ const BLESSING_TIERS = [
   },
 ];
 
-const TIER_FOUR_SOURCE_TIERS = BLESSING_TIERS.slice(0, 3);
+const SELECTABLE_TIERS = BLESSING_TIERS.slice(0, 3);
 const TIER_FOUR = BLESSING_TIERS.find((tier) => !tier.selectable);
 const BLESSING_IDS = BLESSING_TIERS.flatMap((tier) =>
   tier.blessings.map((blessing) => blessing.id),
@@ -58,7 +58,7 @@ const BLESSING_IDS = BLESSING_TIERS.flatMap((tier) =>
 const TIER_FOUR_IDS = TIER_FOUR.blessings.map((blessing) => blessing.id);
 
 function deriveTier4God(selectedGods) {
-  if (selectedGods.length !== TIER_FOUR_SOURCE_TIERS.length) return null;
+  if (selectedGods.length !== SELECTABLE_TIERS.length) return null;
 
   const counts = selectedGods.reduce((acc, god) => {
     acc[god] = (acc[god] ?? 0) + 1;
@@ -84,7 +84,11 @@ export default function BlessingPanel({
   const buffsById = new Map((allBuffs ?? []).map((buff) => [buff.id, buff]));
   const enabledBuffs = buffs?.enabledBuffs ?? [];
   const icyenicFaithSelected = enabledBuffs.includes("ICYENIC_FAITH");
-  const selectedPocketName = selectedPocket?.name?.toLowerCase?.() ?? "";
+  const selectedPocketName = (
+    selectedPocket?.name ??
+    selectedPocket?.title ??
+    ""
+  ).toLowerCase();
   const tomeEquipped = selectedPocketName.includes("tome of the icyene");
 
   function selectBlessing(tier, entry) {
@@ -103,7 +107,7 @@ export default function BlessingPanel({
         nextEnabled = [...nextEnabled, entry.id];
       }
 
-      const selectedGods = TIER_FOUR_SOURCE_TIERS.map((selectableTier) => {
+      const selectedGods = SELECTABLE_TIERS.map((selectableTier) => {
         const selectedId = nextEnabled.find((id) =>
           selectableTier.blessings.some((blessing) => blessing.id === id),
         );
@@ -160,7 +164,7 @@ export default function BlessingPanel({
                   className={selected ? "blessing selected" : "blessing"}
                   onClick={() => selectBlessing(tier, entry)}
                   disabled={!tier.selectable}
-                  title={blessing.label}
+                  data-label={blessing.label}
                   aria-label={blessing.label}
                 >
                   {blessing.iconPath && (
