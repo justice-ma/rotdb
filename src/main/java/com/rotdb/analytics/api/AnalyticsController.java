@@ -1,6 +1,7 @@
 package com.rotdb.analytics.api;
 
 import com.rotdb.analytics.application.HeartbeatService;
+import com.rotdb.analytics.domain.HeartbeatResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,7 +19,7 @@ public class AnalyticsController {
     }
 
     @GetMapping("/active")
-    public int active() {
+    public HeartbeatResult active() {
         return heartbeatService.getActiveUsers();
     }
 }

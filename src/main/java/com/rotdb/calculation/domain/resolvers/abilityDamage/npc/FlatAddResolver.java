@@ -20,7 +20,8 @@ public class FlatAddResolver {
         if (style == MAGIC) {
             int corr = buff.has(BuffId.ESSENCECORRUPTIONSTACKS) ? buff.stacks(BuffId.ESSENCECORRUPTIONSTACKS) : 0;
             int magic = skills.getBoostedMagic();
-            if (offhand.getEffect().contains(Effect.SONGOFDESTRUCTION) && mainhand.getEffect().contains(Effect.SONGOFDESTRUCTION)) {
+            if (offhand.getEffect().contains(Effect.SONGOFDESTRUCTION) && mainhand.getEffect().contains(Effect.SONGOFDESTRUCTION)
+                && buff.has(BuffId.ESSENCECORRUPTIONSTACKS)) {
                 add += corr * 3 + magic;
             }
         }
