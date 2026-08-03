@@ -38,7 +38,10 @@ export default function StatsPanel({ skills, setSkills, derivedStats }) {
               <div className="hp-label-group">
                 <label className="stat-label">Lifepoints</label>
                 <div className="hp-effective">
-                  Effective: {derivedStats?.effectiveMaxHp ?? skills.maxHp ?? ""}
+                  Effective:{" "}
+                  {(
+                    derivedStats?.effectiveMaxHp ?? skills.maxHp
+                  )?.toLocaleString("en-US") ?? ""}
                 </div>
               </div>
 

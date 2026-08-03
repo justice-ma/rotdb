@@ -146,7 +146,9 @@ export default function Abilities({
                           <p className="ability-name" title={a.name}>
                             {a.name}
                           </p>
-                          <p className="ability-damage">{result?.avg ?? "-"}</p>
+                          <p className="ability-damage">
+                            {result?.avg?.toLocaleString("en-us") ?? "-"}
+                          </p>
                         </div>
 
                         {result && (

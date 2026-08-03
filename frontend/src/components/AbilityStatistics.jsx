@@ -366,7 +366,9 @@ export default function AbilityStatistics({
         <div className="damage-head">
           <StatTitle icon={Gauge}>Overall Average Damage</StatTitle>
         </div>
-        <p className="damage-result">{calculationResults.totalAvgDamage}</p>
+        <p className="damage-result">
+          {calculationResults?.totalAvgDamage?.toLocaleString("en-us")}
+        </p>
         <p className="subtext">Expected damage per ability</p>
       </div>
 
@@ -376,7 +378,7 @@ export default function AbilityStatistics({
             <StatTitle icon={ArrowDownToLine}>Average Min</StatTitle>
           </div>
           <p className="damage-result-small">
-            {calculationResults.totalMinDamage}
+            {calculationResults?.totalMinDamage?.toLocaleString("en-us")}
           </p>
           <p className="subtext">Crit weighted</p>
         </div>
@@ -386,7 +388,7 @@ export default function AbilityStatistics({
             <StatTitle icon={ArrowUpToLine}>Average Max</StatTitle>
           </div>
           <p className="damage-result-small">
-            {calculationResults.totalMaxDamage}
+            {calculationResults?.totalMaxDamage?.toLocaleString("en-us")}
           </p>
           <p className="subtext">Crit weighted</p>
         </div>
@@ -400,13 +402,13 @@ export default function AbilityStatistics({
           <div>
             <p className="subtext">Minimum</p>
             <p className="damage-result-small">
-              {calculationResults.totalMinNonCrit}
+              {calculationResults?.totalMinNonCrit?.toLocaleString("en-us")}
             </p>
           </div>
           <div>
             <p className="subtext">Maximum</p>
             <p className="damage-result-small">
-              {calculationResults.totalMaxNonCrit}
+              {calculationResults?.totalMaxNonCrit?.toLocaleString("en-us")}
             </p>
           </div>
         </div>
@@ -420,13 +422,13 @@ export default function AbilityStatistics({
           <div>
             <p className="subtext">Minimum</p>
             <p className="damage-result-small">
-              {calculationResults.totalMinCrit}
+              {calculationResults?.totalMinCrit?.toLocaleString("en-us")}
             </p>
           </div>
           <div>
             <p className="subtext">Maximum</p>
             <p className="damage-result-small">
-              {calculationResults.totalMaxCrit}
+              {calculationResults?.totalMaxCrit?.toLocaleString("en-us")}
             </p>
           </div>
         </div>
