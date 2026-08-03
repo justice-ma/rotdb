@@ -85,14 +85,14 @@ public final class CalculationEngine {
     private DerivedStatsResult mapDerivedStats(SkillsContext skills, EquipmentModel equipment, BuffContext buffs) {
         int baseMaxHp = skills.getMaxHp();
         int equipmentLifeBonus = (int) equipment.getTotalLife();
-        int effectiveBaseHp = buffs.has(BuffId.BIG_BONED)
-                ? (int) (baseMaxHp * 1.5)
-                : baseMaxHp;
+        int effectiveMaxHp = buffs.has(BuffId.BIG_BONED)
+                ? (int) ((baseMaxHp + equipmentLifeBonus) * 1.5)
+                : baseMaxHp + equipmentLifeBonus;
 
         return new DerivedStatsResult(
                 baseMaxHp,
                 equipmentLifeBonus,
-                effectiveBaseHp + equipmentLifeBonus
+                effectiveMaxHp
         );
     }
 }

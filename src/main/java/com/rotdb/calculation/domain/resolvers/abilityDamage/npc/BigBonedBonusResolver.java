@@ -10,7 +10,7 @@ public class BigBonedBonusResolver {
             return zero();
         }
 
-        int effectiveMaxHp = (int) ((context.getSkills().getMaxHp() * 1.5) + context.getEquipment().getTotalLife());
+        int effectiveMaxHp = (int) ((context.getSkills().getMaxHp()  + context.getEquipment().getTotalLife()) * 1.5);
         int bonus = (int) (effectiveMaxHp * 0.05);
 
         return new HauntedBonus(bonus, bonus, bonus, bonus, bonus, bonus);
