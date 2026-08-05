@@ -57,3 +57,9 @@ Thumbs.db
 
 ### Temp In Development ###
 src/main/java/com.rotdb/simulation/
+# Generated SQL artifacts
+/tmp/*.sql
+/insert_new_equipment.sql
+/frontend/equipment_data.sql
+/database/*.sql
+/database/migrations/*.sql

@@ -5,6 +5,7 @@ import com.rotdb.calculation.domain.modifiers.baseDamage.BaseAbilityDamageModifi
 import com.rotdb.calculation.domain.modifiers.hitChance.HitChanceModifier;
 import com.rotdb.calculation.domain.modifiers.injectors.*;
 import com.rotdb.calculation.domain.modifiers.stats.DbaStatBoostModifier;
+import com.rotdb.calculation.domain.modifiers.stats.NaragiEffectModifier;
 import com.rotdb.calculation.domain.modifiers.stats.StatBoostModifier;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ public final class AbilityDamagePipeline {
     public AbilityDamagePipeline() {
         steps = List.of(
                 new StatBoostModifier(),
+                new NaragiEffectModifier(),
                 new DbaStatBoostModifier(),
                 new SoulInjector(),
                 new NecrosisInjector(),

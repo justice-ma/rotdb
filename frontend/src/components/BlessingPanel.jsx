@@ -46,7 +46,10 @@ const BLESSING_TIERS = [
     label: "Relics",
     selectable: true,
     deriviationGroup: "LEAGUES_RELICS",
-    blessings: [{ id: "ICYENIC_FAITH", god: "RELIC" }],
+    blessings: [
+      { id: "ICYENIC_FAITH", god: "RELIC" },
+      { id: "NARAGI_EFFECT", god: "RELIC" },
+    ],
   },
 ];
 
