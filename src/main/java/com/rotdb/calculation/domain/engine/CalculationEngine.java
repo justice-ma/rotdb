@@ -33,6 +33,7 @@ public final class CalculationEngine {
         CalculationContext context = ContextBuilder.build(request);
 
         prayerValidator.validatePrayers(context.getSelectedPrayers());
+        applyEffectiveLeagueStatAdjustments(context.getSkills(), context.getEquipment(), context.getBuffs());
 
         abilityPipeline.run(context);
         return mapToResult(context);
@@ -40,6 +41,7 @@ public final class CalculationEngine {
 
     public DerivedStatsResult calculateDerivedStats(DamageRequest request) {
         request = normalizer.normalize(request);
+        applyEffectiveLeagueStatAdjustments(request.getSkills(), request.getEquipment(), request.getBuffs());
         return mapDerivedStats(request.getSkills(), request.getEquipment(), request.getBuffs());
     }
 
@@ -94,5 +96,19 @@ public final class CalculationEngine {
                 equipmentLifeBonus,
                 effectiveMaxHp
         );
+    }
+
+    private void applyEffectiveLeagueStatAdjustments(SkillsContext skills, EquipmentModel equipmentModel, BuffContext buffs) {
+        if (buffs.has(BuffId.HAVOC_BORN)) {
+            equipmentModel.applyTotalArmourModifier(0.75);
+            equipmentModel.applyTotalLifeModifier(0.75);
+            skills.setMaxHp((int) (skills.getMaxHp() * 0.75));
+        }
+
+        if (buffs.has(BuffId.TRUE_EQUILIBRIUM)) {
+            equipmentModel.setFlatArmourBonus(equipmentModel.getFlatArmourBonus() + (50 * buffs.getBlessingsPerAlignment()));
+            equipmentModel.setFlatPrayerBonus(equipmentModel.getFlatPrayerBonus() + (5 * buffs.getBlessingsPerAlignment()));
+            skills.setMaxHp(skills.getMaxHp() + (500 * buffs.getBlessingsPerAlignment()));
+        }
     }
 }

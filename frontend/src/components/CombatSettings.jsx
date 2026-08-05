@@ -786,6 +786,7 @@ export default function CombatSettings({
           <PerksPanel
             selectedPerks={selectedPerks}
             setSelectedPerks={setSelectedPerks}
+            buffs={buffs}
             genocidalRank={genocidalRank}
             setGenocidalRank={setGenocidalRank}
             itemLevel20={itemLevel20}

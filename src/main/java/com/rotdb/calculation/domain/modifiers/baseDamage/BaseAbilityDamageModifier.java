@@ -56,10 +56,21 @@ public final class BaseAbilityDamageModifier implements Modifier{
             ohTier += 5;
         }
 
+        if (buffs.has(BuffId.GENESIS_ESSENCE)) {
+            ohTier = 120;
+            mhTier = 120;
+            ammoTier = effectiveAmmoTier(style, equipment.getMainhand().getStyle(), equipment.getMainhand().getType(),
+                    mhTier, ohTier, ammoTier);
+        }
+
         int base = resolveBase(style, dw, twoHanded, s, bonus, mhTier, ohTier, er, ammoTier, eq);
 
         if (context.getBuffs().has(BuffId.TERAGARDS_AEGIS)) {
             base += TeragardsAegisResolver.resolve(context);
+        }
+
+        if (context.getBuffs().has(BuffId.TRUE_EQUILIBRIUM)) {
+            base += 75 * buffs.getBlessingsPerAlignment();
         }
 
         context.getDamage().setBaseDamage(base);

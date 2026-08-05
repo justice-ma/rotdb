@@ -2,6 +2,8 @@ package com.rotdb.shared.combat.domain.model.equipment;
 
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +11,7 @@ import java.util.List;
 public class EquipmentModel {
     private EquipmentSlot head, body, legs, boots, gloves, cape, pocket, neck, ring, ammo, mainhand, offhand, quiver;
     private CombatStyles combatStyle;
+    private double flatArmourBonus, flatPrayerBonus;
     private int abilityDamage;
     private int tuskaPieces, sliskePieces, tectonicPieces, eliteTectonicPieces, dracolichPieces,
     eliteDracolichPieces, tumekensPieces;
@@ -103,6 +106,10 @@ public class EquipmentModel {
         return pieces;
     }
 
+    public int getTotalVestmentsOfHavoc(BuffContext buffs) {
+        return countSetPieces(Effect.VESTMENTSOFHAVOC, buffs, getHead(), getBody(), getLegs(), getBoots());
+    }
+
     public int getTotalDracolichPieces() {
         int pieces = 0;
 
@@ -115,6 +122,10 @@ public class EquipmentModel {
         return pieces;
     }
 
+    public int getTotalDracolichPieces(BuffContext buffs) {
+        return countSetPieces(Effect.DRACOLICH, buffs, getHead(), getBody(), getLegs(), getGloves(), getBoots());
+    }
+
     public int getTotalEliteDracolichPieces() {
         int pieces = 0;
 
@@ -123,6 +134,27 @@ public class EquipmentModel {
         pieces += getLegs().getEffect().contains(Effect.ELITEDRACOLICH) ? 1 : 0;
         pieces += getGloves().getEffect().contains(Effect.ELITEDRACOLICH) ? 1 : 0;
         pieces += getBoots().getEffect().contains(Effect.ELITEDRACOLICH) ? 1 : 0;
+
+        return pieces;
+    }
+
+    public int getTotalEliteDracolichPieces(BuffContext buffs) {
+        return countSetPieces(Effect.ELITEDRACOLICH, buffs, getHead(), getBody(), getLegs(), getGloves(), getBoots());
+    }
+
+    public int getSetPieceValue(BuffContext buffs) {
+        return buffs != null && buffs.has(BuffId.CHAOTIC_INSIGHT) ? 3 : 1;
+    }
+
+    public int countSetPieces(Effect effect, BuffContext buffs, EquipmentSlot... slots) {
+        int pieces = 0;
+        int pieceValue = getSetPieceValue(buffs);
+
+        for (EquipmentSlot slot : slots) {
+            if (slot.getEffect().contains(effect)) {
+                pieces += pieceValue;
+            }
+        }
 
         return pieces;
     }
@@ -140,7 +172,7 @@ public class EquipmentModel {
                 getRing(),
                 getQuiver(),
                 getPocket()));
-        double armour = 0;
+        double armour = getFlatArmourBonus();
         for (EquipmentSlot equipmentSlot : equipmentSlots) {
             armour += equipmentSlot.getArmour();
         }
@@ -181,11 +213,47 @@ public class EquipmentModel {
                 getRing(),
                 getQuiver(),
                 getPocket()));
-        double prayer = 0;
+        double prayer = getFlatPrayerBonus();
         for (EquipmentSlot equipmentSlot : equipmentSlots) {
             prayer += equipmentSlot.getPrayer();
         }
         return prayer;
+    }
+
+    public void applyTotalArmourModifier(double mod) {
+        List<EquipmentSlot> equipmentSlots = new ArrayList<>(List.of(
+                getOffhand(),
+                getHead(),
+                getCape(),
+                getNeck(),
+                getBody(),
+                getLegs(),
+                getGloves(),
+                getBoots(),
+                getRing(),
+                getQuiver(),
+                getPocket()));
+        for (EquipmentSlot equipmentSlot : equipmentSlots) {
+            equipmentSlot.setArmour(equipmentSlot.getArmour() * mod);
+        }
+    }
+
+    public void applyTotalLifeModifier(double mod) {
+        List<EquipmentSlot> equipmentSlots = new ArrayList<>(List.of(
+                getOffhand(),
+                getHead(),
+                getCape(),
+                getNeck(),
+                getBody(),
+                getLegs(),
+                getGloves(),
+                getBoots(),
+                getRing(),
+                getQuiver(),
+                getPocket()));
+        for (EquipmentSlot equipmentSlot : equipmentSlots) {
+            equipmentSlot.setLife(equipmentSlot.getLife() * mod);
+        }
     }
 
     public EquipmentSlot getOffhand() {
@@ -362,5 +430,21 @@ public class EquipmentModel {
 
     public void setTumekensPieces(int tumekensPieces) {
         this.tumekensPieces = tumekensPieces;
+    }
+
+    public double getFlatArmourBonus() {
+        return flatArmourBonus;
+    }
+
+    public void setFlatArmourBonus(double flatArmourBonus) {
+        this.flatArmourBonus = flatArmourBonus;
+    }
+
+    public double getFlatPrayerBonus() {
+        return flatPrayerBonus;
+    }
+
+    public void setFlatPrayerBonus(double flatPrayerBonus) {
+        this.flatPrayerBonus = flatPrayerBonus;
     }
 }

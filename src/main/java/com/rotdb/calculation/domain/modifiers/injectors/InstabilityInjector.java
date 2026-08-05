@@ -1,5 +1,6 @@
 package com.rotdb.calculation.domain.modifiers.injectors;
 
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
@@ -31,9 +32,9 @@ public class InstabilityInjector implements Modifier {
             double procCritChance = parent.getCritChanceModifier();
             double procCritDamage = parent.getCritDamageModifier();
             // Instability should not inherit conc / gconc crit bonus
-            if (context.getBuffs().has(BuffId.CONCENTRATEDBLASTBUFF)) {
+            if (context.getBuffs().has(BuffId.CONCENTRATEDBLASTBUFF) && context.getAbility().getId() != AbilityId.SMOKETENDRILS) {
                 procCritChance -= context.getBuffs().has(BuffId.RUNICCHARGE) ? 0.51 : 0.21;
-            } else if (context.getBuffs().has(BuffId.GREATERCONCENTRATEDBLASTBUFF)) {
+            } else if (context.getBuffs().has(BuffId.GREATERCONCENTRATEDBLASTBUFF) && context.getAbility().getId() != AbilityId.SMOKETENDRILS) {
                 procCritChance -= context.getBuffs().has(BuffId.RUNICCHARGE) ? 0.45 : 0.15;
             }
 

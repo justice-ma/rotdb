@@ -34,7 +34,8 @@ public class AggregationModifier implements Modifier {
                     hit.getType() == HitType.SPLITSOUL ||
                     hit.getType() == HitType.PERFECTEQUILIBRIUM ||
                     hit.getType() == HitType.POISON ||
-                    hit.getType() == HitType.INFERNO_OF_ZAMORAK) {
+                    hit.getType() == HitType.INFERNO_OF_ZAMORAK ||
+                    hit.getType() == HitType.LIGHT_OF_SARADOMIN) {
                 min += hit.getCurrentMin();
                 max += hit.getCurrentMax();
                 avg += hit.getCurrentDamage();

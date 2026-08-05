@@ -1,7 +1,7 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.preMultiplicative;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.modifiers.abilityDamage.LightOfSaradominDamageModifier;
+import com.rotdb.calculation.domain.modifiers.abilityDamage.BlessingFlatDamageModifier;
 import com.rotdb.calculation.domain.modifiers.abilityDamage.MultiplicativeModifier;
 import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.ability.AbilityProvider;
@@ -33,7 +33,7 @@ class LightOfSaradominDamageBonusResolverTest {
         hit.setCurrentMin(400);
         hit.setCurrentMax(600);
 
-        new LightOfSaradominDamageModifier().apply(context);
+        new BlessingFlatDamageModifier().apply(context);
 
         assertThat(hit.getCurrentMin()).isEqualTo(2900);
         assertThat(hit.getCurrentMax()).isEqualTo(3100);

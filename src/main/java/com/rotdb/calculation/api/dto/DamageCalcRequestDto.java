@@ -28,7 +28,7 @@ public record DamageCalcRequestDto(
         String sessionId
 ) {
     public record Skills(Integer strength, Integer magic, Integer ranged, Integer necromancy, Integer attack,
-                         Integer defence, Integer maxHp, Integer currentHp) {}
+                         Integer defence, Integer herblore, Integer maxHp, Integer currentHp) {}
     public record EquipmentIds(Long mainhandId, Long offhandId, Long headId, Long bodyId,
                                Long glovesId, Long legsId, Long bootsId, Long pocketId, Long ammoId,
                                Long ringId, Long neckId, Long capeId, Long quiverId) {}

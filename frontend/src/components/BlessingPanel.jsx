@@ -3,7 +3,7 @@ import "../style/blessingPanel.css";
 
 const BLESSING_TIERS = [
   {
-    label: "Tier 1",
+    label: "Blessing Tier I",
     selectable: true,
     deriviationGroup: "LEAGUES_T1_TO_T4",
     blessings: [
@@ -13,7 +13,7 @@ const BLESSING_TIERS = [
     ],
   },
   {
-    label: "Tier 2",
+    label: "Blessing Tier II",
     selectable: true,
     deriviationGroup: "LEAGUES_T1_TO_T4",
     blessings: [
@@ -23,7 +23,7 @@ const BLESSING_TIERS = [
     ],
   },
   {
-    label: "Tier 3",
+    label: "Blessing Tier III",
     selectable: true,
     deriviationGroup: "LEAGUES_T1_TO_T4",
     blessings: [
@@ -33,13 +33,53 @@ const BLESSING_TIERS = [
     ],
   },
   {
-    label: "Tier 4",
+    label: "God Tier I",
     selectable: false,
     deriviationGroup: "LEAGUES_T1_TO_T4",
     blessings: [
       { id: "DEMONS_MARK", god: "ZAMORAK" },
       { id: "SPLASH_ZONE", god: "GUTHIX" },
       { id: "SACRED_FERVOR", god: "SARADOMIN" },
+    ],
+  },
+  {
+    label: "Blessing Tier IV",
+    selectable: true,
+    deriviationGroup: "LEAGUES_T5_TO_T8",
+    blessings: [
+      { id: "HAVOC_BORN", god: "ZAMORAK" },
+      { id: "TRUE_EQUILIBRIUM", god: "GUTHIX" },
+      { id: "HIGHER_POWER", god: "SARADOMIN" },
+    ],
+  },
+  {
+    label: "Blessing Tier V",
+    selectable: true,
+    deriviationGroup: "LEAGUES_T5_TO_T8",
+    blessings: [
+      { id: "UNHOLY_CRITUAL", god: "ZAMORAK" },
+      { id: "TEARING_THORNS", god: "GUTHIX" },
+      { id: "LORD_OF_LIGHT", god: "SARADOMIN" },
+    ],
+  },
+  {
+    label: "Blessing Tier VI",
+    selectable: true,
+    deriviationGroup: "LEAGUES_T5_TO_T8",
+    blessings: [
+      { id: "PERFIDIOUS", god: "ZAMORAK" },
+      { id: "ENVENOMED", god: "GUTHIX" },
+      { id: "TEMPERED_HEART", god: "SARADOMIN" },
+    ],
+  },
+  {
+    label: "God Tier II",
+    selectable: false,
+    deriviationGroup: "LEAGUES_T5_TO_T8",
+    blessings: [
+      { id: "CHAOTIC_INSIGHT", god: "ZAMORAK" },
+      { id: "POWER_ARCHIVE", god: "GUTHIX" },
+      { id: "GENESIS_ESSENCE", god: "SARADOMIN" },
     ],
   },
   {
@@ -53,15 +93,29 @@ const BLESSING_TIERS = [
   },
 ];
 
-const SELECTABLE_TIERS = BLESSING_TIERS.slice(0, 3);
-const TIER_FOUR = BLESSING_TIERS.find((tier) => !tier.selectable);
 const BLESSING_IDS = BLESSING_TIERS.flatMap((tier) =>
   tier.blessings.map((blessing) => blessing.id),
 );
-const TIER_FOUR_IDS = TIER_FOUR.blessings.map((blessing) => blessing.id);
+const DERIVED_TIERS = BLESSING_TIERS.filter((tier) => !tier.selectable);
 
-function deriveTier4God(selectedGods) {
-  if (selectedGods.length !== SELECTABLE_TIERS.length) return null;
+function splitTierLabel(label) {
+  const match = label.match(/^(Blessing Tier|God Tier) (.+)$/);
+  if (!match) return [label];
+  return [match[1], match[2]];
+}
+
+function getSelectableTiersForGroup(deriviationGroup) {
+  return BLESSING_TIERS.filter(
+    (tier) => tier.selectable && tier.deriviationGroup === deriviationGroup,
+  );
+}
+
+function getDerivedTierForGroup(deriviationGroup) {
+  return DERIVED_TIERS.find((tier) => tier.deriviationGroup === deriviationGroup);
+}
+
+function deriveGod(selectedGods, requiredSelections) {
+  if (selectedGods.length !== requiredSelections) return null;
 
   const counts = selectedGods.reduce((acc, god) => {
     acc[god] = (acc[god] ?? 0) + 1;
@@ -72,9 +126,13 @@ function deriveTier4God(selectedGods) {
   return majority ? majority[0] : "GUTHIX";
 }
 
-function deriveTier4Id(selectedGods) {
-  const god = deriveTier4God(selectedGods);
-  return TIER_FOUR.blessings.find((blessing) => blessing.god === god)?.id;
+function deriveTierId(deriviationGroup, selectedGods) {
+  const derivedTier = getDerivedTierForGroup(deriviationGroup);
+  if (!derivedTier) return null;
+
+  const selectableTiers = getSelectableTiersForGroup(deriviationGroup);
+  const god = deriveGod(selectedGods, selectableTiers.length);
+  return derivedTier.blessings.find((blessing) => blessing.god === god)?.id;
 }
 
 export default function BlessingPanel({
@@ -101,16 +159,20 @@ export default function BlessingPanel({
       const enabled = prev?.enabledBuffs ?? [];
       const tierIds = tier.blessings.map((blessing) => blessing.id);
       const alreadySelected = enabled.includes(entry.id);
+      const derivedTier = getDerivedTierForGroup(tier.deriviationGroup);
+      const derivedTierIds =
+        derivedTier?.blessings.map((blessing) => blessing.id) ?? [];
 
       let nextEnabled = enabled.filter(
-        (id) => !tierIds.includes(id) && !TIER_FOUR_IDS.includes(id),
+        (id) => !tierIds.includes(id) && !derivedTierIds.includes(id),
       );
 
       if (!alreadySelected) {
         nextEnabled = [...nextEnabled, entry.id];
       }
 
-      const selectedGods = SELECTABLE_TIERS.map((selectableTier) => {
+      const selectableTiers = getSelectableTiersForGroup(tier.deriviationGroup);
+      const selectedGods = selectableTiers.map((selectableTier) => {
         const selectedId = nextEnabled.find((id) =>
           selectableTier.blessings.some((blessing) => blessing.id === id),
         );
@@ -120,10 +182,10 @@ export default function BlessingPanel({
         )?.god;
       }).filter(Boolean);
 
-      const tierFourId = deriveTier4Id(selectedGods);
+      const derivedTierId = deriveTierId(tier.deriviationGroup, selectedGods);
 
-      if (tierFourId) {
-        nextEnabled = [...nextEnabled, tierFourId];
+      if (derivedTierId) {
+        nextEnabled = [...nextEnabled, derivedTierId];
       }
 
       return {
@@ -149,7 +211,11 @@ export default function BlessingPanel({
 
       {BLESSING_TIERS.map((tier) => (
         <div key={tier.label} className="blessing-tier-row">
-          <div className="blessing-tier-label">{tier.label}</div>
+          <div className="blessing-tier-label">
+            {splitTierLabel(tier.label).map((part) => (
+              <span key={part}>{part}</span>
+            ))}
+          </div>
 
           <div className="blessing-tier-grid">
             {tier.blessings.map((entry) => {

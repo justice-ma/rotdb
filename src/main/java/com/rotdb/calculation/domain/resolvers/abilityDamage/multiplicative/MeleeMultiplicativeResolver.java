@@ -21,10 +21,12 @@ public class MeleeMultiplicativeResolver {
 
         double mod = 1;
         if (style == MELEE) {
-            if (buff.has(BuffId.BERSERK)) {
-                mod *= 1.75;
-            } else if (buff.has(BuffId.ZGS) && !buff.has(BuffId.BERSERK)) {
-                mod *= 1.25;
+            if (!buff.has(BuffId.HIGHER_POWER)) {
+                if (buff.has(BuffId.BERSERK)) {
+                    mod *= 1.75;
+                } else if (buff.has(BuffId.ZGS) && !buff.has(BuffId.BERSERK)) {
+                    mod *= 1.25;
+                }
             }
 
             if (buff.has(BuffId.DBA)) {

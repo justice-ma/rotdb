@@ -7,13 +7,14 @@ import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
 import com.rotdb.shared.combat.domain.model.enums.HitType;
 import com.rotdb.shared.combat.domain.model.enums.Targetting;
+import org.springframework.security.config.annotation.web.saml2.LogoutRequestDsl;
 
 import java.util.List;
 
 public class BlessingFactory {
     public static AbilityContext lightOfSaradomin(AbilityId id) {
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(0.4, 0.6, false, AbilityTier.BLESSING, 1)),
+                List.of(new AbilityHitsContext(0.4, 0.6, false, AbilityTier.BLESSING, 1, HitType.LIGHT_OF_SARADOMIN, -1)),
                 "Light of Saradomin",
                 0,
                 15,
@@ -41,7 +42,7 @@ public class BlessingFactory {
 
     public static AbilityContext barkscales(AbilityId id) {
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(0.8, 1.2, true, AbilityTier.BLESSING, 1, HitType.POISON, -1)),
+                List.of(new AbilityHitsContext(0.8, 1.2, false, AbilityTier.BLESSING, 1, HitType.POISON, -1)),
                 "Barkscales",
                 0,
                 25,
@@ -62,6 +63,24 @@ public class BlessingFactory {
                 false,
                 Handedness.BOTH,
                 Targetting.SINGLE_TARGET,
+                id.getStyle(),
+                id
+        );
+    }
+
+    public static AbilityContext lordOfLight(AbilityId id) {
+        return new AbilityContext(5,
+                List.of(new AbilityHitsContext(0.4, 0.6,false, AbilityTier.BLESSING, 1, HitType.LIGHT_OF_SARADOMIN, -1),
+                        new AbilityHitsContext(0.4, 0.6,false, AbilityTier.BLESSING, 1, HitType.LIGHT_OF_SARADOMIN, -1),
+                        new AbilityHitsContext(0.4, 0.6,false, AbilityTier.BLESSING, 1, HitType.LIGHT_OF_SARADOMIN, -1),
+                        new AbilityHitsContext(0.4, 0.6,false, AbilityTier.BLESSING, 1, HitType.LIGHT_OF_SARADOMIN, -1),
+                        new AbilityHitsContext(0.4, 0.6,false, AbilityTier.BLESSING, 1, HitType.LIGHT_OF_SARADOMIN, -1)),
+                "Lord of Light",
+                0,
+                0,
+                false,
+                Handedness.BOTH,
+                Targetting.AREA_TARGET,
                 id.getStyle(),
                 id
         );

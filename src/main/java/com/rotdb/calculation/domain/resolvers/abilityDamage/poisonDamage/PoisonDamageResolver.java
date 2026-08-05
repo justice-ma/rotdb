@@ -25,6 +25,10 @@ public class PoisonDamageResolver {
             if (context.getBuffs().has(BuffId.BIK_ARROWS)) {
                 mod *= (1 + 0.03 * context.getBuffs().stacks(BuffId.BIK_ARROWS));
             }
+
+            if (context.getBuffs().has(BuffId.ENVENOMED)) {
+                mod *= (1.5 + 0.02 * context.getSkills().getHerblore());
+            }
         }
 
         return mod;

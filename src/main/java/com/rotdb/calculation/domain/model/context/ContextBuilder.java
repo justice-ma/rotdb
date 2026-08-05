@@ -90,8 +90,8 @@ public class ContextBuilder {
     public static CalculationContext build(DamageRequest request) {
         CalculationContext context = new CalculationContext();
         context.setEquipment(request.getEquipment());
-        context.setAbility(AbilityProvider.get(request.getAbilityId(), context.getEquipment()));
         context.setBuffs(request.getBuffs());
+        context.setAbility(AbilityProvider.get(request.getAbilityId(), context.getEquipment(), context.getBuffs()));
         context.setTarget(request.getTarget());
         context.setSkills(request.getSkills());
         context.setPerks(request.getPerks());

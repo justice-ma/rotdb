@@ -12,7 +12,9 @@ public class AbilityMultiplierResolver {
         AbilityContext ability = context.getAbility();
         double mod = 1;
         if (context.getBuffs().has(BuffId.LIVINGDEATH) && ability.getId() == AbilityId.FINGEROFDEATH) {
-            mod *= 1.5;
+            if (!context.getBuffs().has(BuffId.HIGHER_POWER)) {
+                mod *= 1.5;
+            }
         }
         if (context.getBuffs().has(BuffId.DEATHSPARK) && context.getBuffs().stacks(BuffId.DEATHSPARK) >= 5
             && ability.getId() == AbilityId.NECROMANCYAUTO) {

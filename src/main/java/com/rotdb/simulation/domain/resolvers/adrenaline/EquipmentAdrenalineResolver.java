@@ -15,7 +15,7 @@ public class EquipmentAdrenalineResolver {
         AbilityContext ability = rc.getAbilityContext();
         double adrenalineDelta = 0;
 
-        if (buff.has(BuffId.VESTMENTSBLEED) && eq.getTotalVestmentsOfHavoc() >= 2 &&
+        if (buff.has(BuffId.VESTMENTSBLEED) && eq.getTotalVestmentsOfHavoc(buff) >= 2 &&
                 ability.getId().getTier() == AbilityTier.ULTIMATE && ability.getId().getStyle() == CombatStyles.MELEE) {
             adrenalineDelta += 20;
         }
@@ -30,12 +30,14 @@ public class EquipmentAdrenalineResolver {
         }
 
         if (ability.getId() == AbilityId.RAPIDFIRE) {
-            if (eq.getTotalDracolichPieces() > 0) {
-                adrenalineDelta += (eq.getDracolichPieces() * 0.2);
+            int dracolichPieces = eq.getTotalDracolichPieces(buff);
+            if (dracolichPieces > 0) {
+                adrenalineDelta += (dracolichPieces * 0.2);
             }
 
-            if (eq.getTotalEliteDracolichPieces() > 0) {
-                adrenalineDelta += (eq.getEliteDracolichPieces() * 0.5);
+            int eliteDracolichPieces = eq.getTotalEliteDracolichPieces(buff);
+            if (eliteDracolichPieces > 0) {
+                adrenalineDelta += (eliteDracolichPieces * 0.5);
             }
         }
 

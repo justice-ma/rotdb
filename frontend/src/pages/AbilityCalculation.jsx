@@ -27,20 +27,25 @@ const BLESSING_ABILITY_REQUIREMENTS = {
   LIGHT_OF_SARADOMIN_RANGED: "STRIKING_LIGHT",
   LIGHT_OF_SARADOMIN_NECROMANCY: "STRIKING_LIGHT",
 
+  LORD_OF_LIGHT_MAGIC: "LORD_OF_LIGHT",
+  LORD_OF_LIGHT_MELEE: "LORD_OF_LIGHT",
+  LORD_OF_LIGHT_RANGED: "LORD_OF_LIGHT",
+  LORD_OF_LIGHT_NECROMANCY: "LORD_OF_LIGHT",
+
   BASH_MAGIC: "STEADFAST_WILL",
   BASH_MELEE: "STEADFAST_WILL",
   BASH_RANGED: "STEADFAST_WILL",
   BASH_NECROMANCY: "STEADFAST_WILL",
 
-  BARKSCALES_MAGIC: "BARKSCALES",
-  BARKSCALES_MELEE: "BARKSCALES",
-  BARKSCALES_RANGED: "BARKSCALES",
-  BARKSCALES_NECROMANCY: "BARKSCALES",
+  BARKSCALES_MAGIC: ["BARKSCALES", "TEARING_THORNS"],
+  BARKSCALES_MELEE: ["BARKSCALES", "TEARING_THORNS"],
+  BARKSCALES_RANGED: ["BARKSCALES", "TEARING_THORNS"],
+  BARKSCALES_NECROMANCY: ["BARKSCALES", "TEARING_THORNS"],
 
-  INFERNO_OF_ZAMORAK_MAGIC: "ABYSSAL_CINDERS",
-  INFERNO_OF_ZAMORAK_MELEE: "ABYSSAL_CINDERS",
-  INFERNO_OF_ZAMORAK_RANGED: "ABYSSAL_CINDERS",
-  INFERNO_OF_ZAMORAK_NECROMANCY: "ABYSSAL_CINDERS",
+  INFERNO_OF_ZAMORAK_MAGIC: ["ABYSSAL_CINDERS", "UNHOLY_CRITUAL"],
+  INFERNO_OF_ZAMORAK_MELEE: ["ABYSSAL_CINDERS", "UNHOLY_CRITUAL"],
+  INFERNO_OF_ZAMORAK_RANGED: ["ABYSSAL_CINDERS", "UNHOLY_CRITUAL"],
+  INFERNO_OF_ZAMORAK_NECROMANCY: ["ABYSSAL_CINDERS", "UNHOLY_CRITUAL"],
 };
 
 const DEFAULT_SKILLS = {
@@ -52,6 +57,7 @@ const DEFAULT_SKILLS = {
   attack: 120,
   defence: 99,
   summoning: 99,
+  herblore: 120,
   maxHp: 10100,
   currentHp: 10100,
 };
@@ -74,6 +80,7 @@ const DEFAULT_PRESETS = [
         attack: 120,
         defence: 99,
         summoning: 99,
+        herblore: 120,
         maxHp: 10100,
         currentHp: 10100,
       },
@@ -149,6 +156,7 @@ const DEFAULT_PRESETS = [
         attack: 120,
         defence: 99,
         summoning: 99,
+        herblore: 120,
         maxHp: 10100,
         currentHp: 10100,
       },
@@ -225,6 +233,7 @@ const DEFAULT_PRESETS = [
         attack: 120,
         defence: 99,
         summoning: 99,
+        herblore: 120,
         maxHp: 10100,
         currentHp: 10100,
       },
@@ -304,6 +313,7 @@ const DEFAULT_PRESETS = [
         attack: 120,
         defence: 99,
         summoning: 99,
+        herblore: 120,
         maxHp: 10100,
         currentHp: 10100,
       },
@@ -578,6 +588,10 @@ export default function AbilityCalculation({ clientId, sessionId }) {
       const requiredBuff = BLESSING_ABILITY_REQUIREMENTS[ability.ability];
 
       if (!requiredBuff) return true;
+
+      if (Array.isArray(requiredBuff)) {
+        return requiredBuff.some((buffId) => enabledBuffs.has(buffId));
+      }
 
       return enabledBuffs.has(requiredBuff);
     });

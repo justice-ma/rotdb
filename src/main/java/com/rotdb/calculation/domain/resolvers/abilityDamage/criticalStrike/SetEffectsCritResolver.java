@@ -6,10 +6,7 @@ import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
-import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
-
-import java.util.List;
 
 public class SetEffectsCritResolver {
     public static CritBonus resolve(CalculationContext context) {
@@ -19,24 +16,20 @@ public class SetEffectsCritResolver {
         BuffContext buff = context.getBuffs();
         AbilityContext ability = context.getAbility();
         EquipmentModel equipment = context.getEquipment();
-        EquipmentSlot head = equipment.getHead();
-        EquipmentSlot body = equipment.getBody();
-        EquipmentSlot legs = equipment.getLegs();
-        EquipmentSlot boots = equipment.getBoots();
-        EquipmentSlot gloves = equipment.getGloves();
-        EquipmentSlot cape = equipment.getCape();
-        List<EquipmentSlot> equipmentSlots = List.of(head, body, legs, boots, gloves, cape);
-
-        for (EquipmentSlot piece : equipmentSlots) {
-            if (piece == null) continue;
-            if (piece.getEffect().contains(Effect.WARPRIESTOFTUSKA)) equipment.setTuskaPieces(equipment.getTuskaPieces() + 1);
-            if (piece.getEffect().contains(Effect.ANIMACOREOFSLISKE)) equipment.setSliskePieces(equipment.getSliskePieces() + 1);
-            if (piece.getEffect().contains(Effect.TECTONIC)) equipment.setTectonicPieces(equipment.getEliteTectonicPieces() + 1);
-            if (piece.getEffect().contains(Effect.ELITETECTONIC)) equipment.setEliteTectonicPieces(equipment.getEliteTectonicPieces() + 1);
-            if (piece.getEffect().contains(Effect.DRACOLICH)) equipment.setDracolichPieces(equipment.getDracolichPieces() + 1);
-            if (piece.getEffect().contains(Effect.ELITEDRACOLICH)) equipment.setEliteDracolichPieces(equipment.getEliteDracolichPieces() + 1);
-            if (piece.getEffect().contains(Effect.TUMEKENS)) equipment.setTumekensPieces(equipment.getTumekensPieces() + 1);
-        }
+        equipment.setTuskaPieces(equipment.countSetPieces(Effect.WARPRIESTOFTUSKA, buff,
+                equipment.getHead(), equipment.getBody(), equipment.getLegs(), equipment.getBoots(), equipment.getGloves(), equipment.getCape()));
+        equipment.setSliskePieces(equipment.countSetPieces(Effect.ANIMACOREOFSLISKE, buff,
+                equipment.getHead(), equipment.getBody(), equipment.getLegs(), equipment.getBoots(), equipment.getGloves(), equipment.getCape()));
+        equipment.setTectonicPieces(equipment.countSetPieces(Effect.TECTONIC, buff,
+                equipment.getHead(), equipment.getBody(), equipment.getLegs(), equipment.getBoots(), equipment.getGloves(), equipment.getCape()));
+        equipment.setEliteTectonicPieces(equipment.countSetPieces(Effect.ELITETECTONIC, buff,
+                equipment.getHead(), equipment.getBody(), equipment.getLegs(), equipment.getBoots(), equipment.getGloves(), equipment.getCape()));
+        equipment.setDracolichPieces(equipment.countSetPieces(Effect.DRACOLICH, buff,
+                equipment.getHead(), equipment.getBody(), equipment.getLegs(), equipment.getBoots(), equipment.getGloves(), equipment.getCape()));
+        equipment.setEliteDracolichPieces(equipment.countSetPieces(Effect.ELITEDRACOLICH, buff,
+                equipment.getHead(), equipment.getBody(), equipment.getLegs(), equipment.getBoots(), equipment.getGloves(), equipment.getCape()));
+        equipment.setTumekensPieces(equipment.countSetPieces(Effect.TUMEKENS, buff,
+                equipment.getHead(), equipment.getBody(), equipment.getLegs(), equipment.getBoots(), equipment.getGloves(), equipment.getCape()));
 
         if (equipment.getTuskaPieces() >= 3) {
             criticalStrikeChance += Math.min(0.06, equipment.getTuskaPieces() / 100.0);

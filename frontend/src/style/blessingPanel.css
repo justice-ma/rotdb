@@ -26,7 +26,7 @@
 
 .blessing-tier-row {
   display: grid;
-  grid-template-columns: 56px repeat(3, 72px);
+  grid-template-columns: 74px repeat(3, 72px);
   align-items: center;
   gap: var(--space-2);
 }
@@ -39,9 +39,21 @@
 }
 
 .blessing-tier-label {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+  gap: 1px;
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.05;
   text-align: right;
+  text-transform: uppercase;
+}
+
+.blessing-tier-label span:last-child {
+  color: var(--text);
+  font-size: 16px;
 }
 
 .blessing-tier-grid {

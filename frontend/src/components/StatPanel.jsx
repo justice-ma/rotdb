@@ -8,6 +8,7 @@ const SKILL_FIELDS = [
   { key: "magic", label: "Magic" },
   { key: "ranged", label: "Ranged" },
   { key: "necromancy", label: "Necromancy" },
+  { key: "herblore", label: "Herblore" },
   { key: "currentHp", label: "Current HP" },
   { key: "maxHp", label: "Maximum HP" },
 ];

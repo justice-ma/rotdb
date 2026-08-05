@@ -6,12 +6,17 @@ import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.enums.Slots;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
 
 public final class AbilityProvider {
 
     private AbilityProvider() {}
 
     public static AbilityContext get(AbilityId id, EquipmentModel equipment) {
+        return get(id, equipment, null);
+    }
+
+    public static AbilityContext get(AbilityId id, EquipmentModel equipment, BuffContext buffs) {
         return switch (id) {
             // Melee Abilities
             case MELEEAUTO -> MeleeAbilityFactory.attack();
@@ -53,7 +58,7 @@ public final class AbilityProvider {
             case COMBUST -> MagicAbilityFactory.combust();
             case CHAIN -> MagicAbilityFactory.chain();
             case GREATERCHAIN -> MagicAbilityFactory.greaterChain();
-            case ASPHYXIATE -> hasAtLeastTumekensPieces(equipment, 4)
+            case ASPHYXIATE -> hasAtLeastTumekensPieces(equipment, buffs, 4)
                     ? MagicAbilityFactory.asphyxiateTumekens()
                     : MagicAbilityFactory.asphyxiate();
             case CONCENTRATEDBLAST -> MagicAbilityFactory.concentratedBlast();
@@ -180,6 +185,11 @@ public final class AbilityProvider {
             case LIGHT_OF_SARADOMIN_MAGIC -> BlessingFactory.lightOfSaradomin(AbilityId.LIGHT_OF_SARADOMIN_MAGIC);
             case LIGHT_OF_SARADOMIN_MELEE -> BlessingFactory.lightOfSaradomin(AbilityId.LIGHT_OF_SARADOMIN_MELEE);
 
+            case LORD_OF_LIGHT_NECROMANCY -> BlessingFactory.lordOfLight(AbilityId.LORD_OF_LIGHT_NECROMANCY);
+            case LORD_OF_LIGHT_RANGED -> BlessingFactory.lordOfLight(AbilityId.LORD_OF_LIGHT_RANGED);
+            case LORD_OF_LIGHT_MAGIC -> BlessingFactory.lordOfLight(AbilityId.LORD_OF_LIGHT_MAGIC);
+            case LORD_OF_LIGHT_MELEE -> BlessingFactory.lordOfLight(AbilityId.LORD_OF_LIGHT_MELEE);
+
             case BASH_MAGIC -> BlessingFactory.bash(AbilityId.BASH_MAGIC);
             case BASH_RANGED -> BlessingFactory.bash(AbilityId.BASH_RANGED);
             case BASH_MELEE -> BlessingFactory.bash(AbilityId.BASH_MELEE);
@@ -196,14 +206,15 @@ public final class AbilityProvider {
             case INFERNO_OF_ZAMORAK_NECROMANCY -> BlessingFactory.infernoOfZamorak(AbilityId.INFERNO_OF_ZAMORAK_NECROMANCY);
         };
     }
-    private static boolean hasAtLeastTumekensPieces(EquipmentModel equipment, int required) {
+    private static boolean hasAtLeastTumekensPieces(EquipmentModel equipment, BuffContext buffs, int required) {
         int count = 0;
+        int pieceValue = equipment.getSetPieceValue(buffs);
 
-        if (isTumekens(equipment.getHead())) count++;
-        if (isTumekens(equipment.getBody())) count++;
-        if (isTumekens(equipment.getLegs())) count++;
-        if (isTumekens(equipment.getGloves())) count++;
-        if (isTumekens(equipment.getBoots())) count++;
+        if (isTumekens(equipment.getHead())) count += pieceValue;
+        if (isTumekens(equipment.getBody())) count += pieceValue;
+        if (isTumekens(equipment.getLegs())) count += pieceValue;
+        if (isTumekens(equipment.getGloves())) count += pieceValue;
+        if (isTumekens(equipment.getBoots())) count += pieceValue;
 
         return count >= required;
     }

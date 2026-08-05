@@ -1,8 +1,11 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.HitType;
 import com.rotdb.shared.combat.domain.model.enums.Perks;
 
 public class CritAggregator {
@@ -34,7 +37,7 @@ public class CritAggregator {
                 continue;
             }
 
-            if (hit.getTier() == AbilityTier.CONJURE) {
+            if (hit.getTier() == AbilityTier.CONJURE || hit.getType() == HitType.POISON) {
                 hit.setCritChanceModifier(0);
                 continue;
             }
@@ -42,12 +45,36 @@ public class CritAggregator {
             double hitCritChance = globalChance;
             double hitCritDamage = globalDamage;
 
+            if ((context.getAbility().getId() == AbilityId.INFERNO_OF_ZAMORAK_MAGIC ||
+                    context.getAbility().getId() == AbilityId.INFERNO_OF_ZAMORAK_MELEE ||
+                    context.getAbility().getId() == AbilityId.INFERNO_OF_ZAMORAK_RANGED ||
+                    context.getAbility().getId() == AbilityId.INFERNO_OF_ZAMORAK_NECROMANCY ||
+                    hit.getType() == HitType.INFERNO_OF_ZAMORAK) && context.getBuffs().has(BuffId.UNHOLY_CRITUAL)) {
+                hitCritDamage += 0.5;
+            }
+
+            if (context.getBuffs().has(BuffId.TRUE_EQUILIBRIUM)) {
+                hitCritChance += 0.05 * context.getBuffs().getBlessingsPerAlignment();
+                hitCritDamage += 0.075 * context.getBuffs().getBlessingsPerAlignment();
+            }
+
             CritBonus perHit = PerHitCritAdjustResolver.resolve(context, hit, i);
 
             hitCritChance += perHit.getChanceDelta();
             hitCritDamage += perHit.getDamageDelta();
 
-            hitCritChance = Math.max(0, Math.min(hitCritChance, 1));
+            if (context.getAbility().getId() == AbilityId.SMOKETENDRILS || context.getAbility().getId() == AbilityId.SHADOWTENDRILS) {
+                hitCritChance = 1;
+            }
+
+            if (!context.getBuffs().has(BuffId.UNHOLY_CRITUAL)) {
+                hitCritChance = Math.max(0, Math.min(hitCritChance, 1));
+            } else {
+                hitCritChance += 0.15;
+                double excess = Math.max(0, hitCritChance - 0.5);
+                hitCritChance = Math.max(0, Math.min(hitCritChance, 0.5));
+                hitCritDamage += excess;
+            }
 
             hit.setCritChanceModifier(hitCritChance);
             hit.setCritDamageModifier(hitCritDamage);

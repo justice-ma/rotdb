@@ -18,8 +18,8 @@ public class BuffCritResolver {
 
         double criticalStrikeChance = 0;
         if (buff.has(BuffId.FURYBUFF) && ability.getCombatStyle() == CombatStyles.MELEE) criticalStrikeChance += 0.25;
-        if (buff.has(BuffId.GREATERFURYBUFF) && ability.getCombatStyle() == CombatStyles.MELEE) criticalStrikeChance = 1;
-        if (ability.getId() == SMOKETENDRILS || ability.getId() == SHADOWTENDRILS) criticalStrikeChance = 1;
+        if (buff.has(BuffId.GREATERFURYBUFF) && ability.getCombatStyle() == CombatStyles.MELEE) return 1;
+        if (ability.getId() == SMOKETENDRILS || ability.getId() == SHADOWTENDRILS) return 1;
         if (buff.has(BuffId.CONCENTRATEDBLASTBUFF)  && ability.getCombatStyle() == CombatStyles.MAGIC) {
             if (buff.has(BuffId.RUNICCHARGE)) {
                 criticalStrikeChance += 0.45;

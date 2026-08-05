@@ -11,7 +11,7 @@ public class AdrenalineBoundsResolver {
     public static void resolve(RotationSnapshot rc, EquipmentModel eq, BuffContext buff) {
         AdrenalineContext ac = rc.getAdrenaline();
 
-        if (eq.getTotalVestmentsOfHavoc() >= 4 && eq.getMainhand().getClazz() == CombatStyles.MELEE) {
+        if (eq.getTotalVestmentsOfHavoc(buff) >= 4 && eq.getMainhand().getClazz() == CombatStyles.MELEE) {
             ac.setMaximumBound(ac.getMaximumBound() + 20);
         }
 

@@ -115,7 +115,19 @@ public enum BuffId {
     ETERNAL_SUSTENANCE(0, 0, false, "Eternal Sustenance", "blessings/Eternal_Sustenance.png"),
     SACRED_FERVOR(0, 0, false, "Sacred Fervor", "blessings/Sacred_Fervor.png"),
     ICYENIC_FAITH(0, 0, false, "Icyenic Faith", "blessings/Icyenic_Faith.png"),
-    NARAGI_EFFECT(0, 0, false, "Naragi Effect", "blessings/Naragi_Effect.png");
+    NARAGI_EFFECT(0, 0, false, "Naragi Effect", "blessings/Naragi_Effect.png"),
+    HAVOC_BORN(0, 0, false, "Havoc Born", "blessings/Havoc_Born.png"),
+    TRUE_EQUILIBRIUM(0, 0, false, "True Equilibrium", "blessings/True_Equilibrium.png"),
+    HIGHER_POWER(0, 0, false, "Higher Power", "blessings/Higher_Power.png"),
+    UNHOLY_CRITUAL(0, 0, false, "Unholy Critual", "blessings/Unholy_Critual.png"),
+    TEARING_THORNS(0, 0, false, "Tearing Thorns", "blessings/Tearing_Thorns.png"),
+    LORD_OF_LIGHT(0, 0, false, "Lord of Light", "blessings/Lord_of_Light.png"),
+    PERFIDIOUS(0, 0, false, "Perfidious", "blessings/Perfidious.png"),
+    ENVENOMED(0, 0, false, "Envenomed", "blessings/Envenomed.png"),
+    TEMPERED_HEART(0, 0, false, "Tempered Heart", "blessings/Tempered_Heart.png"),
+    CHAOTIC_INSIGHT(0, 0, false, "Chaotic Insight", "blessings/Chaotic_Insight.png"),
+    POWER_ARCHIVE(0, 0, false, "Power Archive", "blessings/Power_Archive.png"),
+    GENESIS_ESSENCE(0, 0, false, "Genesis Essence", "blessings/Genesis_Essence.png");
 
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;

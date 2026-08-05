@@ -51,7 +51,7 @@ public final class DamageRequestMapper {
         SpellContext spell = spellContextMapper.from(request.spell());
         PrayerContext prayer = prayerContextMapper.from(request.selectedPrayers());
         FamiliarContext familiar = familiarContextMapper.from(request.selectedFamiliar());
-        PerkContext perks = perkContextMapper.from(request.perks());
+        PerkContext perks = perkContextMapper.from(request.perks(), buffs);
         HitCapMode hitCapMode = hitCapModeMapper.from(request.hitCapMode());
 
         DamageRequest dr = new DamageRequest();

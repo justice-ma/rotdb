@@ -98,6 +98,12 @@
   background: var(--bg-accent);
 }
 
+.buff:disabled,
+.buff.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .buff:hover,
 .buff-tab:hover {
   cursor: pointer;
@@ -105,7 +111,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
 }
 
-.buff:hover:not(.buff.selected),
+.buff:hover:not(.buff.selected):not(:disabled),
 .buff-tab:hover:not(.buff-tab:active) {
   background-color: var(--bg-light);
 }

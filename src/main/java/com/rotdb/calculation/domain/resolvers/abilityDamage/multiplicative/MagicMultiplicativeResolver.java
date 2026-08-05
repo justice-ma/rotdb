@@ -17,8 +17,10 @@ public class MagicMultiplicativeResolver {
         double mod = 1;
 
         if (style == MAGIC) {
-            if (buff.has(BuffId.SUNSHINE)) {
-                mod *= 1.5;
+            if (!buff.has(BuffId.HIGHER_POWER)) {
+                if (buff.has(BuffId.SUNSHINE)) {
+                    mod *= 1.5;
+                }
             }
 
             if (buff.has(BuffId.TITHESTACKS) && buff.stacks(BuffId.TITHESTACKS) > 0 && hit.getTier() == BASIC

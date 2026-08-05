@@ -14,8 +14,10 @@ public class RangedMultiplicativeResolver {
 
         double mod = 1;
         if (style == RANGED) {
-            if (buff.has(BuffId.DEATHSWIFTNESS)) {
-                mod *= 1.5;
+            if (!buff.has(BuffId.HIGHER_POWER)) {
+                if (buff.has(BuffId.DEATHSWIFTNESS)) {
+                    mod *= 1.5;
+                }
             }
         }
         return mod;
