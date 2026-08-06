@@ -127,7 +127,8 @@ public enum BuffId {
     TEMPERED_HEART(0, 0, false, "Tempered Heart", "blessings/Tempered_Heart.png"),
     CHAOTIC_INSIGHT(0, 0, false, "Chaotic Insight", "blessings/Chaotic_Insight.png"),
     POWER_ARCHIVE(0, 0, false, "Power Archive", "blessings/Power_Archive.png"),
-    GENESIS_ESSENCE(0, 0, false, "Genesis Essence", "blessings/Genesis_Essence.png");
+    GENESIS_ESSENCE(0, 0, false, "Genesis Essence", "blessings/Genesis_Essence.png"),
+    INFERNAL_FIRE(0, 0, false, "Infernal Fire", "blessings/Infernal_Fire.png");
 
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;

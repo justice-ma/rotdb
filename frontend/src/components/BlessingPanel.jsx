@@ -89,6 +89,7 @@ const BLESSING_TIERS = [
     blessings: [
       { id: "ICYENIC_FAITH", god: "RELIC" },
       { id: "NARAGI_EFFECT", god: "RELIC" },
+      { id: "INFERNAL_FIRE", god: "RELIC" },
     ],
   },
 ];
@@ -111,7 +112,9 @@ function getSelectableTiersForGroup(deriviationGroup) {
 }
 
 function getDerivedTierForGroup(deriviationGroup) {
-  return DERIVED_TIERS.find((tier) => tier.deriviationGroup === deriviationGroup);
+  return DERIVED_TIERS.find(
+    (tier) => tier.deriviationGroup === deriviationGroup,
+  );
 }
 
 function deriveGod(selectedGods, requiredSelections) {
@@ -172,15 +175,17 @@ export default function BlessingPanel({
       }
 
       const selectableTiers = getSelectableTiersForGroup(tier.deriviationGroup);
-      const selectedGods = selectableTiers.map((selectableTier) => {
-        const selectedId = nextEnabled.find((id) =>
-          selectableTier.blessings.some((blessing) => blessing.id === id),
-        );
+      const selectedGods = selectableTiers
+        .map((selectableTier) => {
+          const selectedId = nextEnabled.find((id) =>
+            selectableTier.blessings.some((blessing) => blessing.id === id),
+          );
 
-        return selectableTier.blessings.find(
-          (blessing) => blessing.id === selectedId,
-        )?.god;
-      }).filter(Boolean);
+          return selectableTier.blessings.find(
+            (blessing) => blessing.id === selectedId,
+          )?.god;
+        })
+        .filter(Boolean);
 
       const derivedTierId = deriveTierId(tier.deriviationGroup, selectedGods);
 
