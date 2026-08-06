@@ -23,8 +23,7 @@ import com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike.CritD
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.rotdb.shared.combat.domain.model.enums.HitType.INFERNO_OF_ZAMORAK;
-import static com.rotdb.shared.combat.domain.model.enums.HitType.PERFECTEQUILIBRIUM;
+import static com.rotdb.shared.combat.domain.model.enums.HitType.*;
 
 public class PerfectEquilibriumInjector implements Modifier {
 
@@ -74,6 +73,7 @@ public class PerfectEquilibriumInjector implements Modifier {
             if (parent.isDot()) continue;
             if (parent.getType() == PERFECTEQUILIBRIUM) continue;
             if (parent.getType() == INFERNO_OF_ZAMORAK) continue;
+            if (parent.getType() == LIGHT_OF_SARADOMIN) continue;
             stacks++;
 
             if (isCrystalRain) {

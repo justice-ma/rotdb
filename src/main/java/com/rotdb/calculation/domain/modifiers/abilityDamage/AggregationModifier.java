@@ -48,7 +48,7 @@ public class AggregationModifier implements Modifier {
                 nonCritMax += hit.getNonCritMax();
                 nonCritAvg += hit.getNonCritDamage();
 
-                if (hit.getType() == HitType.BASE || hit.getType() == HitType.POISON) {
+                if (hit.getType() == HitType.BASE || hit.getType() == HitType.POISON || hit.getType() == HitType.LIGHT_OF_SARADOMIN) {
                     minCoeff += hit.getMin() * 100 + 1E-9;
                     maxCoeff += hit.getMax() * 100 + 1E-9;
                 }
