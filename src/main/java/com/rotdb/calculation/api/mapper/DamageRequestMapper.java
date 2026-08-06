@@ -45,8 +45,8 @@ public final class DamageRequestMapper {
 
     public DamageRequest from(DamageCalcRequestDto request) {
         EquipmentModel equipment = equipmentContextMapper.from(request.equipment());
-        SkillsContext skills = skillsContextMapper.from(request.skills());
         BuffContext buffs = buffContextMapper.from(request.buffs());
+        SkillsContext skills = skillsContextMapper.from(request.skills(), buffs);
         List<PotionContext> potion = potionContextMapper.from(request.potions());
         SpellContext spell = spellContextMapper.from(request.spell());
         PrayerContext prayer = prayerContextMapper.from(request.selectedPrayers());

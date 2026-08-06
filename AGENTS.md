@@ -105,6 +105,12 @@ When a task benefits from specialist work, use the project-scoped custom agents 
 Codex surface exposes them. If the surface cannot target custom agents directly, spawn a normal subagent with the
 matching role instructions from `docs/AI_ASSISTED_WORKFLOW.md` and report the spawned subagent id.
 
+Before concluding that specialist delegation is unavailable, explicitly inspect the current Codex tool surface for
+deferred or namespaced agent tools such as `spawn_agent` and `wait_agent`; agent capabilities may not appear in the
+primary tool list. Do not infer that an agent is loaded from `AGENTS.md`, a skill file, or a directory listing. Distinguish
+between a documented role, a role exposed by the current runtime, and an agent thread that was actually spawned. When
+delegation is appropriate and the runtime exposes it, perform the delegation and report the role, agent id, and result.
+
 ## Code Rule
 
 Never write code unless explicitly asked.

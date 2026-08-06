@@ -1,12 +1,14 @@
 package com.rotdb.calculation.application.mapper;
 
 import com.rotdb.calculation.api.dto.DamageCalcRequestDto;
+import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
 import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SkillsContextMapper {
-    public SkillsContext from(DamageCalcRequestDto.Skills request) {
+    public SkillsContext from(DamageCalcRequestDto.Skills request, BuffContext buffs) {
         SkillsContext skills = new SkillsContext();
         if (request == null) skills.fillMissingWithOne();
         if (request.strength() != null) skills.setBaseStrength(request.strength());
@@ -20,7 +22,7 @@ public class SkillsContextMapper {
         if (request.maxHp() != null) skills.setMaxHp(request.maxHp());
 
         skills.fillMissingWithOne();
-        skills.correctBoundaries();
+        skills.correctBoundaries(buffs);
         return skills;
     }
 }

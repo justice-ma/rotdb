@@ -12,6 +12,24 @@ This document is the source of truth for Codex's ROTDB mentoring workflow. It ex
   prompt and must report the spawned agent id.
 - The main mentor keeps decisions and durable summaries in this chat and the lightweight journal docs, not in raw logs.
 
+### Runtime delegation check
+
+The existence of a role definition in repository documentation or under `.codex/agents/` does not prove that the role is
+loaded or available in the current Codex runtime. Before reporting delegation as unavailable, inspect the live tool
+surface, including deferred or namespaced tools, for agent capabilities such as `spawn_agent`, `wait_agent`, and
+`send_input`.
+
+Keep these states separate:
+
+- documented role: described by repository instructions or skill documentation;
+- exposed role: offered by the current runtime/tool surface;
+- spawned agent: a separate thread created by a successful spawn call and identified by an agent id.
+
+When a task benefits from independent specialist work, use an exposed project role when available. If no suitable role is
+exposed but generic spawning is available, use the matching role instructions in this document. If neither is available,
+state that conclusion and the evidence used. Never claim that delegation occurred without a spawn result and a
+corresponding agent id; when possible, wait for completion and report the returned status.
+
 ## Main Mentor Contract
 
 The main Codex context is the user's mentor and coordinator. It should:
@@ -75,7 +93,10 @@ behavior would materially affect implementation, tests, tick order, state behavi
 Review completed user work. Inspect the relevant diff and execution path. Verify RuneScape mechanics when required. Run
 appropriate tests and checks when permitted. Present the strongest finding first and classify findings where useful as
 correctness issue, architecture concern, testing gap, maintainability issue, unnecessary complexity, or optional polish.
-Do not rewrite the work before helping the user reason about important findings.
+Before starting the review, decide whether independent codebase, mechanics, pattern, or adversarial work would materially
+improve confidence. If so, perform the runtime delegation check above and delegate when the current surface supports it.
+Report the specialist role and agent id, or explicitly report why no delegation was possible. Do not rewrite the work before
+helping the user reason about important findings.
 
 ### `$reflect`
 
