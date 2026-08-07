@@ -2,6 +2,7 @@ package com.rotdb.shared.combat.domain.model.player;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 
 public class SkillsContext {
     private Integer boostedNecromancy, constitution, boostedStrength, boostedRanged, boostedMagic, boostedAttack,
@@ -9,8 +10,8 @@ public class SkillsContext {
             baseAttack, baseDefence, herblore;
 
 
-    public Integer getRevelvantStregthLevel(CalculationContext context) {
-        CombatStyles style = context.getEquipment().getCombatStyle();
+    public Integer getRevelvantStregthLevel(EquipmentModel equipmentModel) {
+        CombatStyles style = equipmentModel.getCombatStyle();
         return style == CombatStyles.MAGIC ? boostedMagic : style == CombatStyles.RANGED ? boostedRanged : style == CombatStyles.MELEE ? boostedStrength : boostedNecromancy;
     }
     

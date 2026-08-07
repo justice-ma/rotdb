@@ -1,5 +1,6 @@
 package com.rotdb.calculation.domain.model.context;
 
+import com.rotdb.calculation.domain.model.EffectiveStatsResult;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.context.TargetContext;
@@ -34,6 +35,7 @@ public class CalculationContext {
     private boolean perfectEquilibriumSecondPass;
     private double hitChance;
     private HitCapMode hitCapMode;
+    private EffectiveStatsResult effectiveStatsResult;
 
     public boolean debug = false;
     public boolean finalPrint = false;
@@ -172,5 +174,13 @@ public class CalculationContext {
 
     public void setHitCapMode(HitCapMode hitCapMode) {
         this.hitCapMode = hitCapMode;
+    }
+
+    public EffectiveStatsResult getEffectiveStatsResult() {
+        return effectiveStatsResult;
+    }
+
+    public void setEffectiveStatsResult(EffectiveStatsResult effectiveStatsResult) {
+        this.effectiveStatsResult = effectiveStatsResult;
     }
 }

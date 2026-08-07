@@ -14,6 +14,7 @@ import {
   fetchSpells,
   fetchFamiliars,
   fetchTargetByTitle,
+  fetchEffectiveStats,
 } from "../api/api";
 
 import "../style/abilityPage.css";
@@ -407,6 +408,8 @@ export default function AbilityCalculation({ clientId, sessionId }) {
   const [presets, setPresets] = useState([]);
   const [selectedPresetId, setSelectedPresetId] = useState("");
 
+  const [effectiveStats, setEffectiveStats] = useState(null);
+
   const [itemLevel20, setItemLevel20] = useState(false);
   const [selectedPotions, setSelectedPotions] = useState([
     { pot: "NONE", stat: "ALL" },
@@ -577,6 +580,43 @@ export default function AbilityCalculation({ clientId, sessionId }) {
     spell,
     familiar,
     hitCapMode,
+  ]);
+
+  const effectiveStatsPayload = useMemo(() => {
+    return {
+      skills,
+      buffs,
+      equipmentIds: {
+        mainhandId: equipmentIds.MAINHAND ?? null,
+        offhandId: equipmentIds.OFFHAND ?? null,
+        headId: equipmentIds.HEAD ?? null,
+        bodyId: equipmentIds.BODY ?? null,
+        legsId: equipmentIds.LEGS ?? null,
+        bootsId: equipmentIds.BOOTS ?? null,
+        glovesId: equipmentIds.GLOVES ?? null,
+        neckId: equipmentIds.NECK ?? null,
+        ringId: equipmentIds.RING ?? null,
+        capeId: equipmentIds.CAPE ?? null,
+        pocketId: equipmentIds.POCKET ?? null,
+        ammoId: equipmentIds.AMMO ?? null,
+        quiverId: equipmentIds.QUIVER ?? null,
+      },
+      familiar: familiar?.id ?? null,
+      perks: {
+        selectedPerks,
+        itemLevel20,
+        genocidalRank,
+      },
+    };
+  }, [
+    skills,
+    equipmentIds,
+    buffs,
+    selectedPrayers,
+    familiar,
+    selectedPerks,
+    itemLevel20,
+    genocidalRank,
   ]);
 
   const needsMainhand = !equipmentIds.MAINHAND;
@@ -873,6 +913,24 @@ export default function AbilityCalculation({ clientId, sessionId }) {
   }, [derivedStatsPayload]);
 
   useEffect(() => {
+    let ignore = false;
+
+    (async () => {
+      try {
+        const stats = await fetchEffectiveStats(effectiveStatsPayload);
+        if (!ignore) setEffectiveStats(stats);
+      } catch (e) {
+        console.error("Effective stats calculation failed", e);
+        if (!ignore) setEffectiveStats(null);
+      }
+    })();
+
+    return () => {
+      ignore = true;
+    };
+  }, [effectiveStatsPayload]);
+
+  useEffect(() => {
     if (!base) return;
     if (!selectedAbility) return;
 
@@ -965,6 +1023,7 @@ export default function AbilityCalculation({ clientId, sessionId }) {
           setSelectedPotions={setSelectedPotions}
           targetSize={targetSize}
           setTargetSize={setTargetSize}
+          effectiveStats={effectiveStats}
         />
       </div>
 

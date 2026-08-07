@@ -13,24 +13,14 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public final class AbilityDamagePipeline {
+public final class PostCriticalPipeline {
     private final List<Modifier> steps;
 
-    public AbilityDamagePipeline() {
+    public PostCriticalPipeline() {
         steps = List.of(
-                new StatBoostModifier(),
-                new NaragiEffectModifier(),
-                new DbaStatBoostModifier(),
-                new SoulInjector(),
-                new NecrosisInjector(),
-                new NightmareGauntletsInjector(),
-                new MeleeBleedsInjector(),
-                new TearingThornsInjector(),
-                new RunicChargeInjector(),
-                new BaseAbilityDamageModifier(),
                 new CriticalStrikeModifier(),
-                new InstabilityInjector(),
                 new InfernoOfZamorakInjector(),
+                new InstabilityInjector(),
                 new AbilityRangeModifier(),
                 new BashDamageModifier(),
                 new BlessingFlatDamageModifier(),

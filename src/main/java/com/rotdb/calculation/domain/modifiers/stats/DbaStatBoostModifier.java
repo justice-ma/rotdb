@@ -1,15 +1,14 @@
 package com.rotdb.calculation.domain.modifiers.stats;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.calculation.domain.modifiers.StatModifier;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
 import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 
-public class DbaStatBoostModifier implements Modifier {
-    public void apply(CalculationContext context) {
-        BuffContext buffs = context.getBuffs();
-        SkillsContext skill = context.getSkills();
+public class DbaStatBoostModifier implements StatModifier {
+    public void apply(SkillsContext skill, BuffContext buffs) {
         if (buffs.has(BuffId.DBA)) {
             int boost = (((int) (skill.getBoostedAttack() * 0.1) + (int) (skill.getBoostedDefence() * 0.1) +
                     (int) (skill.getBoostedMagic() * 0.1) + (int) (skill.getBoostedRanged() * 0.1) +

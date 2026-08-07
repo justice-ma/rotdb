@@ -180,6 +180,7 @@ export default function CombatSettings({
   setSelectedPotions,
   targetSize,
   setTargetSize,
+  effectiveStats,
 }) {
   const [editingSlot, setEditingSlot] = useState(null);
   const DEFAULT_BOOK_UPTIME = 66;
@@ -727,6 +728,7 @@ export default function CombatSettings({
             skills={skills}
             setSkills={setSkills}
             derivedStats={derivedStats}
+            effectiveStats={effectiveStats}
           />
         </div>
       </details>

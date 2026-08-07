@@ -17,7 +17,8 @@ public class PerkMultiplicativeResolver {
         // TODO: Check that offhand == shield some day!
         if (buff.has(BuffId.REVENGESTACKS) && buff.stacks(BuffId.REVENGESTACKS) > 0 &&
                 (context.getEquipment().getOffhand().getType() == EquipmentType.SHIELD ||
-                        context.getEquipment().getOffhand().getEffect().contains(Effect.DEFENDER))) {
+                context.getEquipment().getOffhand().getEffect().contains(Effect.DEFENDER) ||
+                context.getEquipment().getMainhand().getType() == EquipmentType.SHIELDBOW)) {
             int maxStacks = context.getBuffs().has(BuffId.STEADFAST_WILL) ? 20 : 10;
             mod *= 1 + Math.min(maxStacks, buff.stacks(BuffId.REVENGESTACKS) ) * (context.getEquipment().getOffhand().getEffect().contains(Effect.DEFENDER) ? 0.025 : 0.05);
         }

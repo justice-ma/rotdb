@@ -3,10 +3,7 @@ package com.rotdb.calculation.domain.modifiers.injectors;
 import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
-import com.rotdb.shared.combat.domain.model.enums.BuffId;
-import com.rotdb.shared.combat.domain.model.enums.Effect;
-import com.rotdb.shared.combat.domain.model.enums.HitType;
+import com.rotdb.shared.combat.domain.model.enums.*;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike.CritDamageRangeResolver;
 
@@ -22,28 +19,16 @@ public class InstabilityInjector implements Modifier {
         List<AbilityHitsContext> hits = context.getAbility().getHits();
         int baseCount = hits.size();
 
-        for (int i = 0, j = 1; i < baseCount; i++, j++) {
+        for (int i = 0; i < baseCount; i++) {
             AbilityHitsContext parent = hits.get(i);
 
             if (!parentCanCrit(context, parent)) {
                 continue;
             }
 
-            double procCritChance = parent.getCritChanceModifier();
-            double procCritDamage = parent.getCritDamageModifier();
-            // Instability should not inherit conc / gconc crit bonus
-            if (context.getBuffs().has(BuffId.CONCENTRATEDBLASTBUFF) && context.getAbility().getId() != AbilityId.SMOKETENDRILS) {
-                procCritChance -= context.getBuffs().has(BuffId.RUNICCHARGE) ? 0.51 : 0.21;
-            } else if (context.getBuffs().has(BuffId.GREATERCONCENTRATEDBLASTBUFF) && context.getAbility().getId() != AbilityId.SMOKETENDRILS) {
-                procCritChance -= context.getBuffs().has(BuffId.RUNICCHARGE) ? 0.45 : 0.15;
-            }
-
-            if (context.getEquipment().getRing().getEffect().contains(Effect.CHANNELLERSRING)) {
-                procCritChance -= 0.04 * j;
-                if (context.getBuffs().has(BuffId.ENCHANTMENTOFMETAPHYSICS)) {
-                    procCritDamage -= 0.025 * j;
-                }
-            }
+            double procCritChance = context.getEffectiveStatsResult().getGlobalCritChance();
+            double procCritDamage = context.getEffectiveStatsResult().getGlobalCritDamage();
+            double expectedInstabilityProcs = parent.getExpectedOccurences() * (parent.isForcedCrit() ? 1 : parent.getCritChanceModifier());
 
             procCritChance = Math.max(0, Math.min(procCritChance, 1));
             procCritDamage = Math.max(0, procCritDamage);
@@ -62,6 +47,8 @@ public class InstabilityInjector implements Modifier {
             proc.setMinCritDamage(CritDamageRangeResolver.resolve(context, proc).getMinMod());
             proc.setMaxCritDamage(CritDamageRangeResolver.resolve(context, proc).getMaxMod());
             proc.setAverageCritDamage((proc.getMinCritDamage() + proc.getMaxCritDamage()) / 2);
+            proc.setForcedCrit(parent.isForcedCrit());
+            proc.setExpectedOccurences(expectedInstabilityProcs);
             hits.add(i + 1, proc);
             baseCount++;
             i++;
@@ -69,6 +56,7 @@ public class InstabilityInjector implements Modifier {
     }
 
     private boolean parentCanCrit(CalculationContext context, AbilityHitsContext parent) {
+        if (parent.isForcedCrit() && !context.getPerks().has(Perks.EQUILIBRIUM)) return true;
         if (parent.isDot()) return false;
         if (parent.getCritChanceModifier() == 0) return false;
         return !context.getAbility().getName().equalsIgnoreCase("Magma Tempest");

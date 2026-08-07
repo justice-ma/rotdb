@@ -13,7 +13,12 @@ const SKILL_FIELDS = [
   { key: "maxHp", label: "Maximum HP" },
 ];
 
-export default function StatsPanel({ skills, setSkills, derivedStats }) {
+export default function StatsPanel({
+  skills,
+  setSkills,
+  derivedStats,
+  effectiveStats,
+}) {
   const inputRefs = useRef({});
 
   function handleSkillChange(skillKey, value) {
@@ -107,6 +112,41 @@ export default function StatsPanel({ skills, setSkills, derivedStats }) {
           </div>
         );
       })}
+      <div className="effective-stats-panel">
+        <label className="stat-label effective-stats-title">
+          Effective Stats
+        </label>
+        <div className="effective-stats">
+          {effectiveStats ? (
+            <div className="effective-stats-container">
+              <div className="effective-stat">
+                <span>Prayer</span>
+                <strong>
+                  {effectiveStats.totalPrayer.toLocaleString("en-us")}
+                </strong>
+              </div>
+              <div className="effective-stat">
+                <span>Armour</span>
+                <strong>
+                  {effectiveStats.totalArmour.toLocaleString("en-us")}
+                </strong>
+              </div>
+              <div className="effective-stat">
+                <span>Crit Chance</span>
+                <strong>
+                  {(effectiveStats.globalCritChance * 100.0).toFixed(2)}%
+                </strong>
+              </div>
+              <div className="effective-stat">
+                <span>Crit Damage</span>
+                <strong>
+                  {(effectiveStats.globalCritDamage * 100.0).toFixed(2)}%
+                </strong>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </div>
     </div>
   );
 }

@@ -54,7 +54,7 @@ public class AggregationModifier implements Modifier {
                 }
 
             } else if (hit.getType() == HitType.INSTABILITY) {
-                double w = hit.getCritChanceModifier();
+                double w = hit.getExpectedOccurences();
                 avg += (int) Math.floor(hit.getCurrentDamage() * w);
                 max += hit.getCritMax();
                 critMin += hit.getNonCritMin();
@@ -68,6 +68,13 @@ public class AggregationModifier implements Modifier {
                 hit.setNonCritMin((int) (hit.getNonCritMin() * w));
                 hit.setNonCritMax((int) (hit.getNonCritMax() * w));
                 hit.setNonCritDamage((int) (hit.getNonCritDamage() * w));
+
+                if (hit.isForcedCrit()) {
+                    min += hit.getCurrentMin();
+                    nonCritMin += hit.getNonCritMin();
+                    nonCritMax += hit.getNonCritMax();
+                    nonCritAvg += hit.getNonCritDamage();
+                }
             }
         }
 

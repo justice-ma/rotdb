@@ -1,31 +1,13 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike;
 
+import com.rotdb.calculation.domain.model.ForcedCritResult;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
-import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
-import com.rotdb.shared.combat.domain.model.enums.BuffId;
-import com.rotdb.shared.combat.domain.model.enums.HitType;
-import com.rotdb.shared.combat.domain.model.enums.Perks;
+import com.rotdb.shared.combat.domain.model.enums.*;
 
 public class CritAggregator {
     public static void apply(CalculationContext context) {
-        double baseChance = 0.1;
-        double baseDamage = BaseCritResolver.resolve(context);
-        CritBonus setBonus = SetEffectsCritResolver.resolve(context);
-        CritBonus gearBonus = GearCritResolver.resolve(context);
-
-        double globalChance = baseChance
-                + setBonus.getChanceDelta()
-                + gearBonus.getChanceDelta()
-                + BuffCritResolver.resolve(context)
-                + PerkCritResolver.resolve(context);
-
-        double globalDamage = baseDamage
-                + setBonus.getDamageDelta()
-                + gearBonus.getDamageDelta()
-                + TargetCritResolver.resolve(context);
-
         int hits = context.getAbility().getHits().size();
 
         for (int i = 0; i < hits; i++) {
@@ -42,8 +24,8 @@ public class CritAggregator {
                 continue;
             }
 
-            double hitCritChance = globalChance;
-            double hitCritDamage = globalDamage;
+            double hitCritChance = context.getEffectiveStatsResult().getGlobalCritChance();
+            double hitCritDamage = context.getEffectiveStatsResult().getGlobalCritDamage();
 
             if ((context.getAbility().getId() == AbilityId.INFERNO_OF_ZAMORAK_MAGIC ||
                     context.getAbility().getId() == AbilityId.INFERNO_OF_ZAMORAK_MELEE ||
@@ -53,27 +35,32 @@ public class CritAggregator {
                 hitCritDamage += 0.5;
             }
 
-            if (context.getBuffs().has(BuffId.TRUE_EQUILIBRIUM)) {
-                hitCritChance += 0.05 * context.getBuffs().getBlessingsPerAlignment();
-                hitCritDamage += 0.075 * context.getBuffs().getBlessingsPerAlignment();
-            }
-
             CritBonus perHit = PerHitCritAdjustResolver.resolve(context, hit, i);
 
             hitCritChance += perHit.getChanceDelta();
             hitCritDamage += perHit.getDamageDelta();
 
-            if (context.getAbility().getId() == AbilityId.SMOKETENDRILS || context.getAbility().getId() == AbilityId.SHADOWTENDRILS) {
-                hitCritChance = 1;
+            ForcedCritResult forcedCrits = ForcedCritResolver.resolve(context, hit);
+            if (forcedCrits.isForcedCrit()) {
+                if (forcedCrits.getSource() == ForceCritSource.GREATER_FURY) {
+                    hit.setForcedCrit(true);
+                    context.getBuffs().getBuffSet().remove(BuffId.GREATERFURYBUFF);
+                } else if (forcedCrits.getSource() == ForceCritSource.TENDRILS) {
+                    hit.setForcedCrit(true);
+                }
+            }
+
+            if (context.getBuffs().has(BuffId.TRUE_EQUILIBRIUM)) {
+                hitCritChance += 0.05 * context.getBuffs().getBlessingsPerAlignment();
+                hitCritDamage += 0.075 * context.getBuffs().getBlessingsPerAlignment();
             }
 
             if (!context.getBuffs().has(BuffId.UNHOLY_CRITUAL)) {
                 hitCritChance = Math.max(0, Math.min(hitCritChance, 1));
             } else {
-                hitCritChance += 0.15;
                 double excess = Math.max(0, hitCritChance - 0.5);
                 hitCritChance = Math.max(0, Math.min(hitCritChance, 0.5));
-                hitCritDamage += excess;
+                hitCritDamage = hitCritDamage + excess;
             }
 
             hit.setCritChanceModifier(hitCritChance);

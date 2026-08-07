@@ -46,7 +46,7 @@ public enum Prayer {
     RIGOUR(true, 8, 8, EnumSet.of(CombatStyles.RANGED), PrayerBook.NORMAL, "Rigour", EnumSet.of(PrayerExclusivityGroup.ACCURACY, PrayerExclusivityGroup.DAMAGE)),
     AUGURY(true, 8, 8, EnumSet.of(CombatStyles.MAGIC), PrayerBook.NORMAL, "Augury", EnumSet.of(PrayerExclusivityGroup.ACCURACY, PrayerExclusivityGroup.DAMAGE)),
     PIETY(true, 8, 8, EnumSet.of(CombatStyles.MELEE), PrayerBook.NORMAL, "Piety", EnumSet.of(PrayerExclusivityGroup.ACCURACY, PrayerExclusivityGroup.DAMAGE)),
-    TORMENT(false, 10, 10, EnumSet.of(CombatStyles.NECROMANCY), PrayerBook.CURSES, "Torment", EnumSet.of(PrayerExclusivityGroup.ACCURACY, PrayerExclusivityGroup.DAMAGE)),
+    TORMENT(false, 10, 10, EnumSet.of(CombatStyles.MAGIC), PrayerBook.CURSES, "Torment", EnumSet.of(PrayerExclusivityGroup.ACCURACY, PrayerExclusivityGroup.DAMAGE)),
     ANGUISH(false, 10, 10, EnumSet.of(CombatStyles.RANGED), PrayerBook.CURSES, "Anguish", EnumSet.of(PrayerExclusivityGroup.ACCURACY, PrayerExclusivityGroup.DAMAGE)),
     SORROW(false, 10, 10, EnumSet.of(CombatStyles.NECROMANCY), PrayerBook.CURSES, "Sorrow", EnumSet.of(PrayerExclusivityGroup.ACCURACY, PrayerExclusivityGroup.DAMAGE)),
     TURMOIL(false, 10, 10, EnumSet.of(CombatStyles.MELEE), PrayerBook.CURSES, "Turmoil", EnumSet.of(PrayerExclusivityGroup.ACCURACY, PrayerExclusivityGroup.DAMAGE)),

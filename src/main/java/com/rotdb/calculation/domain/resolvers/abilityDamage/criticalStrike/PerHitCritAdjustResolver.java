@@ -4,6 +4,7 @@ import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.enums.HitType;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
@@ -42,9 +43,9 @@ public class PerHitCritAdjustResolver {
 
         if (ability.getCombatStyle() == MAGIC && ability.isChannel() &&
                 ring.getEffect().contains(Effect.CHANNELLERSRING) && hit.getType() == HitType.BASE) {
-            criticalStrikeChance += 0.04 * hitIndex;
+            criticalStrikeChance += 0.04 * (hitIndex + 1);
             if (buff.has(BuffId.ENCHANTMENTOFMETAPHYSICS)) {
-                criticalStrikeDamage += 0.025 * hitIndex;
+                criticalStrikeDamage += 0.025 * (hitIndex + 1);
             }
         }
 
@@ -52,6 +53,10 @@ public class PerHitCritAdjustResolver {
             criticalStrikeChance -= 1;
         } else if (ability.getCombatStyle() == MELEE && buff.has(BuffId.FURYBUFF) && hitIndex > 0) {
             criticalStrikeChance -= 0.25;
+        }
+
+        if (buff.has(BuffId.NOFEAR) && buff.stacks(BuffId.NOFEAR) > 0 && ability.getId() == METEORSTRIKE) {
+            criticalStrikeChance += 0.2 * buff.stacks(BuffId.NOFEAR);
         }
 
         return new CritBonus(criticalStrikeChance, criticalStrikeDamage);

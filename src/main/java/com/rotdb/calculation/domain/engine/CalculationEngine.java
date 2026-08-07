@@ -1,18 +1,19 @@
 package com.rotdb.calculation.domain.engine;
 
+import com.rotdb.calculation.application.mapper.*;
 import com.rotdb.calculation.application.normalization.DamageRequestNormalizer;
 import com.rotdb.calculation.application.validation.DamageRequestValidator;
 import com.rotdb.calculation.application.validation.PrayerRequestValidator;
-import com.rotdb.calculation.domain.model.HitResult;
-import com.rotdb.calculation.domain.model.DamageRequest;
-import com.rotdb.calculation.domain.model.DamageResult;
-import com.rotdb.calculation.domain.model.DerivedStatsResult;
+import com.rotdb.calculation.domain.model.*;
+import com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike.*;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.model.context.ContextBuilder;
 import com.rotdb.calculation.domain.model.context.DamageContext;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
+import com.rotdb.shared.combat.domain.model.equipment.FamiliarContext;
+import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
 import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 import org.springframework.stereotype.Service;
@@ -22,20 +23,27 @@ import java.util.stream.IntStream;
 
 @Service
 public final class CalculationEngine {
-    private final AbilityDamagePipeline abilityPipeline = new AbilityDamagePipeline();
+    private final PostCriticalPipeline postCriticalPipeline = new PostCriticalPipeline();
+    private final PreCriticalPipeline preCriticalPipeline = new PreCriticalPipeline();
+    private final StatPreparation statPreparation = new StatPreparation();
     private final DamageRequestNormalizer normalizer = new DamageRequestNormalizer();
     private final DamageRequestValidator validator = new DamageRequestValidator();
     private final PrayerRequestValidator prayerValidator = new PrayerRequestValidator();
+
+
     public DamageResult calculateAbilityDamage(DamageRequest request) {
         validator.validate(request);
         request = normalizer.normalize(request);
 
         CalculationContext context = ContextBuilder.build(request);
 
+        context.setEffectiveStatsResult(calculateEffectiveStats(context.getSkills(), context.getEquipment(), context.getBuffs(), context.getFamiliar(), context.getPerks()));
+
         prayerValidator.validatePrayers(context.getSelectedPrayers());
         applyEffectiveLeagueStatAdjustments(context.getSkills(), context.getEquipment(), context.getBuffs());
+        preCriticalPipeline.run(context);
 
-        abilityPipeline.run(context);
+        postCriticalPipeline.run(context);
         return mapToResult(context);
     }
 
@@ -43,6 +51,24 @@ public final class CalculationEngine {
         request = normalizer.normalize(request);
         applyEffectiveLeagueStatAdjustments(request.getSkills(), request.getEquipment(), request.getBuffs());
         return mapDerivedStats(request.getSkills(), request.getEquipment(), request.getBuffs());
+    }
+
+    private EffectiveStatsResult calculateEffectiveStats(SkillsContext skills, EquipmentModel equipment, BuffContext buffs,
+                                                         FamiliarContext familiar, PerkContext perks) {
+        statPreparation.run(skills, buffs);
+        double baseChance = 0.1;
+        double baseDamage = BaseCritResolver.resolve(skills, equipment);
+        CritBonus globalBonus = GlobalCritResolver.resolve(buffs, familiar, equipment, perks);
+        double globalChance = baseChance + globalBonus.getChanceDelta();
+        double globalDamage = baseDamage + globalBonus.getDamageDelta();
+
+        return mapEffectiveStats(equipment, buffs, globalChance, globalDamage);
+    }
+
+    public EffectiveStatsResult calculateEffectiveStats(EffectiveStatsRequest request) {
+        applyEffectiveLeagueStatAdjustments(request.getSkillsContext(), request.getEquipmentModel(), request.getBuffContext());
+        return calculateEffectiveStats(request.getSkillsContext(), request.getEquipmentModel(),
+                request.getBuffContext(), request.getFamiliarContext(), request.getPerkContext());
     }
 
     public DamageResult mapToResult(CalculationContext context) {
@@ -81,7 +107,8 @@ public final class CalculationEngine {
                 (int) (damage.getMinPercent()),
                 (int) (damage.getMaxPercent()),
                 hits,
-                mapDerivedStats(context.getSkills(), context.getEquipment(), context.getBuffs()));
+                mapDerivedStats(context.getSkills(), context.getEquipment(), context.getBuffs()),
+                context.getEffectiveStatsResult());
     }
 
     private DerivedStatsResult mapDerivedStats(SkillsContext skills, EquipmentModel equipment, BuffContext buffs) {
@@ -96,6 +123,20 @@ public final class CalculationEngine {
                 equipmentLifeBonus,
                 effectiveMaxHp
         );
+    }
+
+    private EffectiveStatsResult mapEffectiveStats(EquipmentModel equipment, BuffContext buffs, double critChance, double critDamage) {
+        double prayer = equipment.getTotalPrayer();
+        double armour = equipment.getTotalArmour();
+
+        if (buffs.has(BuffId.UNHOLY_CRITUAL)) {
+            critChance += 0.15;
+            double excess = Math.max(0, critChance - 0.5);
+            critChance = Math.max(0, Math.min(critChance, 0.5));
+            critDamage += excess;
+        }
+
+        return new EffectiveStatsResult(critChance, critDamage, armour, prayer);
     }
 
     private void applyEffectiveLeagueStatAdjustments(SkillsContext skills, EquipmentModel equipmentModel, BuffContext buffs) {

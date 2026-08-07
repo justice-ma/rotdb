@@ -6,8 +6,8 @@ import com.rotdb.shared.combat.domain.model.enums.HitType;
 public class AbilityHitsContext {
     private int parentIndex, critMin, critMax, critDamage, nonCritMin, nonCritMax, nonCritDamage, currentDamage,
             currentMin, currentMax, bolgMin, bolgMax, bolgDamage, hitTiming;
-    private double min, max, critChanceModifier, critDamageModifier, minCritDamage, maxCritDamage, averageCritDamage;
-    private boolean dot, needsRangeRecalc, rangeCalculated;
+    private double min, max, critChanceModifier, critDamageModifier, minCritDamage, maxCritDamage, averageCritDamage, expectedOccurences;
+    private boolean dot, needsRangeRecalc, rangeCalculated, forcedCrit;
     private AbilityTier tier;
     private HitType type;
 
@@ -21,6 +21,8 @@ public class AbilityHitsContext {
         this.hitTiming = hitTiming;
         this.type = HitType.BASE;
         this.parentIndex = -1;
+        this.forcedCrit = false;
+        this.expectedOccurences = 1;
     }
 
     public AbilityHitsContext(double min, double max, boolean dot, AbilityTier tier, int hitTiming, HitType type, int parentIndex) {
@@ -31,6 +33,8 @@ public class AbilityHitsContext {
         this.hitTiming = hitTiming;
         this.type = type;
         this.parentIndex = parentIndex;
+        this.forcedCrit = false;
+        this.expectedOccurences = 1;
     }
 
     public void calculateDamages (double mod) {
@@ -296,5 +300,21 @@ public class AbilityHitsContext {
 
     public void setAverageCritDamage(double averageCritDamage) {
         this.averageCritDamage = averageCritDamage;
+    }
+
+    public boolean isForcedCrit() {
+        return forcedCrit;
+    }
+
+    public void setForcedCrit(boolean forcedCrit) {
+        this.forcedCrit = forcedCrit;
+    }
+
+    public double getExpectedOccurences() {
+        return expectedOccurences;
+    }
+
+    public void setExpectedOccurences(double expectedOccurences) {
+        this.expectedOccurences = expectedOccurences;
     }
 }

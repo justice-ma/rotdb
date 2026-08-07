@@ -27,6 +27,16 @@ public class CritDamageModifier implements Modifier {
                 hit.setCurrentDamage((hit.getCurrentMin() + hit.getCurrentMax()) / 2);
             }
 
+            if (hit.isForcedCrit()) {
+                hit.setNonCritDamage(hit.getCritDamage());
+                hit.setNonCritMax(hit.getCritMax());
+                hit.setNonCritMin(hit.getCritMin());
+
+                hit.setCurrentDamage(hit.getCritDamage());
+                hit.setCurrentMax(hit.getCritMax());
+                hit.setCurrentMin(hit.getCritMin());
+            }
+
             if (context.debug) Debug.stageRow(context, i, hit);
         }
         if (context.debug) Debug.stageFooter(context);

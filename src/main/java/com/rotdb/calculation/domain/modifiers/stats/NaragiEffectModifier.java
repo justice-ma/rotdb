@@ -2,19 +2,22 @@ package com.rotdb.calculation.domain.modifiers.stats;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
+import com.rotdb.calculation.domain.modifiers.StatModifier;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 
-public class NaragiEffectModifier implements Modifier {
+public class NaragiEffectModifier implements StatModifier {
 
     @Override
-    public void apply(CalculationContext context) {
-        if (context.getBuffs().has(BuffId.NARAGI_EFFECT)) {
-            context.getSkills().setBoostedAttack(255);
-            context.getSkills().setBoostedRanged(255);
-            context.getSkills().setBoostedMagic(255);
-            context.getSkills().setBoostedNecromancy(255);
-            context.getSkills().setBoostedStrength(255);
-            context.getSkills().setBoostedDefence(255);
+    public void apply(SkillsContext skillsContext, BuffContext buffContext) {
+        if (buffContext.has(BuffId.NARAGI_EFFECT)) {
+            skillsContext.setBoostedAttack(255);
+            skillsContext.setBoostedRanged(255);
+            skillsContext.setBoostedMagic(255);
+            skillsContext.setBoostedNecromancy(255);
+            skillsContext.setBoostedStrength(255);
+            skillsContext.setBoostedDefence(255);
         }
     }
 }

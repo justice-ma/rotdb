@@ -30,8 +30,9 @@ public class InfernoOfZamorakInjector implements Modifier {
             orderedHits.add(parent);
 
             if (parent.isDot()) continue;
-            if (parent.getType() != HitType.BASE) continue;
+            if (parent.getType() != HitType.BASE && parent.getType() != HitType.INSTABILITY && parent.getType() != HitType.PERFECTEQUILIBRIUM) continue;
             if (parent.getTier() == AbilityTier.CONJURE) continue;
+            if (context.getAbility().getId() == AbilityId.MAGMATEMPEST) continue;
 
             double procCritChance = parent.getCritChanceModifier();
             double procCritDamage = parent.getCritDamageModifier();
@@ -50,12 +51,12 @@ public class InfernoOfZamorakInjector implements Modifier {
             double infernoCritProcChance = 0;
 
             if (hasUnholyCritual) {
-                parentCritProcChance = Math.min(0.5, parent.getCritChanceModifier());
+                parentCritProcChance =  Math.min(0.5, parent.getCritChanceModifier());
                 infernoCritProcChance = Math.min(0.5, procCritChance);
                 procCritDamage += 0.5;
             }
 
-            double initialProcChance = baseProcChance + parentCritProcChance;
+            double initialProcChance = baseProcChance + (parent.isForcedCrit() ? 1 :parentCritProcChance);
             double recursiveProcChance = baseProcChance + infernoCritProcChance;
             double procChance = initialProcChance / (1 - recursiveProcChance);
 
@@ -75,6 +76,7 @@ public class InfernoOfZamorakInjector implements Modifier {
             proc.setCritDamageModifier(procCritDamage);
             CritRange procCritRange = CritDamageRangeResolver.resolve(context, proc);
             proc.setCritDamages(procCritRange.getMinMod(), procCritRange.getMaxMod());
+            proc.setExpectedOccurences(procChance);
 
             orderedHits.add(proc);
         }
