@@ -1,9 +1,11 @@
 package com.rotdb.shared.combat.domain.model.equipment;
 
+import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
+import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -159,7 +161,7 @@ public class EquipmentModel {
         return pieces;
     }
 
-    public double getTotalArmour() {
+    public double getTotalArmour(SkillsContext skillsContext) {
         List<EquipmentSlot> equipmentSlots = new ArrayList<>(List.of(
                 getOffhand(),
                 getHead(),
@@ -173,6 +175,7 @@ public class EquipmentModel {
                 getQuiver(),
                 getPocket()));
         double armour = getFlatArmourBonus();
+        armour += (0.0008 * Math.pow(skillsContext.getBoostedDefence(), 3) + 4 * 99 + 40);
         for (EquipmentSlot equipmentSlot : equipmentSlots) {
             armour += equipmentSlot.getArmour();
         }

@@ -62,7 +62,7 @@ public final class CalculationEngine {
         double globalChance = baseChance + globalBonus.getChanceDelta();
         double globalDamage = baseDamage + globalBonus.getDamageDelta();
 
-        return mapEffectiveStats(equipment, buffs, globalChance, globalDamage);
+        return mapEffectiveStats(equipment, buffs, globalChance, globalDamage, skills);
     }
 
     public EffectiveStatsResult calculateEffectiveStats(EffectiveStatsRequest request) {
@@ -125,9 +125,9 @@ public final class CalculationEngine {
         );
     }
 
-    private EffectiveStatsResult mapEffectiveStats(EquipmentModel equipment, BuffContext buffs, double critChance, double critDamage) {
+    private EffectiveStatsResult mapEffectiveStats(EquipmentModel equipment, BuffContext buffs, double critChance, double critDamage, SkillsContext skillsContext) {
         double prayer = equipment.getTotalPrayer();
-        double armour = equipment.getTotalArmour();
+        double armour = equipment.getTotalArmour(skillsContext);
 
         if (buffs.has(BuffId.UNHOLY_CRITUAL)) {
             critChance += 0.15;

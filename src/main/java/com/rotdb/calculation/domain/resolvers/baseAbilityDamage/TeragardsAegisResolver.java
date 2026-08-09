@@ -6,7 +6,7 @@ import com.rotdb.shared.combat.domain.model.enums.EquipmentType;
 
 public class TeragardsAegisResolver {
     public static int resolve(CalculationContext context) {
-        double delta = context.getEquipment().getTotalArmour() * 0.25;
+        double delta = context.getEquipment().getTotalArmour(context.getSkills()) * 0.25;
 
         if (context.getEquipment().getOffhand().getEffect().contains(Effect.DEFENDER)) {
             delta *= 2;

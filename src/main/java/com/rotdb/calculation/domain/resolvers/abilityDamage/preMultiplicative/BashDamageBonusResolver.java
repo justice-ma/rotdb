@@ -16,12 +16,12 @@ public class BashDamageBonusResolver {
             return List.of(0, 0);
         }
 
-        int min = (int) ((context.getEquipment().getTotalArmour() + context.getSkills().getBoostedDefence()) * 0.2);
+        int min = (int) ((context.getEquipment().getTotalArmour(context.getSkills()) + context.getSkills().getBoostedDefence()) * 0.2);
         int max = min;
 
         if (context.getBuffs().has(BuffId.STEADFAST_WILL)) {
-            min += (int) (context.getEquipment().getTotalArmour() * 3.5);
-            max += (int) (context.getEquipment().getTotalArmour() * 4.5);
+            min += (int) (context.getEquipment().getTotalArmour(context.getSkills()) * 3.5);
+            max += (int) (context.getEquipment().getTotalArmour(context.getSkills()) * 4.5);
         }
 
         return List.of(min, max);
