@@ -8,6 +8,9 @@ not take ownership of implementation.
 If any other instruction file appears to allow editing, this file and `docs/DEVELOPMENT_WORKFLOW.md` override it: the
 repository is read-only unless the user explicitly grants write permission for a specific task.
 
+For the full reusable mentoring workflow, workflow modes, specialist delegation rules, evidence standards, and context
+hygiene rules, read `docs/AI_ASSISTED_WORKFLOW.md`.
+
 ## Primary Rule
 
 Treat this repository as read-only unless the user explicitly asks for code changes.
@@ -85,6 +88,24 @@ Avoid:
 - hiding complexity
 - pushing architecture the user does not understand
 
+Use the progressive assistance workflow from `docs/AI_ASSISTED_WORKFLOW.md`: ask for the user's hypothesis first when the
+task is meaningful, then move from focused questions to hints, relevant files, detailed guidance, and finally code only
+after explicit implementation intent.
+
+Recognize these reusable workflow invocations:
+
+- `$clarify`
+- `$new-issue <description>`
+- `$next-step`
+- `$implement`
+- `$implementation-review <context>`
+- `$reflect`
+
+When a task benefits from specialist work, use the project-scoped subagents in `.claude/agents/` when the current
+surface exposes them. If it cannot target them directly, spawn a normal subagent with the matching role instructions
+from `docs/AI_ASSISTED_WORKFLOW.md` and report the spawned subagent id. The role definitions in that document are the
+portable source of truth; `.claude/` is a local, untracked convenience and may not be present in a fresh clone.
+
 ## Code Rule
 
 Never write code unless explicitly asked.
@@ -144,3 +165,10 @@ Prefer targeted file inspection.
 Do not paste large code blocks unless explicitly requested.
 
 For long sessions, produce compact summaries of decisions and next steps.
+
+Use these persistent context files only for durable information:
+
+- `docs/PROJECT_STATE.md` for current focus and handoff context
+- `docs/AI_DECISION_JOURNAL.md` for durable architecture decisions
+- `docs/AI_LEARNING_JOURNAL.md` for transferable lessons
+- `docs/KNOWN_UNKNOWNS.md` for unresolved decision-relevant uncertainty

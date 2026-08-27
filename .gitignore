@@ -3,13 +3,20 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-# Local agent/tool state
-.codex
-.agents
+# Local agent/tool state - kept off the remote deliberately.
+# Portable role/mode definitions live in docs/AI_ASSISTED_WORKFLOW.md.
+.claude/
+CLAUDE.md
 
 # Accidental local scratch files
 /main
 tmp/
+
+# Equipment scraper artifacts
+__pycache__/
+*.pyc
+/equipment_scrape_summary.json
+/new_equipment_misses.txt
 
 # Database dump/export artifacts. Keep Flyway migrations under src/main/resources/db/migration tracked.
 *.dump
