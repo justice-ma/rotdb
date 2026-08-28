@@ -3,32 +3,25 @@ package com.rotdb.calculation.domain.engine;
 import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.modifiers.abilityDamage.*;
-import com.rotdb.calculation.domain.modifiers.baseDamage.BaseAbilityDamageModifier;
 import com.rotdb.calculation.domain.modifiers.hitChance.HitChanceModifier;
-import com.rotdb.calculation.domain.modifiers.injectors.*;
-import com.rotdb.calculation.domain.modifiers.stats.DbaStatBoostModifier;
-import com.rotdb.calculation.domain.modifiers.stats.StatBoostModifier;
+import com.rotdb.calculation.domain.modifiers.injectors.BloatInjector;
+import com.rotdb.calculation.domain.modifiers.injectors.InstabilityInjector;
+import com.rotdb.calculation.domain.modifiers.injectors.PerfectEquilibriumInjector;
+import com.rotdb.calculation.domain.modifiers.injectors.SplitSoulInjector;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public final class AbilityDamagePipeline {
+public final class PostCriticalPipeline {
     private final List<Modifier> steps;
 
-    public AbilityDamagePipeline() {
+    public PostCriticalPipeline() {
         steps = List.of(
-                new StatBoostModifier(),
-                new DbaStatBoostModifier(),
-                new SoulInjector(),
-                new NecrosisInjector(),
-                new NightmareGauntletsInjector(),
-                new MeleeBleedsInjector(),
-                new RunicChargeInjector(),
-                new BaseAbilityDamageModifier(),
                 new CriticalStrikeModifier(),
                 new InstabilityInjector(),
                 new AbilityRangeModifier(),
+                new BashDamageModifier(),
                 new HitChanceModifier(),
                 new InvisibleAbilityModifier(),
                 new AbilitySpecificModifier(),
@@ -44,6 +37,7 @@ public final class AbilityDamagePipeline {
                 new BloatInjector(),
                 new SplitSoulInjector(),
                 new NpcModifier(),
+                new PoisonDamageModifier(),
                 new HitCapModifier(),
                 new AggregationModifier()
         );

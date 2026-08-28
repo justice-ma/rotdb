@@ -5,5 +5,6 @@ public enum AbilityTier {
     ENHANCED,
     ULTIMATE,
     SPECIAL,
-    CONJURE
+    CONJURE,
+    BLESSING
 }

@@ -1,6 +1,7 @@
 package com.rotdb.calculation.persistence.mapper;
 
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.EquipmentType;
 import com.rotdb.shared.combat.domain.model.enums.WeaponStyle;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
@@ -32,6 +33,10 @@ public class EquipmentMapper {
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
                     slot.setSlot(item.getSlot());
+                    slot.setArmour(item.getArmour() == null ? 0 : item.getArmour());
+                    slot.setLife(item.getLife() == null ? 0 : item.getLife());
+                    slot.setType(item.getType() == null ? EquipmentType.NONE : item.getType());
+                    slot.setPrayer(item.getPrayer() == null ? 0 : item.getPrayer());
                     eq.setMainhand(slot);
                     break;
                 case TWOHANDED:
@@ -49,6 +54,10 @@ public class EquipmentMapper {
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
                     slot.setSlot(item.getSlot());
+                    slot.setArmour(item.getArmour() == null ? 0 : item.getArmour());
+                    slot.setLife(item.getLife() == null ? 0 : item.getLife());
+                    slot.setType(item.getType() == null ? EquipmentType.NONE : item.getType());
+                    slot.setPrayer(item.getPrayer() == null ? 0 : item.getPrayer());
                     eq.setMainhand(slot);
                     break;
                 case OFFHAND:
@@ -66,6 +75,10 @@ public class EquipmentMapper {
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
                     slot.setSlot(item.getSlot());
+                    slot.setArmour(item.getArmour() == null ? 0 : item.getArmour());
+                    slot.setLife(item.getLife() == null ? 0 : item.getLife());
+                    slot.setType(item.getType() == null ? EquipmentType.NONE : item.getType());
+                    slot.setPrayer(item.getPrayer() == null ? 0 : item.getPrayer());
                     eq.setOffhand(slot);
                     break;
                 case HEAD:
@@ -82,6 +95,10 @@ public class EquipmentMapper {
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
                     slot.setSlot(item.getSlot());
+                    slot.setArmour(item.getArmour() == null ? 0 : item.getArmour());
+                    slot.setLife(item.getLife() == null ? 0 : item.getLife());
+                    slot.setType(item.getType() == null ? EquipmentType.NONE : item.getType());
+                    slot.setPrayer(item.getPrayer() == null ? 0 : item.getPrayer());
                     eq.setHead(slot);
                     break;
                 case BODY:
@@ -98,6 +115,10 @@ public class EquipmentMapper {
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
                     slot.setSlot(item.getSlot());
+                    slot.setArmour(item.getArmour() == null ? 0 : item.getArmour());
+                    slot.setLife(item.getLife() == null ? 0 : item.getLife());
+                    slot.setType(item.getType() == null ? EquipmentType.NONE : item.getType());
+                    slot.setPrayer(item.getPrayer() == null ? 0 : item.getPrayer());
                     eq.setBody(slot);
                     break;
                 case GLOVES:
@@ -114,6 +135,10 @@ public class EquipmentMapper {
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
                     slot.setSlot(item.getSlot());
+                    slot.setArmour(item.getArmour() == null ? 0 : item.getArmour());
+                    slot.setLife(item.getLife() == null ? 0 : item.getLife());
+                    slot.setType(item.getType() == null ? EquipmentType.NONE : item.getType());
+                    slot.setPrayer(item.getPrayer() == null ? 0 : item.getPrayer());
                     eq.setGloves(slot);
                     break;
                 case LEGS:
@@ -130,6 +155,10 @@ public class EquipmentMapper {
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
                     slot.setSlot(item.getSlot());
+                    slot.setArmour(item.getArmour() == null ? 0 : item.getArmour());
+                    slot.setLife(item.getLife() == null ? 0 : item.getLife());
+                    slot.setType(item.getType() == null ? EquipmentType.NONE : item.getType());
+                    slot.setPrayer(item.getPrayer() == null ? 0 : item.getPrayer());
                     eq.setLegs(slot);
                     break;
                 case BOOTS:
@@ -146,6 +175,10 @@ public class EquipmentMapper {
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
                     slot.setSlot(item.getSlot());
+                    slot.setArmour(item.getArmour() == null ? 0 : item.getArmour());
+                    slot.setLife(item.getLife() == null ? 0 : item.getLife());
+                    slot.setType(item.getType() == null ? EquipmentType.NONE : item.getType());
+                    slot.setPrayer(item.getPrayer() == null ? 0 : item.getPrayer());
                     eq.setBoots(slot);
                     break;
                 case POCKET:
@@ -162,6 +195,10 @@ public class EquipmentMapper {
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
                     slot.setSlot(item.getSlot());
+                    slot.setArmour(item.getArmour() == null ? 0 : item.getArmour());
+                    slot.setLife(item.getLife() == null ? 0 : item.getLife());
+                    slot.setType(item.getType() == null ? EquipmentType.NONE : item.getType());
+                    slot.setPrayer(item.getPrayer() == null ? 0 : item.getPrayer());
                     eq.setPocket(slot);
                     break;
                 case AMMO:
@@ -179,6 +216,10 @@ public class EquipmentMapper {
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
                     slot.setSlot(item.getSlot());
+                    slot.setArmour(item.getArmour() == null ? 0 : item.getArmour());
+                    slot.setLife(item.getLife() == null ? 0 : item.getLife());
+                    slot.setType(item.getType() == null ? EquipmentType.NONE : item.getType());
+                    slot.setPrayer(item.getPrayer() == null ? 0 : item.getPrayer());
                     eq.setAmmo(slot);
                     break;
                 case QUIVER:
@@ -195,6 +236,10 @@ public class EquipmentMapper {
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
                     slot.setSlot(item.getSlot());
+                    slot.setArmour(item.getArmour() == null ? 0 : item.getArmour());
+                    slot.setLife(item.getLife() == null ? 0 : item.getLife());
+                    slot.setType(item.getType() == null ? EquipmentType.NONE : item.getType());
+                    slot.setPrayer(item.getPrayer() == null ? 0 : item.getPrayer());
                     eq.setQuiver(slot);
                     break;
                 case RING:
@@ -211,6 +256,10 @@ public class EquipmentMapper {
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
                     slot.setSlot(item.getSlot());
+                    slot.setArmour(item.getArmour() == null ? 0 : item.getArmour());
+                    slot.setLife(item.getLife() == null ? 0 : item.getLife());
+                    slot.setType(item.getType() == null ? EquipmentType.NONE : item.getType());
+                    slot.setPrayer(item.getPrayer() == null ? 0 : item.getPrayer());
                     eq.setRing(slot);
                     break;
                 case NECK:
@@ -227,6 +276,10 @@ public class EquipmentMapper {
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
                     slot.setSlot(item.getSlot());
+                    slot.setArmour(item.getArmour() == null ? 0 : item.getArmour());
+                    slot.setLife(item.getLife() == null ? 0 : item.getLife());
+                    slot.setType(item.getType() == null ? EquipmentType.NONE : item.getType());
+                    slot.setPrayer(item.getPrayer() == null ? 0 : item.getPrayer());
                     eq.setNeck(slot);
                     break;
                 case CAPE:
@@ -243,6 +296,10 @@ public class EquipmentMapper {
                     slot.setStyle(item.getStyle() == null ? WeaponStyle.NONE : item.getStyle());
                     slot.setEffect(item.getEffectSet());
                     slot.setSlot(item.getSlot());
+                    slot.setArmour(item.getArmour() == null ? 0 : item.getArmour());
+                    slot.setLife(item.getLife() == null ? 0 : item.getLife());
+                    slot.setType(item.getType() == null ? EquipmentType.NONE : item.getType());
+                    slot.setPrayer(item.getPrayer() == null ? 0 : item.getPrayer());
                     eq.setCape(slot);
                     break;
                 default:

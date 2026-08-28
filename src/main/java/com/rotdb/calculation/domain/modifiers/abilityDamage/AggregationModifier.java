@@ -32,7 +32,12 @@ public class AggregationModifier implements Modifier {
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
 
-            if (hit.getType() == HitType.BASE || hit.getType() == HitType.SPLITSOUL || hit.getType() == HitType.PERFECTEQUILIBRIUM) {
+            if (hit.getType() == HitType.BASE ||
+                    hit.getType() == HitType.SPLITSOUL ||
+                    hit.getType() == HitType.PERFECTEQUILIBRIUM ||
+                    hit.getType() == HitType.POISON ||
+                    hit.getType() == HitType.INFERNO_OF_ZAMORAK ||
+                    hit.getType() == HitType.LIGHT_OF_SARADOMIN) {
                 min += hit.getCurrentMin();
                 max += hit.getCurrentMax();
                 avg += hit.getCurrentDamage();
@@ -45,13 +50,13 @@ public class AggregationModifier implements Modifier {
                 nonCritMax += hit.getNonCritMax();
                 nonCritAvg += hit.getNonCritDamage();
 
-                if (hit.getType() == HitType.BASE) {
+                if (hit.getType() == HitType.BASE || hit.getType() == HitType.POISON || hit.getType() == HitType.LIGHT_OF_SARADOMIN) {
                     minCoeff += hit.getMin() * 100 + 1E-9;
                     maxCoeff += hit.getMax() * 100 + 1E-9;
                 }
 
             } else if (hit.getType() == HitType.INSTABILITY) {
-                double w = hit.getCritChanceModifier();
+                double w = hit.getExpectedOccurences();
                 avg += (int) Math.floor(hit.getCurrentDamage() * w);
                 max += hit.getCritMax();
                 critMin += hit.getNonCritMin();
@@ -65,6 +70,13 @@ public class AggregationModifier implements Modifier {
                 hit.setNonCritMin((int) (hit.getNonCritMin() * w));
                 hit.setNonCritMax((int) (hit.getNonCritMax() * w));
                 hit.setNonCritDamage((int) (hit.getNonCritDamage() * w));
+
+                if (hit.isForcedCrit()) {
+                    min += hit.getCurrentMin();
+                    nonCritMin += hit.getNonCritMin();
+                    nonCritMax += hit.getNonCritMax();
+                    nonCritAvg += hit.getNonCritDamage();
+                }
             }
         }
 

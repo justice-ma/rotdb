@@ -12,7 +12,7 @@ public class AbilityGeneratedBuffDefinitionFactory {
     }
 
     public static BuffDefinition rendBleed() {
-        return create(BuffId.RENDBLEED, BuffLifecycle.TIMED, 25, null);
+        return create(BuffId.REND_BLEED, BuffLifecycle.TIMED, 25, null);
     }
 
     public static BuffDefinition chaosRoar() {

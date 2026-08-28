@@ -3,6 +3,7 @@ package com.rotdb.calculation.domain.modifiers.abilityDamage;
 import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.shared.combat.domain.model.enums.HitType;
 import com.rotdb.shared.combat.domain.model.enums.Perks;
 import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
 import com.rotdb.calculation.domain.resolvers.Debug;
@@ -19,6 +20,7 @@ public class PreciseModifier implements Modifier {
 
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
+            if (hit.getType() == HitType.POISON) continue;
 
             if (!hit.isDot()) {
                 if (perk.has(Perks.PRECISE)) {

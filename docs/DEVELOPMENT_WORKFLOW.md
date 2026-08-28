@@ -39,15 +39,21 @@ the user has already demonstrated understanding.
 ## Default Workflow
 
 1.  User describes the feature or problem.
-2.  AI asks clarifying questions if needed.
-3.  AI inspects only relevant files.
-4.  AI explains the existing design and data flow.
-5.  AI pressure-tests the user's understanding.
-6.  AI discusses options and tradeoffs.
-7.  User chooses a direction.
-8.  User implements.
-9.  AI reviews the implementation.
-10. User commits.
+2.  AI separates symptoms from assumptions and asks for the user's hypothesis when the issue is meaningful.
+3.  AI inspects only relevant files, delegating focused read-only investigation when useful.
+4.  AI verifies real RuneScape mechanics when they affect correctness.
+5.  AI explains the existing design and data flow.
+6.  AI locates comparable repository patterns when they help reasoning.
+7.  AI pressure-tests the user's understanding.
+8.  User proposes a direction.
+9.  AI challenges the proposal and discusses tradeoffs.
+10. User explicitly enters implementation mode before AI edits code.
+11. User or AI implements within the agreed scope.
+12. AI reviews the implementation.
+13. AI and user reflect on the transferable lesson.
+14. User commits.
+
+Reusable modes and specialist roles are defined in `docs/AI_ASSISTED_WORKFLOW.md`.
 
 ## AI File Interaction Rule
 

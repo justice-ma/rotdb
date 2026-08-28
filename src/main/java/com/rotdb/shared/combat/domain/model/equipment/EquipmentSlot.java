@@ -1,9 +1,6 @@
 package com.rotdb.shared.combat.domain.model.equipment;
 
-import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
-import com.rotdb.shared.combat.domain.model.enums.Effect;
-import com.rotdb.shared.combat.domain.model.enums.Slots;
-import com.rotdb.shared.combat.domain.model.enums.WeaponStyle;
+import com.rotdb.shared.combat.domain.model.enums.*;
 
 import java.util.EnumSet;
 
@@ -13,17 +10,19 @@ import static com.rotdb.shared.combat.domain.model.enums.WeaponStyle.NONE;
 public class EquipmentSlot {
     private Long id;
     private int tier, damageTier, accuracyTier, armourTier, attackRange;
-    private double strength, ranged, magic, necromancy;
+    private double strength, ranged, magic, necromancy, armour, life, prayer;
     private String title, requiredSkill, requiredLevel;
     private boolean members;
     private CombatStyles clazz;
     private Slots slot;
     private EnumSet<Effect> effect;
     private WeaponStyle style;
+    private EquipmentType type;
 
     public EquipmentSlot() {}
 
-    public EquipmentSlot(String title, CombatStyles clazz, Slots slot, int damageTier, double strength, double ranged, double magic, double necromancy, EnumSet<Effect> effect) {
+    public EquipmentSlot(String title, CombatStyles clazz, Slots slot, int damageTier, double strength, double ranged,
+                         double magic, double necromancy, EnumSet<Effect> effect) {
         this.title = title;
         this.clazz = clazz;
         this.slot = slot;
@@ -197,5 +196,37 @@ public class EquipmentSlot {
 
     public void setStyle(WeaponStyle style) {
         this.style = style;
+    }
+
+    public double getArmour() {
+        return armour;
+    }
+
+    public void setArmour(double armour) {
+        this.armour = armour;
+    }
+
+    public double getLife() {
+        return life;
+    }
+
+    public void setLife(double life) {
+        this.life = life;
+    }
+
+    public EquipmentType getType() {
+        return type;
+    }
+
+    public void setType(EquipmentType type) {
+        this.type = type;
+    }
+
+    public double getPrayer() {
+        return prayer;
+    }
+
+    public void setPrayer(double prayer) {
+        this.prayer = prayer;
     }
 }

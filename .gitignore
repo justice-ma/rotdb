@@ -2,6 +2,7 @@ HELP.md
 target/
 !**/src/main/**/target/
 !**/src/test/**/target/
+/tmp
 
 # Local agent/tool state - kept off the remote deliberately.
 # Portable role/mode definitions live in docs/AI_ASSISTED_WORKFLOW.md.
@@ -75,3 +76,10 @@ dist/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Generated SQL artifacts
+/tmp/*.sql
+/insert_new_equipment.sql
+/frontend/equipment_data.sql
+/database/*.sql
+/database/migrations/*.sql

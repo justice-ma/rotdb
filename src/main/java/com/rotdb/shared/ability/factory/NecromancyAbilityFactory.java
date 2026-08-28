@@ -261,7 +261,7 @@ public class NecromancyAbilityFactory {
                 0,
                 false,
                 BOTH,
-                SINGLE_TARGET,
+                MULTI_TARGET,
                 CombatStyles.NECROMANCY,
                 SOULSTRIKE,
                 false);

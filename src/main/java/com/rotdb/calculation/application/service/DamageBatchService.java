@@ -62,7 +62,10 @@ public class DamageBatchService {
                 base.selectedPrayers(),
                 base.berserkersFury(),
                 base.selectedFamiliar(),
-                base.perks()
+                base.perks(),
+                base.hitCapMode(),
+                base.clientId(),
+                base.sessionId()
         );
     }
 }

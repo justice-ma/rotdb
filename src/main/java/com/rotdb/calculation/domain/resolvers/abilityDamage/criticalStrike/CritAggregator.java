@@ -1,28 +1,12 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike;
 
+import com.rotdb.calculation.domain.model.ForcedCritResult;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
-import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
-import com.rotdb.shared.combat.domain.model.enums.Perks;
+import com.rotdb.shared.combat.domain.model.enums.*;
 
 public class CritAggregator {
     public static void apply(CalculationContext context) {
-        double baseChance = 0.1;
-        double baseDamage = BaseCritResolver.resolve(context);
-        CritBonus setBonus = SetEffectsCritResolver.resolve(context);
-        CritBonus gearBonus = GearCritResolver.resolve(context);
-
-        double globalChance = baseChance
-                + setBonus.getChanceDelta()
-                + gearBonus.getChanceDelta()
-                + BuffCritResolver.resolve(context)
-                + PerkCritResolver.resolve(context);
-
-        double globalDamage = baseDamage
-                + setBonus.getDamageDelta()
-                + gearBonus.getDamageDelta()
-                + TargetCritResolver.resolve(context);
-
         int hits = context.getAbility().getHits().size();
 
         for (int i = 0; i < hits; i++) {
@@ -34,19 +18,28 @@ public class CritAggregator {
                 continue;
             }
 
-            if (hit.getTier() == AbilityTier.CONJURE) {
+            if (hit.getTier() == AbilityTier.CONJURE || hit.getType() == HitType.POISON) {
                 hit.setCritChanceModifier(0);
                 continue;
             }
 
-            double hitCritChance = globalChance;
-            double hitCritDamage = globalDamage;
+            double hitCritChance = context.getEffectiveStatsResult().getGlobalCritChance();
+            double hitCritDamage = context.getEffectiveStatsResult().getGlobalCritDamage();
 
-            CritBonus perHit = PerHitCritAdjustResolver.resolve(context, hit, hit.getHitIndex() == -1 ? i : hit.getHitIndex());
+            CritBonus perHit = PerHitCritAdjustResolver.resolve(context, hit, i);
+
             hitCritChance += perHit.getChanceDelta();
             hitCritDamage += perHit.getDamageDelta();
 
-            hitCritChance = Math.max(0, Math.min(hitCritChance, 1));
+            ForcedCritResult forcedCrits = ForcedCritResolver.resolve(context, hit);
+            if (forcedCrits.isForcedCrit()) {
+                if (forcedCrits.getSource() == ForceCritSource.GREATER_FURY) {
+                    hit.setForcedCrit(true);
+                    context.getBuffs().getBuffSet().remove(BuffId.GREATERFURYBUFF);
+                } else if (forcedCrits.getSource() == ForceCritSource.TENDRILS) {
+                    hit.setForcedCrit(true);
+                }
+            }
 
             hit.setCritChanceModifier(hitCritChance);
             hit.setCritDamageModifier(hitCritDamage);

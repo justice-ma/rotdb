@@ -1,16 +1,16 @@
 package com.rotdb.shared.combat.domain.model.player;
 
-import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 
 public class SkillsContext {
     private Integer boostedNecromancy, constitution, boostedStrength, boostedRanged, boostedMagic, boostedAttack,
             boostedDefence, summoning, currentHp, maxHp, baseNecromancy, baseStrength, baseRanged, baseMagic,
-            baseAttack, baseDefence;
+            baseAttack, baseDefence, herblore;
 
 
-    public Integer getRevelvantStregthLevel(CalculationContext context) {
-        CombatStyles style = context.getEquipment().getCombatStyle();
+    public Integer getRevelvantStregthLevel(EquipmentModel equipmentModel) {
+        CombatStyles style = equipmentModel.getCombatStyle();
         return style == CombatStyles.MAGIC ? boostedMagic : style == CombatStyles.RANGED ? boostedRanged : style == CombatStyles.MELEE ? boostedStrength : boostedNecromancy;
     }
     
@@ -21,16 +21,17 @@ public class SkillsContext {
         if (getBaseMagic() == null) setBaseMagic(1);
         if (getBaseNecromancy() == null) setBaseNecromancy(1);
         if (getBaseRanged() == null) setBaseRanged(1);
+        if (getHerblore() == null) setHerblore(1);
         if (getCurrentHp() == null) setCurrentHp(1000);
         if (getMaxHp() == null) setMaxHp(1000);
     }
 
-    public void correctBoundaries() {
+    public void correctBoundaries(BuffContext buffs) {
         if (getBaseStrength() > 120) setBaseStrength(120);
         if (getBaseStrength() < 1) setBaseStrength(1);
         if (getBaseAttack() > 120) setBaseAttack(120);
         if (getBaseAttack() < 1) setBaseAttack(1);
-        if (getBaseDefence() > 120) setBaseDefence(120);
+        if (getBaseDefence() > 99) setBaseDefence(99);
         if (getBaseDefence() < 1) setBaseDefence(1);
         if (getBaseMagic() > 120) setBaseMagic(120);
         if (getBaseMagic() < 1) setBaseMagic(1);
@@ -42,6 +43,8 @@ public class SkillsContext {
         if (getMaxHp() < 1) setMaxHp(1);
         if (getCurrentHp() > 32000) setCurrentHp(32000);
         if (getCurrentHp() < 1) setCurrentHp(1);
+        if (getHerblore() < 1) setHerblore(1);
+        if (getHerblore() > 120) setHerblore(120);
     }
 
     public Integer getSummoning() {
@@ -170,5 +173,13 @@ public class SkillsContext {
 
     public void setBaseDefence(Integer baseDefence) {
         this.baseDefence = baseDefence;
+    }
+
+    public Integer getHerblore() {
+        return herblore;
+    }
+
+    public void setHerblore(Integer herblore) {
+        this.herblore = herblore;
     }
 }

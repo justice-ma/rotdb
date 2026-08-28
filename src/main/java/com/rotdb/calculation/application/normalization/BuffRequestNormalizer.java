@@ -50,7 +50,7 @@ public class BuffRequestNormalizer {
         }
 
         if (cleanedBuffs.contains(BuffId.REND)) {
-            cleanedBuffs.add(BuffId.RENDBLEED);
+            cleanedBuffs.add(BuffId.REND_BLEED);
         }
 
         result.setBuffStacks(cleanedStacks);

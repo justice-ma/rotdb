@@ -2,7 +2,7 @@
   width: 100%;
   box-sizing: border-box;
 
-  border-radius: 10px;
+  border-radius: 8px;
   border: 1px solid var(--border);
 
   background: var(--bg-dark);
@@ -98,17 +98,20 @@
   background: var(--bg-accent);
 }
 
+.buff:disabled,
+.buff.disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .buff:hover,
 .buff-tab:hover {
   cursor: pointer;
-  transform: translateY(-2px);
   border-color: var(--border-accent);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 8px 20px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
 }
 
-.buff:hover:not(.buff.selected),
+.buff:hover:not(.buff.selected):not(:disabled),
 .buff-tab:hover:not(.buff-tab:active) {
   background-color: var(--bg-light);
 }
@@ -116,11 +119,9 @@
 @keyframes buff-enter {
   from {
     opacity: 0;
-    transform: translateY(6px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 

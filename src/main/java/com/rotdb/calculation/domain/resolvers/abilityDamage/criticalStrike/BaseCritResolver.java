@@ -1,10 +1,12 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
+import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 
 public class BaseCritResolver {
-    public static double resolve(CalculationContext context) {
-        int strength = context.getSkills().getRevelvantStregthLevel(context);
+    public static double resolve(SkillsContext skillsContext, EquipmentModel equipmentModel) {
+        int strength = skillsContext.getRevelvantStregthLevel(equipmentModel);
         double criticalStrikeDamage = 0;
 
         if (strength < 20) {

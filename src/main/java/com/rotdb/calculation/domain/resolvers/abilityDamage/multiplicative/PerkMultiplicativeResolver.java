@@ -2,6 +2,8 @@ package com.rotdb.calculation.domain.resolvers.abilityDamage.multiplicative;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.Effect;
+import com.rotdb.shared.combat.domain.model.enums.EquipmentType;
 import com.rotdb.shared.combat.domain.model.enums.Perks;
 import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
@@ -13,16 +15,19 @@ public class PerkMultiplicativeResolver {
 
         double mod = 1;
         // TODO: Check that offhand == shield some day!
-        if (buff.has(BuffId.REVENGESTACKS) && buff.stacks(BuffId.REVENGESTACKS) > 0) {
-            mod *= 1 + Math.min(10, buff.stacks(BuffId.REVENGESTACKS)) * 0.05;
+        if (buff.has(BuffId.REVENGESTACKS) && buff.stacks(BuffId.REVENGESTACKS) > 0 &&
+                (context.getEquipment().getOffhand().getType() == EquipmentType.SHIELD ||
+                context.getEquipment().getOffhand().getEffect().contains(Effect.DEFENDER) ||
+                context.getEquipment().getMainhand().getType() == EquipmentType.SHIELDBOW)) {
+            mod *= 1 + Math.min(BuffId.REVENGESTACKS.getMaximumStacks(), buff.stacks(BuffId.REVENGESTACKS) ) * (context.getEquipment().getOffhand().getEffect().contains(Effect.DEFENDER) ? 0.025 : 0.05);
         }
 
         if (perk.has(Perks.SPENDTHRIFT)) {
-            mod *= 1 + Math.min(perk.rank(Perks.SPENDTHRIFT) / 100.0, 0.06) * Math.min(perk.rank(Perks.SPENDTHRIFT) / 100.0, 0.06);
+            mod *= 1 + perk.rank(Perks.SPENDTHRIFT) / 100.0 * perk.rank(Perks.SPENDTHRIFT) / 100.0;
         }
 
         if (buff.has(BuffId.RUTHELESSSTACKS) && buff.stacks(BuffId.RUTHELESSSTACKS) > 0 && perk.has(Perks.RUTHLESS)) {
-            mod *= 1 + Math.min(buff.stacks(BuffId.RUTHELESSSTACKS), 5) * Math.min(perk.rank(Perks.RUTHLESS), 3) * 0.005;
+            mod *= 1 + Math.min(buff.stacks(BuffId.RUTHELESSSTACKS), 5) * perk.rank(Perks.RUTHLESS) * 0.005;
         }
         return mod;
     }

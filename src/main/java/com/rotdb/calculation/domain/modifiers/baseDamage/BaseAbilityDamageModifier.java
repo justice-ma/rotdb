@@ -11,6 +11,8 @@ import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.enums.Perks;
+import com.rotdb.calculation.domain.resolvers.baseAbilityDamage.*;
+import com.rotdb.shared.combat.domain.model.enums.*;
 
 public final class BaseAbilityDamageModifier implements Modifier {
     @Override
@@ -27,7 +29,8 @@ public final class BaseAbilityDamageModifier implements Modifier {
         var buffs = context.getBuffs();
 
         CombatStyles style = equipment.getMainhand().getClazz();
-        boolean dw = (equipment.getOffhand().getId() != null);
+        boolean dw = (equipment.getOffhand().getId() != null && equipment.getOffhand().getType() != EquipmentType.SHIELD);
+        boolean twoHanded = equipment.getMainhand().getSlot() == Slots.TWOHANDED;
 
         int s = switch (style) {
             case MELEE -> skills.getBoostedStrength();
@@ -53,6 +56,8 @@ public final class BaseAbilityDamageModifier implements Modifier {
         int ohTier = dw ? equipment.getOffhand().getDamageTier() : 0;
         int ammoTier = style == CombatStyles.MAGIC ? context.getSpellContext().getSpell().getDamageTier() :
                 context.getEquipment().getAmmo().getDamageTier();
+        ammoTier = effectiveAmmoTier(style, equipment.getMainhand().getStyle(), equipment.getMainhand().getType(),
+                mhTier, ohTier, ammoTier);
 
         if (equipment.getMainhand().getEffect().contains(Effect.SHARDABLE) && buffs.getBuffSet().contains(BuffId.SHARDOFGENESIS)) {
             mhTier += 5;
@@ -62,31 +67,49 @@ public final class BaseAbilityDamageModifier implements Modifier {
             ohTier += 5;
         }
 
-        int base = resolveBase(style, dw, s, bonus, mhTier, ohTier, er, ammoTier, eq);
+        int base = resolveBase(style, dw, twoHanded, s, bonus, mhTier, ohTier, er, ammoTier, eq);
 
         context.getDamage().setBaseDamage(base);
         context.getEquipment().setCombatStyle(style);
     }
 
-    private int resolveBase(CombatStyles style, boolean dw,
+    private int resolveBase(CombatStyles style, boolean dw, boolean twoHanded,
                             int s, double bonus, int mhTier, int ohTier,
                             int er, int ammoTier, int eq) {
         return switch (style) {
             case MELEE -> dw
                     ? MeleeBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, eq)
-                    : MeleeBaseDamageResolver.twoHand(s, bonus, mhTier, er, eq);
+                    : twoHanded ? MeleeBaseDamageResolver.twoHand(s, bonus, mhTier, er, eq)
+                    : MeleeBaseDamageResolver.mainhandOnly(s, bonus, mhTier, er, eq);
 
             case MAGIC -> dw
                     ? MagicBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, ammoTier, eq)
-                    : MagicBaseDamageResolver.twoHand(s, bonus, mhTier, er, ammoTier, eq);
+                    : twoHanded ? MagicBaseDamageResolver.twoHand(s, bonus, mhTier, er, ammoTier, eq)
+                    : MagicBaseDamageResolver.mainhandOnly(s, bonus, mhTier, er, ammoTier, eq);
 
             case RANGED -> dw
                     ? RangedBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, ammoTier, eq)
-                    : RangedBaseDamageResolver.twoHand(s, bonus, mhTier, er, ammoTier, eq);
+                    : twoHanded ? RangedBaseDamageResolver.twoHand(s, bonus, mhTier, er, ammoTier, eq)
+                    : RangedBaseDamageResolver.mainhandOnly(s, bonus, mhTier, er, ammoTier, eq);
 
-            case NECROMANCY -> NecromancyBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, eq);
+            case NECROMANCY ->
+                    dw ? NecromancyBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, eq) :
+                    NecromancyBaseDamageResolver.mainhandOnly(s, bonus, mhTier, er, eq);
 
             case ALL -> throw new IllegalStateException("Combat style ALL is not valid for base damage");
         };
+    }
+
+    private int effectiveAmmoTier(CombatStyles style, WeaponStyle weaponStyle, EquipmentType weaponType,
+                                  int mhTier, int ohTier, int ammoTier) {
+        if (style != CombatStyles.RANGED || ammoTier > 0) {
+            return ammoTier;
+        }
+
+        if (weaponStyle == WeaponStyle.THROWN || weaponType == EquipmentType.CHARGEBOW) {
+            return Math.max(mhTier, ohTier);
+        }
+
+        return ammoTier;
     }
 }

@@ -3,15 +3,22 @@ import "../style/statPanel.css";
 
 const SKILL_FIELDS = [
   { key: "attack", label: "Attack" },
+  { key: "defence", label: "Defence" },
   { key: "strength", label: "Strength" },
   { key: "magic", label: "Magic" },
   { key: "ranged", label: "Ranged" },
   { key: "necromancy", label: "Necromancy" },
+  { key: "herblore", label: "Herblore" },
   { key: "currentHp", label: "Current HP" },
   { key: "maxHp", label: "Maximum HP" },
 ];
 
-export default function StatsPanel({ skills, setSkills }) {
+export default function StatsPanel({
+  skills,
+  setSkills,
+  derivedStats,
+  effectiveStats,
+}) {
   const inputRefs = useRef({});
 
   function handleSkillChange(skillKey, value) {
@@ -34,7 +41,15 @@ export default function StatsPanel({ skills, setSkills }) {
         if (skill.key === "currentHp") {
           return (
             <div key="hp-row" className="stat-row hp-row">
-              <label className="stat-label">Health Points</label>
+              <div className="hp-label-group">
+                <label className="stat-label">Lifepoints</label>
+                <div className="hp-effective">
+                  Effective:{" "}
+                  {(
+                    derivedStats?.effectiveMaxHp ?? skills.maxHp
+                  )?.toLocaleString("en-US") ?? ""}
+                </div>
+              </div>
 
               <div className="hp-input-group">
                 <input
@@ -97,6 +112,41 @@ export default function StatsPanel({ skills, setSkills }) {
           </div>
         );
       })}
+      <div className="effective-stats-panel">
+        <label className="stat-label effective-stats-title">
+          Effective Stats
+        </label>
+        <div className="effective-stats">
+          {effectiveStats ? (
+            <div className="effective-stats-container">
+              <div className="effective-stat">
+                <span>Prayer</span>
+                <strong>
+                  {effectiveStats.totalPrayer.toLocaleString("en-us")}
+                </strong>
+              </div>
+              <div className="effective-stat">
+                <span>Armour</span>
+                <strong>
+                  {effectiveStats.totalArmour.toLocaleString("en-us")}
+                </strong>
+              </div>
+              <div className="effective-stat">
+                <span>Crit Chance</span>
+                <strong>
+                  {(effectiveStats.globalCritChance * 100.0).toFixed(2)}%
+                </strong>
+              </div>
+              <div className="effective-stat">
+                <span>Crit Damage</span>
+                <strong>
+                  {(effectiveStats.globalCritDamage * 100.0).toFixed(2)}%
+                </strong>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </div>
     </div>
   );
 }

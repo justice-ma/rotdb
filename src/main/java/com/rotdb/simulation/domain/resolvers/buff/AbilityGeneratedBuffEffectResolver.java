@@ -45,14 +45,14 @@ public class AbilityGeneratedBuffEffectResolver {
 
         if (abilityContext.getId() == AbilityId.REND && eq.getGloves().getEffect().contains(Effect.GLOVESOFPASSAGE)) {
             BuffDefinition rend = BuffProvider.get(BuffId.REND, BuffSource.ABILITY_GENERATED, state);
-            BuffDefinition rendBleed = BuffProvider.get(BuffId.RENDBLEED, BuffSource.ABILITY_GENERATED, state);
+            BuffDefinition rendBleed = BuffProvider.get(BuffId.REND_BLEED, BuffSource.ABILITY_GENERATED, state);
             buffs.add(new GeneratedBuffEffect(
                     BuffId.REND,
                     GeneratedBuffTiming.ON_RELEASE,
                     rend.getDurationTicks()
             ));
             buffs.add(new GeneratedBuffEffect(
-                    BuffId.RENDBLEED,
+                    BuffId.REND_BLEED,
                     GeneratedBuffTiming.ON_RELEASE,
                     rendBleed.getDurationTicks()
             ));

@@ -5,17 +5,14 @@ import com.rotdb.shared.combat.domain.model.context.TargetContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.enums.TargetTags;
-import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
+import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
 
 public class TargetStatusMultiplierResolver {
     public static double resolve(CalculationContext context) {
         TargetContext target = context.getTarget();
         BuffContext buff = context.getBuffs();
-        EquipmentSlot head = context.getEquipment().getHead();
-        EquipmentSlot body = context.getEquipment().getBody();
-        EquipmentSlot legs = context.getEquipment().getLegs();
-        EquipmentSlot cape = context.getEquipment().getCape();
+        EquipmentModel equipment = context.getEquipment();
 
         double mod = 1;
         if (buff.has(BuffId.VULNED)) {
@@ -36,11 +33,8 @@ public class TargetStatusMultiplierResolver {
         }
 
         if (target.has(TargetTags.GHOSTHUNTER)) {
-            int ghostHunterPieces = 0;
-            if (head.getEffect().contains(Effect.GHOSTHUNTER)) ghostHunterPieces++;
-            if (body.getEffect().contains(Effect.GHOSTHUNTER)) ghostHunterPieces++;
-            if (legs.getEffect().contains(Effect.GHOSTHUNTER)) ghostHunterPieces++;
-            if (cape.getEffect().contains(Effect.GHOSTHUNTER)) ghostHunterPieces++;
+            int ghostHunterPieces = equipment.countSetPieces(Effect.GHOSTHUNTER, buff,
+                    equipment.getHead(), equipment.getBody(), equipment.getLegs(), equipment.getCape());
 
             if (ghostHunterPieces == 1) {
                 mod *= 1.03;

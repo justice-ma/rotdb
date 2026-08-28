@@ -3,6 +3,7 @@ package com.rotdb.calculation.application.mapper;
 import com.rotdb.calculation.api.dto.DamageCalcRequestDto;
 import com.rotdb.shared.combat.domain.model.enums.Perks;
 import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -10,7 +11,7 @@ import java.util.Map;
 
 @Component
 public class PerkContextMapper {
-    public PerkContext from(DamageCalcRequestDto.PerkSelection request) {
+    public PerkContext from(DamageCalcRequestDto.PerkSelection request, BuffContext buffs) {
         PerkContext perks = new PerkContext();
         Map<Perks, Integer> cleanedPerks = new HashMap<>();
         if (request == null || request.selectedPerks() == null || request.selectedPerks().isEmpty()) {
@@ -29,8 +30,11 @@ public class PerkContextMapper {
                 cleanedPerks.put(perk.getKey(), perk.getKey().getMinTier());
                 continue;
             }
-            if (perk.getValue() > perk.getKey().getMaxTier()) {
-                cleanedPerks.put(perk.getKey(), perk.getKey().getMaxTier());
+
+            int maxTier = perk.getKey().getMaxTier();
+
+            if (perk.getValue() > maxTier) {
+                cleanedPerks.put(perk.getKey(), maxTier);
             } else if (perk.getValue() < perk.getKey().getMinTier()) {
                 cleanedPerks.put(perk.getKey(), perk.getKey().getMinTier());
             } else {

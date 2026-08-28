@@ -1,24 +1,30 @@
 package com.rotdb.calculation.application.mapper;
 
 import com.rotdb.calculation.api.dto.DamageCalcRequestDto;
+import com.rotdb.shared.combat.domain.model.player.BuffContext;
 import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SkillsContextMapper {
-    public SkillsContext from(DamageCalcRequestDto.Skills request) {
+    public SkillsContext from(DamageCalcRequestDto.Skills request, BuffContext buffs) {
         SkillsContext skills = new SkillsContext();
-        if (request == null) skills.fillMissingWithOne();
-        if (request.strength() != null) skills.setBaseStrength(request.strength());
-        if (request.necromancy() != null) skills.setBaseNecromancy(request.necromancy());
-        if (request.ranged() != null) skills.setBaseRanged(request.ranged());
-        if (request.magic() != null) skills.setBaseMagic(request.magic());
-        if (request.attack() != null) skills.setBaseAttack(request.attack());
-        if (request.currentHp() != null) skills.setCurrentHp(request.currentHp());
-        if (request.maxHp() != null) skills.setMaxHp(request.maxHp());
+        if (request == null) {
+            skills.fillMissingWithOne();
+        } else {
+            if (request.strength() != null) skills.setBaseStrength(request.strength());
+            if (request.necromancy() != null) skills.setBaseNecromancy(request.necromancy());
+            if (request.ranged() != null) skills.setBaseRanged(request.ranged());
+            if (request.magic() != null) skills.setBaseMagic(request.magic());
+            if (request.attack() != null) skills.setBaseAttack(request.attack());
+            if (request.defence() != null) skills.setBaseDefence(request.defence());
+            if (request.herblore() != null) skills.setHerblore(request.herblore());
+            if (request.currentHp() != null) skills.setCurrentHp(request.currentHp());
+            if (request.maxHp() != null) skills.setMaxHp(request.maxHp());
+        }
 
         skills.fillMissingWithOne();
-        skills.correctBoundaries();
+        skills.correctBoundaries(buffs);
         return skills;
     }
 }

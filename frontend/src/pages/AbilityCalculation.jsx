@@ -7,18 +7,47 @@ import CombatSettings from "../components/CombatSettings";
 import {
   fetchAbilities,
   fetchBatchCalculation,
+  fetchDerivedStats,
   fetchDetailedAbilityCalculation,
   fetchBuffs,
   fetchEquipmentByIds,
   fetchSpells,
   fetchFamiliars,
   fetchTargetByTitle,
+  fetchEffectiveStats,
 } from "../api/api";
 
 import "../style/abilityPage.css";
 
 const STORAGE_KEY = "rs3-presets";
 const DELETED_DEFAULT_PRESET_IDS_KEY = "rs3-deleted-default-preset-ids";
+
+const BLESSING_ABILITY_REQUIREMENTS = {
+  LIGHT_OF_SARADOMIN_MAGIC: "STRIKING_LIGHT",
+  LIGHT_OF_SARADOMIN_MELEE: "STRIKING_LIGHT",
+  LIGHT_OF_SARADOMIN_RANGED: "STRIKING_LIGHT",
+  LIGHT_OF_SARADOMIN_NECROMANCY: "STRIKING_LIGHT",
+
+  LORD_OF_LIGHT_MAGIC: "LORD_OF_LIGHT",
+  LORD_OF_LIGHT_MELEE: "LORD_OF_LIGHT",
+  LORD_OF_LIGHT_RANGED: "LORD_OF_LIGHT",
+  LORD_OF_LIGHT_NECROMANCY: "LORD_OF_LIGHT",
+
+  BASH_MAGIC: "STEADFAST_WILL",
+  BASH_MELEE: "STEADFAST_WILL",
+  BASH_RANGED: "STEADFAST_WILL",
+  BASH_NECROMANCY: "STEADFAST_WILL",
+
+  BARKSCALES_MAGIC: ["BARKSCALES", "TEARING_THORNS"],
+  BARKSCALES_MELEE: ["BARKSCALES", "TEARING_THORNS"],
+  BARKSCALES_RANGED: ["BARKSCALES", "TEARING_THORNS"],
+  BARKSCALES_NECROMANCY: ["BARKSCALES", "TEARING_THORNS"],
+
+  INFERNO_OF_ZAMORAK_MAGIC: ["ABYSSAL_CINDERS", "UNHOLY_CRITUAL"],
+  INFERNO_OF_ZAMORAK_MELEE: ["ABYSSAL_CINDERS", "UNHOLY_CRITUAL"],
+  INFERNO_OF_ZAMORAK_RANGED: ["ABYSSAL_CINDERS", "UNHOLY_CRITUAL"],
+  INFERNO_OF_ZAMORAK_NECROMANCY: ["ABYSSAL_CINDERS", "UNHOLY_CRITUAL"],
+};
 
 const DEFAULT_SKILLS = {
   necromancy: 120,
@@ -29,6 +58,7 @@ const DEFAULT_SKILLS = {
   attack: 120,
   defence: 99,
   summoning: 99,
+  herblore: 120,
   maxHp: 10100,
   currentHp: 10100,
 };
@@ -51,6 +81,7 @@ const DEFAULT_PRESETS = [
         attack: 120,
         defence: 99,
         summoning: 99,
+        herblore: 120,
         maxHp: 10100,
         currentHp: 10100,
       },
@@ -126,6 +157,7 @@ const DEFAULT_PRESETS = [
         attack: 120,
         defence: 99,
         summoning: 99,
+        herblore: 120,
         maxHp: 10100,
         currentHp: 10100,
       },
@@ -202,6 +234,7 @@ const DEFAULT_PRESETS = [
         attack: 120,
         defence: 99,
         summoning: 99,
+        herblore: 120,
         maxHp: 10100,
         currentHp: 10100,
       },
@@ -281,6 +314,7 @@ const DEFAULT_PRESETS = [
         attack: 120,
         defence: 99,
         summoning: 99,
+        herblore: 120,
         maxHp: 10100,
         currentHp: 10100,
       },
@@ -337,12 +371,13 @@ const DEFAULT_PRESETS = [
   },
 ];
 
-export default function AbilityCalculation() {
+export default function AbilityCalculation({ clientId, sessionId }) {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   const [abilities, setAbilities] = useState([]);
   const [results, setResults] = useState({});
   const [detailedResults, setDetailedResults] = useState({});
+  const [derivedStats, setDerivedStats] = useState(null);
   const [error, setError] = useState("");
 
   const [mainhand, setMainhand] = useState(null);
@@ -373,10 +408,14 @@ export default function AbilityCalculation() {
   const [presets, setPresets] = useState([]);
   const [selectedPresetId, setSelectedPresetId] = useState("");
 
+  const [effectiveStats, setEffectiveStats] = useState(null);
+
   const [itemLevel20, setItemLevel20] = useState(false);
   const [selectedPotions, setSelectedPotions] = useState([
     { pot: "NONE", stat: "ALL" },
   ]);
+
+  const [hitCapMode, setHitCapMode] = useState("CAP_30000");
 
   useEffect(() => {
     (async () => {
@@ -471,13 +510,14 @@ export default function AbilityCalculation() {
         itemLevel20,
         genocidalRank,
       },
-      targetTitle: target?.title ?? "Training dummy",
+      targetTitle: target?.title ?? null,
       targetCurrentHp: targetCurrentHp === "" ? null : Number(targetCurrentHp),
       targetMaxHp: targetMaxHp === "" ? null : Number(targetMaxHp),
       targetSize: target ? null : targetSize === "" ? null : Number(targetSize),
       spell: spell?.id ?? null,
       relic: null,
       selectedFamiliar: familiar?.id ?? null,
+      hitCapMode,
     };
   }, [
     style,
@@ -495,9 +535,120 @@ export default function AbilityCalculation() {
     selectedPotions,
     itemLevel20,
     targetSize,
+    hitCapMode,
+  ]);
+
+  const derivedStatsPayload = useMemo(() => {
+    return {
+      skills,
+      equipment: {
+        mainhandId: equipmentIds.MAINHAND ?? null,
+        offhandId: equipmentIds.OFFHAND ?? null,
+        headId: equipmentIds.HEAD ?? null,
+        bodyId: equipmentIds.BODY ?? null,
+        legsId: equipmentIds.LEGS ?? null,
+        bootsId: equipmentIds.BOOTS ?? null,
+        glovesId: equipmentIds.GLOVES ?? null,
+        neckId: equipmentIds.NECK ?? null,
+        ringId: equipmentIds.RING ?? null,
+        capeId: equipmentIds.CAPE ?? null,
+        pocketId: equipmentIds.POCKET ?? null,
+        ammoId: equipmentIds.AMMO ?? null,
+        quiverId: equipmentIds.QUIVER ?? null,
+      },
+      buffs,
+      potions: selectedPotions,
+      selectedPrayers,
+      perks: {
+        selectedPerks,
+        itemLevel20,
+        genocidalRank,
+      },
+      spell: spell?.id ?? null,
+      selectedFamiliar: familiar?.id ?? null,
+      hitCapMode,
+    };
+  }, [
+    skills,
+    equipmentIds,
+    buffs,
+    selectedPotions,
+    selectedPrayers,
+    selectedPerks,
+    itemLevel20,
+    genocidalRank,
+    spell,
+    familiar,
+    hitCapMode,
+  ]);
+
+  const effectiveStatsPayload = useMemo(() => {
+    return {
+      skills,
+      buffs,
+      equipmentIds: {
+        mainhandId: equipmentIds.MAINHAND ?? null,
+        offhandId: equipmentIds.OFFHAND ?? null,
+        headId: equipmentIds.HEAD ?? null,
+        bodyId: equipmentIds.BODY ?? null,
+        legsId: equipmentIds.LEGS ?? null,
+        bootsId: equipmentIds.BOOTS ?? null,
+        glovesId: equipmentIds.GLOVES ?? null,
+        neckId: equipmentIds.NECK ?? null,
+        ringId: equipmentIds.RING ?? null,
+        capeId: equipmentIds.CAPE ?? null,
+        pocketId: equipmentIds.POCKET ?? null,
+        ammoId: equipmentIds.AMMO ?? null,
+        quiverId: equipmentIds.QUIVER ?? null,
+      },
+      familiar: familiar?.id ?? null,
+      perks: {
+        selectedPerks,
+        itemLevel20,
+        genocidalRank,
+      },
+    };
+  }, [
+    skills,
+    equipmentIds,
+    buffs,
+    selectedPrayers,
+    familiar,
+    selectedPerks,
+    itemLevel20,
+    genocidalRank,
   ]);
 
   const needsMainhand = !equipmentIds.MAINHAND;
+
+  const visibleAbilities = useMemo(() => {
+    const enabledBuffs = new Set(buffs?.enabledBuffs ?? []);
+
+    return abilities.filter((ability) => {
+      const requiredBuff = BLESSING_ABILITY_REQUIREMENTS[ability.ability];
+
+      if (!requiredBuff) return true;
+
+      if (Array.isArray(requiredBuff)) {
+        return requiredBuff.some((buffId) => enabledBuffs.has(buffId));
+      }
+
+      return enabledBuffs.has(requiredBuff);
+    });
+  }, [abilities, buffs]);
+
+  useEffect(() => {
+    if (!selectedAbility) return;
+
+    const stillVisible = visibleAbilities.some(
+      (ability) => ability.ability === selectedAbility.ability,
+    );
+
+    if (!stillVisible) {
+      setSelectedAbility(null);
+      setDetailedResults({});
+    }
+  }, [selectedAbility, visibleAbilities]);
 
   function persistPresets(updatedPresets) {
     setPresets(updatedPresets);
@@ -722,22 +873,62 @@ export default function AbilityCalculation() {
 
   useEffect(() => {
     if (!base) return;
-    if (!abilities.length) return;
+    if (!visibleAbilities.length) return;
 
     (async () => {
       try {
         const batchPayload = {
           base,
-          abilityIds: abilities.map((a) => a.ability),
+          abilityIds: visibleAbilities.map((a) => a.ability),
         };
-        const batchResults = await fetchBatchCalculation(batchPayload);
+        const batchResults = await fetchBatchCalculation(
+          batchPayload,
+          clientId,
+          sessionId,
+        );
         setResults(batchResults);
         setError("");
       } catch (e) {
         setError(e?.message ?? "Batch calculation failed");
       }
     })();
-  }, [base, abilities]);
+  }, [base, visibleAbilities, clientId, sessionId]);
+
+  useEffect(() => {
+    let ignore = false;
+
+    (async () => {
+      try {
+        const stats = await fetchDerivedStats(derivedStatsPayload);
+        if (!ignore) setDerivedStats(stats);
+      } catch (e) {
+        console.error("Derived stats calculation failed", e);
+        if (!ignore) setDerivedStats(null);
+      }
+    })();
+
+    return () => {
+      ignore = true;
+    };
+  }, [derivedStatsPayload]);
+
+  useEffect(() => {
+    let ignore = false;
+
+    (async () => {
+      try {
+        const stats = await fetchEffectiveStats(effectiveStatsPayload);
+        if (!ignore) setEffectiveStats(stats);
+      } catch (e) {
+        console.error("Effective stats calculation failed", e);
+        if (!ignore) setEffectiveStats(null);
+      }
+    })();
+
+    return () => {
+      ignore = true;
+    };
+  }, [effectiveStatsPayload]);
 
   useEffect(() => {
     if (!base) return;
@@ -749,14 +940,18 @@ export default function AbilityCalculation() {
           ...base,
           abilityId: selectedAbility.ability,
         };
-        const res = await fetchDetailedAbilityCalculation(detailedPayload);
+        const res = await fetchDetailedAbilityCalculation(
+          detailedPayload,
+          clientId,
+          sessionId,
+        );
         setDetailedResults(res);
         setError("");
       } catch (e) {
         setError(e?.message ?? "Detailed calculation failed");
       }
     })();
-  }, [base, selectedAbility]);
+  }, [base, selectedAbility, clientId, sessionId]);
 
   return (
     <div className="ability-page">
@@ -801,6 +996,7 @@ export default function AbilityCalculation() {
           allBuffs={allBuffs}
           skills={skills}
           setSkills={setSkills}
+          derivedStats={derivedStats}
           selectedPrayers={selectedPrayers}
           setSelectedPrayers={setSelectedPrayers}
           selectedPerks={selectedPerks}
@@ -827,6 +1023,7 @@ export default function AbilityCalculation() {
           setSelectedPotions={setSelectedPotions}
           targetSize={targetSize}
           setTargetSize={setTargetSize}
+          effectiveStats={effectiveStats}
         />
       </div>
 
@@ -939,12 +1136,14 @@ export default function AbilityCalculation() {
           </div>
         ) : (
           <Abilities
-            abilities={abilities}
+            abilities={visibleAbilities}
             results={results}
             error={error}
             selectedAbility={selectedAbility}
             onSelectedAbility={setSelectedAbility}
             weaponStyle={mainhand?.clazz}
+            hitCapMode={hitCapMode}
+            setHitCapMode={setHitCapMode}
           />
         )}
       </div>

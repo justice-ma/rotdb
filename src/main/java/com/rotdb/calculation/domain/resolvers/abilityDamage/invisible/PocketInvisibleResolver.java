@@ -9,6 +9,7 @@ public class PocketInvisibleResolver {
         if (context.getEquipment().getPocket().getEffect().contains(Effect.AMASCUTBOOK)) {
             return 1 + 0.1 * (context.getBuffs().stacks(BuffId.BOOKUPTIME) / 100.0);
         }
+
         return 1;
     }
 }

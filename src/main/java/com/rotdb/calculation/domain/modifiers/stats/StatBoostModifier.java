@@ -1,23 +1,16 @@
 package com.rotdb.calculation.domain.modifiers.stats;
 
-import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
-import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.calculation.domain.modifiers.StatModifier;
 import com.rotdb.shared.combat.domain.model.enums.Stats;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
 import com.rotdb.shared.combat.domain.model.player.PotionContext;
 import com.rotdb.shared.combat.domain.model.player.SkillsContext;
-import com.rotdb.calculation.domain.modifiers.Modifier;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class StatBoostModifier implements Modifier {
-    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
-        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
-
-        SkillsContext skill = context.getSkills();
-        BuffContext buffs = context.getBuffs();
-
+public class StatBoostModifier implements StatModifier {
+    public void apply(SkillsContext skill, BuffContext buffs) {
         skill.setBoostedAttack(skill.getBaseAttack());
         skill.setBoostedStrength(skill.getBaseStrength());
         skill.setBoostedDefence(skill.getBaseDefence());

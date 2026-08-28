@@ -13,7 +13,7 @@ public class CorePerkAddResolver {
         PerkContext perk = context.getPerks();
         AbilityContext ability = context.getAbility();
         if (perk.has(Perks.CAROMING) && perk.rank(Perks.CAROMING) > 0 && (ability.getId() == GREATERRICOCHET || ability.getId() == RICOCHET)) {
-            return (int) (context.getDamage().getBaseDamage() * Math.min(0.16, perk.rank(Perks.CAROMING) * 0.04));
+            return (int) (context.getDamage().getBaseDamage() * (perk.rank(Perks.CAROMING) * 0.04));
         }
         return 0;
     }

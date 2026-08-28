@@ -92,7 +92,7 @@ public final class BuffProvider {
     private static BuffDefinition getAbilityGeneratedDefinition(BuffId id, SimulationState state) {
         return switch (id) {
             case REND -> AbilityGeneratedBuffDefinitionFactory.rend();
-            case RENDBLEED -> AbilityGeneratedBuffDefinitionFactory.rendBleed();
+            case REND_BLEED -> AbilityGeneratedBuffDefinitionFactory.rendBleed();
             case CHAOSROAR -> AbilityGeneratedBuffDefinitionFactory.chaosRoar();
             case BALANCEBYFORCE -> AbilityGeneratedBuffDefinitionFactory.balanceByForce();
             case DRAGONSCIMITAR -> AbilityGeneratedBuffDefinitionFactory.dragonScimitar();

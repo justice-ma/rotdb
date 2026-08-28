@@ -1,8 +1,10 @@
 package com.rotdb.calculation.domain.model.context;
 
+import com.rotdb.calculation.domain.model.EffectiveStatsResult;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.context.TargetContext;
+import com.rotdb.shared.combat.domain.model.enums.HitCapMode;
 import com.rotdb.shared.combat.domain.model.enums.Prayer;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
@@ -32,6 +34,8 @@ public class CalculationContext {
     private boolean zealotsEquipped;
     private boolean perfectEquilibriumSecondPass;
     private double hitChance;
+    private HitCapMode hitCapMode;
+    private EffectiveStatsResult effectiveStatsResult;
 
     public boolean debug = false;
     public boolean finalPrint = false;
@@ -162,5 +166,21 @@ public class CalculationContext {
 
     public void setSpellContext(SpellContext spellContext) {
         this.spellContext = spellContext;
+    }
+
+    public HitCapMode getHitCapMode() {
+        return hitCapMode;
+    }
+
+    public void setHitCapMode(HitCapMode hitCapMode) {
+        this.hitCapMode = hitCapMode;
+    }
+
+    public EffectiveStatsResult getEffectiveStatsResult() {
+        return effectiveStatsResult;
+    }
+
+    public void setEffectiveStatsResult(EffectiveStatsResult effectiveStatsResult) {
+        this.effectiveStatsResult = effectiveStatsResult;
     }
 }

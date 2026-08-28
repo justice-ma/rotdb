@@ -5,6 +5,7 @@ import "../style/perksPanel.css";
 export default function PerksPanel({
   selectedPerks,
   setSelectedPerks,
+  buffs,
   genocidalRank,
   setGenocidalRank,
   itemLevel20,
@@ -15,6 +16,7 @@ export default function PerksPanel({
   const [error, setError] = useState("");
   const [perkRanks, setPerkRanks] = useState({});
   const inputRefs = useRef({});
+  const hasPowerArchive = (buffs?.enabledBuffs ?? []).includes("POWER_ARCHIVE");
 
   useEffect(() => {
     const controller = new AbortController();
@@ -52,6 +54,47 @@ export default function PerksPanel({
     });
   }, [selectedPerks]);
 
+  useEffect(() => {
+    if (hasPowerArchive || !perks.length) return;
+
+    setPerkRanks((prev) => clampPerkRanks(prev, perks, false));
+    setSelectedPerks((prev) => clampPerkRanks(prev, perks, false));
+  }, [hasPowerArchive, perks, setSelectedPerks]);
+
+  function getPerkMax(perk) {
+    const max = perk.max ?? 1;
+    return hasPowerArchive && perk.id !== "GENOCIDAL" ? max * 2 : max;
+  }
+
+  function isFixedRankPerk(perk) {
+    return perk.id !== "GENOCIDAL" && (perk.max ?? 1) === 1;
+  }
+
+  function clampPerkRanks(ranks, perkList, powerArchiveActive) {
+    if (!ranks) return ranks;
+
+    let changed = false;
+    const byId = new Map(perkList.map((perk) => [perk.id, perk]));
+    const next = { ...ranks };
+
+    for (const [perkId, rank] of Object.entries(next)) {
+      if (perkId === "GENOCIDAL" || rank === "") continue;
+
+      const perk = byId.get(perkId);
+      if (!perk) continue;
+
+      const max = powerArchiveActive ? (perk.max ?? 1) * 2 : (perk.max ?? 1);
+      const clamped = Math.max(1, Math.min(max, Number(rank)));
+
+      if (!Number.isNaN(clamped) && clamped !== rank) {
+        next[perkId] = clamped;
+        changed = true;
+      }
+    }
+
+    return changed ? next : ranks;
+  }
+
   function focusInput(perkId) {
     const input = inputRefs.current[perkId];
     if (!input) return;
@@ -65,7 +108,10 @@ export default function PerksPanel({
 
       return {
         ...(prev ?? {}),
-        [perk.id]: perk.id === "GENOCIDAL" ? 1 : (perkRanks[perk.id] ?? 1),
+        [perk.id]:
+          perk.id === "GENOCIDAL" || isFixedRankPerk(perk)
+            ? 1
+            : (perkRanks[perk.id] ?? 1),
       };
     });
   }
@@ -117,6 +163,15 @@ export default function PerksPanel({
       return;
     }
 
+    if (isFixedRankPerk(perk)) {
+      setPerkRanks((prev) => ({
+        ...prev,
+        [perk.id]: 1,
+      }));
+      activatePerk(perk);
+      return;
+    }
+
     setPerkRanks((prev) => ({
       ...prev,
       [perk.id]: value,
@@ -136,7 +191,7 @@ export default function PerksPanel({
     const parsed = Number(value);
     if (Number.isNaN(parsed)) return;
 
-    const max = perk.max ?? 1;
+    const max = getPerkMax(perk);
     const clamped = Math.max(1, Math.min(max, parsed));
 
     setSelectedPerks((prev) => ({
@@ -160,6 +215,22 @@ export default function PerksPanel({
       return;
     }
 
+    if (isFixedRankPerk(perk)) {
+      setPerkRanks((prev) => ({
+        ...prev,
+        [perk.id]: 1,
+      }));
+
+      if (selectedPerks?.[perk.id] != null) {
+        setSelectedPerks((prev) => ({
+          ...(prev ?? {}),
+          [perk.id]: 1,
+        }));
+      }
+
+      return;
+    }
+
     const current = perkRanks[perk.id];
 
     if (current == null || current === "") {
@@ -179,7 +250,7 @@ export default function PerksPanel({
     }
 
     const parsed = Number(current);
-    const max = perk.max ?? 1;
+    const max = getPerkMax(perk);
     const clamped = Number.isNaN(parsed)
       ? 1
       : Math.max(1, Math.min(max, parsed));
@@ -224,10 +295,13 @@ export default function PerksPanel({
       <div className="perks-grid">
         {perks.map((perk) => {
           const selected = selectedPerks?.[perk.id] != null;
+          const fixedRank = isFixedRankPerk(perk);
           const rank =
             perk.id === "GENOCIDAL"
               ? (genocidalRank ?? "")
-              : (perkRanks[perk.id] ?? "");
+              : fixedRank
+                ? 1
+                : (perkRanks[perk.id] ?? "");
 
           return (
             <div
@@ -237,29 +311,31 @@ export default function PerksPanel({
             >
               <span className="perk-label">{perk.name}</span>
 
-              <input
-                ref={(el) => {
-                  inputRefs.current[perk.id] = el;
-                }}
-                className="perk-rank-input"
-                type="number"
-                min={perk.id === "GENOCIDAL" ? 0 : 1}
-                max={perk.id === "GENOCIDAL" ? 4.9 : perk.max}
-                step={perk.id === "GENOCIDAL" ? 0.1 : 1}
-                value={rank}
-                placeholder={perk.id === "GENOCIDAL" ? "0.0" : "1"}
-                onMouseDown={(e) => e.stopPropagation()}
-                onClick={(e) => e.stopPropagation()}
-                onFocus={() => handleInputFocus(perk)}
-                onChange={(e) => updatePerkRank(perk, e.target.value)}
-                onBlur={() => normalizePerkRank(perk)}
-                onKeyDown={(e) => {
-                  e.stopPropagation();
-                  if (e.key === "Enter") {
-                    e.currentTarget.blur();
-                  }
-                }}
-              />
+              {!fixedRank && (
+                <input
+                  ref={(el) => {
+                    inputRefs.current[perk.id] = el;
+                  }}
+                  className="perk-rank-input"
+                  type="number"
+                  min={perk.id === "GENOCIDAL" ? 0 : 1}
+                  max={perk.id === "GENOCIDAL" ? 4.9 : getPerkMax(perk)}
+                  step={perk.id === "GENOCIDAL" ? 0.1 : 1}
+                  value={rank}
+                  placeholder={perk.id === "GENOCIDAL" ? "0.0" : "1"}
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={(e) => e.stopPropagation()}
+                  onFocus={() => handleInputFocus(perk)}
+                  onChange={(e) => updatePerkRank(perk, e.target.value)}
+                  onBlur={() => normalizePerkRank(perk)}
+                  onKeyDown={(e) => {
+                    e.stopPropagation();
+                    if (e.key === "Enter") {
+                      e.currentTarget.blur();
+                    }
+                  }}
+                />
+              )}
             </div>
           );
         })}

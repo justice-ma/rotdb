@@ -25,8 +25,8 @@ public class Sandbox {
         RotationCombatState state = sampleRangedState();
         List<AbilityPlacement> abilities = new ArrayList<>();
         AbilityPlacement placement = new AbilityPlacement();
-        placement.setCastTick(6);
-        placement.setPlacedAbility(AbilityId.CONJURESKELETONWARRIOR);
+        placement.setCastTick(0);
+        placement.setPlacedAbility(AbilityId.COMBUST);
         placement.setReleaseTick(0);
         abilities.add(placement);
 //        AbilityPlacement placement2 = new AbilityPlacement();
@@ -59,7 +59,7 @@ public class Sandbox {
         BuffPlacement buff = new BuffPlacement();
         buff.setPlacementTick(6);
         buff.setBuffId(BuffId.HAUNTED);
-        buffs.add(buff);
+//        buffs.add(buff);
 //        BuffPlacement buff2 = new BuffPlacement();
 //        buff2.setPlacementTick(0);
 //        buff2.setBuffId(BuffId.SUPERADRENALINEPOTION);

@@ -9,6 +9,7 @@ import TargetPanel from "./TargetPanel";
 import FamiliarPanel from "./FamiliarPanel";
 import PresetSelector from "./PresetSelector";
 import PotionsPanel from "./PotionPanel";
+import BlessingPanel from "./BlessingPanel";
 
 const SLOTS = [
   "MAINHAND",
@@ -96,7 +97,7 @@ function SpellSearch({
   error,
   selected,
   onPick,
-  onClear,
+  onBeginEdit,
 }) {
   return (
     <div className="slot-block">
@@ -105,7 +106,7 @@ function SpellSearch({
           className="slot-input"
           value={query}
           onChange={(e) => {
-            if (selected) onClear();
+            if (selected) onBeginEdit();
             setQuery(e.target.value);
           }}
           placeholder="Spell…"
@@ -152,6 +153,7 @@ export default function CombatSettings({
   allBuffs,
   skills,
   setSkills,
+  derivedStats,
   selectedPrayers,
   setSelectedPrayers,
   selectedPerks,
@@ -178,6 +180,7 @@ export default function CombatSettings({
   setSelectedPotions,
   targetSize,
   setTargetSize,
+  effectiveStats,
 }) {
   const [editingSlot, setEditingSlot] = useState(null);
   const DEFAULT_BOOK_UPTIME = 66;
@@ -199,6 +202,7 @@ export default function CombatSettings({
   const [spellResults, setSpellResults] = useState([]);
   const [spellLoading, setSpellLoading] = useState(false);
   const [spellError, setSpellError] = useState("");
+  const [editingSpell, setEditingSpell] = useState(false);
 
   const isTwoHandedMainhand =
     selectedEquipmentBySlot?.MAINHAND?.slot === "TWOHANDED";
@@ -401,15 +405,16 @@ export default function CombatSettings({
   }
 
   function onPickSpell(item) {
+    setEditingSpell(false);
     setSpell(item);
     setSpellQuery(item.name);
     setSpellResults([]);
     setSpellError("");
   }
 
-  function onClearSpell() {
+  function onBeginEditSpell() {
+    setEditingSpell(true);
     setSpell(null);
-    setSpellQuery("");
     setSpellResults([]);
     setSpellError("");
     setSpellLoading(false);
@@ -503,12 +508,13 @@ export default function CombatSettings({
 
   useEffect(() => {
     if (!spell) {
-      setSpellQuery("");
+      if (!editingSpell) setSpellQuery("");
       return;
     }
 
+    setEditingSpell(false);
     setSpellQuery(spell.name ?? "");
-  }, [spell]);
+  }, [spell, editingSpell]);
 
   useEffect(() => {
     if (pocketSupportsBookUptime) return;
@@ -683,7 +689,7 @@ export default function CombatSettings({
                 error={spellError}
                 selected={spell}
                 onPick={onPickSpell}
-                onClear={onClearSpell}
+                onBeginEdit={onBeginEditSpell}
               />
             ) : null}
 
@@ -718,7 +724,12 @@ export default function CombatSettings({
       <details className="cs-section">
         <summary className="cs-summary">Stats</summary>
         <div className="cs-body">
-          <StatPanel skills={skills} setSkills={setSkills} />
+          <StatPanel
+            skills={skills}
+            setSkills={setSkills}
+            derivedStats={derivedStats}
+            effectiveStats={effectiveStats}
+          />
         </div>
       </details>
 
@@ -759,11 +770,25 @@ export default function CombatSettings({
       </details>
 
       <details className="cs-section">
+        <summary className="cs-summary">Leagues</summary>
+        <div className="cs-body">
+          <BlessingPanel
+            style={style}
+            buffs={buffs}
+            setBuffs={setBuffs}
+            allBuffs={allBuffs}
+            selectedPocket={selectedPocket}
+          />
+        </div>
+      </details>
+
+      <details className="cs-section">
         <summary className="cs-summary">Perks</summary>
         <div className="cs-body">
           <PerksPanel
             selectedPerks={selectedPerks}
             setSelectedPerks={setSelectedPerks}
+            buffs={buffs}
             genocidalRank={genocidalRank}
             setGenocidalRank={setGenocidalRank}
             itemLevel20={itemLevel20}

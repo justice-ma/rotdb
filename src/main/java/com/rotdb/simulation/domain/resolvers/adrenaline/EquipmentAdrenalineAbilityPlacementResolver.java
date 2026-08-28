@@ -1,5 +1,6 @@
 package com.rotdb.simulation.domain.resolvers.adrenaline;
 
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.ability.AbilityProvider;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
@@ -28,6 +29,20 @@ public class EquipmentAdrenalineAbilityPlacementResolver {
         if (buff.has(BuffId.BLEEDS) && ability.getId().getStyle() == CombatStyles.MELEE &&
                 eq.getHead().getEffect().contains(Effect.JAWSOFTHEABYSS)) {
             adrenalineDelta += (2 * buff.stacks(BuffId.BLEEDS));
+        }
+
+        if (buff.has(BuffId.RINGOFDEATHPROC) && eq.getRing().getEffect().contains(Effect.RINGOFDEATH)) {
+            adrenalineDelta += 5;
+        }
+
+        if (ability.getId() == AbilityId.RAPIDFIRE) {
+            if (eq.getTotalDracolichPieces() > 0) {
+                adrenalineDelta += (eq.getDracolichPieces() * 0.2);
+            }
+
+            if (eq.getTotalEliteDracolichPieces() > 0) {
+                adrenalineDelta += (eq.getEliteDracolichPieces() * 0.5);
+            }
         }
 
         if (buff.has(BuffId.FURYOFTHESMALL) && ability.getId().getTier() == AbilityTier.BASIC) {

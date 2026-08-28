@@ -13,8 +13,45 @@ export async function fetchAbilities(style) {
   return handleResponse(res);
 }
 
-export async function fetchBatchCalculation(payload) {
+export async function fetchBatchCalculation(payload, clientId, sessionId) {
   const res = await fetch(`${BASE}/damage/calculate/batch`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      ...payload,
+      base: {
+        ...payload.base,
+        clientId,
+        sessionId,
+      },
+    }),
+  });
+  return handleResponse(res);
+}
+
+export async function fetchDetailedAbilityCalculation(
+  payload,
+  clientId,
+  sessionId,
+) {
+  const res = await fetch(`${BASE}/damage/calculate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      ...payload,
+      clientId,
+      sessionId,
+    }),
+  });
+  return handleResponse(res);
+}
+
+export async function fetchDerivedStats(payload) {
+  const res = await fetch(`${BASE}/damage/derived-stats`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -24,8 +61,8 @@ export async function fetchBatchCalculation(payload) {
   return handleResponse(res);
 }
 
-export async function fetchDetailedAbilityCalculation(payload) {
-  const res = await fetch(`${BASE}/damage/calculate`, {
+export async function fetchEffectiveStats(payload) {
+  const res = await fetch(`${BASE}/damage/effective-stats`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -101,4 +138,22 @@ export async function fetchTargetByTitle(title) {
   );
 
   return handleResponse(res);
+}
+
+export async function recordHeartbeat(clientId, sessionId) {
+  const res = await fetch(`${BASE}/analytics/heartbeat`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      clientId,
+      sessionId,
+    }),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || "Request failed.");
+  }
+  return;
 }

@@ -13,7 +13,7 @@ public enum BuffId {
     SHARDOFGENESIS(0, 0, false, "Shard of Genesis"),
     DRACONICFRUIT(0, 0, false, "Draconic Fruit"),
     REND(0, 0, false, "Rend"),
-    RENDBLEED(0, 0, false, "Rend Bleed"),
+    REND_BLEED(0, 0, false, "Rend Bleed"),
     CHAOSROAR(0, 0, false, "Chaos Roar"),
     SUNSHINE(0, 0, false, "Sunshine"),
     DEATHSWIFTNESS(0, 0, false, "Death Swiftness"),
@@ -118,7 +118,9 @@ public enum BuffId {
     INCITEFEARSTACKS(0, 5, true, "Incite Fear Stacks"),
     SKELETONWARRIORDURATION(0, 0, false, "Skeleton Warrior Duration"),
     PUTRIDZOMBIEDURATION(0, 0, false, "Putrid Zombie Duration"),
-    VENGEFULGHOSTDURATION(0, 0, false, "Vengeful Ghost Duration");
+    VENGEFULGHOSTDURATION(0, 0, false, "Vengeful Ghost Duration"),
+    BIK_ARROWS(0, 150, true, "Bik Arrows"),
+    KWUARM(0, 4, true, "Kwuarm Incense");
 
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;

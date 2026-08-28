@@ -2,6 +2,7 @@ package com.rotdb.calculation.domain.model;
 
 import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.combat.domain.model.context.TargetContext;
+import com.rotdb.shared.combat.domain.model.enums.HitCapMode;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.shared.combat.domain.model.equipment.FamiliarContext;
 import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
@@ -19,13 +20,14 @@ public class DamageRequest {
     private FamiliarContext familiar;
     private PrayerContext selectedPrayers;
     private SpellContext spell;
+    private HitCapMode hitCapMode = HitCapMode.CAP_30000;
 
     public DamageRequest() {
     }
     
     public DamageRequest(EquipmentModel equipment, AbilityId abilityId, BuffContext buffs, TargetContext target,
                          SkillsContext skills, PerkContext perks,
-                         FamiliarContext familiar, PrayerContext selectedPrayers, SpellContext spell) {
+                         FamiliarContext familiar, PrayerContext selectedPrayers, SpellContext spell, HitCapMode hitCapMode) {
         this.equipment = equipment;
         this.abilityId = abilityId;
         this.buffs = buffs;
@@ -35,6 +37,7 @@ public class DamageRequest {
         this.familiar = familiar;
         this.selectedPrayers = selectedPrayers;
         this.spell = spell;
+        this.hitCapMode = hitCapMode;
     }
 
     public EquipmentModel getEquipment() {
@@ -111,5 +114,13 @@ public class DamageRequest {
 
     public void setSpell(SpellContext spell) {
         this.spell = spell;
+    }
+
+    public HitCapMode getHitCapMode() {
+        return hitCapMode;
+    }
+
+    public void setHitCapMode(HitCapMode hitCapMode) {
+        this.hitCapMode = hitCapMode;
     }
 }

@@ -4,6 +4,7 @@ import com.rotdb.calculation.api.dto.DamageCalcRequestDto;
 import com.rotdb.calculation.application.mapper.*;
 import com.rotdb.calculation.domain.model.DamageRequest;
 import com.rotdb.shared.combat.domain.model.context.TargetContext;
+import com.rotdb.shared.combat.domain.model.enums.HitCapMode;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.shared.combat.domain.model.equipment.FamiliarContext;
 import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
@@ -23,12 +24,13 @@ public final class DamageRequestMapper {
     private final PrayerContextMapper prayerContextMapper;
     private final FamiliarContextMapper familiarContextMapper;
     private final PerkContextMapper perkContextMapper;
+    private final HitCapModeMapper hitCapModeMapper;
 
     public DamageRequestMapper(EquipmentContextMapper equipmentContextMapper, SkillsContextMapper skillsContextMapper,
                                BuffContextMapper buffContextMapper, TargetContextMapper targetContextMapper,
                                PotionContextMapper potionContextMapper, SpellContextMapper spellContextMapper,
                                PrayerContextMapper prayerContextMapper, FamiliarContextMapper familiarContextMapper,
-                               PerkContextMapper perkContextMapper) {
+                               PerkContextMapper perkContextMapper, HitCapModeMapper hitCapModeMapper) {
         this.equipmentContextMapper = equipmentContextMapper;
         this.skillsContextMapper = skillsContextMapper;
         this.buffContextMapper = buffContextMapper;
@@ -38,17 +40,19 @@ public final class DamageRequestMapper {
         this.prayerContextMapper = prayerContextMapper;
         this.familiarContextMapper = familiarContextMapper;
         this.perkContextMapper = perkContextMapper;
+        this.hitCapModeMapper = hitCapModeMapper;
     }
 
     public DamageRequest from(DamageCalcRequestDto request) {
         EquipmentModel equipment = equipmentContextMapper.from(request.equipment());
-        SkillsContext skills = skillsContextMapper.from(request.skills());
         BuffContext buffs = buffContextMapper.from(request.buffs());
+        SkillsContext skills = skillsContextMapper.from(request.skills(), buffs);
         List<PotionContext> potion = potionContextMapper.from(request.potions());
         SpellContext spell = spellContextMapper.from(request.spell());
         PrayerContext prayer = prayerContextMapper.from(request.selectedPrayers());
         FamiliarContext familiar = familiarContextMapper.from(request.selectedFamiliar());
-        PerkContext perks = perkContextMapper.from(request.perks());
+        PerkContext perks = perkContextMapper.from(request.perks(), buffs);
+        HitCapMode hitCapMode = hitCapModeMapper.from(request.hitCapMode());
 
         DamageRequest dr = new DamageRequest();
         dr.setEquipment(equipment);
@@ -56,6 +60,7 @@ public final class DamageRequestMapper {
         dr.setSkills(skills);
         dr.setBuffs(buffs);
         dr.setPotion(potion);
+        dr.setHitCapMode(hitCapMode);
 
         TargetContext target = targetContextMapper.from(
                 request.targetTitle(),
