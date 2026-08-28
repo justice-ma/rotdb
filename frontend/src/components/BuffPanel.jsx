@@ -65,7 +65,7 @@ const BUFF_UI_META = {
     category: BUFF_CATEGORY.ENCHANTMENTS,
     styles: [STYLE.MAGIC],
   },
-  SMASH: {
+  REND: {
     category: BUFF_CATEGORY.ABILITY_BUFFS,
     styles: [STYLE.MELEE],
   },
@@ -190,7 +190,7 @@ const BUFF_UI_META = {
     category: BUFF_CATEGORY.SPECIAL_ATTACKS,
     styles: [STYLE.MELEE],
   },
-  WENSTACKS: {
+  WENARROWPROC: {
     category: BUFF_CATEGORY.STACKS,
     styles: [STYLE.RANGED],
   },

@@ -14,7 +14,6 @@ public class MultiplicativeResolver {
         mod *= RangedMultiplicativeResolver.resolve(context);
         mod *= SlayerGearMultiplicativeResolver.resolve(context);
         mod *= UndeadGearMultiplicativeResolver.resolve(context);
-        mod *= SplashZoneResolver.resolve(context, hit);
 
         return mod;
     }

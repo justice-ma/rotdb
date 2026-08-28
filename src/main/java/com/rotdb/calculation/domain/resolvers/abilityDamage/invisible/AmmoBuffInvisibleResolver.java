@@ -1,8 +1,8 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.invisible;
 
+import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
-import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.context.TargetContext;
 import com.rotdb.shared.combat.domain.model.enums.*;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
@@ -36,7 +36,7 @@ public class AmmoBuffInvisibleResolver {
             }
         }
 
-        if (style == CombatStyles.RANGED && ammo.getEffect().contains(Effect.WENARROWS) && buff.has(BuffId.WENSTACKS) && buff.stacks(BuffId.WENSTACKS) == 10) {
+        if (style == CombatStyles.RANGED && ammo.getEffect().contains(Effect.WENARROWS) && buff.has(BuffId.WENARROWPROC)) {
             if (hit.getTier() == AbilityTier.ENHANCED || hit.getTier() == AbilityTier.ULTIMATE) {
                 return 1.3;
             }

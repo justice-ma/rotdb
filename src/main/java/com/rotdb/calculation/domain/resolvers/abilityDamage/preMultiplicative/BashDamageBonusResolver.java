@@ -3,7 +3,6 @@ package com.rotdb.calculation.domain.resolvers.abilityDamage.preMultiplicative;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
-import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.enums.EquipmentType;
 import com.rotdb.shared.combat.domain.model.enums.HitType;
@@ -18,12 +17,6 @@ public class BashDamageBonusResolver {
 
         int min = (int) ((context.getEquipment().getTotalArmour(context.getSkills()) + context.getSkills().getBoostedDefence()) * 0.2);
         int max = min;
-
-        if (context.getBuffs().has(BuffId.STEADFAST_WILL)) {
-            min += (int) (context.getEquipment().getTotalArmour(context.getSkills()) * 3.5);
-            max += (int) (context.getEquipment().getTotalArmour(context.getSkills()) * 4.5);
-        }
-
         return List.of(min, max);
     }
 

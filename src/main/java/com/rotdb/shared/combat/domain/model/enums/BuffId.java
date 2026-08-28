@@ -12,7 +12,8 @@ public enum BuffId {
     ENCHANTMENTOFMETAPHYSICS(0, 0, false, "Metaphysics"),
     SHARDOFGENESIS(0, 0, false, "Shard of Genesis"),
     DRACONICFRUIT(0, 0, false, "Draconic Fruit"),
-    SMASH(0, 0, false, "Rend"),
+    REND(0, 0, false, "Rend"),
+    REND_BLEED(0, 0, false, "Rend Bleed"),
     CHAOSROAR(0, 0, false, "Chaos Roar"),
     SUNSHINE(0, 0, false, "Sunshine"),
     DEATHSWIFTNESS(0, 0, false, "Death Swiftness"),
@@ -42,9 +43,11 @@ public enum BuffId {
     CONFLAGRATE(0, 0, false, "Conflagrate"),
     STONEOFJAS(0, 6, true, "Stone of Jas"),
     RUBYAURORA(0, 3, true, "Ruby Aurora"),
-    GRAVITATE(0, 20, true, "Gravitate"),
-    WENSTACKS(0, 10, true, "Wen Stacks"),
-    REVENGESTACKS(0, 20, true, "Revenge Stacks"),
+    GRAVITATESTACKS(0, 20, true, "Gravitate"),
+    GRAVITATEBUFF(0, 0, false, "Gravitate Buff"),
+    WENARROWPROC(0, 0, false, "Wen Arrow Proc"),
+    WENARROWSTACKS(0, 10, true, "Wen Arrow Stacks"),
+    REVENGESTACKS(0, 10, true, "Revenge Stacks"),
     RUTHELESSSTACKS(0, 5, true, "Ruthless Stacks"),
     GUARDHOUSE(0, 3, true, "Guardhouse Tier"),
     TITHESTACKS(0, 12, true, "Tithe Stacks"),
@@ -80,16 +83,16 @@ public enum BuffId {
     BOOKUPTIME(0, 100, true, "Book Uptime"),
     SLAYERHELM(0, 6, true, "Slayer Helmet"),
     DEATHSPARK(0, 5, true, "Death Spark"),
-    SOULSTACKS(0, 5, true, "Soul Stacks"),
+    SOULSTACKS(0, 3, true, "Soul Stacks"),
     NECROSIS(0, 12, true, "Necrosis"),
     RAGE(0, 25, true, "Rage Stacks"),
     VALOUR(0, 25, true, "Valour Stacks"),
     STRENGTHCAPE(0, 0, false, "Strength Cape"),
     HEIGHTENEDSENSES(0, 0, false, "Heightened Senses"),
     METEORSTRIKE(0, 0, false, "Meteor Strike"),
-    ADRENALINEPOTION(0, 0, false, "Adrenaline Potion"),
-    SUPERADRENALINEPOTION(0, 0, false, "Super Adrenaline Potion"),
-    ADRENALINERENEWAL(0, 0, false, "Adrenaline Renewal"),
+    ADRENALINEPOTION(0, 0, false, "Adrenaline Potion", BuffCooldownGroup.ADRENALINEPOTION),
+    SUPERADRENALINEPOTION(0, 0, false, "Super Adrenaline Potion", BuffCooldownGroup.ADRENALINEPOTION),
+    ADRENALINERENEWAL(0, 0, false, "Adrenaline Renewal", BuffCooldownGroup.ADRENALINEPOTION),
     VESTMENTSBLEED(0, 0, false, "Vestments Adrenaline Refund"),
     ASYLUMSURGEONSRINGPROC(0, 0, false, "Asylum Surgeon's Ring Proc"),
     RINGOFDEATHPROC(0, 0, false, "Ring of Death Proc"),
@@ -100,57 +103,41 @@ public enum BuffId {
     RELENTLESSPROC(0, 0, false, "Relentless Proc"),
     CONSERVATIONOFENERGY(0, 0, false, "Conservation Of Energy"),
     RINGOFVIGOUR(0, 0, false, "Ring of Vigour"),
-    KWUARM(0, 4, true, "Kwuarm Sticks"),
+    TSUNAMI(0, 0, false, "Tsunami"),
+    WARPRIESTOFARMADYLPROC(0, 0, false, "Warpriest of Armadyl Proc"),
+    SONICWAVE(0, 0, false, "Sonic Wave"),
+    GREATERSONICWAVE(0, 0, false, "Greater Sonic Wave"),
+    GREATERBARGE(0, 0, false, "Greater Barge"),
+    SUNFALLSLAM(0, 0, false, "Sunfall Slam"),
+    COMMANDSKELETONWARRIOR(0, 0, false, "Commands Skeleton Warrior"),
+    SOULCRUSH(0, 0, false, "Soul Crush"),
+    SOULREAVE(0, 4, true, "Soul Reave"),
+    DEATHESSENCE(0, 0, false, "Death Essence"),
+    DEATHSPORESTACKS(0, 12, true, "Deathspore Stacks"),
+    FEASTINGSPORES(0, 0, false, "Deathspore Proc"),
+    INCITEFEARSTACKS(0, 5, true, "Incite Fear Stacks"),
+    SKELETONWARRIORDURATION(0, 0, false, "Skeleton Warrior Duration"),
+    PUTRIDZOMBIEDURATION(0, 0, false, "Putrid Zombie Duration"),
+    VENGEFULGHOSTDURATION(0, 0, false, "Vengeful Ghost Duration"),
     BIK_ARROWS(0, 150, true, "Bik Arrows"),
-    STRIKING_LIGHT(0, 0, false, "Striking Light", "blessings/Striking_Light.png"),
-    TERAGARDS_AEGIS(0, 0, false, "Teragard's Aegis", "blessings/Teragard's_Aegis.png"),
-    STEADFAST_WILL(0, 0, false, "Steadfast Will", "blessings/Steadfast_Will.png"),
-    BIG_BONED(0, 0, false, "Big Boned", "blessings/Big_Boned.png"),
-    BARKSCALES(0, 0, false, "Barkscales", "blessings/Barkscales.png"),
-    SPLASH_ZONE(0, 0, false, "Splash Zone", "blessings/Splash_Zone.png"),
-    ABYSSAL_CINDERS(0, 0, false, "Abyssal Cinders", "blessings/Abyssal_Cinders.png"),
-    ADRENALINE_JUNKIE(0, 0, false, "Adrenaline Junkie", "blessings/Adrenaline_Junkie.png"),
-    AVERNIC_RAMPAGE(0, 0, false, "Avernic Rampage", "blessings/Avernic_Rampage.png"),
-    DEMONS_MARK(0, 0, false, "Demon's Mark", "blessings/Demon's_Mark.png"),
-    ETERNAL_SUSTENANCE(0, 0, false, "Eternal Sustenance", "blessings/Eternal_Sustenance.png"),
-    SACRED_FERVOR(0, 0, false, "Sacred Fervor", "blessings/Sacred_Fervor.png"),
-    ICYENIC_FAITH(0, 0, false, "Icyenic Faith", "blessings/Icyenic_Faith.png"),
-    NARAGI_EFFECT(0, 0, false, "Naragi Effect", "blessings/Naragi_Effect.png"),
-    HAVOC_BORN(0, 0, false, "Havoc Born", "blessings/Havoc_Born.png"),
-    TRUE_EQUILIBRIUM(0, 0, false, "True Equilibrium", "blessings/True_Equilibrium.png"),
-    HIGHER_POWER(0, 0, false, "Higher Power", "blessings/Higher_Power.png"),
-    UNHOLY_CRITUAL(0, 0, false, "Unholy Critual", "blessings/Unholy_Critual.png"),
-    TEARING_THORNS(0, 0, false, "Tearing Thorns", "blessings/Tearing_Thorns.png"),
-    LORD_OF_LIGHT(0, 0, false, "Lord of Light", "blessings/Lord_of_Light.png"),
-    PERFIDIOUS(0, 0, false, "Perfidious", "blessings/Perfidious.png"),
-    ENVENOMED(0, 0, false, "Envenomed", "blessings/Envenomed.png"),
-    TEMPERED_HEART(0, 0, false, "Tempered Heart", "blessings/Tempered_Heart.png"),
-    CHAOTIC_INSIGHT(0, 0, false, "Chaotic Insight", "blessings/Chaotic_Insight.png"),
-    POWER_ARCHIVE(0, 0, false, "Power Archive", "blessings/Power_Archive.png"),
-    GENESIS_ESSENCE(0, 0, false, "Genesis Essence", "blessings/Genesis_Essence.png"),
-    INFERNAL_FIRE(0, 0, false, "Infernal Fire", "blessings/Infernal_Fire.png");
+    KWUARM(0, 4, true, "Kwuarm Incense");
 
     private final int minimumStacks, maximumStacks;
     private final boolean stackable;
     private final String label;
-    private final String iconPath;
+    private final BuffCooldownGroup cooldownGroup;
 
     BuffId(int minimumStacks, int maximumStacks, boolean stackable, String label) {
+        this(minimumStacks, maximumStacks, stackable, label, null);
+    }
+
+    BuffId(int minimumStacks, int maximumStacks, boolean stackable, String label, BuffCooldownGroup cooldownGroup) {
         this.minimumStacks = minimumStacks;
         this.maximumStacks = maximumStacks;
         this.stackable = stackable;
         this.label = label;
-        this.iconPath = null;
+        this.cooldownGroup = cooldownGroup;
     }
-
-    BuffId(int minimumStacks, int maximumStacks, boolean stackable, String label, String iconPath) {
-        this.minimumStacks = minimumStacks;
-        this.maximumStacks = maximumStacks;
-        this.stackable = stackable;
-        this.label = label;
-        this.iconPath = iconPath;
-    }
-
 
     public int getMinimumStacks() {
         return minimumStacks;
@@ -168,7 +155,11 @@ public enum BuffId {
         return label;
     }
 
-    public String getIconPath() {
-        return iconPath;
+    public BuffCooldownGroup getCooldownGroup() {
+        return cooldownGroup;
+    }
+
+    public boolean hasCooldownGroup() {
+        return cooldownGroup != null;
     }
 }

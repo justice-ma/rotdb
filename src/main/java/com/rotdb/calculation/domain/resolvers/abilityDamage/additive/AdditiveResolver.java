@@ -7,8 +7,6 @@ public class AdditiveResolver {
         return  1 +
                 EquipmentAdditiveResolver.resolve(context) +
                 GlobalAdditiveResolver.resolve(context) +
-                MeleeAdditiveResolver.resolve(context, hitIndex) +
-                HavocBornResolver.resolve(context) +
-                LightOfSaradominResolver.resolve(context);
+                MeleeAdditiveResolver.resolve(context, hitIndex);
     }
 }

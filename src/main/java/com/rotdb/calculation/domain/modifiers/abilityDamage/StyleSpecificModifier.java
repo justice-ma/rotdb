@@ -1,5 +1,6 @@
 package com.rotdb.calculation.domain.modifiers.abilityDamage;
 
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.resolvers.Debug;
@@ -10,7 +11,9 @@ import com.rotdb.shared.combat.domain.model.enums.HitType;
 
 
 public class StyleSpecificModifier implements Modifier {
-    public void apply(CalculationContext context) {
+    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
+        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
+
         int hits = context.getAbility().getHits().size();
         Debug.stageHeader(context, "Style Specific Modifier");
 

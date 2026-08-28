@@ -26,7 +26,7 @@ public class MeleeAdditiveResolver {
                 mod += 0.12;
             }
 
-            if (gloves.getEffect().contains(Effect.GLOVESOFPASSAGE) && buff.has(BuffId.SMASH)) {
+            if (gloves.getEffect().contains(Effect.GLOVESOFPASSAGE) && buff.has(BuffId.REND)) {
                 if (context.getAbility().isChannel()) {
                     if (hitIndex == 0) {
                         mod += buff.has(BuffId.ENCHANTMENTOFAGONY) ? 0.16 : 0.1;
@@ -35,8 +35,8 @@ public class MeleeAdditiveResolver {
                     mod += buff.has(BuffId.ENCHANTMENTOFAGONY) ? 0.16 : 0.1;
                 }
             }
-            if (buff.has(BuffId.GRAVITATE) && buff.stacks(BuffId.GRAVITATE) > 0) {
-                mod += Math.min(0.2, buff.stacks(BuffId.GRAVITATE) / 100.0);
+            if (buff.has(BuffId.GRAVITATESTACKS) && buff.stacks(BuffId.GRAVITATESTACKS) > 0) {
+                mod += Math.min(0.2, buff.stacks(BuffId.GRAVITATESTACKS) / 100.0);
             }
 
             if (neck.getEffect().contains(Effect.AMHEJ)) {

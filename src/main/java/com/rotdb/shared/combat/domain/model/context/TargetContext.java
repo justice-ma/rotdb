@@ -1,10 +1,12 @@
 package com.rotdb.shared.combat.domain.model.context;
 
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.shared.combat.domain.model.enums.TargetTags;
 import com.rotdb.shared.combat.domain.model.enums.WeaponStyle;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 public class TargetContext {
     private int maxHp, currentHp, startingTask, currentTask, size, defence, armour, affinity;
@@ -12,6 +14,7 @@ public class TargetContext {
     private CombatStyles weakness;
     private WeaponStyle weaponWeakness;
     private EnumSet<TargetTags> tags;
+    private Set<BuffId> debuffs = EnumSet.noneOf(BuffId.class);
 
     public boolean has(TargetTags tag) {
         return tags.contains(tag);
@@ -116,6 +119,13 @@ public class TargetContext {
     public void setTags(EnumSet<TargetTags> tags) {
         this.tags = tags;
     }
-}
 
+    public Set<BuffId> getDebuffs() {
+        return debuffs;
+    }
+
+    public void setDebuffs(Set<BuffId> debuffs) {
+        this.debuffs = debuffs;
+    }
+}
 

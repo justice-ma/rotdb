@@ -1,16 +1,18 @@
 package com.rotdb.calculation.domain.modifiers.abilityDamage;
 
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.resolvers.Debug;
 import com.rotdb.calculation.domain.resolvers.abilityDamage.npc.*;
-import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.HitType;
 
 import java.util.List;
 
 public class NpcModifier implements Modifier {
-    public void apply(CalculationContext context) {
+    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
+        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
 
         int hits = context.getAbility().getHits().size();
         Debug.stageHeader(context, "On NPC Modifier");
@@ -21,7 +23,6 @@ public class NpcModifier implements Modifier {
 
             if (hit.getType() != HitType.SPLITSOUL && hit.getType() != HitType.POISON) {
                 HauntedBonus hauntedBonus = HauntedBonusResolver.resolve(context, hit);
-                HauntedBonus bigBonedBonus = BigBonedBonusResolver.resolve(context, hit);
                 mod *= BuffMultiplierResolver.resolve(context, hit);
                 mod *= PerkMultiplierResolver.resolve(context);
                 mod *= ScrimshawMultiplierResolver.resolve(context);
@@ -31,13 +32,12 @@ public class NpcModifier implements Modifier {
                 hit.calculateDamages(mod);
 
                 if (!hauntedBonus.isZero()) applyHauntedBonus(hit, hauntedBonus);
-                if (!bigBonedBonus.isZero()) applyHauntedBonus(hit, bigBonedBonus);
 
                 double postStoredMod = 1;
                 postStoredMod *= PostHauntedMultiplierResolver.resolve(context);
                 postStoredMod *= AbilityMultiplierResolver.resolve(context, hit);
 
-                int flatAdd = FlatAddResolver.resolve(context);
+                int flatAdd = FlatAddResolver.resolve(context, hit);
                 if (flatAdd != 0) applyFlatAdd(hit, flatAdd);
 
                 List<Integer> minMax = FlatRangeAddResolver.resolve(context, hit);

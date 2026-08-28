@@ -1,6 +1,5 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike;
 
-import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.enums.*;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
@@ -80,10 +79,6 @@ public class GlobalCritResolver {
 
         if (ammo.getEffect().contains(Effect.DEATHSPOREARROWS) && mainhand.getClazz() == CombatStyles.RANGED) {
             criticalStrikeChance += 0.03;
-        }
-
-        if (pocket.getEffect().contains(Effect.TOME_OF_THE_ICYENE) && buff.has(BuffId.ICYENIC_FAITH)) {
-            criticalStrikeChance += equipment.getTotalPrayer() * 0.002;
         }
 
         if (perk.has(Perks.BITING)) {

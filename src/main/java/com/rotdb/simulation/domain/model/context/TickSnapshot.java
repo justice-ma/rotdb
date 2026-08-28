@@ -1,82 +1,155 @@
 package com.rotdb.simulation.domain.model.context;
 
-import com.rotdb.shared.ability.AbilityId;
-import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
-import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.simulation.domain.model.buff.BuffCooldownKey;
+import com.rotdb.simulation.domain.model.cooldown.AbilityCooldownKey;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class TickSnapshot {
-    private ArrayList<AbilityId> releasedAbility;
-    private AbilityId stalledAbility;
-    private AdrenalineContext adrenaline;
-    private ArrayList<AbilityHitsContext> hits;
-    private EquipmentModel equipment;
-    private AbilityCooldownContext abilityCooldowns;
-    private BuffRotationContext buffs;
-    private boolean processed;
+    private int tick;
+    private List<AbilityPlacement> castAbilities;
+    private List<AbilityPlacement> releasedAbilities;
+    private List<BuffPlacement> placedBuffs;
+    private RotationCombatState startingCombatState;
+    private RotationCombatState endingCombatState;
+    private Map<AbilityCooldownKey, Integer> startingAbilityCooldownMap;
+    private Map<AbilityCooldownKey, Integer> endingAbilityCooldownMap;
+    private Map<BuffCooldownKey, Integer> startingBuffCooldownMap;
+    private Map<BuffCooldownKey, Integer> endingBuffCooldownMap;
+    private Map<BuffId, ActiveBuffState> startingActiveBuffDurationMap;
+    private Map<BuffId, ActiveBuffState> endingActiveBuffDurationMap;
+    private double startingAdrenaline;
+    private double endingAdrenaline;
+    private List<TimelineHit> landedHits;
+    private List<String> warnings; // I think ideally in the future there is a determinant amount of things that can go wrong, this should likely be an enum of warnings.
 
-    public AbilityId getStalledAbility() {
-        return stalledAbility;
+    public int getTick() {
+        return tick;
     }
 
-    public void setStalledAbility(AbilityId stalledAbility) {
-        this.stalledAbility = stalledAbility;
+    public void setTick(int tick) {
+        this.tick = tick;
     }
 
-    public AdrenalineContext getAdrenaline() {
-        return adrenaline;
+    public List<AbilityPlacement> getCastAbilities() {
+        return castAbilities;
     }
 
-    public void setAdrenaline(AdrenalineContext adrenaline) {
-        this.adrenaline = adrenaline;
+    public void setCastAbilities(List<AbilityPlacement> castAbilities) {
+        this.castAbilities = castAbilities;
     }
 
-    public EquipmentModel getEquipment() {
-        return equipment;
+    public List<AbilityPlacement> getReleasedAbilities() {
+        return releasedAbilities;
     }
 
-    public void setEquipment(EquipmentModel equipment) {
-        this.equipment = equipment;
+    public void setReleasedAbilities(List<AbilityPlacement> releasedAbilities) {
+        this.releasedAbilities = releasedAbilities;
     }
 
-    public AbilityCooldownContext getAbilityCooldowns() {
-        return abilityCooldowns;
+    public List<BuffPlacement> getPlacedBuffs() {
+        return placedBuffs;
     }
 
-    public void setAbilityCooldowns(AbilityCooldownContext abilityCooldowns) {
-        this.abilityCooldowns = abilityCooldowns;
+    public void setPlacedBuffs(List<BuffPlacement> placedBuffs) {
+        this.placedBuffs = placedBuffs;
     }
 
-    public BuffRotationContext getBuffs() {
-        return buffs;
+    public RotationCombatState getStartingCombatState() {
+        return startingCombatState;
     }
 
-    public void setBuffs(BuffRotationContext buffs) {
-        this.buffs = buffs;
+    public void setStartingCombatState(RotationCombatState startingCombatState) {
+        this.startingCombatState = startingCombatState;
     }
 
-    public boolean isProcessed() {
-        return processed;
+    public RotationCombatState getEndingCombatState() {
+        return endingCombatState;
     }
 
-    public void setProcessed(boolean processed) {
-        this.processed = processed;
+    public void setEndingCombatState(RotationCombatState endingCombatState) {
+        this.endingCombatState = endingCombatState;
     }
 
-    public ArrayList<AbilityId> getReleasedAbility() {
-        return releasedAbility;
+    public Map<AbilityCooldownKey, Integer> getStartingAbilityCooldownMap() {
+        return startingAbilityCooldownMap;
     }
 
-    public void setReleasedAbility(ArrayList<AbilityId> releasedAbility) {
-        this.releasedAbility = releasedAbility;
+    public void setStartingAbilityCooldownMap(Map<AbilityCooldownKey, Integer> startingAbilityCooldownMap) {
+        this.startingAbilityCooldownMap = startingAbilityCooldownMap;
     }
 
-    public ArrayList<AbilityHitsContext> getHits() {
-        return hits;
+    public Map<AbilityCooldownKey, Integer> getEndingAbilityCooldownMap() {
+        return endingAbilityCooldownMap;
     }
 
-    public void setHits(ArrayList<AbilityHitsContext> hits) {
-        this.hits = hits;
+    public void setEndingAbilityCooldownMap(Map<AbilityCooldownKey, Integer> endingAbilityCooldownMap) {
+        this.endingAbilityCooldownMap = endingAbilityCooldownMap;
+    }
+
+    public Map<BuffCooldownKey, Integer> getStartingBuffCooldownMap() {
+        return startingBuffCooldownMap;
+    }
+
+    public void setStartingBuffCooldownMap(Map<BuffCooldownKey, Integer> startingBuffCooldownMap) {
+        this.startingBuffCooldownMap = startingBuffCooldownMap;
+    }
+
+    public Map<BuffCooldownKey, Integer> getEndingBuffCooldownMap() {
+        return endingBuffCooldownMap;
+    }
+
+    public void setEndingBuffCooldownMap(Map<BuffCooldownKey, Integer> endingBuffCooldownMap) {
+        this.endingBuffCooldownMap = endingBuffCooldownMap;
+    }
+
+    public Map<BuffId, ActiveBuffState> getStartingActiveBuffDurationMap() {
+        return startingActiveBuffDurationMap;
+    }
+
+    public void setStartingActiveBuffDurationMap(Map<BuffId, ActiveBuffState> startingActiveBuffDurationMap) {
+        this.startingActiveBuffDurationMap = startingActiveBuffDurationMap;
+    }
+
+    public Map<BuffId, ActiveBuffState> getEndingActiveBuffDurationMap() {
+        return endingActiveBuffDurationMap;
+    }
+
+    public void setEndingActiveBuffDurationMap(Map<BuffId, ActiveBuffState> endingActiveBuffDurationMap) {
+        this.endingActiveBuffDurationMap = endingActiveBuffDurationMap;
+    }
+
+    public double getStartingAdrenaline() {
+        return startingAdrenaline;
+    }
+
+    public void setStartingAdrenaline(double startingAdrenaline) {
+        this.startingAdrenaline = startingAdrenaline;
+    }
+
+    public double getEndingAdrenaline() {
+        return endingAdrenaline;
+    }
+
+    public void setEndingAdrenaline(double endingAdrenaline) {
+        this.endingAdrenaline = endingAdrenaline;
+    }
+
+    public List<TimelineHit> getLandedHits() {
+        return landedHits;
+    }
+
+    public void setLandedHits(List<TimelineHit> landedHits) {
+        this.landedHits = landedHits;
+    }
+
+    public List<String> getWarnings() {
+        return warnings;
+    }
+
+    public void setWarnings(List<String> warnings) {
+        this.warnings = warnings;
     }
 }

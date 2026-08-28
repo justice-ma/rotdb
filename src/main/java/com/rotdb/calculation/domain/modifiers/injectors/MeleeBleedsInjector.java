@@ -1,21 +1,24 @@
 package com.rotdb.calculation.domain.modifiers.injectors;
 
-import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.calculation.domain.modifiers.Modifier;
+import com.rotdb.shared.ability.AbilityId;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
-import com.rotdb.calculation.domain.modifiers.Modifier;
-import com.rotdb.shared.ability.AbilityId;
 
 import java.util.List;
 
 import static com.rotdb.shared.ability.AbilityId.*;
 
 public class MeleeBleedsInjector implements Modifier {
-    public void apply(CalculationContext context) {
+    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
+        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
+
         if (context.getEquipment().getMainhand().getEffect().contains(Effect.MASTERWORKSPEAROFANNIHILATION)
-            && (context.getAbility().getId() == DISMEMBER ||
+                && (context.getAbility().getId() == DISMEMBER ||
                 context.getAbility().getId() == SLAUGHTER ||
                 context.getAbility().getId() == MASSACRE)) {
             double min = context.getAbility().getHits().get(1).getMin();

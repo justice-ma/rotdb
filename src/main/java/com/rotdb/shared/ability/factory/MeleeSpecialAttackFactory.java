@@ -1,15 +1,20 @@
 package com.rotdb.shared.ability.factory;
 
+import com.rotdb.shared.ability.model.AbilityCooldownTiming;
+import com.rotdb.shared.ability.model.GeneratedBuffEffect;
+import com.rotdb.shared.ability.model.GeneratedBuffTiming;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 
 import java.util.List;
 
 import static com.rotdb.shared.ability.AbilityId.*;
-import static com.rotdb.shared.ability.Handedness.*;
-import static com.rotdb.shared.combat.domain.model.enums.AbilityTier.*;
-import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.*;
-import static com.rotdb.shared.combat.domain.model.enums.Targetting.*;
+import static com.rotdb.shared.ability.Handedness.BOTH;
+import static com.rotdb.shared.combat.domain.model.enums.AbilityTier.ENHANCED;
+import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.MELEE;
+import static com.rotdb.shared.combat.domain.model.enums.Targetting.MULTI_TARGET;
+import static com.rotdb.shared.combat.domain.model.enums.Targetting.SINGLE_TARGET;
 
 public class MeleeSpecialAttackFactory {
     public static AbilityContext energyDrain() {
@@ -67,6 +72,11 @@ public class MeleeSpecialAttackFactory {
     }
 
     public static AbilityContext clobber() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.CLOBBER,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(0.9, 1.1, false, ENHANCED, 2)),
                 "Clobber",
@@ -76,7 +86,8 @@ public class MeleeSpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MELEE,
-                CLOBBER);
+                CLOBBER,
+                generatedBuffEffects);
     }
 
     public static AbilityContext quickSmash() {
@@ -146,6 +157,11 @@ public class MeleeSpecialAttackFactory {
     }
 
     public static AbilityContext sunder() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.SUNDER,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(1.25, 1.45, false, ENHANCED, 2)),
                 "Sunder",
@@ -155,7 +171,8 @@ public class MeleeSpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MELEE,
-                SUNDER);
+                SUNDER,
+                generatedBuffEffects);
     }
 
     public static AbilityContext draconicPuncture() {
@@ -173,6 +190,11 @@ public class MeleeSpecialAttackFactory {
     }
 
     public static AbilityContext backstab() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.BACKSTAB,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(1.5, 1.7, false, ENHANCED, 2)),
                 "Backstab",
@@ -182,7 +204,8 @@ public class MeleeSpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MELEE,
-                BACKSTAB);
+                BACKSTAB,
+                generatedBuffEffects);
     }
 
     public static AbilityContext aimedStrike() {
@@ -277,6 +300,11 @@ public class MeleeSpecialAttackFactory {
     }
 
     public static AbilityContext draconicSlash() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.DRAGONSCIMITAR,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(2.4, 2.8, false, ENHANCED, 2)),
                 "Draconic Slash",
@@ -286,7 +314,8 @@ public class MeleeSpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MELEE,
-                DRACONICSLASH);
+                DRACONICSLASH,
+                generatedBuffEffects);
     }
 
     public static AbilityContext feint() {
@@ -303,6 +332,11 @@ public class MeleeSpecialAttackFactory {
     }
 
     public static AbilityContext igneousShowdown() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.FLAMEBOUNDRIVAL,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(2.6, 3, false, ENHANCED, 2)),
                 "Igneous Showdown",
@@ -312,7 +346,10 @@ public class MeleeSpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MELEE,
-                IGNEOUSSHOWDOWN);
+                IGNEOUSSHOWDOWN,
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_RELEASE,
+                true);
     }
 
     public static AbilityContext igneousShowdownRecast() {
@@ -328,7 +365,8 @@ public class MeleeSpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MELEE,
-                IGNEOUSSHOWDOWNRECAST);
+                IGNEOUSSHOWDOWNRECAST,
+                AbilityCooldownTiming.ON_RELEASE);
     }
 
     public static AbilityContext draconicCleave() {
@@ -359,6 +397,11 @@ public class MeleeSpecialAttackFactory {
     }
 
     public static AbilityContext sunfallSlam() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.SUNFALLSLAM,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(2.9, 3, false, ENHANCED, 3)),
                 "Sunfall Slam",
@@ -368,7 +411,10 @@ public class MeleeSpecialAttackFactory {
                 BOTH,
                 MULTI_TARGET,
                 MELEE,
-                SUNFALLSLAM);
+                SUNFALLSLAM,
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_RELEASE,
+                true);
     }
 
     public static AbilityContext powerstab() {
@@ -398,6 +444,11 @@ public class MeleeSpecialAttackFactory {
     }
 
     public static AbilityContext blackhole() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.ZGS,
+                GeneratedBuffTiming.ON_CAST
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(11,
                 List.of(new AbilityHitsContext(0.35, 0.45, true, ENHANCED, 3),
                         new AbilityHitsContext(0.35, 0.45, true, ENHANCED, 6),
@@ -417,7 +468,10 @@ public class MeleeSpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MELEE,
-                BLACKHOLE);
+                BLACKHOLE,
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_CAST,
+                false);
     }
 
     public static AbilityContext vineCall() {
@@ -440,7 +494,8 @@ public class MeleeSpecialAttackFactory {
                 BOTH,
                 MULTI_TARGET,
                 MELEE,
-                VINECALL);
+                VINECALL,
+                AbilityCooldownTiming.ON_RELEASE);
     }
 
     public static AbilityContext icyTempest() {
@@ -454,7 +509,8 @@ public class MeleeSpecialAttackFactory {
                 BOTH,
                 MULTI_TARGET,
                 MELEE,
-                ICYTEMPEST);
+                ICYTEMPEST,
+                AbilityCooldownTiming.ON_RELEASE);
     }
 
     public static AbilityContext sliceAndDice() {
@@ -465,8 +521,8 @@ public class MeleeSpecialAttackFactory {
                         new AbilityHitsContext(0.45, 0.55, false, ENHANCED, 4)),
                 "Slice & Dice",
                 -50,
-                 0,
-                 false,
+                0,
+                false,
                 BOTH,
                 SINGLE_TARGET,
                 MELEE,

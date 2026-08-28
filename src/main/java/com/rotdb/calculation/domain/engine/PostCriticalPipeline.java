@@ -1,13 +1,13 @@
 package com.rotdb.calculation.domain.engine;
-import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.modifiers.abilityDamage.*;
-import com.rotdb.calculation.domain.modifiers.baseDamage.BaseAbilityDamageModifier;
-import com.rotdb.calculation.domain.modifiers.hitChance.HitChanceModifier;
-import com.rotdb.calculation.domain.modifiers.injectors.*;
-import com.rotdb.calculation.domain.modifiers.stats.DbaStatBoostModifier;
-import com.rotdb.calculation.domain.modifiers.stats.NaragiEffectModifier;
-import com.rotdb.calculation.domain.modifiers.stats.StatBoostModifier;
+
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
+import com.rotdb.calculation.domain.modifiers.abilityDamage.*;
+import com.rotdb.calculation.domain.modifiers.hitChance.HitChanceModifier;
+import com.rotdb.calculation.domain.modifiers.injectors.BloatInjector;
+import com.rotdb.calculation.domain.modifiers.injectors.InstabilityInjector;
+import com.rotdb.calculation.domain.modifiers.injectors.PerfectEquilibriumInjector;
+import com.rotdb.calculation.domain.modifiers.injectors.SplitSoulInjector;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,11 +19,9 @@ public final class PostCriticalPipeline {
     public PostCriticalPipeline() {
         steps = List.of(
                 new CriticalStrikeModifier(),
-                new InfernoOfZamorakInjector(),
                 new InstabilityInjector(),
                 new AbilityRangeModifier(),
                 new BashDamageModifier(),
-                new BlessingFlatDamageModifier(),
                 new HitChanceModifier(),
                 new InvisibleAbilityModifier(),
                 new AbilitySpecificModifier(),
@@ -32,6 +30,7 @@ public final class PostCriticalPipeline {
                 new AdditiveModifier(),
                 new MultiplicativeModifier(),
                 new CoreModifier(),
+                new FlatHitDamageModifier(),
                 new PerfectEquilibriumInjector(),
                 new CritDamageModifier(),
                 new CrystalRainArrowsModifier(),
@@ -44,7 +43,7 @@ public final class PostCriticalPipeline {
         );
     }
 
-    public void run(CalculationContext context) {
+    public void run(AggregatedCalculationContext context) {
         for (Modifier step : steps) step.apply(context);
     }
 }

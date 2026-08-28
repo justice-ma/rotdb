@@ -1,12 +1,15 @@
 package com.rotdb.calculation.domain.modifiers.abilityDamage;
 
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.shared.combat.domain.model.enums.HitCapMode;
 
 public class HitCapModifier implements Modifier {
-    public void apply(CalculationContext context) {
+    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
+        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
+
         int hits = context.getAbility().getHits().size();
         int hitCap = context.getHitCapMode() == HitCapMode.CAP_30000 ? 30_000 :
                 context.getHitCapMode() == HitCapMode.CAP_32500 ? 32_500 : 2_147_483_647;

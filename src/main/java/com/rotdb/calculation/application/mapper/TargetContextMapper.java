@@ -1,10 +1,10 @@
 package com.rotdb.calculation.application.mapper;
 
+import com.rotdb.calculation.persistence.repository.TargetRepository;
 import com.rotdb.shared.combat.domain.model.context.TargetContext;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.shared.combat.domain.model.enums.TargetTags;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
-import com.rotdb.calculation.persistence.repository.TargetRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.EnumSet;
@@ -42,8 +42,8 @@ public class TargetContextMapper {
         var entity = entityOpt.get();
 
         target.setName(entity.getName());
-        target.setArmour(entity.getArmour1());
-        target.setDefence(entity.getDefence1());
+        target.setArmour(entity.getArmour1() == null ? 0 : entity.getArmour1());
+        target.setDefence(entity.getDefence1() == null ? 1 : entity.getDefence1());
 
         int resolvedSize = targetSize != null ? targetSize : (entity.getSize() != null ? entity.getSize() : 5);
 

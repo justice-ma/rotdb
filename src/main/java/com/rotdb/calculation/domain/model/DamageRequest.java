@@ -21,9 +21,10 @@ public class DamageRequest {
     private PrayerContext selectedPrayers;
     private SpellContext spell;
     private HitCapMode hitCapMode = HitCapMode.CAP_30000;
-    
-    public DamageRequest() {};
 
+    public DamageRequest() {
+    }
+    
     public DamageRequest(EquipmentModel equipment, AbilityId abilityId, BuffContext buffs, TargetContext target,
                          SkillsContext skills, PerkContext perks,
                          FamiliarContext familiar, PrayerContext selectedPrayers, SpellContext spell, HitCapMode hitCapMode) {

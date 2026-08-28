@@ -1,5 +1,6 @@
 package com.rotdb.calculation.domain.modifiers.abilityDamage;
 
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.resolvers.Debug;
@@ -10,7 +11,8 @@ import java.util.List;
 
 public class BashDamageModifier implements Modifier {
     @Override
-    public void apply(CalculationContext context) {
+    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
+        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
         Debug.stageHeader(context, "Bash Damage Modifier");
         int hits = context.getAbility().getHits().size();
 

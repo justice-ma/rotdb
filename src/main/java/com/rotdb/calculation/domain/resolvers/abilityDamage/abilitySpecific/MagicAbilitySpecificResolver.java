@@ -1,9 +1,9 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.abilitySpecific;
 
+import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
-import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
@@ -42,7 +42,7 @@ public class MagicAbilitySpecificResolver {
             }
 
             if (ability.getId() == AbilityId.DRAGONBREATH && buff.has(BuffId.COMBUSTED)) {
-               mod *= 1.25;
+                mod *= 1.25;
             }
         }
         return mod;

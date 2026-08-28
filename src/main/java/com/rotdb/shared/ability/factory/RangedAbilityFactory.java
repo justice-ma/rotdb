@@ -1,15 +1,20 @@
 package com.rotdb.shared.ability.factory;
 
+import com.rotdb.shared.ability.model.GeneratedBuffEffect;
+import com.rotdb.shared.ability.model.GeneratedBuffTiming;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.DamageCalculationTiming;
 
 import java.util.List;
 
 import static com.rotdb.shared.ability.AbilityId.*;
-import static com.rotdb.shared.ability.Handedness.*;
+import static com.rotdb.shared.ability.Handedness.BOTH;
 import static com.rotdb.shared.combat.domain.model.enums.AbilityTier.*;
-import static com.rotdb.shared.combat.domain.model.enums.Targetting.*;
+import static com.rotdb.shared.combat.domain.model.enums.Targetting.MULTI_TARGET;
+import static com.rotdb.shared.combat.domain.model.enums.Targetting.SINGLE_TARGET;
 
 public class RangedAbilityFactory {
     public static AbilityContext ranged() {
@@ -44,12 +49,13 @@ public class RangedAbilityFactory {
                 List.of(new AbilityHitsContext(3, 3.6, false, ENHANCED, 3)),
                 "Snipe",
                 0,
-                100,
+                103,
                 true,
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.RANGED,
-                SNIPE);
+                SNIPE,
+                DamageCalculationTiming.ON_HIT);
     }
 
     public static AbilityContext piercingShot() {
@@ -129,6 +135,11 @@ public class RangedAbilityFactory {
     }
 
     public static AbilityContext galeshot() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.GALES,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(0.9, 1.1, false, BASIC, 2)),
                 "Galeshot",
@@ -138,7 +149,8 @@ public class RangedAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.RANGED,
-                GALESHOT);
+                GALESHOT,
+                generatedBuffEffects);
     }
 
     public static AbilityContext rapidFire() {
@@ -158,7 +170,8 @@ public class RangedAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.RANGED,
-                RAPIDFIRE);
+                RAPIDFIRE,
+                DamageCalculationTiming.ON_HIT);
     }
 
     public static AbilityContext ricochet() {

@@ -8,6 +8,7 @@ public class DamageResult {
     private final List<HitResult> hit;
     private final DerivedStatsResult derivedStats;
     private final EffectiveStatsResult effectiveStats;
+
     public DamageResult(int totalMinDamage, int totalMaxDamage, int totalAvgDamage, int totalMinCrit, int totalMaxCrit,
                         int totalAvgCrit, int totalMinNonCrit, int totalMaxNonCrit, int totalAvgNonCrit, int minCoeff,
                         int maxCoeff, List<HitResult> hit, DerivedStatsResult derivedStats, EffectiveStatsResult effectiveStats) {

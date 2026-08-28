@@ -1,7 +1,7 @@
 package com.rotdb.calculation.application.service;
 
-import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.calculation.api.dto.AbilityDto;
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,7 @@ public class AbilityService {
         List<AbilityDto> out = new ArrayList<>();
 
         for (AbilityId a : AbilityId.values()) {
-            if (a.getStyle() == style) {
+            if (a.getStyle() == style && !a.isInternal()) {
                 out.add(new AbilityDto(a, a.getName(), a.getTier(), a.getIconPath(), a.isCommon()));
             }
         }

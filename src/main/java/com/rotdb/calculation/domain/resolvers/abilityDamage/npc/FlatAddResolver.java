@@ -1,6 +1,7 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.npc;
 
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.*;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
@@ -9,7 +10,7 @@ import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.MAGIC;
 
 public class FlatAddResolver {
-    public static int resolve(CalculationContext context) {
+    public static int resolve(CalculationContext context, AbilityHitsContext hit) {
         EquipmentSlot mainhand = context.getEquipment().getMainhand();
         EquipmentSlot offhand = context.getEquipment().getOffhand();
         CombatStyles style = context.getEquipment().getCombatStyle();
@@ -20,8 +21,9 @@ public class FlatAddResolver {
         if (style == MAGIC) {
             int corr = buff.has(BuffId.ESSENCECORRUPTIONSTACKS) ? buff.stacks(BuffId.ESSENCECORRUPTIONSTACKS) : 0;
             int magic = skills.getBoostedMagic();
-            if (offhand.getEffect().contains(Effect.SONGOFDESTRUCTION) && mainhand.getEffect().contains(Effect.SONGOFDESTRUCTION)
-                && buff.has(BuffId.ESSENCECORRUPTIONSTACKS)) {
+            if ((offhand.getEffect().contains(Effect.SONGOFDESTRUCTION) || mainhand.getEffect().contains(Effect.SONGOFDESTRUCTION))
+                && buff.has(BuffId.ESSENCECORRUPTIONSTACKS) && buff.stacks(BuffId.ESSENCECORRUPTIONSTACKS) > 10 && hit.isDot()
+                    && context.getAbility().getCombatStyle() == MAGIC) {
                 add += corr * 3 + magic;
             }
         }

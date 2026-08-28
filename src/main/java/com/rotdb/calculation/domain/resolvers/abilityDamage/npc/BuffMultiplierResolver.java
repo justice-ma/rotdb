@@ -1,7 +1,7 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.npc;
 
-import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
@@ -14,7 +14,7 @@ public class BuffMultiplierResolver {
         BuffContext buff = context.getBuffs();
         EquipmentSlot gloves = context.getEquipment().getGloves();
         double mod = 1;
-        if (buff.has(BuffId.SMASH) && gloves.getEffect().contains(Effect.GLOVESOFPASSAGE) && hit.isDot()) {
+        if (buff.has(BuffId.REND_BLEED) && gloves.getEffect().contains(Effect.GLOVESOFPASSAGE) && hit.isDot()) {
             if (buff.has(BuffId.ENCHANTMENTOFAGONY)) {
                 mod *= 1.25;
             } else {

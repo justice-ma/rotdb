@@ -5,13 +5,14 @@ import com.rotdb.shared.combat.domain.model.enums.HitType;
 
 public class AbilityHitsContext {
     private int parentIndex, critMin, critMax, critDamage, nonCritMin, nonCritMax, nonCritDamage, currentDamage,
-            currentMin, currentMax, bolgMin, bolgMax, bolgDamage, hitTiming;
+            currentMin, currentMax, bolgMin, bolgMax, bolgDamage, hitTiming, hitIndex = -1;
     private double min, max, critChanceModifier, critDamageModifier, minCritDamage, maxCritDamage, averageCritDamage, expectedOccurences;
     private boolean dot, needsRangeRecalc, rangeCalculated, forcedCrit;
     private AbilityTier tier;
     private HitType type;
 
-    public AbilityHitsContext() {}
+    public AbilityHitsContext() {
+    }
 
     public AbilityHitsContext(double min, double max, boolean dot, AbilityTier tier, int hitTiming) {
         this.min = min;
@@ -316,5 +317,13 @@ public class AbilityHitsContext {
 
     public void setExpectedOccurences(double expectedOccurences) {
         this.expectedOccurences = expectedOccurences;
+    }
+
+    public int getHitIndex() {
+        return hitIndex;
+    }
+
+    public void setHitIndex(int hitIndex) {
+        this.hitIndex = hitIndex;
     }
 }

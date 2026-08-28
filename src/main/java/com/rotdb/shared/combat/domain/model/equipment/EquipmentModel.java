@@ -1,9 +1,7 @@
 package com.rotdb.shared.combat.domain.model.equipment;
 
-import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
-import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
 import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 
@@ -16,9 +14,10 @@ public class EquipmentModel {
     private double flatArmourBonus, flatPrayerBonus;
     private int abilityDamage;
     private int tuskaPieces, sliskePieces, tectonicPieces, eliteTectonicPieces, dracolichPieces,
-    eliteDracolichPieces, tumekensPieces;
+            eliteDracolichPieces, tumekensPieces;
 
-    public EquipmentModel() {}
+    public EquipmentModel() {
+    }
 
     public void fillMissingWithEmpty() {
         if (mainhand == null) setMainhand(EquipmentSlot.emptySlot());
@@ -140,21 +139,28 @@ public class EquipmentModel {
         return pieces;
     }
 
+    public int getTotalTumekensPieces() {
+        int pieces = 0;
+
+        pieces += getHead().getEffect().contains(Effect.TUMEKENS) ? 1 : 0;
+        pieces += getBody().getEffect().contains(Effect.TUMEKENS) ? 1 : 0;
+        pieces += getLegs().getEffect().contains(Effect.TUMEKENS) ? 1 : 0;
+        pieces += getGloves().getEffect().contains(Effect.TUMEKENS) ? 1 : 0;
+        pieces += getBoots().getEffect().contains(Effect.TUMEKENS) ? 1 : 0;
+
+        return pieces;
+    }
+
     public int getTotalEliteDracolichPieces(BuffContext buffs) {
         return countSetPieces(Effect.ELITEDRACOLICH, buffs, getHead(), getBody(), getLegs(), getGloves(), getBoots());
     }
 
-    public int getSetPieceValue(BuffContext buffs) {
-        return buffs != null && buffs.has(BuffId.CHAOTIC_INSIGHT) ? 3 : 1;
-    }
-
     public int countSetPieces(Effect effect, BuffContext buffs, EquipmentSlot... slots) {
         int pieces = 0;
-        int pieceValue = getSetPieceValue(buffs);
 
         for (EquipmentSlot slot : slots) {
             if (slot.getEffect().contains(effect)) {
-                pieces += pieceValue;
+                pieces++;
             }
         }
 
@@ -175,7 +181,8 @@ public class EquipmentModel {
                 getQuiver(),
                 getPocket()));
         double armour = getFlatArmourBonus();
-        armour += (0.0008 * Math.pow(skillsContext.getBoostedDefence(), 3) + 4 * 99 + 40);
+        armour += (0.0008 * Math.pow(skillsContext.getBoostedDefence() == null ? skillsContext.getBaseDefence() :
+                        skillsContext.getBoostedDefence(), 3) + 4 * 99 + 40);
         for (EquipmentSlot equipmentSlot : equipmentSlots) {
             armour += equipmentSlot.getArmour();
         }

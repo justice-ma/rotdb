@@ -1,13 +1,21 @@
 package com.rotdb.shared.ability.factory;
 
+import com.rotdb.shared.ability.model.AbilityCooldownTiming;
+import com.rotdb.shared.ability.model.GeneratedBuffEffect;
+import com.rotdb.shared.ability.model.GeneratedBuffTiming;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.DamageCalculationTiming;
+
 import java.util.List;
+
 import static com.rotdb.shared.ability.AbilityId.*;
-import static com.rotdb.shared.ability.Handedness.*;
+import static com.rotdb.shared.ability.Handedness.BOTH;
 import static com.rotdb.shared.combat.domain.model.enums.AbilityTier.*;
-import static com.rotdb.shared.combat.domain.model.enums.Targetting.*;
+import static com.rotdb.shared.combat.domain.model.enums.Targetting.MULTI_TARGET;
+import static com.rotdb.shared.combat.domain.model.enums.Targetting.SINGLE_TARGET;
 
 public class NecromancyAbilityFactory {
     public static AbilityContext necromancy() {
@@ -20,23 +28,38 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.NECROMANCY,
-                NECROMANCYAUTO);
+                NECROMANCYAUTO,
+                false);
     }
 
     public static AbilityContext conjureSkeletonWarrior() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.SKELETONWARRIORDURATION,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
-                List.of(new AbilityHitsContext(0.22, 0.28, false, CONJURE, 4)),
+                List.of(new AbilityHitsContext(0.22, 0.28, false, CONJURE, 5)),
                 "Conjure Skeleton Warrior",
                 0,
-                0,
+                6,
                 false,
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.NECROMANCY,
-                CONJURESKELETONWARRIOR);
+                CONJURESKELETONWARRIOR,
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_CAST,
+                false,
+                DamageCalculationTiming.ON_RELEASE);
     }
 
     public static AbilityContext commandSkeletonWarrior() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.COMMANDSKELETONWARRIOR,
+                GeneratedBuffTiming.ON_CAST
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(2,
                 List.of(new AbilityHitsContext(0.22, 0.28, false, CONJURE, 1),
                         new AbilityHitsContext(0.22, 0.28, false, CONJURE, 2)),
@@ -47,7 +70,10 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.NECROMANCY,
-                COMMANDSKELETONWARRIOR);
+                COMMANDSKELETONWARRIOR,
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_CAST,
+                false);
     }
 
     public static AbilityContext fingerOfDeath() {
@@ -60,7 +86,8 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.NECROMANCY,
-                FINGEROFDEATH);
+                FINGEROFDEATH,
+                false);
     }
 
     public static AbilityContext touchOfDeath() {
@@ -73,7 +100,8 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.NECROMANCY,
-                TOUCHOFDEATH);
+                TOUCHOFDEATH,
+                false);
     }
 
     public static AbilityContext deathSkulls() {
@@ -88,7 +116,8 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 MULTI_TARGET,
                 CombatStyles.NECROMANCY,
-                DEATHSKULLS);
+                DEATHSKULLS,
+                false);
     }
 
     public static AbilityContext deathSkullsIgneous() {
@@ -104,7 +133,8 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 MULTI_TARGET,
                 CombatStyles.NECROMANCY,
-                DEATHSKULLSIGNEOUS);
+                DEATHSKULLSIGNEOUS,
+                false);
     }
 
     public static AbilityContext bloodSiphon() {
@@ -117,7 +147,8 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.NECROMANCY,
-                BLOODSIPHON);
+                BLOODSIPHON,
+                false);
     }
 
     public static AbilityContext bloodSiphonHeal() {
@@ -133,10 +164,16 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 MULTI_TARGET,
                 CombatStyles.NECROMANCY,
-                BLOODSIPHONHEAL);
+                BLOODSIPHONHEAL,
+                false);
     }
 
     public static AbilityContext conjurePutridZombie() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.PUTRIDZOMBIEDURATION,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(2,
                 List.of(new AbilityHitsContext(0.18, 0.22, false, CONJURE, 6),
                         new AbilityHitsContext(0.08, 0.12, false, CONJURE, 3)),
@@ -147,7 +184,10 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.NECROMANCY,
-                CONJUREPUTRIDZOMBIE);
+                CONJUREPUTRIDZOMBIE,
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_RELEASE,
+                false);
     }
 
     public static AbilityContext commandPutridZombie() {
@@ -160,10 +200,16 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 MULTI_TARGET,
                 CombatStyles.NECROMANCY,
-                COMMANDPUTRIDZOMBIE);
+                COMMANDPUTRIDZOMBIE,
+                false);
     }
 
     public static AbilityContext conjureVengefulGhost() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.VENGEFULGHOSTDURATION,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(0.18, 0.22, false, CONJURE, 7)),
                 "Conjure Vengeful Ghost",
@@ -173,7 +219,10 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.NECROMANCY,
-                CONJUREVENGEFULGHOST);
+                CONJUREVENGEFULGHOST,
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_RELEASE,
+                false);
     }
 
     public static AbilityContext bloat() {
@@ -186,7 +235,8 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.NECROMANCY,
-                BLOAT);
+                BLOAT,
+                false);
     }
 
     public static AbilityContext soulSap() {
@@ -199,7 +249,8 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.NECROMANCY,
-                SOULSAP);
+                SOULSAP,
+                false);
     }
 
     public static AbilityContext soulStrike() {
@@ -212,7 +263,8 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 MULTI_TARGET,
                 CombatStyles.NECROMANCY,
-                SOULSTRIKE);
+                SOULSTRIKE,
+                false);
     }
 
     public static AbilityContext spectralScythe() {
@@ -225,7 +277,8 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 MULTI_TARGET,
                 CombatStyles.NECROMANCY,
-                SPECTRALSCYTHE);
+                SPECTRALSCYTHE,
+                false);
     }
 
     public static AbilityContext spectralHurricane() {
@@ -238,7 +291,8 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 MULTI_TARGET,
                 CombatStyles.NECROMANCY,
-                SPECTRALHURRICANE);
+                SPECTRALHURRICANE,
+                false);
     }
 
     public static AbilityContext spectralMeteorStrike() {
@@ -251,11 +305,12 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 MULTI_TARGET,
                 CombatStyles.NECROMANCY,
-                SPECTRALMETEORSTRIKE);
+                SPECTRALMETEORSTRIKE,
+                false);
     }
 
     public static AbilityContext volleyOfSouls() {
-        return new AbilityContext(5,
+        return new AbilityContext(2,
                 List.of(new AbilityHitsContext(1.35, 1.65, false, ENHANCED, 2),
                         new AbilityHitsContext(1.35, 1.65, false, ENHANCED, 2)),
                 "Volley of Souls",
@@ -265,7 +320,8 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.NECROMANCY,
-                VOLLEYOFSOULS);
+                VOLLEYOFSOULS,
+                false);
     }
 
     public static AbilityContext commandPhantomGuardian() {
@@ -278,6 +334,7 @@ public class NecromancyAbilityFactory {
                 BOTH,
                 MULTI_TARGET,
                 CombatStyles.NECROMANCY,
-                COMMANDPHANTOMGUARDIAN);
+                COMMANDPHANTOMGUARDIAN,
+                false);
     }
 }

@@ -1,15 +1,19 @@
 package com.rotdb.calculation.domain.model;
 
+import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.combat.domain.model.enums.HitType;
 
 public class HitResult {
     private final int hitMinDamage, hitMaxDamage, hitAvgDamage, hitMinCrit,
-            hitMaxCrit, hitAvgCrit, hitMinNonCrit, hitMaxNonCrit, hitAvgNonCrit, hitIndex;
+            hitMaxCrit, hitAvgCrit, hitMinNonCrit, hitMaxNonCrit, hitAvgNonCrit, hitIndex, hitTiming;
+    private final double critChance;
     private final HitType hitType;
+    private final AbilityId parentAbility;
+    private final boolean dot;
 
     public HitResult(int hitMinDamage, int hitMaxDamage, int hitAvgDamage, int hitMinCrit, int hitMaxCrit,
-                        int hitAvgCrit, int hitMinNonCrit, int hitMaxNonCrit, int hitAvgNonCrit, int hitIndex,
-                     HitType hitType) {
+                     int hitAvgCrit, int hitMinNonCrit, int hitMaxNonCrit, int hitAvgNonCrit, int hitIndex, int hitTiming, double critChance,
+                     HitType hitType, AbilityId parentAbility, boolean dot) {
         this.hitMinDamage = hitMinDamage;
         this.hitMaxDamage = hitMaxDamage;
         this.hitAvgDamage = hitAvgDamage;
@@ -20,7 +24,11 @@ public class HitResult {
         this.hitMaxNonCrit = hitMaxNonCrit;
         this.hitAvgNonCrit = hitAvgNonCrit;
         this.hitIndex = hitIndex;
+        this.hitTiming = hitTiming;
+        this.critChance = critChance;
         this.hitType = hitType;
+        this.parentAbility = parentAbility;
+        this.dot = dot;
     }
 
     public int getHitMinDamage() {
@@ -65,5 +73,21 @@ public class HitResult {
 
     public HitType getHitType() {
         return hitType;
+    }
+
+    public int getHitTiming() {
+        return hitTiming;
+    }
+
+    public double getCritChance() {
+        return critChance;
+    }
+
+    public AbilityId getParentAbility() {
+        return parentAbility;
+    }
+
+    public boolean isDot() {
+        return dot;
     }
 }

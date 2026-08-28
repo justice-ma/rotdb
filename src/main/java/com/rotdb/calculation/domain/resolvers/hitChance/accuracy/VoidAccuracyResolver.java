@@ -16,7 +16,7 @@ public class VoidAccuracyResolver {
         EquipmentSlot gloves = equipment.getGloves();
         EquipmentSlot offhand = equipment.getOffhand();
         List<EquipmentSlot> voidKnight = List.of(head, body, legs, gloves, offhand);
-        int pieceValue = equipment.getSetPieceValue(context.getBuffs());
+        int pieceValue = 1;
 
         double accuracyModifier = 0;
         int baseVoid = 0;

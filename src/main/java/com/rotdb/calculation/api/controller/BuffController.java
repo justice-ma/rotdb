@@ -20,8 +20,7 @@ public class BuffController {
                         buff.getLabel(),
                         buff.isStackable(),
                         buff.getMinimumStacks(),
-                        buff.getMaximumStacks(),
-                        buff.getIconPath()
+                        buff.getMaximumStacks()
         )).toList();
     }
 }

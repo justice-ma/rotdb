@@ -1,7 +1,7 @@
 package com.rotdb.calculation.domain.resolvers.abilityDamage.multiplicative;
 
-import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.shared.combat.domain.model.enums.HitType;
@@ -17,14 +17,12 @@ public class MagicMultiplicativeResolver {
         double mod = 1;
 
         if (style == MAGIC) {
-            if (!buff.has(BuffId.HIGHER_POWER)) {
-                if (buff.has(BuffId.SUNSHINE)) {
-                    mod *= 1.5;
-                }
+            if (buff.has(BuffId.SUNSHINE)) {
+                mod *= 1.5;
             }
 
             if (buff.has(BuffId.TITHESTACKS) && buff.stacks(BuffId.TITHESTACKS) > 0 && hit.getTier() == BASIC
-                && hit.getType() != HitType.INSTABILITY) {
+                    && hit.getType() != HitType.INSTABILITY) {
                 mod *= 1 + buff.stacks(BuffId.TITHESTACKS) / 100.0;
             }
         }

@@ -9,4 +9,5 @@ public record AbilityDto(
         AbilityTier tier,
         String iconPath,
         boolean common
-) {}
+) {
+}

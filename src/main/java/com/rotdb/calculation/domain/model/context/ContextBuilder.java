@@ -1,9 +1,11 @@
 package com.rotdb.calculation.domain.model.context;
 
-import com.rotdb.shared.ability.AbilityProvider;
 import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.calculation.domain.model.DamageRequest;
+import com.rotdb.calculation.domain.resolvers.PrayerResolver;
+import com.rotdb.shared.ability.AbilityProvider;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
+import com.rotdb.shared.combat.domain.model.context.TargetContext;
 import com.rotdb.shared.combat.domain.model.enums.Effect;
 import com.rotdb.shared.combat.domain.model.enums.HitCapMode;
 import com.rotdb.shared.combat.domain.model.enums.Prayer;
@@ -14,8 +16,6 @@ import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
 import com.rotdb.shared.combat.domain.model.player.SkillsContext;
 import com.rotdb.shared.combat.domain.model.player.SpellContext;
-import com.rotdb.calculation.domain.resolvers.PrayerResolver;
-import com.rotdb.shared.combat.domain.model.context.TargetContext;
 
 import java.util.EnumSet;
 

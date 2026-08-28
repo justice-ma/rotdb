@@ -10,7 +10,8 @@ import com.rotdb.shared.combat.domain.model.player.BuffContext;
 
 public final class AbilityProvider {
 
-    private AbilityProvider() {}
+    private AbilityProvider() {
+    }
 
     public static AbilityContext get(AbilityId id, EquipmentModel equipment) {
         return get(id, equipment, null);
@@ -22,10 +23,9 @@ public final class AbilityProvider {
             case MELEEAUTO -> MeleeAbilityFactory.attack();
             case ASSAULT -> MeleeAbilityFactory.assault();
             case BLOODLUSTASSAULT -> MeleeAbilityFactory.bloodlustAssault();
-            case ADAPTIVESTRIKE ->
-                    equipment.getMainhand().getSlot() == Slots.TWOHANDED
-                            ? MeleeAbilityFactory.adaptiveStrike2h()
-                            : MeleeAbilityFactory.adaptiveStrikeDw();
+            case ADAPTIVESTRIKE -> equipment.getMainhand().getSlot() == Slots.TWOHANDED
+                    ? MeleeAbilityFactory.adaptiveStrike2h()
+                    : MeleeAbilityFactory.adaptiveStrikeDw();
             case OVERPOWER -> MeleeAbilityFactory.overpower();
             case OVERPOWERIGNEOUS -> MeleeAbilityFactory.overpowerIgneous();
             case REND -> MeleeAbilityFactory.rend();
@@ -179,6 +179,12 @@ public final class AbilityProvider {
             case SOULCRUSH -> NecromancySpecialAttackFactory.soulCrush();
             case DEATHESSENCE -> NecromancySpecialAttackFactory.deathEssence();
 
+            // Internal Abilities
+            case INCITEFEARPROC -> InternalAbilityFactory.inciteFearProc();
+            case COMMANDSKELETONWARRIORHIT -> InternalAbilityFactory.commandSkeletonWarriorHit();
+            case PUTRIDZOMBIEHIT -> InternalAbilityFactory.putridZombieHit();
+            case PUTRIDZOMBIEPOISON -> InternalAbilityFactory.putridZombiePoison();
+
             // Blessings
             case LIGHT_OF_SARADOMIN_NECROMANCY -> BlessingFactory.lightOfSaradomin(AbilityId.LIGHT_OF_SARADOMIN_NECROMANCY);
             case LIGHT_OF_SARADOMIN_RANGED -> BlessingFactory.lightOfSaradomin(AbilityId.LIGHT_OF_SARADOMIN_RANGED);
@@ -206,9 +212,10 @@ public final class AbilityProvider {
             case INFERNO_OF_ZAMORAK_NECROMANCY -> BlessingFactory.infernoOfZamorak(AbilityId.INFERNO_OF_ZAMORAK_NECROMANCY);
         };
     }
+
     private static boolean hasAtLeastTumekensPieces(EquipmentModel equipment, BuffContext buffs, int required) {
         int count = 0;
-        int pieceValue = equipment.getSetPieceValue(buffs);
+        int pieceValue = 1;
 
         if (isTumekens(equipment.getHead())) count += pieceValue;
         if (isTumekens(equipment.getBody())) count += pieceValue;

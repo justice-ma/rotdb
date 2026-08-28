@@ -27,7 +27,7 @@ public class BuffRequestNormalizer {
                 if (!entry.getKey().isStackable() && v > 0) {
                     cleanedBuffs.add(entry.getKey());
                 } else if (entry.getKey().isStackable()) {
-                    if(entry.getKey().getMaximumStacks() < v) {
+                    if (entry.getKey().getMaximumStacks() < v) {
                         cleanedStacks.put(entry.getKey(), entry.getKey().getMaximumStacks());
                     } else if (entry.getKey().getMinimumStacks() > v) {
                         cleanedStacks.put(entry.getKey(), entry.getKey().getMinimumStacks());
@@ -47,6 +47,10 @@ public class BuffRequestNormalizer {
                     cleanedBuffs.add(buff);
                 }
             }
+        }
+
+        if (cleanedBuffs.contains(BuffId.REND)) {
+            cleanedBuffs.add(BuffId.REND_BLEED);
         }
 
         result.setBuffStacks(cleanedStacks);

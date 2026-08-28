@@ -1,21 +1,32 @@
 package com.rotdb.calculation.domain.modifiers.baseDamage;
 
+import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
+import com.rotdb.calculation.domain.modifiers.Modifier;
+import com.rotdb.calculation.domain.resolvers.baseAbilityDamage.MagicBaseDamageResolver;
+import com.rotdb.calculation.domain.resolvers.baseAbilityDamage.MeleeBaseDamageResolver;
+import com.rotdb.calculation.domain.resolvers.baseAbilityDamage.NecromancyBaseDamageResolver;
+import com.rotdb.calculation.domain.resolvers.baseAbilityDamage.RangedBaseDamageResolver;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.Effect;
+import com.rotdb.shared.combat.domain.model.enums.Perks;
 import com.rotdb.calculation.domain.resolvers.baseAbilityDamage.*;
 import com.rotdb.shared.combat.domain.model.enums.*;
-import com.rotdb.calculation.domain.modifiers.Modifier;
 
-public final class BaseAbilityDamageModifier implements Modifier{
+public final class BaseAbilityDamageModifier implements Modifier {
     @Override
-    public void apply(CalculationContext context) {
+    public void apply(AggregatedCalculationContext aggregatedCalculationContext) {
+        CalculationContext context = aggregatedCalculationContext.getSnapshotContext();
+
         var equipment = context.getEquipment();
         if (equipment.getMainhand() == null) {
             throw new IllegalStateException("Mainhand is required for ability damage");
         }
 
         var skills = context.getSkills();
-        var perks  = context.getPerks();
-        var buffs  = context.getBuffs();
+        var perks = context.getPerks();
+        var buffs = context.getBuffs();
 
         CombatStyles style = equipment.getMainhand().getClazz();
         boolean dw = (equipment.getOffhand().getId() != null && equipment.getOffhand().getType() != EquipmentType.SHIELD);
@@ -56,22 +67,7 @@ public final class BaseAbilityDamageModifier implements Modifier{
             ohTier += 5;
         }
 
-        if (buffs.has(BuffId.GENESIS_ESSENCE)) {
-            ohTier = 120;
-            mhTier = 120;
-            ammoTier = effectiveAmmoTier(style, equipment.getMainhand().getStyle(), equipment.getMainhand().getType(),
-                    mhTier, ohTier, ammoTier);
-        }
-
         int base = resolveBase(style, dw, twoHanded, s, bonus, mhTier, ohTier, er, ammoTier, eq);
-
-        if (context.getBuffs().has(BuffId.TERAGARDS_AEGIS)) {
-            base += TeragardsAegisResolver.resolve(context);
-        }
-
-        if (context.getBuffs().has(BuffId.TRUE_EQUILIBRIUM)) {
-            base += 75 * buffs.getBlessingsPerAlignment();
-        }
 
         context.getDamage().setBaseDamage(base);
         context.getEquipment().setCombatStyle(style);
@@ -100,8 +96,7 @@ public final class BaseAbilityDamageModifier implements Modifier{
                     dw ? NecromancyBaseDamageResolver.dualWield(s, bonus, mhTier, ohTier, er, eq) :
                     NecromancyBaseDamageResolver.mainhandOnly(s, bonus, mhTier, er, eq);
 
-            case ALL ->
-                    throw new IllegalStateException("Combat style ALL is not valid for base damage");
+            case ALL -> throw new IllegalStateException("Combat style ALL is not valid for base damage");
         };
     }
 

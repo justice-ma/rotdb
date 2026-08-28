@@ -1,14 +1,21 @@
 package com.rotdb.shared.ability.factory;
 
+import com.rotdb.shared.ability.model.AbilityCooldownTiming;
+import com.rotdb.shared.ability.model.GeneratedBuffEffect;
+import com.rotdb.shared.ability.model.GeneratedBuffTiming;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
+import com.rotdb.shared.combat.domain.model.enums.DamageCalculationTiming;
+
 import java.util.List;
 
 import static com.rotdb.shared.ability.AbilityId.*;
-import static com.rotdb.shared.ability.Handedness.*;
-import static com.rotdb.shared.combat.domain.model.enums.AbilityTier.*;
+import static com.rotdb.shared.ability.Handedness.BOTH;
+import static com.rotdb.shared.combat.domain.model.enums.AbilityTier.ENHANCED;
 import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.MAGIC;
-import static com.rotdb.shared.combat.domain.model.enums.Targetting.*;
+import static com.rotdb.shared.combat.domain.model.enums.Targetting.MULTI_TARGET;
+import static com.rotdb.shared.combat.domain.model.enums.Targetting.SINGLE_TARGET;
 
 public class MagicSpecialAttackFactory {
     public static AbilityContext fromTheShadows() {
@@ -29,6 +36,11 @@ public class MagicSpecialAttackFactory {
     }
 
     public static AbilityContext instability() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.INSTABILITY,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(1.2, 1.4, false, ENHANCED, 2)),
                 "Instability",
@@ -38,7 +50,10 @@ public class MagicSpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MAGIC,
-                INSTABILITY);
+                INSTABILITY,
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_RELEASE,
+                true);
     }
 
     public static AbilityContext runeFlame() {
@@ -55,6 +70,11 @@ public class MagicSpecialAttackFactory {
     }
 
     public static AbilityContext clawsOfGuthix() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.CLAWSOFGUTHIX,
+                GeneratedBuffTiming.ON_HIT
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(2, 2.4, false, ENHANCED, 1)),
                 "Claws of Guthix",
@@ -64,7 +84,8 @@ public class MagicSpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MAGIC,
-                CLAWSOFGUTHIX);
+                CLAWSOFGUTHIX,
+                generatedBuffEffects);
     }
 
     public static AbilityContext devour() {
@@ -159,7 +180,8 @@ public class MagicSpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MAGIC,
-                TEMPESTOFARMADYL);
+                TEMPESTOFARMADYL,
+                DamageCalculationTiming.ON_HIT);
     }
 
     public static AbilityContext ibanBlast() {
@@ -176,6 +198,11 @@ public class MagicSpecialAttackFactory {
     }
 
     public static AbilityContext soulfire() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.CONFLAGRATE,
+                GeneratedBuffTiming.ON_CAST
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(7,
                 List.of(new AbilityHitsContext(1.3, 1.6, false, ENHANCED, 3),
                         new AbilityHitsContext(1.7, 2, true, ENHANCED, 3),
@@ -191,6 +218,9 @@ public class MagicSpecialAttackFactory {
                 BOTH,
                 SINGLE_TARGET,
                 MAGIC,
-                SOULFIRE);
+                SOULFIRE,
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_RELEASE,
+                true);
     }
 }

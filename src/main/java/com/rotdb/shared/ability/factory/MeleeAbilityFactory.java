@@ -1,8 +1,13 @@
 package com.rotdb.shared.ability.factory;
 
+import com.rotdb.shared.ability.model.AbilityCooldownTiming;
+import com.rotdb.shared.ability.model.GeneratedBuffEffect;
+import com.rotdb.shared.ability.model.GeneratedBuffTiming;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
+import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.DamageCalculationTiming;
 
 import java.util.List;
 
@@ -41,7 +46,8 @@ public class MeleeAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.MELEE,
-                ASSAULT);
+                ASSAULT,
+                DamageCalculationTiming.ON_HIT);
     }
 
     public static AbilityContext bloodlustAssault() {
@@ -57,7 +63,8 @@ public class MeleeAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.MELEE,
-                BLOODLUSTASSAULT);
+                BLOODLUSTASSAULT,
+                DamageCalculationTiming.ON_HIT);
     }
 
     public static AbilityContext adaptiveStrike2h() {
@@ -128,6 +135,11 @@ public class MeleeAbilityFactory {
     }
 
     public static AbilityContext fury() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.FURYBUFF,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(1.1, 1.3, false, BASIC, 1)),
                 "Fury",
@@ -137,10 +149,16 @@ public class MeleeAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.MELEE,
-                FURY);
+                FURY,
+                generatedBuffEffects);
     }
 
     public static AbilityContext greaterFury() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.GREATERFURYBUFF,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(1.2, 1.4, false, BASIC, 1)),
                 "Greater Fury",
@@ -150,7 +168,8 @@ public class MeleeAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.MELEE,
-                GREATERFURY);
+                GREATERFURY,
+                generatedBuffEffects);
     }
 
     public static AbilityContext backhand() {
@@ -212,7 +231,8 @@ public class MeleeAbilityFactory {
                 DUAL_WIELD,
                 AREA_TARGET,
                 CombatStyles.MELEE,
-                FLURRY);
+                FLURRY,
+                DamageCalculationTiming.ON_HIT);
     }
 
     public static AbilityContext greaterFlurry() {
@@ -232,19 +252,20 @@ public class MeleeAbilityFactory {
                 DUAL_WIELD,
                 AREA_TARGET,
                 CombatStyles.MELEE,
-                GREATERFLURRY);
+                GREATERFLURRY,
+                DamageCalculationTiming.ON_HIT);
     }
 
     public static AbilityContext dismember() {
         return new AbilityContext(8,
-                List.of(new AbilityHitsContext(0.25, 0.35,true, ENHANCED, 2),
-                        new AbilityHitsContext(0.25, 0.35,true, ENHANCED, 4),
-                        new AbilityHitsContext(0.25, 0.35,true, ENHANCED, 6),
-                        new AbilityHitsContext(0.25, 0.35,true, ENHANCED, 8),
-                        new AbilityHitsContext(0.25, 0.35,true, ENHANCED, 10),
-                        new AbilityHitsContext(0.25, 0.35,true, ENHANCED, 12),
-                        new AbilityHitsContext(0.25, 0.35,true, ENHANCED, 14),
-                        new AbilityHitsContext(0.25, 0.35,true, ENHANCED, 16)),
+                List.of(new AbilityHitsContext(0.25, 0.35, true, ENHANCED, 2),
+                        new AbilityHitsContext(0.25, 0.35, true, ENHANCED, 4),
+                        new AbilityHitsContext(0.25, 0.35, true, ENHANCED, 6),
+                        new AbilityHitsContext(0.25, 0.35, true, ENHANCED, 8),
+                        new AbilityHitsContext(0.25, 0.35, true, ENHANCED, 10),
+                        new AbilityHitsContext(0.25, 0.35, true, ENHANCED, 12),
+                        new AbilityHitsContext(0.25, 0.35, true, ENHANCED, 14),
+                        new AbilityHitsContext(0.25, 0.35, true, ENHANCED, 16)),
                 "Dismember",
                 0,
                 40,
@@ -319,6 +340,11 @@ public class MeleeAbilityFactory {
     }
 
     public static AbilityContext greaterBarge() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.GREATERBARGE,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(0.75, 0.95, false, BASIC, 1)),
                 "Greater Barge",
@@ -328,7 +354,10 @@ public class MeleeAbilityFactory {
                 BOTH,
                 SINGLE_TARGET,
                 CombatStyles.MELEE,
-                GREATERBARGE);
+                GREATERBARGE,
+                generatedBuffEffects,
+                AbilityCooldownTiming.ON_CAST,
+                false);
     }
 
     public static AbilityContext pulverise() {
@@ -345,6 +374,11 @@ public class MeleeAbilityFactory {
     }
 
     public static AbilityContext meteorStrike() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.METEORSTRIKE,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(2.2, 2.5, false, ULTIMATE, 2)),
                 "Meteor Strike",
@@ -354,10 +388,16 @@ public class MeleeAbilityFactory {
                 BOTH,
                 MULTI_TARGET,
                 CombatStyles.MELEE,
-                METEORSTRIKE);
+                METEORSTRIKE,
+                generatedBuffEffects);
     }
 
     public static AbilityContext chaosRoar() {
+        GeneratedBuffEffect generatedBuffEffect = new GeneratedBuffEffect(
+                BuffId.CHAOSROAR,
+                GeneratedBuffTiming.ON_RELEASE
+        );
+        List<GeneratedBuffEffect> generatedBuffEffects = List.of(generatedBuffEffect);
         return new AbilityContext(1,
                 List.of(new AbilityHitsContext(1, 1.2, false, BASIC, 1)),
                 "Chaos Roar",
@@ -366,6 +406,8 @@ public class MeleeAbilityFactory {
                 false,
                 BOTH,
                 SINGLE_TARGET,
-                CombatStyles.MELEE,CHAOSROAR);
+                CombatStyles.MELEE,
+                CHAOSROAR,
+                generatedBuffEffects);
     }
 }
