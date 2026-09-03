@@ -5,6 +5,7 @@ import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.shared.combat.domain.model.enums.AbilityTier;
 import com.rotdb.calculation.domain.modifiers.Modifier;
+import com.rotdb.shared.combat.domain.model.enums.HitType;
 
 import java.util.List;
 
@@ -35,6 +36,9 @@ public class BloatInjector implements Modifier {
             bleed.setDot(true);
             bleed.setTier(AbilityTier.BASIC);
             bleed.setParentIndex(i);
+            bleed.setType(HitType.BASE);
+            bleed.setMin(1.35 * 0.25);
+            bleed.setMax(1.65 * 0.25);
 
             bleed.setCritMin(minCritDamage);
             bleed.setCritDamage(critDamage);
