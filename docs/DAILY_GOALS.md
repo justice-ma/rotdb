@@ -193,19 +193,55 @@ Stretch:
 
 - add placeholder action variants for future preset and equipment slot swaps if the first slice is already stable
 
-### End-Of-Day Notes
+### End-Of-Day Notes (executed 2026-09-03)
 
 Completed:
-- Not recorded yet.
+
+- **Goal 1 (provenance), met with one deliberate exception.** The fixture record carries `provenance` (free text:
+  gear, permanent unlocks, stat state) and `observedOn` (`LocalDate`). `1924` is confirmed as an in-game observation,
+  not calculator output. The VERIFIED / CHARACTERIZATION split was considered and **declined by the user**: every
+  fixture in this suite is an in-game observation, so the distinction carries no information here. Revisit only if a
+  characterization fixture is ever added.
+- **Goal 2 (parameterized fixture table), met.** `@ParameterizedTest` + `@MethodSource("fixtures")` over a nested
+  `BaseAbilityDamageFixture` record. `toString()` returns observation date + provenance, so the test report names rows.
+  The assertion reads `fixture.expected`, `fixture.tolerance`, and `fixture.provenance`. `AttackHandedness`
+  (`MAINHAND_ONLY` / `TWO_HANDED` / `DUAL_WIELD`) replaced the three booleans that could contradict each other.
+- **Goal 3 (verify what runs), partially met.** Surefire 3.5.4 is confirmed configured and running the class — the
+  earlier suspicion that no tests execute is ruled out for this suite. Still only one fixture row; style coverage did
+  not start.
+- **Goal 4 (cleanup), met.** `engine`, `copier`, `sampleRequest(...)`, the three unused `sample*Context()` methods and
+  the `SimulationStateSnapshotCopier` import are gone. The `tier_100_...` name is moot — the method is now
+  `baseAbilityDamageTests` and effective tier is described in the row's provenance.
+- **New, unplanned: `BaseCombatState` extracted** (`src/test/java/com/rotdb/calculation/BaseCombatState.java`). Holds
+  permanent account state only, returns a fresh graph per call. Ability and spell were both deliberately *excluded* as
+  per-fixture axes — see the decision note below.
+
+Verified:
+
+- `mvn test -Dtest=CalculationBaseAbilityDamageTests` passes. The melee dual-wield fixture holds at `1924 ± 5` when
+  built from `BaseCombatState.baseState()` rather than the old inline context, confirming the two were equivalent on
+  the base-damage path.
+
+Decisions worth remembering:
+
+- These context classes are DTOs with **no constructor invariants** — `new XContext()` leaves collections and boxed
+  fields null (`BuffContext.buffSet`, `PerkContext.perk`/`genocidalRank`, `PrayerContext.selected`,
+  `TargetContext.tags`). Anything building one owns initializing all of them. Four separate NPE-on-use defects came
+  from assuming otherwise.
+- Base state holds what is permanent; the fixture holds what varies. Ability and spell are axes, not state — leaving
+  them unset makes a malformed row fail loudly instead of silently computing a plausible wrong number.
+- Boosted stats are *derived* (`StatBoostModifier` resets to base, then applies `potionBuffs`). The axis is therefore
+  the potion, never a hand-set boosted stat, which would test a state the engine cannot produce.
 
 Blocked:
-- Not recorded yet.
+- Nothing.
 
 Ready For User Check-Off:
-- Not recorded yet.
+- Nothing on the V1 checklist.
 
 Next Starting Point:
-- Not recorded yet.
+- Add the `shardable = false` melee row. Cheapest row that can actually fail, and it proves the Shard of Genesis +5 is
+  applied rather than inherited from row one.
 
 ## 2026-07-20
 
@@ -259,6 +295,250 @@ Done when:
 Stretch:
 
 - add placeholder action variants for preset swaps and equipment slot swaps if they do not complicate the first slice
+
+### End-Of-Day Notes (executed 2026-09-03)
+
+Completed:
+
+- **Goal 1 (provenance), met with one deliberate exception.** The fixture record carries `provenance` (free text:
+  gear, permanent unlocks, stat state) and `observedOn` (`LocalDate`). `1924` is confirmed as an in-game observation,
+  not calculator output. The VERIFIED / CHARACTERIZATION split was considered and **declined by the user**: every
+  fixture in this suite is an in-game observation, so the distinction carries no information here. Revisit only if a
+  characterization fixture is ever added.
+- **Goal 2 (parameterized fixture table), met.** `@ParameterizedTest` + `@MethodSource("fixtures")` over a nested
+  `BaseAbilityDamageFixture` record. `toString()` returns observation date + provenance, so the test report names rows.
+  The assertion reads `fixture.expected`, `fixture.tolerance`, and `fixture.provenance`. `AttackHandedness`
+  (`MAINHAND_ONLY` / `TWO_HANDED` / `DUAL_WIELD`) replaced the three booleans that could contradict each other.
+- **Goal 3 (verify what runs), partially met.** Surefire 3.5.4 is confirmed configured and running the class — the
+  earlier suspicion that no tests execute is ruled out for this suite. Still only one fixture row; style coverage did
+  not start.
+- **Goal 4 (cleanup), met.** `engine`, `copier`, `sampleRequest(...)`, the three unused `sample*Context()` methods and
+  the `SimulationStateSnapshotCopier` import are gone. The `tier_100_...` name is moot — the method is now
+  `baseAbilityDamageTests` and effective tier is described in the row's provenance.
+- **New, unplanned: `BaseCombatState` extracted** (`src/test/java/com/rotdb/calculation/BaseCombatState.java`). Holds
+  permanent account state only, returns a fresh graph per call. Ability and spell were both deliberately *excluded* as
+  per-fixture axes — see the decision note below.
+
+Verified:
+
+- `mvn test -Dtest=CalculationBaseAbilityDamageTests` passes. The melee dual-wield fixture holds at `1924 ± 5` when
+  built from `BaseCombatState.baseState()` rather than the old inline context, confirming the two were equivalent on
+  the base-damage path.
+
+Decisions worth remembering:
+
+- These context classes are DTOs with **no constructor invariants** — `new XContext()` leaves collections and boxed
+  fields null (`BuffContext.buffSet`, `PerkContext.perk`/`genocidalRank`, `PrayerContext.selected`,
+  `TargetContext.tags`). Anything building one owns initializing all of them. Four separate NPE-on-use defects came
+  from assuming otherwise.
+- Base state holds what is permanent; the fixture holds what varies. Ability and spell are axes, not state — leaving
+  them unset makes a malformed row fail loudly instead of silently computing a plausible wrong number.
+- Boosted stats are *derived* (`StatBoostModifier` resets to base, then applies `potionBuffs`). The axis is therefore
+  the potion, never a hand-set boosted stat, which would test a state the engine cannot produce.
+
+Blocked:
+- Nothing.
+
+Ready For User Check-Off:
+- Nothing on the V1 checklist.
+
+Next Starting Point:
+- Add the `shardable = false` melee row. Cheapest row that can actually fail, and it proves the Shard of Genesis +5 is
+  applied rather than inherited from row one.
+
+## 2026-09-01
+
+Carried forward unchanged from the 2026-08-29 plan, which was written but not started. Verified at the
+start of this session: the `main` merge is still `19b9025`, `CalculationBaseAbilityDamageTests` is still
+the single-fixture one-method shape with the `engine`, `copier`, and `sampleRequest(...)` leftovers and
+the `SimulationStateSnapshotCopier` import still present. Calculation-domain regression testing remains
+the active track; simulation timeline work is intentionally parked.
+
+`src/test/java/com/rotdb/calculation/CalculationBaseAbilityDamageTests.java` currently holds one melee
+dual-wield fixture asserting `1924` within a tolerance of `5`. That number has no recorded source yet,
+which is the first thing to settle.
+
+### Goal 1: Settle Expected-Value Provenance For Base Ability Damage
+
+Done when:
+
+- it is decided and written down whether fixtures represent real observed in-game states or synthetic isolation cases
+- the melee dual-wield fixture's `1924` is either confirmed against an in-game observation or relabelled as characterization
+- every fixture carries the account state it was observed under (permanent buffs active, gear, stats, date)
+- the distinction between a VERIFIED fixture and a CHARACTERIZATION fixture is visible in the file, not implied
+
+Notes:
+
+- Expected values come from in-game observation; the calculator is the approximation under test.
+- Tolerance is therefore absolute (points), not relative (percent) — the deviation is roughly constant, not proportional.
+- `sampleBuffs()` bakes in REAPERSCREW and SHARDOFGENESIS as permanent account unlocks. This is correct, but it means
+  adding a future permanent buff silently invalidates every expected value recorded before it. That is the specific
+  hazard the provenance record exists to catch.
+
+### Goal 2: Convert The Suite To A Parameterized Fixture Table
+
+Done when:
+
+- `@ParameterizedTest` + `@MethodSource` replaces the one-method-per-case shape
+- a fixture record carries inputs, expected value, tolerance, and provenance as constructor arguments
+- provenance cannot be omitted when adding a case
+- the assertion failure message reports the observed delta and the fixture's conditions
+- the per-case setter mutation is consolidated into a single context builder
+
+Notes:
+
+- `junit-jupiter-params` 6.0.3 is already on the test classpath via `spring-boot-starter-test`; no pom change needed.
+- Override `toString()` on the fixture record so the test report shows names rather than `[1]`, `[2]`.
+- Doing this at one fixture is much cheaper than at twelve.
+
+### Goal 3: Verify What Actually Runs, Then Extend Coverage
+
+Done when:
+
+- `mvn test` has been run and the actual executed test count is known
+- the `DamageControllerTest.java` / `class DamageControllerIT` naming mismatch is confirmed or ruled out
+  (Surefire matches `*Test`, Failsafe matches `*IT`; the pom configures neither)
+- a decision is recorded on whether those four controller tests should run, be renamed, or be replaced
+- base damage fixtures exist for more than one style
+
+Notes:
+
+- Style coverage is really style x weapon configuration: magic alone has `twoHand`, `dualWield`, and `mainhandOnly`.
+- Base damage resolvers are static methods on primitives — no Spring, no database, fast.
+
+### Goal 4: Cleanup And Record Open Questions
+
+Done when:
+
+- unused leftovers are removed from the test: `engine`, `copier`, `sampleRequest(...)`, and the three unused `sample*Context()` methods
+- the `com.rotdb.simulation.application.snapshot.SimulationStateSnapshotCopier` import is gone (calculation suite should not reach into simulation)
+- the `tier_100_...` test name is reconciled with the tier-95 setters plus the Shard of Genesis +5, or the effective tier is explained in the file
+- `docs/KNOWN_UNKNOWNS.md` records that the true base-damage formula is unpublished, the calculator approximates it,
+  and the per-style deviation is an open measurement
+
+### Stretch
+
+- Extract the context builder far enough that a second modifier tier (crit, additive, multiplicative) could reuse it.
+
+### End-Of-Day Notes (executed 2026-09-03)
+
+Completed:
+
+- **Goal 1 (provenance), met with one deliberate exception.** The fixture record carries `provenance` (free text:
+  gear, permanent unlocks, stat state) and `observedOn` (`LocalDate`). `1924` is confirmed as an in-game observation,
+  not calculator output. The VERIFIED / CHARACTERIZATION split was considered and **declined by the user**: every
+  fixture in this suite is an in-game observation, so the distinction carries no information here. Revisit only if a
+  characterization fixture is ever added.
+- **Goal 2 (parameterized fixture table), met.** `@ParameterizedTest` + `@MethodSource("fixtures")` over a nested
+  `BaseAbilityDamageFixture` record. `toString()` returns observation date + provenance, so the test report names rows.
+  The assertion reads `fixture.expected`, `fixture.tolerance`, and `fixture.provenance`. `AttackHandedness`
+  (`MAINHAND_ONLY` / `TWO_HANDED` / `DUAL_WIELD`) replaced the three booleans that could contradict each other.
+- **Goal 3 (verify what runs), partially met.** Surefire 3.5.4 is confirmed configured and running the class — the
+  earlier suspicion that no tests execute is ruled out for this suite. Still only one fixture row; style coverage did
+  not start.
+- **Goal 4 (cleanup), met.** `engine`, `copier`, `sampleRequest(...)`, the three unused `sample*Context()` methods and
+  the `SimulationStateSnapshotCopier` import are gone. The `tier_100_...` name is moot — the method is now
+  `baseAbilityDamageTests` and effective tier is described in the row's provenance.
+- **New, unplanned: `BaseCombatState` extracted** (`src/test/java/com/rotdb/calculation/BaseCombatState.java`). Holds
+  permanent account state only, returns a fresh graph per call. Ability and spell were both deliberately *excluded* as
+  per-fixture axes — see the decision note below.
+
+Verified:
+
+- `mvn test -Dtest=CalculationBaseAbilityDamageTests` passes. The melee dual-wield fixture holds at `1924 ± 5` when
+  built from `BaseCombatState.baseState()` rather than the old inline context, confirming the two were equivalent on
+  the base-damage path.
+
+Decisions worth remembering:
+
+- These context classes are DTOs with **no constructor invariants** — `new XContext()` leaves collections and boxed
+  fields null (`BuffContext.buffSet`, `PerkContext.perk`/`genocidalRank`, `PrayerContext.selected`,
+  `TargetContext.tags`). Anything building one owns initializing all of them. Four separate NPE-on-use defects came
+  from assuming otherwise.
+- Base state holds what is permanent; the fixture holds what varies. Ability and spell are axes, not state — leaving
+  them unset makes a malformed row fail loudly instead of silently computing a plausible wrong number.
+- Boosted stats are *derived* (`StatBoostModifier` resets to base, then applies `potionBuffs`). The axis is therefore
+  the potion, never a hand-set boosted stat, which would test a state the engine cannot produce.
+
+Blocked:
+- Nothing.
+
+Ready For User Check-Off:
+- Nothing on the V1 checklist.
+
+Next Starting Point:
+- Add the `shardable = false` melee row. Cheapest row that can actually fail, and it proves the Shard of Genesis +5 is
+  applied rather than inherited from row one.
+
+## 2026-09-04
+
+Continues the calculation-domain regression testing track. The fixture shape is settled and verified at one row; today
+is about proving the axes actually work and getting real coverage into the table. Simulation timeline work stays parked.
+
+Entry state: `CalculationBaseAbilityDamageTests` holds one melee dual-wield row passing at `1924 ± 5`.
+`BaseCombatState` supplies permanent account state; ability and spell are unset by design.
+
+### Goal 1: Prove The Axes Before Trusting Them
+
+Every axis added yesterday is exercised by exactly one value, so none of them are known to work. A field that silently
+does nothing still passes.
+
+Done when:
+
+- a `shardable = false` melee row exists and its expected value differs from row one by the Shard of Genesis margin
+- `MAINHAND_ONLY` and `TWO_HANDED` melee rows exist, and each demonstrably routes to a different resolver branch
+- `armourBonus` is exercised by at least one row with a non-zero value
+- any axis that turns out not to change the result is either fixed or removed — not left in place
+
+Notes:
+
+- `armourBonus` is applied to the body slot as a lump sum. `getTotalStrength()` sums slots, so this is arithmetically
+  equivalent, but it means the row describes a total, not a real gear set. Keep that in the provenance text.
+- A row whose expected value is unchanged when an axis changes is evidence the axis is not wired, not evidence the
+  mechanic does nothing.
+
+### Goal 2: Guard Malformed Rows Before Writing Magic
+
+Done when:
+
+- a magic row without a spell fails with a message naming the row, not an NPE inside `BaseAbilityDamageModifier:57`
+- the `ammoTier`-ignored-for-magic overlap is either rejected by the same guard or the field is restructured
+- it is decided whether `NECROMANCY` + `TWO_HANDED` should be expressible at all
+
+Notes:
+
+- `resolveBase` has no two-handed branch for necromancy (`dw ? dualWield : mainhandOnly`), so such a row silently
+  routes to mainhand-only. If necromancy has no two-handed weapons in game, the table should not be able to express it.
+- Guards belong at the point the fixture is applied, before the modifier runs.
+
+### Goal 3: Style Coverage
+
+Done when:
+
+- ranged, magic, and necromancy rows exist alongside melee
+- each style covers its real weapon configurations (magic has all three; necromancy likely two)
+- every row carries its own in-game observation and date
+
+Notes:
+
+- Ranged has a wrinkle: `effectiveAmmoTier` substitutes `max(mainhand, offhand)` when ammo tier is 0 and the weapon is
+  thrown or a chargebow. Worth a row that lands on that path deliberately.
+- This is the goal most likely to overrun. Observing values in game is the slow part, not writing rows.
+
+### Goal 4: Close The Remaining Documentation Debt
+
+Done when:
+
+- `docs/KNOWN_UNKNOWNS.md` records that the true base-damage formula is unpublished, that the calculator approximates
+  it, and that per-style deviation is an open measurement
+- a decision is recorded on the `DamageControllerTest.java` / `class DamageControllerIT` mismatch — Surefire is
+  confirmed working, so the question is now only whether those four tests are named correctly
+
+### Stretch
+
+- Start a second modifier suite (crit is the natural next tier) reusing `BaseCombatState`. This is the real test of
+  whether base state generalizes; if the crit suite needs a different base, the split is wrong somewhere.
+- If it does generalize, that is the point to reconsider moving `BaseCombatState` to a shared test package.
 
 ### End-Of-Day Notes
 

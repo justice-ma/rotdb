@@ -14,9 +14,19 @@ This permission is limited to session-tracking docs. It does not permit code edi
 
 ## Current Focus
 
-The current focus is the rotation simulator foundation needed for accurate conjures, commands, and equipment swaps.
+As of 2026-08-28 the active track is **calculation-domain regression testing**. Simulation timeline work below is
+intentionally parked and should be resumed once base damage coverage has a stable, provenance-recorded fixture shape.
 
-Immediate design direction:
+Active calculation-test direction:
+
+- expected values come from in-game observation; the calculator is the approximation under test
+- tolerance is absolute (points), not relative (percent)
+- every fixture records the account state it was observed under, and whether it is VERIFIED or CHARACTERIZATION
+- scope is calculation only — no simulation imports in this suite
+
+Parked focus: the rotation simulator foundation needed for accurate conjures, commands, and equipment swaps.
+
+Immediate design direction (parked):
 
 - introduce ordered same-tick user actions
 - model timeline actions as ordered items per tick
@@ -141,12 +151,28 @@ Last known result from prior work:
 - `RotationTimelineServiceTest` passed
 - broader test status should be rechecked when the next implementation slice is complete
 
+As of 2026-09-03:
+
+- `main` merge committed as `19b9025`
+- `BaseCombatState` (test scope) supplies permanent account state; ability and spell are deliberately unset as
+  per-fixture axes
+- `CalculationBaseAbilityDamageTests` is a `@ParameterizedTest` over a `BaseAbilityDamageFixture` record carrying
+  provenance, observation date, expected value and tolerance
+- one melee dual-wield row, verified passing at `1924 ± 5` against `BaseCombatState.baseState()`; `1924` is confirmed
+  as an in-game observation
+- Surefire 3.5.4 is confirmed configured and running this class — earlier doubt that no tests execute is ruled out
+- still open: `DamageControllerTest.java` declares `class DamageControllerIT`, so those four controller tests are
+  likely skipped by Surefire's `*Test` matching. Not yet confirmed or decided
+- every other axis on the fixture record is exercised by exactly one value and is therefore not yet known to work
+
 ## Known Open Questions
 
 - exact same-tick lifecycle ordering between user actions, releases, hit landings, expiries, and state snapshots
 - whether current tick starting-state snapshots should show pre-removal or post-removal conjure state
 - whether command validation should be warning-only, hard invalidation, or warning plus suppressed damage
 - how frontend-visible tick inspection should represent multiple ordered actions on the same tick
+- the true RS3 base-damage formula is unpublished; the calculator approximates it, and the per-style deviation is an open measurement
+- whether `NECROMANCY` + two-handed is a real in-game configuration; `resolveBase` has no two-handed necromancy branch
 
 ## Fresh Session Checklist
 
