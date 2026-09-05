@@ -15,7 +15,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,16 +52,16 @@ public class CalculationBaseAbilityDamageTests {
     ) {
         @Override
         public String toString() {
-            return "Observation Date: " + observedOn + " - " + provenance;
+            return "Observation Date: " + observedOn + " | " + provenance;
         }
     }
-
+    
     private static Stream<BaseAbilityDamageFixture> fixtures() {
         return Stream.of(
                 new BaseAbilityDamageFixture(
-                        "Dark Shard of Leng, Dark Sliver of Leng, Shard of Genesis, Maxed Stats, Base Test",
+                        "Dark Shard of Leng, Dark Sliver of Leng, Shard of Genesis, Base Test",
                         LocalDate.of(2026, 9, 3),
-                        5,
+                        1,
                         1924,
                         CombatStyles.MELEE,
                         AttackHandedness.DUAL_WIELD,
@@ -71,6 +74,142 @@ public class CalculationBaseAbilityDamageTests {
                         true,
                         0,
                         0
+                ),
+                new BaseAbilityDamageFixture(
+                        "Dark Shard of Leng, Dark Sliver of Leng, Shard of Genesis, Eruptive 2, Base Test",
+                        LocalDate.of(2026, 9, 3),
+                        1,
+                        1942,
+                        CombatStyles.MELEE,
+                        AttackHandedness.DUAL_WIELD,
+                        new ArrayList<>(),
+                        0,
+                        95,
+                        95,
+                        0,
+                        null,
+                        true,
+                        0,
+                        2
+                ),
+                new BaseAbilityDamageFixture(
+                        "Dark Shard of Leng, Dark Sliver of Leng, Shard of Genesis, Elder Overload Test",
+                        LocalDate.of(2026, 9, 5),
+                        1,
+                        2002,
+                        CombatStyles.MELEE,
+                        AttackHandedness.DUAL_WIELD,
+                        PlayerBuffFactory.addElderOverload(new ArrayList<>()),
+                        0,
+                        95,
+                        95,
+                        0,
+                        null,
+                        true,
+                        0,
+                        0
+                ),
+                new BaseAbilityDamageFixture(
+                        "Ek-Zek-Kil, Shard of Genesis, Eruptive 2, Elder Overload Test",
+                        LocalDate.of(2026, 9, 5),
+                        1,
+                        2022,
+                        CombatStyles.MELEE,
+                        AttackHandedness.TWO_HANDED,
+                        PlayerBuffFactory.addElderOverload(new ArrayList<>()),
+                        0,
+                        95,
+                        0,
+                        0,
+                        null,
+                        true,
+                        0,
+                        2
+                ),
+                new BaseAbilityDamageFixture(
+                        "Ek-Zek-Kil, Shard of Genesis, Eruptive 2, Base Test",
+                        LocalDate.of(2026, 9, 5),
+                        1,
+                        1943,
+                        CombatStyles.MELEE,
+                        AttackHandedness.TWO_HANDED,
+                        new ArrayList<>(),
+                        0,
+                        95,
+                        0,
+                        0,
+                        null,
+                        true,
+                        0,
+                        2
+                ),
+                new BaseAbilityDamageFixture(
+                        "Masterwork 2h sword, Equilibrium 4, Base Test",
+                        LocalDate.of(2026, 9, 5),
+                        1,
+                        2193,
+                        CombatStyles.MELEE,
+                        AttackHandedness.TWO_HANDED,
+                        new ArrayList<>(),
+                        0,
+                        100,
+                        0,
+                        0,
+                        null,
+                        false,
+                        4,
+                        0
+                ),
+                new BaseAbilityDamageFixture(
+                        "Dark Shard of Leng, No offhand, Base Test",
+                        LocalDate.of(2026, 9, 5),
+                        1,
+                        1283,
+                        CombatStyles.MELEE,
+                        AttackHandedness.MAINHAND_ONLY,
+                        new ArrayList<>(),
+                        0,
+                        95,
+                        0,
+                        0,
+                        null,
+                        true,
+                        0,
+                        0
+                ),
+                new BaseAbilityDamageFixture(
+                        "Dark Shard of Leng, Dark Sliver of Leng, Vestments Robe Set, Enhanced Gloves of Passage, Nodon's Spike Harness, Am-Hej, Igneous-Kal-Zuk, Reaver's Ring, Scripture of Ful, Base Test",
+                        LocalDate.of(2026, 9, 5),
+                        1,
+                        2359,
+                        CombatStyles.MELEE,
+                        AttackHandedness.DUAL_WIELD,
+                        new ArrayList<>(),
+                        290.9,
+                        95,
+                        95,
+                        0,
+                        null,
+                        true,
+                        0,
+                        0
+                ),
+                new BaseAbilityDamageFixture(
+                        "Laniakea's Spear, Eruptive 4, Base Test",
+                        LocalDate.of(2026, 9, 5),
+                        1,
+                        1815,
+                        CombatStyles.MELEE,
+                        AttackHandedness.TWO_HANDED,
+                        new ArrayList<>(),
+                        0,
+                        90,
+                        0,
+                        0,
+                        null,
+                        false,
+                        0,
+                        4
                 )
         );
     }
@@ -135,6 +274,7 @@ public class CalculationBaseAbilityDamageTests {
         baseAbilityDamageModifier.apply(context);
         int baseDamage = context.getSnapshotContext().getDamage().getBaseDamage();
 
+        System.out.println(fixture.provenance + " | Expected: " + fixture.expected + " | Result: " + baseDamage );
         assertEquals(fixture.expected, baseDamage, fixture.tolerance, fixture.provenance);
     }
 }
