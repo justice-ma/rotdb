@@ -19,9 +19,8 @@ public class NpcModifier implements Modifier {
             double mod = 1;
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
 
-            if (hit.getType() != HitType.SPLITSOUL && hit.getType() != HitType.POISON) {
+            if (hit.getType() != HitType.SPLITSOUL) {
                 HauntedBonus hauntedBonus = HauntedBonusResolver.resolve(context, hit);
-                HauntedBonus bigBonedBonus = BigBonedBonusResolver.resolve(context, hit);
                 mod *= BuffMultiplierResolver.resolve(context, hit);
                 mod *= PerkMultiplierResolver.resolve(context);
                 mod *= ScrimshawMultiplierResolver.resolve(context);
@@ -31,7 +30,6 @@ public class NpcModifier implements Modifier {
                 hit.calculateDamages(mod);
 
                 if (!hauntedBonus.isZero()) applyHauntedBonus(hit, hauntedBonus);
-                if (!bigBonedBonus.isZero()) applyHauntedBonus(hit, bigBonedBonus);
 
                 double postStoredMod = 1;
                 postStoredMod *= PostHauntedMultiplierResolver.resolve(context);

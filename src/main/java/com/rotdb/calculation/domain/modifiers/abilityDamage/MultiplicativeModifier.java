@@ -14,7 +14,6 @@ public class MultiplicativeModifier implements Modifier {
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
             if (!hit.isDot()) {
-                if (hit.getType() == HitType.POISON) continue;
                 double mod = MultiplicativeResolver.resolve(context, hit);
                 hit.calculateDamages(mod);
             }

@@ -17,8 +17,6 @@ public class PreciseModifier implements Modifier {
 
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
-            if (hit.getType() == HitType.POISON) continue;
-
             if (!hit.isDot()) {
                 if (perk.has(Perks.PRECISE)) {
                     double preciseMod = (perk.rank(Perks.PRECISE) * 0.015);

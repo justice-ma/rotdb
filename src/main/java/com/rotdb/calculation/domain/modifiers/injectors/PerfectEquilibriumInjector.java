@@ -72,8 +72,6 @@ public class PerfectEquilibriumInjector implements Modifier {
             // No stacks from DoTs, and never stack/proc off the proc
             if (parent.isDot()) continue;
             if (parent.getType() == PERFECTEQUILIBRIUM) continue;
-            if (parent.getType() == INFERNO_OF_ZAMORAK) continue;
-            if (parent.getType() == LIGHT_OF_SARADOMIN) continue;
             stacks++;
 
             if (isCrystalRain) {

@@ -6,7 +6,6 @@ import com.rotdb.calculation.application.validation.DamageRequestValidator;
 import com.rotdb.calculation.application.validation.PrayerRequestValidator;
 import com.rotdb.calculation.domain.model.*;
 import com.rotdb.calculation.domain.resolvers.abilityDamage.criticalStrike.*;
-import com.rotdb.shared.combat.domain.model.enums.BuffId;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.model.context.ContextBuilder;
@@ -40,7 +39,6 @@ public final class CalculationEngine {
         context.setEffectiveStatsResult(calculateEffectiveStats(context.getSkills(), context.getEquipment(), context.getBuffs(), context.getFamiliar(), context.getPerks()));
 
         prayerValidator.validatePrayers(context.getSelectedPrayers());
-        applyEffectiveLeagueStatAdjustments(context.getSkills(), context.getEquipment(), context.getBuffs());
         preCriticalPipeline.run(context);
 
         postCriticalPipeline.run(context);
@@ -49,7 +47,6 @@ public final class CalculationEngine {
 
     public DerivedStatsResult calculateDerivedStats(DamageRequest request) {
         request = normalizer.normalize(request);
-        applyEffectiveLeagueStatAdjustments(request.getSkills(), request.getEquipment(), request.getBuffs());
         return mapDerivedStats(request.getSkills(), request.getEquipment(), request.getBuffs());
     }
 
@@ -66,7 +63,6 @@ public final class CalculationEngine {
     }
 
     public EffectiveStatsResult calculateEffectiveStats(EffectiveStatsRequest request) {
-        applyEffectiveLeagueStatAdjustments(request.getSkillsContext(), request.getEquipmentModel(), request.getBuffContext());
         return calculateEffectiveStats(request.getSkillsContext(), request.getEquipmentModel(),
                 request.getBuffContext(), request.getFamiliarContext(), request.getPerkContext());
     }
@@ -114,9 +110,7 @@ public final class CalculationEngine {
     private DerivedStatsResult mapDerivedStats(SkillsContext skills, EquipmentModel equipment, BuffContext buffs) {
         int baseMaxHp = skills.getMaxHp();
         int equipmentLifeBonus = (int) equipment.getTotalLife();
-        int effectiveMaxHp = buffs.has(BuffId.BIG_BONED)
-                ? (int) ((baseMaxHp + equipmentLifeBonus) * 1.5)
-                : baseMaxHp + equipmentLifeBonus;
+        int effectiveMaxHp = baseMaxHp + equipmentLifeBonus;
 
         return new DerivedStatsResult(
                 baseMaxHp,
@@ -129,27 +123,6 @@ public final class CalculationEngine {
         double prayer = equipment.getTotalPrayer();
         double armour = equipment.getTotalArmour(skillsContext);
 
-        if (buffs.has(BuffId.UNHOLY_CRITUAL)) {
-            critChance += 0.15;
-            double excess = Math.max(0, critChance - 0.5);
-            critChance = Math.max(0, Math.min(critChance, 0.5));
-            critDamage += excess;
-        }
-
         return new EffectiveStatsResult(critChance, critDamage, armour, prayer);
-    }
-
-    private void applyEffectiveLeagueStatAdjustments(SkillsContext skills, EquipmentModel equipmentModel, BuffContext buffs) {
-        if (buffs.has(BuffId.HAVOC_BORN)) {
-            equipmentModel.applyTotalArmourModifier(0.75);
-            equipmentModel.applyTotalLifeModifier(0.75);
-            skills.setMaxHp((int) (skills.getMaxHp() * 0.75));
-        }
-
-        if (buffs.has(BuffId.TRUE_EQUILIBRIUM)) {
-            equipmentModel.setFlatArmourBonus(equipmentModel.getFlatArmourBonus() + (50 * buffs.getBlessingsPerAlignment()));
-            equipmentModel.setFlatPrayerBonus(equipmentModel.getFlatPrayerBonus() + (5 * buffs.getBlessingsPerAlignment()));
-            skills.setMaxHp(skills.getMaxHp() + (500 * buffs.getBlessingsPerAlignment()));
-        }
     }
 }

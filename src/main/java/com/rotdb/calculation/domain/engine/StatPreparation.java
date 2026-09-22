@@ -1,10 +1,7 @@
 package com.rotdb.calculation.domain.engine;
 
-import com.rotdb.calculation.domain.model.context.CalculationContext;
-import com.rotdb.calculation.domain.modifiers.Modifier;
 import com.rotdb.calculation.domain.modifiers.StatModifier;
 import com.rotdb.calculation.domain.modifiers.stats.DbaStatBoostModifier;
-import com.rotdb.calculation.domain.modifiers.stats.NaragiEffectModifier;
 import com.rotdb.calculation.domain.modifiers.stats.StatBoostModifier;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
 import com.rotdb.shared.combat.domain.model.player.SkillsContext;
@@ -17,7 +14,6 @@ public class StatPreparation {
     public StatPreparation() {
         steps = List.of(
                 new StatBoostModifier(),
-                new NaragiEffectModifier(),
                 new DbaStatBoostModifier()
         );
     }

@@ -20,11 +20,9 @@ public class CoreModifier implements Modifier {
 
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
-            if (hit.getType() == HitType.POISON) continue;
             if (hit.isDot()) continue;
-            int add = baseAdd + AbyssalCindersCoreAddResolver.resolve(context, hit);
-            hit.setCurrentMin(hit.getCurrentMin() + add);
-            hit.setCurrentMax(hit.getCurrentMax() + add);
+            hit.setCurrentMin(hit.getCurrentMin() + baseAdd);
+            hit.setCurrentMax(hit.getCurrentMax() + baseAdd);
             hit.setCurrentDamage((hit.getCurrentMin() + hit.getCurrentMax()) / 2);
             hit.calculateDamages(bf);
 

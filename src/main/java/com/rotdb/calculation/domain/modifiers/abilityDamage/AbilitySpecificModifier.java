@@ -14,7 +14,6 @@ public class AbilitySpecificModifier implements Modifier {
         if (context.debug) Debug.stageHeader(context, "Ability Specific Modifier");
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
-            if (hit.getType() == HitType.POISON) continue;
 
             double mult = AbilitySpecificResolver.resolve(context, hit, i);
 

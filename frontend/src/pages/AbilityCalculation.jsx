@@ -22,32 +22,70 @@ import "../style/abilityPage.css";
 const STORAGE_KEY = "rs3-presets";
 const DELETED_DEFAULT_PRESET_IDS_KEY = "rs3-deleted-default-preset-ids";
 
-const BLESSING_ABILITY_REQUIREMENTS = {
-  LIGHT_OF_SARADOMIN_MAGIC: "STRIKING_LIGHT",
-  LIGHT_OF_SARADOMIN_MELEE: "STRIKING_LIGHT",
-  LIGHT_OF_SARADOMIN_RANGED: "STRIKING_LIGHT",
-  LIGHT_OF_SARADOMIN_NECROMANCY: "STRIKING_LIGHT",
+// Leagues blessings were removed from the UI. Saved presets can still carry their
+// buff ids, and the backend applies any blessing id it receives, so strip them on
+// load to stop invisible damage buffs leaking into calculations.
+const LEAGUES_BUFF_IDS = new Set([
+  "ADRENALINE_JUNKIE",
+  "BIG_BONED",
+  "TERAGARDS_AEGIS",
+  "ABYSSAL_CINDERS",
+  "BARKSCALES",
+  "STRIKING_LIGHT",
+  "AVERNIC_RAMPAGE",
+  "ETERNAL_SUSTENANCE",
+  "STEADFAST_WILL",
+  "DEMONS_MARK",
+  "SPLASH_ZONE",
+  "SACRED_FERVOR",
+  "HAVOC_BORN",
+  "TRUE_EQUILIBRIUM",
+  "HIGHER_POWER",
+  "UNHOLY_CRITUAL",
+  "TEARING_THORNS",
+  "LORD_OF_LIGHT",
+  "PERFIDIOUS",
+  "ENVENOMED",
+  "TEMPERED_HEART",
+  "CHAOTIC_INSIGHT",
+  "POWER_ARCHIVE",
+  "GENESIS_ESSENCE",
+  "ICYENIC_FAITH",
+  "NARAGI_EFFECT",
+  "INFERNAL_FIRE",
+]);
 
-  LORD_OF_LIGHT_MAGIC: "LORD_OF_LIGHT",
-  LORD_OF_LIGHT_MELEE: "LORD_OF_LIGHT",
-  LORD_OF_LIGHT_RANGED: "LORD_OF_LIGHT",
-  LORD_OF_LIGHT_NECROMANCY: "LORD_OF_LIGHT",
+function stripLeaguesBuffs(preset) {
+  const buffs = preset?.payload?.buffs;
+  if (!buffs) return preset;
 
-  BASH_MAGIC: "STEADFAST_WILL",
-  BASH_MELEE: "STEADFAST_WILL",
-  BASH_RANGED: "STEADFAST_WILL",
-  BASH_NECROMANCY: "STEADFAST_WILL",
+  const enabled = Array.isArray(buffs.enabledBuffs) ? buffs.enabledBuffs : [];
+  const stacks = buffs.buffStacks ?? {};
 
-  BARKSCALES_MAGIC: ["BARKSCALES", "TEARING_THORNS"],
-  BARKSCALES_MELEE: ["BARKSCALES", "TEARING_THORNS"],
-  BARKSCALES_RANGED: ["BARKSCALES", "TEARING_THORNS"],
-  BARKSCALES_NECROMANCY: ["BARKSCALES", "TEARING_THORNS"],
+  const nextEnabled = enabled.filter((id) => !LEAGUES_BUFF_IDS.has(id));
+  const nextStacks = Object.fromEntries(
+    Object.entries(stacks).filter(([id]) => !LEAGUES_BUFF_IDS.has(id)),
+  );
 
-  INFERNO_OF_ZAMORAK_MAGIC: ["ABYSSAL_CINDERS", "UNHOLY_CRITUAL"],
-  INFERNO_OF_ZAMORAK_MELEE: ["ABYSSAL_CINDERS", "UNHOLY_CRITUAL"],
-  INFERNO_OF_ZAMORAK_RANGED: ["ABYSSAL_CINDERS", "UNHOLY_CRITUAL"],
-  INFERNO_OF_ZAMORAK_NECROMANCY: ["ABYSSAL_CINDERS", "UNHOLY_CRITUAL"],
-};
+  if (
+    nextEnabled.length === enabled.length &&
+    Object.keys(nextStacks).length === Object.keys(stacks).length
+  ) {
+    return preset;
+  }
+
+  return {
+    ...preset,
+    payload: {
+      ...preset.payload,
+      buffs: {
+        ...buffs,
+        enabledBuffs: nextEnabled,
+        buffStacks: nextStacks,
+      },
+    },
+  };
+}
 
 const DEFAULT_SKILLS = {
   necromancy: 120,
@@ -136,7 +174,6 @@ const DEFAULT_PRESETS = [
       targetCurrentHp: null,
       targetMaxHp: null,
       spell: null,
-      relic: null,
       selectedFamiliar: "KALGERIONDEMON",
     },
   },
@@ -213,7 +250,6 @@ const DEFAULT_PRESETS = [
       targetCurrentHp: null,
       targetMaxHp: null,
       spell: null,
-      relic: null,
       selectedFamiliar: "KALGERIONDEMON",
     },
   },
@@ -293,7 +329,6 @@ const DEFAULT_PRESETS = [
       targetCurrentHp: null,
       targetMaxHp: null,
       spell: "INCITEFEAR",
-      relic: null,
       selectedFamiliar: "KALGERIONDEMON",
     },
   },
@@ -365,7 +400,6 @@ const DEFAULT_PRESETS = [
       targetCurrentHp: 800000,
       targetMaxHp: 800000,
       spell: null,
-      relic: null,
       selectedFamiliar: "RIPPERDEMON",
     },
   },
@@ -436,9 +470,9 @@ export default function AbilityCalculation({ clientId, sessionId }) {
       );
 
       const storedPresets = rawPresets ? JSON.parse(rawPresets) : [];
-      const safeStoredPresets = Array.isArray(storedPresets)
-        ? storedPresets
-        : [];
+      const safeStoredPresets = (
+        Array.isArray(storedPresets) ? storedPresets : []
+      ).map(stripLeaguesBuffs);
 
       const deletedDefaultIds = rawDeletedDefaultIds
         ? JSON.parse(rawDeletedDefaultIds)
@@ -515,7 +549,6 @@ export default function AbilityCalculation({ clientId, sessionId }) {
       targetMaxHp: targetMaxHp === "" ? null : Number(targetMaxHp),
       targetSize: target ? null : targetSize === "" ? null : Number(targetSize),
       spell: spell?.id ?? null,
-      relic: null,
       selectedFamiliar: familiar?.id ?? null,
       hitCapMode,
     };
@@ -621,26 +654,10 @@ export default function AbilityCalculation({ clientId, sessionId }) {
 
   const needsMainhand = !equipmentIds.MAINHAND;
 
-  const visibleAbilities = useMemo(() => {
-    const enabledBuffs = new Set(buffs?.enabledBuffs ?? []);
-
-    return abilities.filter((ability) => {
-      const requiredBuff = BLESSING_ABILITY_REQUIREMENTS[ability.ability];
-
-      if (!requiredBuff) return true;
-
-      if (Array.isArray(requiredBuff)) {
-        return requiredBuff.some((buffId) => enabledBuffs.has(buffId));
-      }
-
-      return enabledBuffs.has(requiredBuff);
-    });
-  }, [abilities, buffs]);
-
   useEffect(() => {
     if (!selectedAbility) return;
 
-    const stillVisible = visibleAbilities.some(
+    const stillVisible = abilities.some(
       (ability) => ability.ability === selectedAbility.ability,
     );
 
@@ -648,7 +665,7 @@ export default function AbilityCalculation({ clientId, sessionId }) {
       setSelectedAbility(null);
       setDetailedResults({});
     }
-  }, [selectedAbility, visibleAbilities]);
+  }, [selectedAbility, abilities]);
 
   function persistPresets(updatedPresets) {
     setPresets(updatedPresets);
@@ -873,13 +890,13 @@ export default function AbilityCalculation({ clientId, sessionId }) {
 
   useEffect(() => {
     if (!base) return;
-    if (!visibleAbilities.length) return;
+    if (!abilities.length) return;
 
     (async () => {
       try {
         const batchPayload = {
           base,
-          abilityIds: visibleAbilities.map((a) => a.ability),
+          abilityIds: abilities.map((a) => a.ability),
         };
         const batchResults = await fetchBatchCalculation(
           batchPayload,
@@ -892,7 +909,7 @@ export default function AbilityCalculation({ clientId, sessionId }) {
         setError(e?.message ?? "Batch calculation failed");
       }
     })();
-  }, [base, visibleAbilities, clientId, sessionId]);
+  }, [base, abilities, clientId, sessionId]);
 
   useEffect(() => {
     let ignore = false;
@@ -1136,7 +1153,7 @@ export default function AbilityCalculation({ clientId, sessionId }) {
           </div>
         ) : (
           <Abilities
-            abilities={visibleAbilities}
+            abilities={abilities}
             results={results}
             error={error}
             selectedAbility={selectedAbility}

@@ -82,10 +82,6 @@ public class GlobalCritResolver {
             criticalStrikeChance += 0.03;
         }
 
-        if (pocket.getEffect().contains(Effect.TOME_OF_THE_ICYENE) && buff.has(BuffId.ICYENIC_FAITH)) {
-            criticalStrikeChance += equipment.getTotalPrayer() * 0.002;
-        }
-
         if (perk.has(Perks.BITING)) {
             if (perk.isEquipmentLevel20()) {
                 criticalStrikeChance += perk.rank(Perks.BITING) * 0.022;

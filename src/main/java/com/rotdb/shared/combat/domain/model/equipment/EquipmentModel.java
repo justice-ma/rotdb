@@ -144,13 +144,9 @@ public class EquipmentModel {
         return countSetPieces(Effect.ELITEDRACOLICH, buffs, getHead(), getBody(), getLegs(), getGloves(), getBoots());
     }
 
-    public int getSetPieceValue(BuffContext buffs) {
-        return buffs != null && buffs.has(BuffId.CHAOTIC_INSIGHT) ? 3 : 1;
-    }
-
     public int countSetPieces(Effect effect, BuffContext buffs, EquipmentSlot... slots) {
         int pieces = 0;
-        int pieceValue = getSetPieceValue(buffs);
+        int pieceValue = 1;
 
         for (EquipmentSlot slot : slots) {
             if (slot.getEffect().contains(effect)) {

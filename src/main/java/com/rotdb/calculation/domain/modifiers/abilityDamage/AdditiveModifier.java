@@ -14,7 +14,6 @@ public class AdditiveModifier implements Modifier {
         if (context.debug) Debug.stageHeader(context, "Additive Modifier");
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
-            if (hit.getType() == HitType.POISON) continue;
             if (!hit.isDot()) {
                 double mod = AdditiveResolver.resolve(context, i);
                 hit.calculateDamages(mod);

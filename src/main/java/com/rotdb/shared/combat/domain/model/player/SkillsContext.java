@@ -40,9 +40,9 @@ public class SkillsContext {
         if (getBaseNecromancy() < 1) setBaseNecromancy(1);
         if (getBaseRanged() > 120) setBaseRanged(120);
         if (getBaseRanged() < 1) setBaseRanged(1);
-        if (getMaxHp() > 32000 && buffs.getBlessingsPerAlignment() <= 0) setMaxHp(32000);
+        if (getMaxHp() > 32000) setMaxHp(32000);
         if (getMaxHp() < 1) setMaxHp(1);
-        if (getCurrentHp() > 32000 && buffs.getBlessingsPerAlignment() <= 0) setCurrentHp(32000);
+        if (getCurrentHp() > 32000) setCurrentHp(32000);
         if (getCurrentHp() < 1) setCurrentHp(1);
         if (getHerblore() < 1) setHerblore(1);
         if (getHerblore() > 120) setHerblore(120);

@@ -17,7 +17,7 @@ public class EquipmentAdditiveResolver {
         EquipmentSlot gloves = equipment.getGloves();
         EquipmentSlot offhand = equipment.getOffhand();
         List<EquipmentSlot> voidKnight = new ArrayList<>(List.of(head, body, legs, gloves, offhand));
-        int pieceValue = equipment.getSetPieceValue(context.getBuffs());
+        int pieceValue = 1;
 
         int superiorVoid = 0;
         int baseVoid = 0;

@@ -32,7 +32,7 @@ public class PerkContextMapper {
                 continue;
             }
 
-            int maxTier = buffs.has(BuffId.POWER_ARCHIVE) ? perk.getKey().getMaxTier() * 2 : perk.getKey().getMaxTier();
+            int maxTier = perk.getKey().getMaxTier();
 
             if (perk.getValue() > maxTier) {
                 cleanedPerks.put(perk.getKey(), maxTier);

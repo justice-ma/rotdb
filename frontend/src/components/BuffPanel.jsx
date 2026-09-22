@@ -19,13 +19,6 @@ const STYLE = {
   NECROMANCY: "NECROMANCY",
 };
 
-const HIGHER_POWER_BLOCKED_BUFFS = new Set([
-  "BERSERK",
-  "DEATHSWIFTNESS",
-  "LIVINGDEATH",
-  "SUNSHINE",
-]);
-
 const PRAYER_MOVED_BUFF_IDS = ["ECLIPSEDSOUL", "BOOKUPTIME"];
 
 const BUFF_UI_META = {
@@ -387,15 +380,7 @@ export default function BuffPanel({ style, buffs, setBuffs, allBuffs }) {
 
   const enabledBuffs = buffs?.enabledBuffs ?? [];
   const buffStacks = buffs?.buffStacks ?? {};
-  const higherPowerSelected = enabledBuffs.includes("HIGHER_POWER");
-
-  function isBlockedByHigherPower(buffId) {
-    return higherPowerSelected && HIGHER_POWER_BLOCKED_BUFFS.has(buffId);
-  }
-
   function toggleBuff(buffId) {
-    if (isBlockedByHigherPower(buffId)) return;
-
     setBuffs((prev) => {
       const enabled = prev?.enabledBuffs ?? [];
       const stacks = prev?.buffStacks ?? {};
@@ -491,32 +476,6 @@ export default function BuffPanel({ style, buffs, setBuffs, allBuffs }) {
   const activeBuffs = groupedBuffs[activeCategory] ?? [];
 
   useEffect(() => {
-    if (!higherPowerSelected) return;
-
-    setBuffs((prev) => {
-      const enabled = prev?.enabledBuffs ?? [];
-      const stacks = prev?.buffStacks ?? {};
-
-      const nextEnabled = enabled.filter(
-        (id) => !HIGHER_POWER_BLOCKED_BUFFS.has(id),
-      );
-
-      if (nextEnabled.length === enabled.length) return prev;
-
-      const nextStacks = { ...stacks };
-      HIGHER_POWER_BLOCKED_BUFFS.forEach((id) => {
-        delete nextStacks[id];
-      });
-
-      return {
-        ...prev,
-        enabledBuffs: nextEnabled,
-        buffStacks: nextStacks,
-      };
-    });
-  }, [higherPowerSelected, setBuffs]);
-
-  useEffect(() => {
     if (!visibleCategories.length) return;
     if (!visibleCategories.includes(activeCategory)) {
       setActiveCategory(visibleCategories[0]);
@@ -551,21 +510,13 @@ export default function BuffPanel({ style, buffs, setBuffs, allBuffs }) {
         <div className="buff-grid">
           {activeBuffs.map((buff) => {
             const isSelected = enabledBuffs.includes(buff.id);
-            const disabled = isBlockedByHigherPower(buff.id);
 
             return (
               <div key={buff.id} className="buff-item">
                 <button
                   type="button"
                   onClick={() => toggleBuff(buff.id)}
-                  disabled={disabled}
-                  className={
-                    disabled
-                      ? "buff disabled"
-                      : isSelected
-                        ? "buff selected"
-                        : "buff"
-                  }
+                  className={isSelected ? "buff selected" : "buff"}
                 >
                   <span className="buff-label">{buff.label}</span>
 

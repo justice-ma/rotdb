@@ -9,7 +9,6 @@ public class InvisibleAggregator {
                 * AmmoBuffInvisibleResolver.resolve(context, hit, hitIndex)
                 * PerkInvisibleResolver.resolve(context, hit)
                 * PocketInvisibleResolver.resolve(context)
-                * WeaponInvisibleResolver.resolve(context)
-                * HigherPowerResolver.resolve(context);
+                * WeaponInvisibleResolver.resolve(context);
     }
 }

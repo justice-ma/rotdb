@@ -32,10 +32,7 @@ public class AggregationModifier implements Modifier {
 
             if (hit.getType() == HitType.BASE ||
                     hit.getType() == HitType.SPLITSOUL ||
-                    hit.getType() == HitType.PERFECTEQUILIBRIUM ||
-                    hit.getType() == HitType.POISON ||
-                    hit.getType() == HitType.INFERNO_OF_ZAMORAK ||
-                    hit.getType() == HitType.LIGHT_OF_SARADOMIN) {
+                    hit.getType() == HitType.PERFECTEQUILIBRIUM) {
                 min += hit.getCurrentMin();
                 max += hit.getCurrentMax();
                 avg += hit.getCurrentDamage();
@@ -48,7 +45,7 @@ public class AggregationModifier implements Modifier {
                 nonCritMax += hit.getNonCritMax();
                 nonCritAvg += hit.getNonCritDamage();
 
-                if (hit.getType() == HitType.BASE || hit.getType() == HitType.POISON || hit.getType() == HitType.LIGHT_OF_SARADOMIN) {
+                if (hit.getType() == HitType.BASE) {
                     minCoeff += hit.getMin() * 100 + 1E-9;
                     maxCoeff += hit.getMax() * 100 + 1E-9;
                 }

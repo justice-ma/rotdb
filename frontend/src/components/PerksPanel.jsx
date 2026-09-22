@@ -5,7 +5,6 @@ import "../style/perksPanel.css";
 export default function PerksPanel({
   selectedPerks,
   setSelectedPerks,
-  buffs,
   genocidalRank,
   setGenocidalRank,
   itemLevel20,
@@ -16,7 +15,6 @@ export default function PerksPanel({
   const [error, setError] = useState("");
   const [perkRanks, setPerkRanks] = useState({});
   const inputRefs = useRef({});
-  const hasPowerArchive = (buffs?.enabledBuffs ?? []).includes("POWER_ARCHIVE");
 
   useEffect(() => {
     const controller = new AbortController();
@@ -55,22 +53,21 @@ export default function PerksPanel({
   }, [selectedPerks]);
 
   useEffect(() => {
-    if (hasPowerArchive || !perks.length) return;
+    if (!perks.length) return;
 
-    setPerkRanks((prev) => clampPerkRanks(prev, perks, false));
-    setSelectedPerks((prev) => clampPerkRanks(prev, perks, false));
-  }, [hasPowerArchive, perks, setSelectedPerks]);
+    setPerkRanks((prev) => clampPerkRanks(prev, perks));
+    setSelectedPerks((prev) => clampPerkRanks(prev, perks));
+  }, [perks, setSelectedPerks]);
 
   function getPerkMax(perk) {
-    const max = perk.max ?? 1;
-    return hasPowerArchive && perk.id !== "GENOCIDAL" ? max * 2 : max;
+    return perk.max ?? 1;
   }
 
   function isFixedRankPerk(perk) {
     return perk.id !== "GENOCIDAL" && (perk.max ?? 1) === 1;
   }
 
-  function clampPerkRanks(ranks, perkList, powerArchiveActive) {
+  function clampPerkRanks(ranks, perkList) {
     if (!ranks) return ranks;
 
     let changed = false;
@@ -83,7 +80,7 @@ export default function PerksPanel({
       const perk = byId.get(perkId);
       if (!perk) continue;
 
-      const max = powerArchiveActive ? (perk.max ?? 1) * 2 : (perk.max ?? 1);
+      const max = perk.max ?? 1;
       const clamped = Math.max(1, Math.min(max, Number(rank)));
 
       if (!Number.isNaN(clamped) && clamped !== rank) {

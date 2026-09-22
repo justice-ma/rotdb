@@ -19,21 +19,13 @@ public class CritAggregator {
                 continue;
             }
 
-            if (hit.getTier() == AbilityTier.CONJURE || hit.getType() == HitType.POISON) {
+            if (hit.getTier() == AbilityTier.CONJURE) {
                 hit.setCritChanceModifier(0);
                 continue;
             }
 
             double hitCritChance = context.getEffectiveStatsResult().getGlobalCritChance();
             double hitCritDamage = context.getEffectiveStatsResult().getGlobalCritDamage();
-
-            if ((context.getAbility().getId() == AbilityId.INFERNO_OF_ZAMORAK_MAGIC ||
-                    context.getAbility().getId() == AbilityId.INFERNO_OF_ZAMORAK_MELEE ||
-                    context.getAbility().getId() == AbilityId.INFERNO_OF_ZAMORAK_RANGED ||
-                    context.getAbility().getId() == AbilityId.INFERNO_OF_ZAMORAK_NECROMANCY ||
-                    hit.getType() == HitType.INFERNO_OF_ZAMORAK) && context.getBuffs().has(BuffId.UNHOLY_CRITUAL)) {
-                hitCritDamage += 0.5;
-            }
 
             CritBonus perHit = PerHitCritAdjustResolver.resolve(context, hit, i);
 
@@ -49,19 +41,8 @@ public class CritAggregator {
                     hit.setForcedCrit(true);
                 }
             }
-
-            if (context.getBuffs().has(BuffId.TRUE_EQUILIBRIUM)) {
-                hitCritChance += 0.05 * context.getBuffs().getBlessingsPerAlignment();
-                hitCritDamage += 0.075 * context.getBuffs().getBlessingsPerAlignment();
-            }
-
-            if (!context.getBuffs().has(BuffId.UNHOLY_CRITUAL)) {
-                hitCritChance = Math.max(0, Math.min(hitCritChance, 1));
-            } else {
-                double excess = Math.max(0, hitCritChance - 0.5);
-                hitCritChance = Math.max(0, Math.min(hitCritChance, 0.5));
-                hitCritDamage = hitCritDamage + excess;
-            }
+            
+            hitCritChance = Math.max(0, Math.min(hitCritChance, 1));
 
             hit.setCritChanceModifier(hitCritChance);
             hit.setCritDamageModifier(hitCritDamage);

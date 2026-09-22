@@ -16,8 +16,6 @@ public class StyleSpecificModifier implements Modifier {
 
         for (int i = 0; i < hits; i++) {
             AbilityHitsContext hit = context.getAbility().getHits().get(i);
-            if (hit.getType() == HitType.POISON) continue;
-
             if (!hit.isDot()) {
                 double mod = StyleSpecificAggregator.resolve(context);
                 hit.calculateDamages(mod);

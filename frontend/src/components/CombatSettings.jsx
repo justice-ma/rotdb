@@ -9,7 +9,6 @@ import TargetPanel from "./TargetPanel";
 import FamiliarPanel from "./FamiliarPanel";
 import PresetSelector from "./PresetSelector";
 import PotionsPanel from "./PotionPanel";
-import BlessingPanel from "./BlessingPanel";
 
 const SLOTS = [
   "MAINHAND",
@@ -770,25 +769,11 @@ export default function CombatSettings({
       </details>
 
       <details className="cs-section">
-        <summary className="cs-summary">Leagues</summary>
-        <div className="cs-body">
-          <BlessingPanel
-            style={style}
-            buffs={buffs}
-            setBuffs={setBuffs}
-            allBuffs={allBuffs}
-            selectedPocket={selectedPocket}
-          />
-        </div>
-      </details>
-
-      <details className="cs-section">
         <summary className="cs-summary">Perks</summary>
         <div className="cs-body">
           <PerksPanel
             selectedPerks={selectedPerks}
             setSelectedPerks={setSelectedPerks}
-            buffs={buffs}
             genocidalRank={genocidalRank}
             setGenocidalRank={setGenocidalRank}
             itemLevel20={itemLevel20}

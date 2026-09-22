@@ -13,7 +13,6 @@ import java.util.List;
 
 import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.NECROMANCY;
 import static com.rotdb.shared.combat.domain.model.enums.CombatStyles.RANGED;
-import static com.rotdb.shared.combat.domain.model.enums.HitType.POISON;
 import static com.rotdb.shared.combat.domain.model.enums.HitType.SPLITSOUL;
 
 public class SplitSoulInjector implements Modifier {
@@ -40,9 +39,6 @@ public class SplitSoulInjector implements Modifier {
                 return;
             }
 
-            if (hits.get(i).getType() == POISON) {
-                continue;
-            }
             AbilityHitsContext parent = hits.get(i);
 
             AbilityHitsContext proc = new AbilityHitsContext();

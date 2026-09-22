@@ -152,32 +152,7 @@ public enum AbilityId {
 
     DEATHGRASP(NECROMANCY, SPECIAL,"Death Grasp", "special_attack_weapon_icons/death-guard.png", true),
     SOULCRUSH(NECROMANCY, SPECIAL,"Soul Crush", "special_attack_weapon_icons/devourer-s-guard.png", true),
-    DEATHESSENCE(NECROMANCY, SPECIAL,"Death Essence", "special_attack_weapon_icons/omni-guard.png", true),
-
-    LIGHT_OF_SARADOMIN_MAGIC(MAGIC, BLESSING, "Light of Saradomin", "blessings/Striking_Light.png"),
-    LIGHT_OF_SARADOMIN_MELEE(MELEE, BLESSING, "Light of Saradomin", "blessings/Striking_Light.png"),
-    LIGHT_OF_SARADOMIN_RANGED(RANGED, BLESSING, "Light of Saradomin", "blessings/Striking_Light.png"),
-    LIGHT_OF_SARADOMIN_NECROMANCY(NECROMANCY, BLESSING, "Light of Saradomin", "blessings/Striking_Light.png"),
-
-    LORD_OF_LIGHT_MAGIC(MAGIC, BLESSING, "Lord of Light", "blessings/Lord_of_Light.png"),
-    LORD_OF_LIGHT_MELEE(MELEE, BLESSING, "Lord of Light", "blessings/Lord_of_Light.png"),
-    LORD_OF_LIGHT_RANGED(RANGED, BLESSING, "Lord of Light", "blessings/Lord_of_Light.png"),
-    LORD_OF_LIGHT_NECROMANCY(NECROMANCY, BLESSING, "Lord of Light", "blessings/Lord_of_Light.png"),
-
-    BASH_MAGIC(MAGIC, BLESSING, "Bash", "blessings/Steadfast_Will.png"),
-    BASH_MELEE(MELEE, BLESSING, "Bash", "blessings/Steadfast_Will.png"),
-    BASH_RANGED(RANGED, BLESSING, "Bash", "blessings/Steadfast_Will.png"),
-    BASH_NECROMANCY(NECROMANCY, BLESSING, "Bash", "blessings/Steadfast_Will.png"),
-
-    BARKSCALES_MAGIC(MAGIC, BLESSING, "Grasp of Guthix", "blessings/Barkscales.png"),
-    BARKSCALES_MELEE(MELEE, BLESSING, "Grasp of Guthix", "blessings/Barkscales.png"),
-    BARKSCALES_RANGED(RANGED, BLESSING, "Grasp of Guthix", "blessings/Barkscales.png"),
-    BARKSCALES_NECROMANCY(NECROMANCY, BLESSING, "Grasp of Guthix", "blessings/Barkscales.png"),
-
-    INFERNO_OF_ZAMORAK_MAGIC(MAGIC, BLESSING, "Inferno of Zamorak", "blessings/Abyssal_Cinders.png"),
-    INFERNO_OF_ZAMORAK_MELEE(MELEE, BLESSING, "Inferno of Zamorak", "blessings/Abyssal_Cinders.png"),
-    INFERNO_OF_ZAMORAK_RANGED(RANGED, BLESSING, "Inferno of Zamorak", "blessings/Abyssal_Cinders.png"),
-    INFERNO_OF_ZAMORAK_NECROMANCY(NECROMANCY, BLESSING, "Inferno of Zamorak", "blessings/Abyssal_Cinders.png");
+    DEATHESSENCE(NECROMANCY, SPECIAL,"Death Essence", "special_attack_weapon_icons/omni-guard.png", true);
 
     private final CombatStyles style;
     private final AbilityTier tier;
