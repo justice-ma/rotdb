@@ -165,6 +165,25 @@ As of 2026-09-03:
   likely skipped by Surefire's `*Test` matching. Not yet confirmed or decided
 - every other axis on the fixture record is exercised by exactly one value and is therefore not yet known to work
 
+As of 2026-09-24:
+
+- `CalculationBaseAbilityDamageTests`: 20 fixtures covering melee, magic and ranged, all passing at ±1. The full
+  `mvn test` suite was **not** run in-session; run it before committing.
+- Fixed: two-handed ranged weapons with no ammo (or tier-0 ammo) now use an effective ammo tier of `mainhand tier / 3.0`,
+  back-solved from four in-game readings. Dual-wield and main-hand-only ranged weapons do **not** follow this rule;
+  they still use ammo tier 0, which matches the in-game Ruinous Crossbow readings.
+- Fixed: Shard of Genesis now adds +5 to the magic spell tier and to the two-handed ranged ammo tier, not only to
+  weapon tiers.
+- Refactor: shard logic moved into `ShardOfGenesisResolver` (queries only); `effectiveAmmoTier` in
+  `BaseAbilityDamageModifier` owns the no-ammo rule.
+- User-supplied, not externally verified: thrown weapons, charge bows, and dual-wield or main-hand-only ranged weapons
+  cannot be sharded (recorded as a comment in `BaseAbilityDamageModifier`).
+- Parked: the User:Akritia/ability_damage formula (wiki, 12 June 2026) didn't reproduce the in-game fixtures and cites
+  no sources. The resolvers were not changed.
+- **Next starting point:** 7 of the 20 fixtures are off by exactly 1, in both directions, and the tolerance hides it.
+  Investigate rounding: compare where `MagicBaseDamageResolver` and `RangedBaseDamageResolver` floor values and where
+  they cast to `int`.
+
 ## Known Open Questions
 
 - exact same-tick lifecycle ordering between user actions, releases, hit landings, expiries, and state snapshots
@@ -173,6 +192,8 @@ As of 2026-09-03:
 - how frontend-visible tick inspection should represent multiple ordered actions on the same tick
 - the true RS3 base-damage formula is unpublished; the calculator approximates it, and the per-style deviation is an open measurement
 - whether `NECROMANCY` + two-handed is a real in-game configuration; `resolveBase` has no two-handed necromancy branch
+- source of the systematic off-by-one in base ability damage (rounding or truncation order in the resolvers)
+- melee base damage when weapon tier exceeds Strength level (see `docs/KNOWN_UNKNOWNS.md`)
 
 ## Fresh Session Checklist
 

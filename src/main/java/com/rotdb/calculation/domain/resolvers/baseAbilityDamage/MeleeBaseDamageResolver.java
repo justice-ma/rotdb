@@ -27,6 +27,4 @@ public class MeleeBaseDamageResolver {
         double base = EquilibriumCalc.Calc(mh, eq);
         return (int) EruptiveCalc.Calc(base, er);
     }
-    // Damage output is low when tier is greater than strength ** ASSUME TIER IS ALWAYS LESS THAN OR EQUAL TO STR **
-    // TODO: Try to find a fix, contact Akritia if required
 }

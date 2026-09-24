@@ -5,10 +5,7 @@ import com.rotdb.calculation.domain.model.context.AggregatedCalculationContext;
 import com.rotdb.calculation.domain.modifiers.baseDamage.BaseAbilityDamageModifier;
 import com.rotdb.shared.ability.AbilityId;
 import com.rotdb.shared.ability.AbilityProvider;
-import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
-import com.rotdb.shared.combat.domain.model.enums.Effect;
-import com.rotdb.shared.combat.domain.model.enums.Perks;
-import com.rotdb.shared.combat.domain.model.enums.Slots;
+import com.rotdb.shared.combat.domain.model.enums.*;
 import com.rotdb.shared.combat.domain.model.player.PotionContext;
 import com.rotdb.shared.combat.domain.model.player.SpellContext;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -45,7 +42,7 @@ public class CalculationBaseAbilityDamageTests {
             int mainHandTier,
             int offHandTier,
             int ammoTier,
-            SpellContext spell,
+            Spells spell,
             boolean shardable,
             int equilibriumRank,
             int eruptiveRank
@@ -210,6 +207,193 @@ public class CalculationBaseAbilityDamageTests {
                         false,
                         0,
                         4
+                ),
+                new BaseAbilityDamageFixture(
+                        "Wand of the Praesul, Imperium Core, Elder Overload, Base Test",
+                        LocalDate.of(2026, 9, 10),
+                        1,
+                        1887,
+                        CombatStyles.MAGIC,
+                        AttackHandedness.DUAL_WIELD,
+                        PlayerBuffFactory.addElderOverload(new ArrayList<>()),
+                        0,
+                        92,
+                        92,
+                        0,
+                        Spells.INCITEFEAR,
+                        false,
+                        0,
+                        0
+                ),
+                new BaseAbilityDamageFixture(
+                        "Fracture Staff of Armadyl, Shard of Genesis, Elder Overload, Eruptive 2, Base Test",
+                        LocalDate.of(2026, 9, 10),
+                        1,
+                        2022,
+                        CombatStyles.MAGIC,
+                        AttackHandedness.TWO_HANDED,
+                        PlayerBuffFactory.addElderOverload(new ArrayList<>()),
+                        0,
+                        95,
+                        95,
+                        0,
+                        Spells.INCITEFEAR,
+                        true,
+                        0,
+                        2
+                ),
+                new BaseAbilityDamageFixture(
+                        "Bow of the Last Guardian, Shard of Genesis, Eruptive 2, No Ammo, Base Test",
+                        LocalDate.of(2026, 9, 24),
+                        1,
+                        1022,
+                        CombatStyles.RANGED,
+                        AttackHandedness.TWO_HANDED,
+                        new ArrayList<>(),
+                        0,
+                        95,
+                        95,
+                        0,
+                        null,
+                        true,
+                        0,
+                        2
+                ),
+                new BaseAbilityDamageFixture(
+                        "Ruinous Crossbows, No Ammo, Base Test",
+                        LocalDate.of(2026, 9, 24),
+                        1,
+                        484,
+                        CombatStyles.RANGED,
+                        AttackHandedness.DUAL_WIELD,
+                        new ArrayList<>(),
+                        0,
+                        90,
+                        90,
+                        0,
+                        null,
+                        false,
+                        0,
+                        0
+                ),
+                new BaseAbilityDamageFixture(
+                        "Ruinous Crossbows, No Ammo, No offhand, Base Test",
+                        LocalDate.of(2026, 9, 24),
+                        1,
+                        323,
+                        CombatStyles.RANGED,
+                        AttackHandedness.MAINHAND_ONLY,
+                        new ArrayList<>(),
+                        0,
+                        90,
+                        0,
+                        0,
+                        null,
+                        false,
+                        0,
+                        0
+                ),
+                new BaseAbilityDamageFixture(
+                        "Wyvern Crossbow, No Ammo, Base Test",
+                        LocalDate.of(2026, 9, 24),
+                        1,
+                        892,
+                        CombatStyles.RANGED,
+                        AttackHandedness.TWO_HANDED,
+                        new ArrayList<>(),
+                        0,
+                        85,
+                        85,
+                        0,
+                        null,
+                        false,
+                        0,
+                        0
+                ),
+                new BaseAbilityDamageFixture(
+                        "Zamorak Bow, No Ammo, Base Test",
+                        LocalDate.of(2026, 9, 24),
+                        1,
+                        748,
+                        CombatStyles.RANGED,
+                        AttackHandedness.TWO_HANDED,
+                        new ArrayList<>(),
+                        0,
+                        55,
+                        55,
+                        0,
+                        null,
+                        false,
+                        0,
+                        0
+                ),
+                new BaseAbilityDamageFixture(
+                        "Bow of the Last Guardian, Shard of Genesis, Eruptive 2, Ful Arrows, Base Test",
+                        LocalDate.of(2026, 9, 24),
+                        1,
+                        1943,
+                        CombatStyles.RANGED,
+                        AttackHandedness.TWO_HANDED,
+                        new ArrayList<>(),
+                        0,
+                        95,
+                        95,
+                        95,
+                        null,
+                        true,
+                        0,
+                        2
+                ),
+                new BaseAbilityDamageFixture(
+                        "Fractured Staff of Armadyl, Shard of Genesis, Eruptive 2, Ice Blitz, Base Test",
+                        LocalDate.of(2026, 9, 24),
+                        1,
+                        1898,
+                        CombatStyles.MAGIC,
+                        AttackHandedness.TWO_HANDED,
+                        new ArrayList<>(),
+                        0,
+                        95,
+                        95,
+                        0,
+                        Spells.ICEBLITZ,
+                        true,
+                        0,
+                        2
+                ),
+                new BaseAbilityDamageFixture(
+                        "Roar of Awakening, Ode to Deceit, Shard of Genesis, Eruptive 2, Ice Blitz, Base Test",
+                        LocalDate.of(2026, 9, 24),
+                        1,
+                        1898,
+                        CombatStyles.MAGIC,
+                        AttackHandedness.DUAL_WIELD,
+                        new ArrayList<>(),
+                        0,
+                        95,
+                        95,
+                        0,
+                        Spells.ICEBLITZ,
+                        true,
+                        0,
+                        2
+                ),
+                new BaseAbilityDamageFixture(
+                        "Roar of Awakening, No offhand, Shard of Genesis, Ice Blitz, Base Test",
+                        LocalDate.of(2026, 9, 24),
+                        1,
+                        1254,
+                        CombatStyles.MAGIC,
+                        AttackHandedness.MAINHAND_ONLY,
+                        new ArrayList<>(),
+                        0,
+                        95,
+                        95,
+                        0,
+                        Spells.ICEBLITZ,
+                        true,
+                        0,
+                        0
                 )
         );
     }
@@ -260,7 +444,11 @@ public class CalculationBaseAbilityDamageTests {
         context.getSnapshotContext().getPerks().setPerk(perks);
 
         // Setting spell
-        if (fixture.spell != null) context.getSnapshotContext().setSpellContext(fixture.spell);
+        if (fixture.spell != null) {
+            SpellContext spellContext = new SpellContext();
+            spellContext.setSpell(fixture.spell);
+            context.getSnapshotContext().setSpellContext(spellContext);
+        }
 
         // Setting ammo tier
         context.getSnapshotContext().getEquipment().getAmmo().setDamageTier(fixture.ammoTier);

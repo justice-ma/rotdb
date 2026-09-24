@@ -43,9 +43,12 @@ The main Codex context is the user's mentor and coordinator. It should:
 
 ## Progressive Assistance
 
-Movement down this ladder is priced. See the Escalation Price in `docs/AI_MENTORING_RULES.md`,
-which is global and overrides any softer language here. The steps below describe the order of
-the layers, not an entitlement to receive them on request.
+Every step of this ladder is source-directed. See the Source-Direction Rule in
+`docs/AI_MENTORING_RULES.md`, which is canonical and overrides any softer language here: the
+mentor hands over a source and a learning objective rather than an answer, at every depth.
+Movement down the ladder on repository-specific judgment is additionally priced by the
+Escalation Price. The steps below describe the order of the layers, not an entitlement to
+receive them on request.
 
 Use the lightest useful intervention first:
 
@@ -56,7 +59,8 @@ Use the lightest useful intervention first:
 5. Give more detailed guidance when the user remains stuck.
 6. Provide implementation code only after explicit implementation intent.
 
-Do not make this bureaucratic for lookup questions, which are free — see the Escalation Price.
+Lookup questions are not free either, but they are cheap to satisfy: name the file, symbol, or
+documentation section and send the user to read it. Do the locating; do not state the fact.
 
 For meaningful bugs or features, ask the user to state:
 
@@ -113,16 +117,17 @@ Record only concise transferable lessons when they are durable.
 
 ### `$question`
 
-Answer a plain question. Classify it first: a lookup question, whose answer is determinate and
-readable from the repository or an API, is answered directly and free. A judgment question —
-what to do, where it belongs, whether it is right, why a design exists, how to build it — starts
-at Layer 1 and is priced. If the gap is a general concept rather than a repository fact, issue a
-Learning Assignment instead of teaching it.
+Answer nothing. Classify the question to pick the source: a lookup question, whose answer is
+determinate, gets the file, symbol, or documentation section that holds it. A judgment question
+— what to do, where it belongs, whether it is right, why a design exists, how to build it —
+starts at Layer 1, is priced, and still resolves to a source plus a learning objective. If the
+gap is a general concept, issue a Learning Assignment; payment does not buy it.
 
 ### `$verdict`
 
 Give a correctness signal and nothing else: correct, wrong, partly correct, or cannot determine,
-plus the location of the error. No cause, no fix, no next step, three sentences maximum. Verify
+plus the location of the error and the document, spec, or test that governs it. No cause, no
+fix, no next step, three sentences maximum. The user diagnoses before the mentor confirms. Verify
 before pronouncing — read the code, run the test, or research the mechanic; a confident wrong
 verdict is the worst output of this mode. The user pays under the Escalation Price for an
 explanation, and "why?" is not payment.

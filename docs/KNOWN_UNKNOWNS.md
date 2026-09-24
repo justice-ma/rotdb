@@ -60,3 +60,21 @@ Would resolve with:
 
 Status:
 - unresolved
+
+### Melee base damage when weapon tier exceeds Strength level
+
+Why it matters:
+- `MeleeBaseDamageResolver` produces low base ability damage when the weapon's damage tier is greater than the player's Strength level. The resolvers currently assume tier ≤ Strength, so under-levelled or low-level setups may produce wrong base damage without any error.
+
+Evidence checked:
+- Recorded as a code comment in `MeleeBaseDamageResolver` ("ASSUME TIER IS ALWAYS LESS THAN OR EQUAL TO STR"). The comment was removed during the 2026-09-24 ranged no-ammo work and moved here.
+- No fixture in `CalculationBaseAbilityDamageTests` covers tier > Strength.
+
+Conflicting evidence:
+- None recorded yet.
+
+Would resolve with:
+- In-game readings of displayed base ability damage with Strength held below the weapon tier (one factor changed at a time), added as fixtures. The original note suggests contacting Akritia if the readings don't settle it.
+
+Status:
+- unresolved
