@@ -49,6 +49,10 @@ public class TargetStatusMultiplierResolver {
             mod *= buff.stacks(BuffId.SLAYERLODGE) == 1 ? 1.01 : buff.stacks(BuffId.SLAYERLODGE) == 2 ? 1.03 : 1.06;
         }
 
+        if (equipment.getMainhand().getEffect().contains(Effect.HAVENSILVER)) {
+            mod *= 1.5;
+        }
+
         return mod;
     }
 }
