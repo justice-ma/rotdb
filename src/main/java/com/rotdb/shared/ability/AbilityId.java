@@ -149,6 +149,7 @@ public enum AbilityId {
     AIMEDSHOT(RANGED, SPECIAL,"Aimed Shot", "special_attack_weapon_icons/hand-cannon.png", false),
     RESTORATIVESHOT(RANGED, SPECIAL,"Restorative Shot", "special_attack_weapon_icons/saradomin-bow.png", false),
     BALANCEDSHOT(RANGED, SPECIAL,"Balanced Shot", "special_attack_weapon_icons/guthix-bow.png", false),
+    SANGUINE_VOLLEY(RANGED, SPECIAL, "Sanguine Volley", "special_attack_weapon_icons/malachi-s-tooth.png", true),
 
     DEATHGRASP(NECROMANCY, SPECIAL,"Death Grasp", "special_attack_weapon_icons/death-guard.png", true),
     SOULCRUSH(NECROMANCY, SPECIAL,"Soul Crush", "special_attack_weapon_icons/devourer-s-guard.png", true),

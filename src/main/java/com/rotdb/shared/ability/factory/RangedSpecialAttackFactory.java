@@ -236,4 +236,21 @@ public class RangedSpecialAttackFactory {
                 RANGED,
                 BALANCEDSHOT);
     }
+
+    public static AbilityContext sanguineVolley() {
+        return new AbilityContext(5,
+                List.of(new AbilityHitsContext(0.7, 0.9, false, ENHANCED, 4),
+                        new AbilityHitsContext(0.7, 0.9, false, ENHANCED, 4),
+                        new AbilityHitsContext(0.7, 0.9, false, ENHANCED, 4),
+                        new AbilityHitsContext(0.7, 0.9, false, ENHANCED, 4),
+                        new AbilityHitsContext(0.7, 0.9, false, ENHANCED, 4)),
+                        "Sanguine Volley",
+                        -40,
+                        100,
+                        false,
+                        BOTH,
+                        SINGLE_TARGET,
+                        RANGED,
+                        SANGUINE_VOLLEY);
+    }
 }

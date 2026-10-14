@@ -173,6 +173,7 @@ public final class AbilityProvider {
             case DESTRUCTIVESHOT -> RangedSpecialAttackFactory.destructiveShot();
             case RESTORATIVESHOT -> RangedSpecialAttackFactory.restorativeShot();
             case BALANCEDSHOT -> RangedSpecialAttackFactory.balancedShot();
+            case SANGUINE_VOLLEY -> RangedSpecialAttackFactory.sanguineVolley();
 
             // Necromancy Specs
             case DEATHGRASP -> NecromancySpecialAttackFactory.deathGrasp();

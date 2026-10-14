@@ -351,13 +351,9 @@ const BUFF_UI_META = {
     category: BUFF_CATEGORY.PASSIVE_BUFFS,
     styles: [STYLE.MELEE],
   },
-  BIK_ARROWS: {
-    category: BUFF_CATEGORY.STACKS,
+  CRIMSON_SALVO: {
+    category: BUFF_CATEGORY.ABILITY_BUFFS,
     styles: [STYLE.RANGED],
-  },
-  KWUARM: {
-    category: BUFF_CATEGORY.STACKS,
-    styles: [STYLE.MELEE, STYLE.MAGIC, STYLE.RANGED, STYLE.NECROMANCY],
   },
 };
 
