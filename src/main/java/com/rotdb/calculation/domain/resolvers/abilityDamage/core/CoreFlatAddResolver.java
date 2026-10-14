@@ -22,6 +22,11 @@ public class CoreFlatAddResolver {
             add += (int) (context.getDamage().getBaseDamage() * 0.24);
         }
 
+        if (context.getBuffs().has(BuffId.CRIMSON_SALVO) && context.getEquipment().getMainhand().getEffect().contains(Effect.MALACHI)
+                && context.getEquipment().getOffhand().getEffect().contains(Effect.MALACHI)) {
+            add += (int) (context.getDamage().getBaseDamage() * 0.2);
+        }
+
         return add;
     }
 }

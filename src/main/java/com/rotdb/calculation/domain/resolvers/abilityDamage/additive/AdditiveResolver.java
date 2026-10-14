@@ -7,7 +7,6 @@ public class AdditiveResolver {
         return  1 +
                 EquipmentAdditiveResolver.resolve(context) +
                 GlobalAdditiveResolver.resolve(context) +
-                MeleeAdditiveResolver.resolve(context, hitIndex) +
-                RangedAdditiveResolver.resolve(context);
+                MeleeAdditiveResolver.resolve(context, hitIndex);
     }
 }
