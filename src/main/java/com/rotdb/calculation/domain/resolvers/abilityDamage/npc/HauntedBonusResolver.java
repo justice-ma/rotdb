@@ -11,10 +11,10 @@ public class HauntedBonusResolver {
     // TODO: NEXUS GOES IN QUIVER SLOT - CREATE QUIVER SLOT
     public static HauntedBonus resolve(CalculationContext context, AbilityHitsContext hit) {
         BuffContext buff = context.getBuffs();
-        EquipmentSlot pocket = context.getEquipment().getPocket();
+        EquipmentSlot quiver = context.getEquipment().getQuiver();
         int minCrit = 0, maxCrit = 0, minNonCrit = 0, maxNonCrit = 0, minAvg = 0, maxAvg = 0;
         if (buff.has(BuffId.HAUNTED)) {
-            double mod = pocket.getEffect().contains(Effect.DEVOURERSNEXUS) ? 0.15 : 0.1;
+            double mod = quiver.getEffect().contains(Effect.DEVOURERSNEXUS) ? 0.15 : 0.1;
             minCrit = Math.min((int) (hit.getCritMin() * mod), (int) (context.getDamage().getBaseDamage() * (mod * 2)));
             maxCrit = Math.min((int) (hit.getCritMax() * mod), (int) (context.getDamage().getBaseDamage() * (mod * 2)));
             minNonCrit = Math.min((int) (hit.getNonCritMin() * mod), (int) (context.getDamage().getBaseDamage() * (mod * 2)));
