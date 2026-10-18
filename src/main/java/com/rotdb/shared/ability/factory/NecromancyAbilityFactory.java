@@ -3,6 +3,8 @@ package com.rotdb.shared.ability.factory;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
+import com.rotdb.shared.combat.domain.model.enums.HitType;
+
 import java.util.List;
 import static com.rotdb.shared.ability.AbilityId.*;
 import static com.rotdb.shared.ability.Handedness.*;
@@ -139,7 +141,7 @@ public class NecromancyAbilityFactory {
     public static AbilityContext conjurePutridZombie() {
         return new AbilityContext(2,
                 List.of(new AbilityHitsContext(0.18, 0.22, false, CONJURE, 6),
-                        new AbilityHitsContext(0.08, 0.12, false, CONJURE, 3)),
+                        new AbilityHitsContext(0.08, 0.12, false, CONJURE, 3, HitType.POISON)),
                 "Conjure Putrid Zombie",
                 0,
                 0,

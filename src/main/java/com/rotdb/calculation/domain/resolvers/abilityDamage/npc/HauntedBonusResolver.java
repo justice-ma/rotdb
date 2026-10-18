@@ -8,7 +8,6 @@ import com.rotdb.shared.combat.domain.model.equipment.EquipmentSlot;
 import com.rotdb.shared.combat.domain.model.player.BuffContext;
 
 public class HauntedBonusResolver {
-    // TODO: NEXUS GOES IN QUIVER SLOT - CREATE QUIVER SLOT
     public static HauntedBonus resolve(CalculationContext context, AbilityHitsContext hit) {
         BuffContext buff = context.getBuffs();
         EquipmentSlot quiver = context.getEquipment().getQuiver();

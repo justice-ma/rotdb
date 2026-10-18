@@ -355,6 +355,10 @@ const BUFF_UI_META = {
     category: BUFF_CATEGORY.ABILITY_BUFFS,
     styles: [STYLE.RANGED],
   },
+  ARISEN_FLESH: {
+    category: BUFF_CATEGORY.ABILITY_BUFFS,
+    styles: [STYLE.NECROMANCY],
+  },
 };
 
 const CATEGORY_ORDER = [

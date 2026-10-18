@@ -25,6 +25,18 @@ public class AbilityHitsContext {
         this.expectedOccurences = 1;
     }
 
+    public AbilityHitsContext(double min, double max, boolean dot, AbilityTier tier, int hitTiming, HitType type) {
+        this.min = min;
+        this.max = max;
+        this.dot = dot;
+        this.tier = tier;
+        this.hitTiming = hitTiming;
+        this.type = type;
+        this.parentIndex = -1;
+        this.forcedCrit = false;
+        this.expectedOccurences = 1;
+    }
+
     public AbilityHitsContext(double min, double max, boolean dot, AbilityTier tier, int hitTiming, HitType type, int parentIndex) {
         this.min = min;
         this.max = max;

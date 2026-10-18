@@ -1,6 +1,5 @@
 package com.rotdb.calculation.domain.model;
 
-import com.rotdb.calculation.persistence.mapper.EquipmentMapper;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.shared.combat.domain.model.equipment.FamiliarContext;
 import com.rotdb.shared.combat.domain.model.equipment.PerkContext;

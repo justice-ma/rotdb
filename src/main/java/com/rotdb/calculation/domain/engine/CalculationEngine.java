@@ -37,6 +37,7 @@ public final class CalculationEngine {
         CalculationContext context = ContextBuilder.build(request);
 
         context.setEffectiveStatsResult(calculateEffectiveStats(context.getSkills(), context.getEquipment(), context.getBuffs(), context.getFamiliar(), context.getPerks()));
+        context.setDerivedStatsResult(calculateDerivedStats(request));
 
         prayerValidator.validatePrayers(context.getSelectedPrayers());
         preCriticalPipeline.run(context);

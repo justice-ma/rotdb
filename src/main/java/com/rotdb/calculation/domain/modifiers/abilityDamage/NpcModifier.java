@@ -35,7 +35,7 @@ public class NpcModifier implements Modifier {
                 postStoredMod *= PostHauntedMultiplierResolver.resolve(context);
                 postStoredMod *= AbilityMultiplierResolver.resolve(context, hit);
 
-                int flatAdd = FlatAddResolver.resolve(context);
+                int flatAdd = FlatAddResolver.resolve(context, hit);
                 if (flatAdd != 0) applyFlatAdd(hit, flatAdd);
 
                 List<Integer> minMax = FlatRangeAddResolver.resolve(context, hit);

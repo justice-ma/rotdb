@@ -4,5 +4,6 @@ public enum HitType {
     BASE,
     INSTABILITY,
     SPLITSOUL,
-    PERFECTEQUILIBRIUM
+    PERFECTEQUILIBRIUM,
+    POISON
 }

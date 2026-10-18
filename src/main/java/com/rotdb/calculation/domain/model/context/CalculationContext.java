@@ -1,5 +1,6 @@
 package com.rotdb.calculation.domain.model.context;
 
+import com.rotdb.calculation.domain.model.DerivedStatsResult;
 import com.rotdb.calculation.domain.model.EffectiveStatsResult;
 import com.rotdb.shared.combat.domain.model.context.AbilityContext;
 import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
@@ -36,6 +37,7 @@ public class CalculationContext {
     private double hitChance;
     private HitCapMode hitCapMode;
     private EffectiveStatsResult effectiveStatsResult;
+    private DerivedStatsResult derivedStatsResult;
 
     public boolean debug = false;
     public boolean finalPrint = false;
@@ -182,5 +184,13 @@ public class CalculationContext {
 
     public void setEffectiveStatsResult(EffectiveStatsResult effectiveStatsResult) {
         this.effectiveStatsResult = effectiveStatsResult;
+    }
+
+    public DerivedStatsResult getDerivedStatsResult() {
+        return derivedStatsResult;
+    }
+
+    public void setDerivedStatsResult(DerivedStatsResult derivedStatsResult) {
+        this.derivedStatsResult = derivedStatsResult;
     }
 }
