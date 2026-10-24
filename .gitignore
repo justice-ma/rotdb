@@ -57,9 +57,14 @@ Thumbs.db
 
 ### Temp In Development ###
 src/main/java/com.rotdb/simulation/
+### Python ###
+__pycache__/
+.venv/
+
 # Generated SQL artifacts
 /tmp/*.sql
 /insert_new_equipment.sql
+/wiki-scrape/
 /frontend/equipment_data.sql
 /database/*.sql
 /database/migrations/*.sql

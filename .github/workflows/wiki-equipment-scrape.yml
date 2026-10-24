@@ -1,21 +1,16 @@
-name: Weekly wiki equipment scrape
+name: Weekly wiki item scrape
 
 on:
   schedule:
     - cron: "0 12 * * 3"
   workflow_dispatch:
-    inputs:
-      max_pages:
-        description: "Optional page limit for a test run"
-        required: false
-        type: string
 
 permissions:
   contents: read
 
 jobs:
-  scrape-equipment:
-    name: Generate equipment update SQL
+  scrape-items:
+    name: Plan equipment and item ID updates
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -33,28 +28,25 @@ jobs:
       - name: Install scraper dependencies
         run: python -m pip install -r requirements-wiki-scraper.txt
 
-      - name: Run scraper
+      - name: Run scraper tests
+        run: python -m unittest test_wiki_item_scraper
+
+      - name: Fetch wiki data
+        run: python wiki_item_scraper.py fetch --out-dir artifacts/wiki-scrape/data
+
+      # Read-only: plan opens a read-only session and only writes files. Point DB_URL at a
+      # read-only database role so that holds even if the script changes.
+      - name: Plan against the database
         env:
           DB_URL: ${{ secrets.DB_URL }}
-          MAX_PAGES: ${{ github.event.inputs.max_pages }}
         run: |
-          mkdir -p artifacts/wiki-equipment
+          python wiki_item_scraper.py plan \
+            --data-dir artifacts/wiki-scrape/data \
+            --out-dir artifacts/wiki-scrape/plan
 
-          args=()
-          if [ -n "$MAX_PAGES" ]; then
-            args+=(--max-pages "$MAX_PAGES")
-          fi
-
-          python wiki_equipment_update_scraper.py \
-            --api "https://runescape.wiki/api.php" \
-            --out artifacts/wiki-equipment/insert_new_equipment.sql \
-            --misses artifacts/wiki-equipment/new_equipment_misses.txt \
-            --summary artifacts/wiki-equipment/equipment_scrape_summary.json \
-            "${args[@]}"
-
-      - name: Upload generated SQL and logs
+      - name: Upload reports and apply.sql
         uses: actions/upload-artifact@v4
         with:
-          name: wiki-equipment-scrape
-          path: artifacts/wiki-equipment/
+          name: wiki-item-scrape
+          path: artifacts/wiki-scrape/
           if-no-files-found: error
