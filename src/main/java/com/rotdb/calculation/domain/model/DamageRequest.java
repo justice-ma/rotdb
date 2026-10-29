@@ -21,12 +21,13 @@ public class DamageRequest {
     private PrayerContext selectedPrayers;
     private SpellContext spell;
     private HitCapMode hitCapMode = HitCapMode.CAP_30000;
+    private Integer baseAbilityDamage = null;
     
     public DamageRequest() {};
 
     public DamageRequest(EquipmentModel equipment, AbilityId abilityId, BuffContext buffs, TargetContext target,
                          SkillsContext skills, PerkContext perks,
-                         FamiliarContext familiar, PrayerContext selectedPrayers, SpellContext spell, HitCapMode hitCapMode) {
+                         FamiliarContext familiar, PrayerContext selectedPrayers, SpellContext spell, HitCapMode hitCapMode, Integer baseAbilityDamage) {
         this.equipment = equipment;
         this.abilityId = abilityId;
         this.buffs = buffs;
@@ -37,6 +38,7 @@ public class DamageRequest {
         this.selectedPrayers = selectedPrayers;
         this.spell = spell;
         this.hitCapMode = hitCapMode;
+        this.baseAbilityDamage = baseAbilityDamage;
     }
 
     public EquipmentModel getEquipment() {
@@ -121,5 +123,13 @@ public class DamageRequest {
 
     public void setHitCapMode(HitCapMode hitCapMode) {
         this.hitCapMode = hitCapMode;
+    }
+
+    public Integer getBaseAbilityDamage() {
+        return baseAbilityDamage;
+    }
+
+    public void setBaseAbilityDamage(Integer baseAbilityDamage) {
+        this.baseAbilityDamage = baseAbilityDamage;
     }
 }

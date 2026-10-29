@@ -10,6 +10,7 @@ import com.rotdb.shared.combat.domain.model.context.AbilityHitsContext;
 import com.rotdb.calculation.domain.model.context.CalculationContext;
 import com.rotdb.calculation.domain.model.context.ContextBuilder;
 import com.rotdb.calculation.domain.model.context.DamageContext;
+import com.rotdb.shared.combat.domain.model.enums.CombatStyles;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.shared.combat.domain.model.equipment.FamiliarContext;
 import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
@@ -30,7 +31,18 @@ public final class CalculationEngine {
     private final PrayerRequestValidator prayerValidator = new PrayerRequestValidator();
 
 
-    public DamageResult calculateAbilityDamage(DamageRequest request) {
+    public DamageResult calculateAbilityDamageFromStart(DamageRequest request) {
+        return calculateAbilityDamage(request, false);
+    }
+
+    public DamageResult calculateAbilityDamageFromBaseAbilityDamage(DamageRequest request) {
+        if (request.getBaseAbilityDamage() == null || request.getBaseAbilityDamage() == 0) {
+            return calculateAbilityDamage(request, false);
+        }
+        return calculateAbilityDamage(request, true);
+    }
+
+    private DamageResult calculateAbilityDamage(DamageRequest request, boolean baseAbilityDamageProvided) {
         validator.validate(request);
         request = normalizer.normalize(request);
 
@@ -40,7 +52,16 @@ public final class CalculationEngine {
         context.setDerivedStatsResult(calculateDerivedStats(request));
 
         prayerValidator.validatePrayers(context.getSelectedPrayers());
-        preCriticalPipeline.run(context);
+        preCriticalPipeline.run(context, baseAbilityDamageProvided);
+
+        if (baseAbilityDamageProvided) {
+            context.getDamage().setBaseDamage(request.getBaseAbilityDamage());
+            if (context.getEquipment().getMainhand().getClazz() != CombatStyles.ALL) {
+                context.getEquipment().setCombatStyle(context.getEquipment().getMainhand().getClazz());
+            } else {
+                context.getEquipment().setCombatStyle(CombatStyles.MELEE);
+            }
+        }
 
         postCriticalPipeline.run(context);
         return mapToResult(context);

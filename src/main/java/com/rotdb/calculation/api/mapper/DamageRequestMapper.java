@@ -4,6 +4,7 @@ import com.rotdb.calculation.api.dto.DamageCalcRequestDto;
 import com.rotdb.calculation.application.mapper.*;
 import com.rotdb.calculation.domain.model.DamageRequest;
 import com.rotdb.shared.combat.domain.model.context.TargetContext;
+import com.rotdb.shared.combat.domain.model.enums.EquipmentIdSource;
 import com.rotdb.shared.combat.domain.model.enums.HitCapMode;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.shared.combat.domain.model.equipment.FamiliarContext;
@@ -43,8 +44,16 @@ public final class DamageRequestMapper {
         this.hitCapModeMapper = hitCapModeMapper;
     }
 
-    public DamageRequest from(DamageCalcRequestDto request) {
-        EquipmentModel equipment = equipmentContextMapper.from(request.equipment());
+    public DamageRequest fromOfficialEquipmentIds(DamageCalcRequestDto request) {
+        return from(request, EquipmentIdSource.OFFICIAL);
+    }
+
+    public DamageRequest fromInternalEquipmentIds(DamageCalcRequestDto request) {
+        return from(request, EquipmentIdSource.INTERNAL);
+    }
+
+    public DamageRequest from(DamageCalcRequestDto request, EquipmentIdSource equipmentIdSource) {
+        EquipmentModel equipment = equipmentContextMapper.from(request.equipment(), equipmentIdSource);
         BuffContext buffs = buffContextMapper.from(request.buffs());
         SkillsContext skills = skillsContextMapper.from(request.skills(), buffs);
         List<PotionContext> potion = potionContextMapper.from(request.potions());
@@ -73,6 +82,8 @@ public final class DamageRequestMapper {
         dr.setSelectedPrayers(prayer);
         dr.setFamiliar(familiar);
         dr.setPerks(perks);
+        dr.setBaseAbilityDamage(request.baseAbilityDamage());
+
         return dr;
     }
 }

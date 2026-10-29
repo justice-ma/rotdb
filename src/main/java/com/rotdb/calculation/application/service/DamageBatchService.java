@@ -31,9 +31,9 @@ public class DamageBatchService {
             DamageCalcRequestDto base = req.base();
             DamageCalcRequestDto perAbility = copyWithAbility(base, id);
 
-            DamageRequest internal = mapper.from(perAbility);
+            DamageRequest internal = mapper.fromInternalEquipmentIds(perAbility);
 
-            DamageResult result = engine.calculateAbilityDamage(internal);
+            DamageResult result = engine.calculateAbilityDamageFromStart(internal);
 
             double min = result.getMinCoeff();
             double max = result.getMaxCoeff();
@@ -64,7 +64,8 @@ public class DamageBatchService {
                 base.perks(),
                 base.hitCapMode(),
                 base.clientId(),
-                base.sessionId()
+                base.sessionId(),
+                base.baseAbilityDamage()
         );
     }
 }

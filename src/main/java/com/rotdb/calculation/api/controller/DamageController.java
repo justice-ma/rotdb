@@ -37,14 +37,14 @@ public class DamageController {
 
     @PostMapping("/calculate")
     public DamageResult calculate(@RequestBody DamageCalcRequestDto request) {
-        DamageRequest internal = mapper.from(request);
+        DamageRequest internal = mapper.fromInternalEquipmentIds(request);
         heartbeatService.recordCalculationActivity(request.clientId(), request.sessionId());
-        return engine.calculateAbilityDamage(internal);
+        return engine.calculateAbilityDamageFromStart(internal);
     }
 
     @PostMapping("/derived-stats")
     public DerivedStatsResult calculateDerivedStats(@RequestBody DamageCalcRequestDto request) {
-        DamageRequest internal = mapper.from(request);
+        DamageRequest internal = mapper.fromInternalEquipmentIds(request);
         return engine.calculateDerivedStats(internal);
     }
 
@@ -58,5 +58,11 @@ public class DamageController {
     public EffectiveStatsResult calculateEffectiveStats(@RequestBody EffectiveStatsRequestDto request) {
         EffectiveStatsRequest internal = effectiveStatsMapper.from(request);
         return engine.calculateEffectiveStats(internal);
+    }
+
+    @PostMapping("/calculate/base-damage-present")
+    public DamageResult calculateFromBaseAbilityDamage(@RequestBody DamageCalcRequestDto request) {
+        DamageRequest internal = mapper.fromOfficialEquipmentIds(request);
+        return engine.calculateAbilityDamageFromBaseAbilityDamage(internal);
     }
 }

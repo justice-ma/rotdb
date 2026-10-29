@@ -25,7 +25,8 @@ public record DamageCalcRequestDto(
         PerkSelection perks,
         HitCapMode hitCapMode,
         String clientId,
-        String sessionId
+        String sessionId,
+        Integer baseAbilityDamage
 ) {
     public record Skills(Integer strength, Integer magic, Integer ranged, Integer necromancy, Integer attack,
                          Integer defence, Integer herblore, Integer maxHp, Integer currentHp) {}

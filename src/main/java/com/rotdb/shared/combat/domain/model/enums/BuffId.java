@@ -45,7 +45,7 @@ public enum BuffId {
     GRAVITATE(0, 20, true, "Gravitate"),
     WENSTACKS(0, 10, true, "Wen Stacks"),
     REVENGESTACKS(0, 20, true, "Revenge Stacks"),
-    RUTHELESSSTACKS(0, 5, true, "Ruthless Stacks"),
+    RUTHLESSSTACKS(0, 5, true, "Ruthless Stacks"),
     GUARDHOUSE(0, 3, true, "Guardhouse Tier"),
     TITHESTACKS(0, 12, true, "Tithe Stacks"),
     PUZZLEBOX(0, 6, true, "Puzzlebox"),

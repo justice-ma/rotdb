@@ -3,6 +3,7 @@ package com.rotdb.calculation.api.mapper;
 import com.rotdb.calculation.api.dto.EffectiveStatsRequestDto;
 import com.rotdb.calculation.application.mapper.*;
 import com.rotdb.calculation.domain.model.EffectiveStatsRequest;
+import com.rotdb.shared.combat.domain.model.enums.EquipmentIdSource;
 import com.rotdb.shared.combat.domain.model.equipment.EquipmentModel;
 import com.rotdb.shared.combat.domain.model.equipment.FamiliarContext;
 import com.rotdb.shared.combat.domain.model.equipment.PerkContext;
@@ -30,7 +31,7 @@ public final class EffectiveStatsMapper {
     public EffectiveStatsRequest from(EffectiveStatsRequestDto request) {
         BuffContext buffContext = buffContextMapper.from(request.buffs());
         SkillsContext skillsContext = skillsContextMapper.from(request.skills(), buffContext);
-        EquipmentModel equipmentModel = equipmentContextMapper.from(request.equipmentIds());
+        EquipmentModel equipmentModel = equipmentContextMapper.from(request.equipmentIds(), EquipmentIdSource.INTERNAL);
         FamiliarContext familiarContext = familiarContextMapper.from(request.familiar());
         PerkContext perkContext = perkContextMapper.from(request.perks(), buffContext);
 

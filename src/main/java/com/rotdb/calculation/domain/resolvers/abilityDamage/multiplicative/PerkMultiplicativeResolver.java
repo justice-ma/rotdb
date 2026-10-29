@@ -26,8 +26,8 @@ public class PerkMultiplicativeResolver {
             mod *= 1 + perk.rank(Perks.SPENDTHRIFT) / 100.0 * perk.rank(Perks.SPENDTHRIFT) / 100.0;
         }
 
-        if (buff.has(BuffId.RUTHELESSSTACKS) && buff.stacks(BuffId.RUTHELESSSTACKS) > 0 && perk.has(Perks.RUTHLESS)) {
-            mod *= 1 + Math.min(buff.stacks(BuffId.RUTHELESSSTACKS), 5) * perk.rank(Perks.RUTHLESS) * 0.005;
+        if (buff.has(BuffId.RUTHLESSSTACKS) && buff.stacks(BuffId.RUTHLESSSTACKS) > 0 && perk.has(Perks.RUTHLESS)) {
+            mod *= 1 + Math.min(buff.stacks(BuffId.RUTHLESSSTACKS), 5) * perk.rank(Perks.RUTHLESS) * 0.005;
         }
         return mod;
     }
