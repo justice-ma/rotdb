@@ -11,6 +11,7 @@ import com.rotdb.calculation.application.service.DamageBatchService;
 import com.rotdb.calculation.domain.engine.CalculationEngine;
 import com.rotdb.calculation.domain.model.*;
 import com.rotdb.shared.ability.AbilityId;
+import com.rotdb.shared.combat.domain.model.enums.EquipmentIdSource;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,7 +52,7 @@ public class DamageController {
     @PostMapping("/calculate/batch")
     public Map<AbilityId, AbilityCardResultDto> calculateBatch(@RequestBody BatchDamageCalcRequest request) {
         heartbeatService.recordCalculationActivity(request.base().clientId(), request.base().sessionId());
-        return batchService.calculateBatch(request);
+        return batchService.calculateBatch(request, EquipmentIdSource.INTERNAL);
     }
 
     @PostMapping("/effective-stats")
@@ -64,5 +65,10 @@ public class DamageController {
     public DamageResult calculateFromBaseAbilityDamage(@RequestBody DamageCalcRequestDto request) {
         DamageRequest internal = mapper.fromOfficialEquipmentIds(request);
         return engine.calculateAbilityDamageFromBaseAbilityDamage(internal);
+    }
+
+    @PostMapping("/calculate/batch-base-damage-present")
+    public Map<AbilityId, AbilityCardResultDto> calculateBatchFromBaseDamage(@RequestBody BatchDamageCalcRequest request) {
+        return batchService.calculateBatch(request, EquipmentIdSource.OFFICIAL);
     }
 }
