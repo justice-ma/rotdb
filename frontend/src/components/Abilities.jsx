@@ -154,7 +154,7 @@ export default function Abilities({
                         {result && (
                           <div className="ability-card-secondary">
                             <p className="subtle-text">
-                              {result.min}% - {result.max}%
+                              {result.minCoeff}% - {result.maxCoeff}%
                             </p>
                             <p className="subtle-text">Avg</p>
                           </div>
